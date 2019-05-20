@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .human-heart {
+    margin: 5em;
+    animation: .8s infinite heartEffect;
+  }
+  
+  @keyframes heartEffect {
+    0% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1.1);
+    }
+    40% {
+      transform: scale(1);
+    }
+    60% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+}
