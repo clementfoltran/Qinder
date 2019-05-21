@@ -1,0 +1,17 @@
+.navbar {
+    padding: 0;
+    
+    .nav-link {
+        text-align: center;
+        color: white;
+        font-size: 25px;
+    }
+
+    .nav-item {
+        background-color: rgba(240, 67, 33, 0.8);
+    }
+
+    .nav-item:hover {
+        background-color: rgba(240, 66, 33, 0.7);
+    }
+}
