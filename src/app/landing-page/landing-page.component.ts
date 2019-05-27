@@ -36,9 +36,8 @@ export class LandingPageComponent implements OnInit {
       this.registerService.register(this.APIParameter)
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
-            alert('register successfully');
           } else {
-            // TODO ErrorHandlerService
+            // TODO error handler (same email, password doesn't match)
           }
         });
     }
