@@ -4,11 +4,12 @@ import {ActivatedRoute} from '@angular/router';
 import {RegisterParameter} from './services/register.parameter';
 import {RegisterService} from './services/register.service';
 import {RegisterReturn} from './services/register.return';
+import {MessageService} from 'primeng/api';
 
 @Component({
   selector: 'app-landing-page',
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.scss']
+  styleUrls: ['./landing-page.component.scss'],
 })
 export class LandingPageComponent implements OnInit {
   /**
@@ -45,7 +46,8 @@ export class LandingPageComponent implements OnInit {
 
   constructor(public fb: FormBuilder,
               public route: ActivatedRoute,
-              public registerService: RegisterService) {
+              public registerService: RegisterService,
+              private messageService: MessageService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -56,6 +58,11 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Mes superbes notifications',
+      detail: 'Order submitted',
+      life: 500
+    });
   }
-
 }

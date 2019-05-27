@@ -9,6 +9,9 @@ import { HomeComponent } from './home/home.component';
 import {RegisterService} from './landing-page/services/register.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ToastModule} from 'primeng/toast';
+import {AccordionModule, MessageService} from 'primeng/primeng';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -19,12 +22,16 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    AccordionModule,
+    ToastModule,
   ],
   providers: [
+    MessageService,
     RegisterService,
   ],
   bootstrap: [AppComponent]

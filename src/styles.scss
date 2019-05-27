@@ -1,9 +1,20 @@
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import "~primeng/resources/themes/bootstrap/theme.css";
+@import "~primeng/resources/primeng.min.css";
+@import "~font-awesome/css/font-awesome.min.css";
 @import url('https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap');
 
 html {
     height: 100%;
     font-family: 'Roboto Condensed', sans-serif;
+}
+
+.ui-toast-message {
+  border-radius: 5px;
+}
+
+.ui-toast-message-success {
+  background-color: rgba(113, 221, 113, 0.5);
 }
 
 .human-heart {
