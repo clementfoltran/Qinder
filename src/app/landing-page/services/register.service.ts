@@ -3,24 +3,23 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {RegisterParameter} from './register.parameter';
 import {Observable} from 'rxjs';
 import {RegisterReturn} from './register.return';
-import {catchError} from 'rxjs/operators';
+import {Globals} from '../../globals';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegisterService {
-  // TODO Make const for serviceURL
-  public serviceURL = 'http://localhost:8000';
+  public serviceURL = Globals.baseURL + 'register';
   constructor(public http: HttpClient) { }
 
   register(APIParameter: RegisterParameter): Observable<RegisterReturn> {
     const option = {
       headers: new HttpHeaders({
-        'Content-type': 'applications/json'
+        'Content-Type': 'application/json',
       }),
     };
 
-    return this.http.post<RegisterReturn>(this.serviceURL + '/register', JSON.stringify(APIParameter), option).pipe(
+    return this.http.post<RegisterReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
       // TODO Put the error handle
     );
   }

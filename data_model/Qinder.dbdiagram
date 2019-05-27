@@ -1,11 +1,10 @@
 Table users {
   id_user int [primary key]
-  firstmame varchar
-  lastmame varchar
+  firstname varchar
+  lastname varchar
   email varchar [unique]
   gender varchar
   date_of_birth date
-  login varchar
   interest varchar
   bio varchar
   key varchar

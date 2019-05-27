@@ -10,7 +10,7 @@ const db = mysql.createConnection({
   user      : 'adm',
   password  : 'clemclem',
   database  : 'qinder'
-})
+});
 const secret = "7hDwfF<k780-S0F9g0hj8yyt01-20fasvcxvbnmujrhnj";
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -20,6 +20,14 @@ db.connect((err) => {
     console.log('Failed to connect to mysql database');
   }
   console.log('Successfully connect to qinder mysql database');
+});
+
+app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
 });
 
 app.get('/', (req, res) => {
@@ -46,7 +54,41 @@ app.post('/login', urlencodedParser, (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-
+  console.log(`register post ${req.body.email}`);
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      let sql = 'INSERT INTO users VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let query = db.format(sql, [
+        req.body.firstname,
+        req.body.lastname,
+        req.body.email,
+        req.body.gender,
+        new Date().toISOString().slice(0, 19).replace('T', ' '),
+        null, null, null, null, null,
+      ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          console.log(err);
+          // return ;
+        }
+        res.send(response);
+      });
+      const myToken = jwt.sign({
+        iss: 'https://qinder.com',
+        user: 'Clément',
+        scope: 'user'
+      }, secret);
+      res.json({
+        token: myToken,
+        message: '',
+        success: true,
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
 });
 
 app.get('/getUsers', (req, res) => {

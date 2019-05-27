@@ -24,15 +24,15 @@ export class LandingPageComponent implements OnInit {
   public APIParameter: RegisterParameter;
 
   register() {
-    alert(this.registerForm.valid);
     this.sendAttempt = true;
     if (this.registerForm.valid) {
       this.APIParameter = {
+        firstname: this.registerForm.get('firstname').value,
+        lastname: this.registerForm.get('lastname').value,
         email: this.registerForm.get('email').value,
         password: this.registerForm.get('passwd').value,
         gender: this.registerForm.get('gender').value
       };
-      console.log(`${this.APIParameter.email} ${this.APIParameter.password} ${this.APIParameter.gender}`);
       this.registerService.register(this.APIParameter)
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
@@ -48,6 +48,8 @@ export class LandingPageComponent implements OnInit {
               public route: ActivatedRoute,
               public registerService: RegisterService) {
     this.registerForm = fb.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       email: ['', Validators.required],
       passwd: ['', Validators.required],
       gender: ['', Validators.required]
