@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {RegisterParameter} from './services/register.parameter';
-import {RegisterService} from './services/register.service';
-import {RegisterReturn} from './services/register.return';
+import {Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
+import {RegisterService} from './services/register/register.service';
+import {RegisterParameter} from './services/register/register.parameter';
+import {RegisterReturn} from './services/register/register.return';
+import {LoginParameter} from './services/login/login.parameter';
+import {LoginService} from './services/login/login.service';
+import {LoginReturn} from './services/login/login.return';
 
 @Component({
   selector: 'app-landing-page',
@@ -13,30 +16,72 @@ import {MessageService} from 'primeng/api';
 })
 export class LandingPageComponent implements OnInit {
   /**
-   * The broker form input
+   * Register form
    *
    */
   public registerForm: FormGroup;
   /**
-   * Boolean flag to mark form input submission
+   * Login form
    *
    */
-  public sendAttempt: boolean;
-  public APIParameter: RegisterParameter;
+  public loginForm: FormGroup;
+  /**
+   * Type interface of register data structure
+   *
+   */
+  public RegisterAPIParameter: RegisterParameter;
+  /**
+   * Type interface of login data structure
+   *
+   */
+  public LoginAPIParameter: LoginParameter;
+
+  login() {
+    if (this.loginForm.valid) {
+      this.LoginAPIParameter = {
+        email: this.loginForm.get('email').value,
+        password: this.loginForm.get('password').value,
+      };
+      this.loginService.auth(this.LoginAPIParameter)
+        .subscribe((result: LoginReturn) => {
+          if (result.success) {
+            // Connect successfully let's store the token
+            localStorage.setItem('token', result.token);
+            this.router.navigate(['/home']);
+          } else {
+            alert('ok');
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: 'Invalid credentials',
+              life: 6000
+            });
+          }
+        });
+    }
+  }
 
   register() {
-    this.sendAttempt = true;
     if (this.registerForm.valid) {
-      this.APIParameter = {
+      this.RegisterAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
         lastname: this.registerForm.get('lastname').value,
         email: this.registerForm.get('email').value,
         password: this.registerForm.get('passwd').value,
         gender: this.registerForm.get('gender').value
       };
-      this.registerService.register(this.APIParameter)
+      this.registerService.register(this.RegisterAPIParameter)
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
+            // Connect successfully let's store the token
+            localStorage.setItem('token', result.token);
+            this.router.navigate(['/home']);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Welcome',
+              detail: 'Welcome on Qinder',
+              life: 6000
+            });
           } else {
             // TODO error handler (same email, password doesn't match)
           }
@@ -45,24 +90,23 @@ export class LandingPageComponent implements OnInit {
   }
 
   constructor(public fb: FormBuilder,
-              public route: ActivatedRoute,
+              public router: Router,
               public registerService: RegisterService,
+              public loginService: LoginService,
               private messageService: MessageService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       email: ['', Validators.required],
       passwd: ['', Validators.required],
-      gender: ['', Validators.required]
+      gender: ['', Validators.required],
+    });
+
+    this.loginForm = fb.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
 
-  ngOnInit() {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Mes superbes notifications',
-      detail: 'Order submitted',
-      life: 500
-    });
-  }
+  ngOnInit() {}
 }

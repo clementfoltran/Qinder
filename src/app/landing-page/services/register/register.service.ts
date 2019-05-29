@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {RegisterParameter} from './register.parameter';
-import {Observable} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {RegisterReturn} from './register.return';
-import {Globals} from '../../globals';
+import {catchError} from 'rxjs/operators';
+import {Globals} from '../../../globals';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,10 @@ export class RegisterService {
     };
 
     return this.http.post<RegisterReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
-      // TODO Put the error handle
+      catchError((err) => {
+        console.log(err);
+        return throwError('error');
+      }),
     );
   }
 }
