@@ -3,11 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HomeComponent } from './home/home.component';
 import {IsLoggedInGuard} from './guards/is-logged-in-guard';
+import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
 
 const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
+    canActivate: [IsLoggedOutGuard],
   },
   {
     path: 'home',
@@ -18,7 +20,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [IsLoggedInGuard],
+  providers: [IsLoggedInGuard, IsLoggedOutGuard],
   exports: [RouterModule],
 })
 export class AppRoutingModule { }

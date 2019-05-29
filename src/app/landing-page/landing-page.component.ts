@@ -44,16 +44,16 @@ export class LandingPageComponent implements OnInit {
       };
       this.loginService.auth(this.LoginAPIParameter)
         .subscribe((result: LoginReturn) => {
+          console.log(result);
           if (result.success) {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
             this.router.navigate(['/home']);
           } else {
-            alert('ok');
             this.messageService.add({
               severity: 'error',
               summary: 'Error',
-              detail: 'Invalid credentials',
+              detail: result.message,
               life: 6000
             });
           }

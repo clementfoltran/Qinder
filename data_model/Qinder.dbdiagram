@@ -3,13 +3,12 @@ Table user {
   firstname varchar
   lastname varchar
   email varchar [unique]
-  passwd varchar
+  hash varchar
   gender varchar
   date_of_birth date
   interest varchar
   bio varchar
   key varchar
-  confirm date
   popularity float
   position varchar
 }
@@ -51,13 +50,13 @@ Table message {
   id_conv int [ref: > conversation.id_conv]
 }
 
-Table tags {
+Table tag {
   id_tag int [primary key]
   tag varchar
 }
 
-Table userTags {
+Table userTag {
   id_utag int [primary key]
-  id_tag int [ref: > tags.id_tag]
+  id_tag int [ref: > tag.id_tag]
   id_user int [ref: > user.id_user]
 }
