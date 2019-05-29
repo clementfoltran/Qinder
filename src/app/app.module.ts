@@ -6,9 +6,13 @@ import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HomeComponent } from './home/home.component';
-import {RegisterService} from './landing-page/services/register.service';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ToastModule} from 'primeng/toast';
+import {AccordionModule, MessageService} from 'primeng/primeng';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RegisterService} from './landing-page/services/register/register.service';
+import {LoginService} from './landing-page/services/login/login.service';
 
 @NgModule({
   declarations: [
@@ -19,13 +23,18 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    AccordionModule,
+    ToastModule,
   ],
   providers: [
+    MessageService,
     RegisterService,
+    LoginService,
   ],
   bootstrap: [AppComponent]
 })

@@ -11,7 +11,7 @@ const db = mysql.createConnection({
   password  : 'clemclem',
   database  : 'qinder'
 });
-const secret = "7hDwfF<k780-S0F9g0hj8yyt01-20fasvcxvbnmujrhnj";
+const secret = 'UGeH8th6SNvvnJbic7KaCW9HSp3F1ThhpjgFuUn386P9gUE5I6iqMX3H2i6PGA2r';
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 // Connect to database
@@ -34,22 +34,39 @@ app.get('/', (req, res) => {
   res.send('Server works');
 });
 
+// Check the request
+const checkUserToken = (req, res, next) => {
+  if (!req.header('Authorization')) {
+    return res.status(401).json({
+      success: false,
+      message: 'Missing authentication header'
+    });
+  }
+  const token = req.header('authorization').split(' ')[1];
+  jwt.verify(token, secret);
+  next();
+};
+
 const fakeUser = { email: "cf@quinder.com", passwd: "asdf"};
 app.post('/login', urlencodedParser, (req, res) => {
-  console.log(`login post ${req.body}`);
-  if (!req.body) {
-    res.sendStatus(500);
-  } else {
-    if (fakeUser.email === req.body && fakeUser.passwd === req.body.passwd) {
-      const myToken = jwt.sign({
-        iss: 'https://qinder.com',
-        user: 'Clément',
-        scope: 'user'
+  if (req.body) {
+    const email = req.body.email;
+    const password = req.body.password;
+    if (email === fakeUser.email && password === fakeUser.passwd) {
+      delete req.body.password;
+      const token = jwt.sign({
+        iss: 'http://localhost:8000',
+        role: 'user',
       }, secret);
-      res.json({token: myToken});
+      res.json({
+        success: true,
+        token: token,
+      });
     } else {
-      res.sendStatus(401);
+      res.json({ success: false, message: 'Wrongs credentials'});
     }
+  } else {
+    res.json({ success: false, message: 'Missing data' });
   }
 });
 
@@ -71,7 +88,7 @@ app.post('/register', (req, res) => {
       db.query(query, (err, response) => {
         if (err) {
           console.log(err);
-          // return ;
+          // Todo return ;
         }
         res.send(response);
       });
