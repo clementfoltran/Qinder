@@ -3,11 +3,12 @@ const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const port = 8000;
 const db = mysql.createConnection({
   host      : 'localhost',
-  user      : 'adm',
+  user      : 'root',
   password  : 'clemclem',
   database  : 'qinder'
 });
@@ -18,6 +19,7 @@ let urlencodedParser = bodyParser.urlencoded({ extended: false });
 db.connect((err) => {
   if (err) {
     console.log('Failed to connect to mysql database');
+    return ;
   }
   console.log('Successfully connect to qinder mysql database');
 });
@@ -47,8 +49,27 @@ const checkUserToken = (req, res, next) => {
   next();
 };
 
-const fakeUser = { email: "cf@quinder.com", passwd: "asdf"};
+const login = (email, password) => {
+  if (email && password) {
+    // Check the email and password in database
+    let sql = "SELECT hash FROM user WHERE email LIKE ?";
+    let query = db.format(sql, [email]);
+    db.query(query, (err, response) => {
+      if (err) {
+        console.log(err);
+        // TODO return
+      } else {
+        console.log(response);
+      }
+    });
+
+  } else {
+    return false;
+  }
+};
+
 app.post('/login', urlencodedParser, (req, res) => {
+  login(req.body.email, req.body.password);
   if (req.body) {
     const email = req.body.email;
     const password = req.body.password;
@@ -76,11 +97,12 @@ app.post('/register', (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO users VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       let query = db.format(sql, [
         req.body.firstname,
         req.body.lastname,
         req.body.email,
+        req.body.password,
         req.body.gender,
         new Date().toISOString().slice(0, 19).replace('T', ' '),
         null, null, null, null, null,
@@ -109,7 +131,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/getUsers', (req, res) => {
-  let sql = 'SELECT * FROM users';
+  let sql = 'SELECT * FROM user';
   db.query(sql, (err, result) => {
     console.log(result);
     res.send(result);
