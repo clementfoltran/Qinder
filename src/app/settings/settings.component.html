@@ -46,12 +46,22 @@
         </div>
         <div class="modal-body text-center">
           <h3>Martin Scaglia</h3><br>
-          <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <form #settingsNameform="ngForm" (ngSubmit)="updateName(settingsNameform.value)">
             <div class="form-group">
-              <input type="text" formControlName="email" class="form-control" placeholder="Firstname">
+              <input 
+              type="text" 
+              class="form-control" 
+              ngModel 
+              name="newFirstName" 
+              placeholder="Firstname">
             </div>
             <div class="form-group">
-              <input type="text" formControlName="password" class="form-control" placeholder="Lastname">
+              <input 
+              type="text" 
+              class="form-control" 
+              ngModel 
+              name="newLastName" 
+              placeholder="Lastname">
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
@@ -74,9 +84,14 @@
         <div class="modal-body text-center">
           <h3>mrtscg@gmail.com</h3><br>
           <h4 style="color: green">Confirmed</h4>
-          <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <form #settingsEmailform="ngForm" (ngSubmit)="updateEmail(settingsEmailform.value)">
             <div class="form-group">
-              <input type="text" formControlName="email" class="form-control" placeholder="Email">
+              <input 
+              type="text" 
+              class="form-control" 
+              ngModel 
+              name="newEmail" 
+              placeholder="New email">
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
@@ -97,10 +112,15 @@
           </button>
         </div>
         <div class="modal-body text-center">
-          <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <form #settingsPasswordForm="ngForm" (ngSubmit)="updatePassword(settingsPasswordForm.value)">
             <div class="form-group">
               <label>New password</label>
-              <input type="text" formControlName="email" class="form-control" placeholder="New password">
+              <input 
+              type="text" 
+              class="form-control" 
+              ngModel 
+              name="newPassword" 
+              placeholder="New password">
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>

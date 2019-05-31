@@ -12,4 +12,18 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
   }
 
+  updateNotifications(formData) {
+    console.log('success: ', formData);
+  }
+  updateEmail(formData) {
+    console.log('success: ', formData);
+  }
+  updateName(formData) {
+    console.log('success: ', formData);
+  }
+  updatePassword(formData) {
+    console.log('success: ', formData);
+  }
+
+
 }
