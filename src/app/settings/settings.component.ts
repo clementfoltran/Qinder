@@ -9,9 +9,17 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SettingsComponent implements OnInit {
 
-  public resolveData: EnterViewSettingsReturn;
+  public resolvedData: EnterViewSettingsReturn;
 
   constructor(public activatedRoute: ActivatedRoute) { }
+
+  ngOnInit() {
+    console.log('HELLO');
+    this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn }) => {
+      this.resolvedData = data.viewData;
+    });
+    this.checkAccountConfirmed(this.resolvedData);
+  }
 
   updateNotifications(formData) {
     console.log('success: ', formData);
@@ -26,10 +34,20 @@ export class SettingsComponent implements OnInit {
     console.log('success: ', formData);
   }
 
-  ngOnInit() {
-    console.log('HELLO');
-    this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn }) => {
-      this.resolveData = data.viewData;
-    });
+  checkAccountConfirmed(data) {
+    if(data.confirm === 1)
+      return 1;
+  }
+  checkMatchNotifActivated(data) {
+    if(data.notifMatch === 1)
+      return 1;
+  }
+  checkLikeNotifActivated(data) {
+    if(data.notifLike === 1)
+      return 1;
+  }
+  checkMessageNotifActivated(data) {
+    if(data.notifMessage === 1)
+      return 1;
   }
 }

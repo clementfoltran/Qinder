@@ -5,7 +5,7 @@ exports.enterViewSetting = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT firstname, lastname, email FROM user WHERE id_user = ?';
+      const sql = 'SELECT firstname, lastname, email, confirm, notifMatch, notifLike, notifMessage FROM user WHERE id_user = ?';
       const query = db.format(sql, [req.params.id]);
       db.query(query, (err, response) => {
         if (err) {
@@ -20,7 +20,11 @@ exports.enterViewSetting = (req, res) => {
             id_user: req.params.id,
             firstname: response[0].firstname,
             lastname: response[0].lastname,
-            email: response[0].email
+            email: response[0].email,
+            confirm: response[0].confirm,
+            notifLike: response[0].notifLike,
+            notifMatch: response[0].notifMatch,
+            notifMessage: response[0].notifMessage,
           });
         }
       });
