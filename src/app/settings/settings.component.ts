@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { EnterViewSettingsReturn } from './services/enter-view-settings-return';
 import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UpdateNameParameter } from './services/update-name/update-name-parameter';
+import { UpdateNameService } from './services/update-name/update-name.service';
+import { UpdateNameReturn } from './services/update-name/update-name-return';
 
 @Component({
   selector: 'app-settings',
@@ -10,11 +14,20 @@ import { ActivatedRoute } from '@angular/router';
 export class SettingsComponent implements OnInit {
 
   public resolvedData: EnterViewSettingsReturn;
+  public changeNameForm: FormGroup;
+  public UpdateNameAPIParameter: UpdateNameParameter;
 
-  constructor(public activatedRoute: ActivatedRoute) { }
+  constructor(public activatedRoute: ActivatedRoute, 
+              public updateNameService: UpdateNameService,
+              public fb: FormBuilder)
+              { 
+                this.changeNameForm = fb.group({
+                  newFirstName: ['', Validators.required],
+                  newLastName: ['', Validators.required]
+                });
+              }
 
   ngOnInit() {
-    console.log('HELLO');
     this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn }) => {
       this.resolvedData = data.viewData;
     });
@@ -27,9 +40,25 @@ export class SettingsComponent implements OnInit {
   updateEmail(formData) {
     console.log('success: ', formData);
   }
-  updateName(formData) {
-    console.log('success: ', formData);
+
+  updateName() {
+    if (this.changeNameForm.valid) {
+      this.UpdateNameAPIParameter = {
+        newFirstName: this.changeNameForm.get('newFirstName').value,
+        newLastName: this.changeNameForm.get('newLastName').value,
+        // idUser: this.activatedRoute.params.id; // fix id
+      };
+    }
+    this.updateNameService.updateName(this.UpdateNameAPIParameter)
+        .subscribe((result: UpdateNameReturn) => {
+          if (result.success) {
+            console.log('okay');
+          } else {
+            console.log('not okay');
+          }
+          });
   }
+
   updatePassword(formData) {
     console.log('success: ', formData);
   }

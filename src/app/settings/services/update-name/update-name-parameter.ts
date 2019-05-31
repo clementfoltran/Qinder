@@ -1,5 +1,6 @@
 export interface UpdateNameParameter {
-    idUser: number;
-    token: string;
-    newName: string;
+    // idUser: number;
+    // token: string;
+    newFirstName: string;
+    newLastName: string;
 }

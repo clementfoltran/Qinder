@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Globals } from '../../../globals';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,10 +11,21 @@ import { UpdateNameReturn } from './update-name-return';
 })
 export class UpdateNameService {
 
-  // public serviceURL = Globals.baseURL + 'settings';
-  // constructor(private http: HttpClient) { }
+  public serviceURL = Globals.baseURL + 'updateName';
+  constructor(private http: HttpClient) { }
 
-  updateName(data) {
+  updateName(APIParameter: UpdateNameParameter): Observable<UpdateNameReturn> {
+    const option = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
 
+    return this.http.post<UpdateNameReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
+      catchError((err) => {
+        console.log(err);
+        return throwError('error');
+      }),
+    );
   }
 }

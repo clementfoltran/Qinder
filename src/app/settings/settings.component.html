@@ -49,27 +49,31 @@
         </div>
         <div class="modal-body text-center">
             <h3>{{ resolvedData.firstname }} {{ resolvedData.lastname }} </h3><br>
-          <form #settingsNameform="ngForm" (ngSubmit)="updateName(settingsNameform.value)">
+
+          <form [formGroup]="changeNameForm" (ngSubmit)="updateName()">
             <div class="form-group">
               <input 
               type="text" 
               class="form-control" 
-              ngModel 
               name="newFirstName" 
-              placeholder="Firstname">
+              placeholder="Firstname"
+              formControlName="newFirstName"
+              >
             </div>
             <div class="form-group">
               <input 
               type="text" 
               class="form-control" 
-              ngModel 
               name="newLastName" 
-              placeholder="Lastname">
+              placeholder="Lastname"
+              formControlName="newLastName"
+              >
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
             </div>
           </form>
+
         </div>
       </div>
     </div>
