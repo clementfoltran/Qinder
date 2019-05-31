@@ -5,13 +5,16 @@ import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {LoginParameter} from './login.parameter';
 import {LoginReturn} from './login.return';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   public serviceURL = Globals.baseURL + 'login';
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient,
+              public router: Router) {}
 
   auth(APIParameter: LoginParameter): Observable<LoginReturn> {
     const option = {
@@ -32,7 +35,17 @@ export class LoginService {
     return !!localStorage.getItem('token');
   }
 
+  createAuthorizationHeader(token, headers: HttpHeaders) {
+    const isExpired = new JwtHelperService().isTokenExpired(token);
+    if (token !== null && !isExpired) {
+      return headers.append('Authorization', 'JWT' + token);
+    } else {
+      this.logOut();
+    }
+  }
+
   logOut() {
     localStorage.removeItem('token');
+    this.router.navigate(['/']);
   }
 }
