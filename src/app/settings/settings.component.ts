@@ -24,6 +24,4 @@ export class SettingsComponent implements OnInit {
   updatePassword(formData) {
     console.log('success: ', formData);
   }
-
-
 }
