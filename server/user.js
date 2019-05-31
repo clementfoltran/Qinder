@@ -34,7 +34,7 @@ exports.login = (req, res) => {
       }
     });
   }
-}
+};
 
 exports.register = (req, res) => {
   console.log(`register post ${req.body.email}`);
@@ -42,7 +42,7 @@ exports.register = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql, [
@@ -52,7 +52,7 @@ exports.register = (req, res) => {
         hash,
         req.body.gender,
         new Date().toISOString().slice(0, 19).replace('T', ' '),
-        null, null, null, null, null,
+        null, null, null, 1, null, null,
       ]);
       db.query(query, (err, response) => {
         if (err) {
@@ -75,4 +75,4 @@ exports.register = (req, res) => {
       res.sendStatus(401);
     }
   }
-}
+};

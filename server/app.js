@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const port = 8000;
 
 const user = require('./user.js');
+const setting = require('./setting');
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -32,10 +33,14 @@ app.get('/', (req, res) => {
 //   next();
 // };
 
+// POST routes
 app.post('/login', urlencodedParser, user.login);
 
 app.post('/register', urlencodedParser, user.register);
 
+// GET routes
+
+app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
