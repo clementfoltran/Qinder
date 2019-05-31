@@ -11,8 +11,8 @@ import { UpdateNameReturn } from './update-name-return';
 })
 export class UpdateNameService {
 
-  public serviceURL = Globals.baseURL + 'settings';
-  constructor(private http: HttpClient) { }
+  // public serviceURL = Globals.baseURL + 'settings';
+  // constructor(private http: HttpClient) { }
 
   updateName(data) {
 

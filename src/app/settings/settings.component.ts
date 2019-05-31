@@ -27,7 +27,8 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn } ) => {
+    console.log('HELLO');
+    this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn }) => {
       this.resolveData = data.viewData;
     });
   }

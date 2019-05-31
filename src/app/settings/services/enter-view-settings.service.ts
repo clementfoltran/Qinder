@@ -12,7 +12,7 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class EnterViewSettingsService {
 
-  public serviceURL = Globals.baseURL + 'settings/';
+  public serviceURL = Globals.baseURL + 'setting/';
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +23,7 @@ export class EnterViewSettingsService {
       }),
     };
 
-    return this.http.get<EnterViewSettingsReturn>(this.serviceURL + '2', option).pipe(
+    return this.http.get<EnterViewSettingsReturn>(this.serviceURL + '1', option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');

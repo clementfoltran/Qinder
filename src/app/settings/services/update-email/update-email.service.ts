@@ -10,8 +10,8 @@ import { UpdateEmailReturn } from './update-email-return';
   providedIn: 'root'
 })
 export class UpdateEmailService {
-  public serviceURL = Globals.baseURL + 'settings';
-  constructor(private http: HttpClient) { }
+  // public serviceURL = Globals.baseURL + 'settings';
+  // constructor(private http: HttpClient) { }
 
   updateEmail(data) {
 

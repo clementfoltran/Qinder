@@ -10,8 +10,8 @@ import { UpdatePasswordReturn } from './update-password-return';
   providedIn: 'root'
 })
 export class UpdatePasswordService {
-  public serviceURL = Globals.baseURL + 'settings';
-  constructor(private http: HttpClient) { }
+  // public serviceURL = Globals.baseURL + 'settings';
+  // constructor(private http: HttpClient) { }
 
   updatePassword(data) {
 

@@ -11,8 +11,8 @@ import { UpdateNotificationsReturn } from './update-notifications-return';
 })
 export class UpdateNotificationsService {
 
-  public serviceURL = Globals.baseURL + 'settings';
-  constructor(private http: HttpClient) { }
+  // public serviceURL = Globals.baseURL + 'settings';
+  // constructor(private http: HttpClient) { }
 
   updateNotifications(data) {
 
