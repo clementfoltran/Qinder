@@ -10,6 +10,7 @@ const routes: Routes = [
     path: '',
     component: LandingPageComponent,
     canActivate: [IsLoggedOutGuard],
+
   },
   {
     path: 'home',
