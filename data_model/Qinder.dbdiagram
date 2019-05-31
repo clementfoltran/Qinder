@@ -5,12 +5,16 @@ Table user {
   email varchar [unique]
   hash varchar
   gender varchar
-  date_of_birth date
+  birthdate date
   interest varchar
   bio varchar
   key varchar
+  confirm boolean
   popularity float
   position varchar
+  notifMatch boolean
+  notifLike boolean
+  notifMessage boolean
 }
 
 Table photo {
