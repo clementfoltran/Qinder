@@ -13,13 +13,15 @@ import {AccordionModule, MessageService} from 'primeng/primeng';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RegisterService} from './landing-page/services/register/register.service';
 import {LoginService} from './landing-page/services/login/login.service';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     LandingPageComponent,
-    HomeComponent
+    HomeComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

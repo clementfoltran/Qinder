@@ -54,14 +54,8 @@ app.post('/login', urlencodedParser, (req, res) => {
     const password = req.body.password;
     if (email === fakeUser.email && password === fakeUser.passwd) {
       delete req.body.password;
-      const token = jwt.sign({
-        iss: 'http://localhost:8000',
-        role: 'user',
-      }, secret);
-      res.json({
-        success: true,
-        token: token,
-      });
+      const token = jwt.sign({ iss: 'http://localhost:8000', role: 'user'}, secret);
+      res.json({ success: true, token: token });
     } else {
       res.json({ success: false, message: 'Wrongs credentials'});
     }

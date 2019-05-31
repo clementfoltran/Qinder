@@ -89,7 +89,7 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
-  constructor(public fb: FormBuilder,
+  constructor (public fb: FormBuilder,
               public router: Router,
               public registerService: RegisterService,
               public loginService: LoginService,
