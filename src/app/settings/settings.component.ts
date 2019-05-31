@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { EnterViewSettingsReturn } from './services/enter-view-settings-return';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-settings',
@@ -7,10 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor() { }
+  public resolveData: EnterViewSettingsReturn;
 
-  ngOnInit() {
-  }
+  constructor(public activatedRoute: ActivatedRoute) { }
 
   updateNotifications(formData) {
     console.log('success: ', formData);
@@ -23,5 +24,11 @@ export class SettingsComponent implements OnInit {
   }
   updatePassword(formData) {
     console.log('success: ', formData);
+  }
+
+  ngOnInit() {
+    this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn } ) => {
+      this.resolveData = data.viewData;
+    });
   }
 }

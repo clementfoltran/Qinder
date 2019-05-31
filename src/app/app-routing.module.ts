@@ -5,6 +5,7 @@ import { HomeComponent } from './home/home.component';
 import {IsLoggedInGuard} from './guards/is-logged-in-guard';
 import { SettingsComponent } from './settings/settings.component';
 import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
+import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
 
 const routes: Routes = [
   {
@@ -19,9 +20,10 @@ const routes: Routes = [
     canActivate: [IsLoggedInGuard],
   },
   {
-    path: 'settings',
+    path: 'settings/:id',
     component: SettingsComponent,
-    // canActivate: [IsLoggedInGuard],
+    canActivate: [IsLoggedInGuard],
+    resolve: {viewData: EnterViewSettingsService}
   }
 ];
 
