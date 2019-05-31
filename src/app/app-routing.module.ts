@@ -3,11 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HomeComponent } from './home/home.component';
 import {IsLoggedInGuard} from './guards/is-logged-in-guard';
-<<<<<<< HEAD
 import { SettingsComponent } from './settings/settings.component';
-=======
 import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
->>>>>>> clfoltra
 
 const routes: Routes = [
   {
