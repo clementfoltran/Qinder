@@ -16,14 +16,15 @@ export class EnterViewSettingsService {
 
   constructor(private http: HttpClient) { }
 
-  enterView(APIParameter: EnterViewSettingsParameter): Observable<EnterViewSettingsReturn> {
+  enterView(id): Observable<EnterViewSettingsReturn> {
+
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     };
 
-    return this.http.get<EnterViewSettingsReturn>(this.serviceURL + '1', option).pipe(
+    return this.http.get<EnterViewSettingsReturn>(this.serviceURL + id, option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');

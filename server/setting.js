@@ -7,6 +7,7 @@ exports.enterViewSetting = (req, res) => {
     if (res) {
       const sql = 'SELECT firstname, lastname, email, confirm, notifMatch, notifLike, notifMessage FROM user WHERE id_user = ?';
       const query = db.format(sql, [req.params.id]);
+      console.log();
       db.query(query, (err, response) => {
         if (err) {
           res.json({
@@ -53,21 +54,21 @@ exports.updateInfos = (req, res) => {
           res.send(response);
         });
       } else {
-        let sql = 'UPDATE user SET email = ?, notifMatch = ?, notifLike = ?, notifMessage = ?, hash = ? WHERE id_user = ?';
-        const hash = passwordHash.generate(req.body.password);
-        let query = db.format(sql, [
-          req.body.firstname,
-          req.body.lastname,
-          req.body.email,
-          hash,
-        ]);
-        db.query(query, (err, response) => {
-          if (err) {
-            console.log(err);
-            // Todo return ;
-          }
-          res.send(response);
-        });
+        // let sql = 'UPDATE user SET email = ?, notifMatch = ?, notifLike = ?, notifMessage = ?, hash = ? WHERE id_user = ?';
+        // const hash = passwordHash.generate(req.body.password);
+        // let query = db.format(sql, [
+        //   req.body.firstname,
+        //   req.body.lastname,
+        //   req.body.email,
+        //   hash,
+        // ]);
+        // db.query(query, (err, response) => {
+        //   if (err) {
+        //     console.log(err);
+        //     // Todo return ;
+        //   }
+        //   res.send(response);
+        // });
       }
     } else {
       res.sendStatus(401);
