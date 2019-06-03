@@ -35,40 +35,35 @@ exports.enterViewSetting = (req, res) => {
   }
 };
 
-exports.updateInfos = (req, res) => {
+exports.updateName = (req, res) => {
+
+  console.log('UPDATE NAME BACK');
+
   if (!req.body) {
     res.sendStatus(500);
   } else {
     if (res) {
-      if (req.body.firstname && req.body.lastname) {
+      if (req.body.newFirstName && req.body.newLastName) {
         let sql = 'UPDATE user SET firstname = ?, lastname = ? WHERE id_user = ?';
         let query = db.format(sql, [
-          req.body.firstname,
-          req.body.lastname,
-          req.params.id
+          req.body.newFirstName,
+          req.body.newLastName,
+          req.body.idUser
         ]);
         db.query(query, (err, response) => {
           if (err) {
             console.log(err);
           }
-          res.send(response);
+          res.json({
+            message: '[BACK] YEAH USERNAME MODIFIED',
+            success: true,
+          });
         });
       } else {
-        // let sql = 'UPDATE user SET email = ?, notifMatch = ?, notifLike = ?, notifMessage = ?, hash = ? WHERE id_user = ?';
-        // const hash = passwordHash.generate(req.body.password);
-        // let query = db.format(sql, [
-        //   req.body.firstname,
-        //   req.body.lastname,
-        //   req.body.email,
-        //   hash,
-        // ]);
-        // db.query(query, (err, response) => {
-        //   if (err) {
-        //     console.log(err);
-        //     // Todo return ;
-        //   }
-        //   res.send(response);
-        // });
+        res.json({
+          message: '[BACK] FAILED TO UPDATE USERNAME',
+          success: true,
+        });
       }
     } else {
       res.sendStatus(401);

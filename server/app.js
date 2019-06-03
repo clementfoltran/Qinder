@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const port = 8000;
 
 const user = require('./user.js');
-const setting = require('./setting');
+const setting = require('./setting.js');
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -38,10 +38,9 @@ app.post('/login', urlencodedParser, user.login);
 
 app.post('/register', urlencodedParser, user.register);
 
-app.post('/updateName', urlencodedParser, setting.updateInfos);
+app.post('/updateName', urlencodedParser, setting.updateName);
 
 // GET routes
-
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 
 app.listen(port, () => {

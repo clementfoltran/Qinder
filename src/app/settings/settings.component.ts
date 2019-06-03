@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EnterViewSettingsReturn } from './services/enter-view-settings-return';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateNameParameter } from './services/update-name/update-name-parameter';
 import { UpdateNameService } from './services/update-name/update-name.service';
@@ -42,19 +42,20 @@ export class SettingsComponent implements OnInit {
   }
 
   updateName() {
+
     if (this.changeNameForm.valid) {
       this.UpdateNameAPIParameter = {
         newFirstName: this.changeNameForm.get('newFirstName').value,
         newLastName: this.changeNameForm.get('newLastName').value,
-        // idUser: this.activatedRoute.params.id; // fix id
+        idUser: this.activatedRoute.params['_value'].id
       };
     }
     this.updateNameService.updateName(this.UpdateNameAPIParameter)
         .subscribe((result: UpdateNameReturn) => {
           if (result.success) {
-            console.log('okay');
+            console.log('Username Modified');
           } else {
-            console.log('not okay');
+            console.log('Failed to update the name');
           }
           });
   }
