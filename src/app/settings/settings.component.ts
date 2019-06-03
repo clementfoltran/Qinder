@@ -32,7 +32,7 @@ export class SettingsComponent implements OnInit {
   public UpdatePasswordAPIParameter: UpdatePasswordParameter;
   checked = true;
 
-  constructor(public activatedRoute: ActivatedRoute, 
+  constructor (public activatedRoute: ActivatedRoute, 
               public updateNameService: UpdateNameService,
               public updateEmailService: UpdateEmailService,
               public updatePasswordService: UpdatePasswordService,
@@ -68,12 +68,14 @@ export class SettingsComponent implements OnInit {
   }
 
   updateNotifications() {
+    if (this.changeNotificationsForm.valid) {
       this.UpdateNotificationsAPIParameter = {
         notifMatch: this.changeNotificationsForm.get('matchSwitch').value,
         notifLike: this.changeNotificationsForm.get('likeSwitch').value,
         notifMessage: this.changeNotificationsForm.get('messageSwitch').value,
         idUser: this.activatedRoute.params['_value'].id
       };
+    }
     
     this.updateNotificationsService.updateNotifications(this.UpdateNotificationsAPIParameter)
         .subscribe((result: UpdateNameReturn) => {
@@ -91,14 +93,15 @@ export class SettingsComponent implements OnInit {
         idUser: this.activatedRoute.params['_value'].id
       };
     }
-    this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
-        .subscribe((result: UpdateEmailReturn) => {
-          if (result.success) {
-            console.log('EmailModified');
-          } else {
-            console.log('Failed to update the email');
-          }
-        });
+
+      this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
+      .subscribe((result: UpdateEmailReturn) => {
+        if (result.success) {
+          console.log('EmailModified');
+        } else {
+          console.log('Failed to update the email');
+        }
+      });
   }
   updateName() {
     if (this.changeNameForm.valid) {
