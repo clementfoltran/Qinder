@@ -35,10 +35,12 @@ app.get('/', (req, res) => {
 
 // POST routes
 app.post('/login', urlencodedParser, user.login);
-
 app.post('/register', urlencodedParser, user.register);
 
 app.post('/updateName', urlencodedParser, setting.updateName);
+app.post('/updateEmail', urlencodedParser, setting.updateEmail);
+app.post('/updatePassword', urlencodedParser, setting.updatePassword);
+app.post('/updateNotifications', urlencodedParser, setting.updateNotifications);
 
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);

@@ -5,6 +5,14 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UpdateNameParameter } from './services/update-name/update-name-parameter';
 import { UpdateNameService } from './services/update-name/update-name.service';
 import { UpdateNameReturn } from './services/update-name/update-name-return';
+import { UpdateEmailParameter } from './services/update-email/update-email-parameter';
+import { UpdateEmailReturn } from './services/update-email/update-email-return';
+import { UpdateEmailService } from './services/update-email/update-email.service';
+import { UpdatePasswordParameter } from './services/update-password/update-password-parameter';
+import { UpdatePasswordService } from './services/update-password/update-password.service';
+import { UpdatePasswordReturn } from './services/update-password/update-password-return';
+import { UpdateNotificationsParameter } from './services/update-notifications/update-notifications-parameter';
+import { UpdateNotificationsService } from './services/update-notifications/update-notifications.service';
 
 @Component({
   selector: 'app-settings',
@@ -14,16 +22,38 @@ import { UpdateNameReturn } from './services/update-name/update-name-return';
 export class SettingsComponent implements OnInit {
 
   public resolvedData: EnterViewSettingsReturn;
+  public changeNotificationsForm: FormGroup;
   public changeNameForm: FormGroup;
+  public changeEmailForm: FormGroup;
+  public changePasswordForm: FormGroup;
+  public UpdateNotificationsAPIParameter: UpdateNotificationsParameter;
   public UpdateNameAPIParameter: UpdateNameParameter;
+  public UpdateEmailAPIParameter: UpdateEmailParameter;
+  public UpdatePasswordAPIParameter: UpdatePasswordParameter;
+  checked = true;
 
   constructor(public activatedRoute: ActivatedRoute, 
               public updateNameService: UpdateNameService,
+              public updateEmailService: UpdateEmailService,
+              public updatePasswordService: UpdatePasswordService,
+              public updateNotificationsService: UpdateNotificationsService,
               public fb: FormBuilder)
               { 
+                this.changeNotificationsForm = fb.group({
+                  matchSwitch: ['', Validators.required],
+                  likeSwitch: ['', Validators.required],
+                  messageSwitch: ['', Validators.required]
+                });
                 this.changeNameForm = fb.group({
                   newFirstName: ['', Validators.required],
                   newLastName: ['', Validators.required]
+                });
+                this.changeEmailForm = fb.group({
+                  newEmail: ['', Validators.required]
+                });
+                this.changePasswordForm = fb.group({
+                  newPassword: ['', Validators.required],
+                  newPasswordConfirmation: ['', Validators.required]
                 });
               }
 
@@ -32,17 +62,45 @@ export class SettingsComponent implements OnInit {
       this.resolvedData = data.viewData;
     });
     this.checkAccountConfirmed(this.resolvedData);
+    this.checkMatchNotifActivated(this.resolvedData);
+    this.checkLikeNotifActivated(this.resolvedData);
+    this.checkMessageNotifActivated(this.resolvedData);
   }
 
-  updateNotifications(formData) {
-    console.log('success: ', formData);
+  updateNotifications() {
+      this.UpdateNotificationsAPIParameter = {
+        notifMatch: this.changeNotificationsForm.get('matchSwitch').value,
+        notifLike: this.changeNotificationsForm.get('likeSwitch').value,
+        notifMessage: this.changeNotificationsForm.get('messageSwitch').value,
+        idUser: this.activatedRoute.params['_value'].id
+      };
+    
+    this.updateNotificationsService.updateNotifications(this.UpdateNotificationsAPIParameter)
+        .subscribe((result: UpdateNameReturn) => {
+          if (result.success) {
+            console.log('Username Notifications');
+          } else {
+            console.log('Failed to update the notifications');
+          }
+        });
   }
-  updateEmail(formData) {
-    console.log('success: ', formData);
+  updateEmail() {
+    if (this.changeEmailForm.valid) {
+      this.UpdateEmailAPIParameter = {
+        newEmail: this.changeEmailForm.get('newEmail').value,
+        idUser: this.activatedRoute.params['_value'].id
+      };
+    }
+    this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
+        .subscribe((result: UpdateEmailReturn) => {
+          if (result.success) {
+            console.log('EmailModified');
+          } else {
+            console.log('Failed to update the email');
+          }
+        });
   }
-
   updateName() {
-
     if (this.changeNameForm.valid) {
       this.UpdateNameAPIParameter = {
         newFirstName: this.changeNameForm.get('newFirstName').value,
@@ -57,11 +115,24 @@ export class SettingsComponent implements OnInit {
           } else {
             console.log('Failed to update the name');
           }
-          });
+        });
   }
-
-  updatePassword(formData) {
-    console.log('success: ', formData);
+  updatePassword() {
+    if (this.changePasswordForm.valid) {
+      this.UpdatePasswordAPIParameter = {
+        newPassword: this.changePasswordForm.get('newPassword').value,
+        newPasswordConfirmation: this.changePasswordForm.get('newPasswordConfirmation').value,
+        idUser: this.activatedRoute.params['_value'].id
+      };
+    }
+    this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)
+        .subscribe((result: UpdatePasswordReturn) => {
+          if (result.success) {
+            console.log('Password Modified');
+          } else {
+            console.log('Failed to update the password');
+          }
+        });
   }
 
   checkAccountConfirmed(data) {
@@ -69,15 +140,24 @@ export class SettingsComponent implements OnInit {
       return 1;
   }
   checkMatchNotifActivated(data) {
-    if(data.notifMatch === 1)
-      return 1;
+    if(data.notifMatch === 1) {
+      this.changeNotificationsForm.get('matchSwitch').setValue(1);
+    } else {
+      this.changeNotificationsForm.get('matchSwitch').setValue(0);
+    }
   }
   checkLikeNotifActivated(data) {
-    if(data.notifLike === 1)
-      return 1;
+    if(data.notifLike === 1) {
+      this.changeNotificationsForm.get('likeSwitch').setValue(1);
+    } else {
+      this.changeNotificationsForm.get('likeSwitch').setValue(0);
+    }
   }
   checkMessageNotifActivated(data) {
-    if(data.notifMessage === 1)
-      return 1;
+    if(data.notifMessage === 1) {
+      this.changeNotificationsForm.get('messageSwitch').setValue(1);
+    } else {
+      this.changeNotificationsForm.get('messageSwitch').setValue(0);
+    }
   }
 }

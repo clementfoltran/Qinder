@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Globals } from '../../../globals';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,10 +10,21 @@ import { UpdatePasswordReturn } from './update-password-return';
   providedIn: 'root'
 })
 export class UpdatePasswordService {
-  // public serviceURL = Globals.baseURL + 'settings';
-  // constructor(private http: HttpClient) { }
+  public serviceURL = Globals.baseURL + 'updatePassword';
+  constructor(private http: HttpClient) { }
 
-  updatePassword(data) {
+  updatePassword(APIParameter: UpdatePasswordParameter): Observable<UpdatePasswordReturn> {
+    const option = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
 
+    return this.http.post<UpdatePasswordReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
+      catchError((err) => {
+        console.log(err);
+        return throwError('error');
+      }),
+    );
   }
 }

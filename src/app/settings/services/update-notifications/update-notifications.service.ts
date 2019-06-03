@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Globals } from '../../../globals';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,11 +10,21 @@ import { UpdateNotificationsReturn } from './update-notifications-return';
   providedIn: 'root'
 })
 export class UpdateNotificationsService {
+  public serviceURL = Globals.baseURL + 'updateNotifications';
+  constructor(private http: HttpClient) { }
 
-  // public serviceURL = Globals.baseURL + 'settings';
-  // constructor(private http: HttpClient) { }
+  updateNotifications(APIParameter: UpdateNotificationsParameter): Observable<UpdateNotificationsReturn> {
+    const option = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
 
-  updateNotifications(data) {
-
+    return this.http.post<UpdateNotificationsReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
+      catchError((err) => {
+        console.log(err);
+        return throwError('error');
+      }),
+    );
   }
 }

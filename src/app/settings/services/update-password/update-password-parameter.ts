@@ -1,6 +1,6 @@
 export interface UpdatePasswordParameter {
     idUser: number;
-    token: string;
+    // token: string;
     newPassword: string;
     newPasswordConfirmation: string;
 }
