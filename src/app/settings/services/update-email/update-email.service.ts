@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Globals } from '../../../globals';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,10 +10,21 @@ import { UpdateEmailReturn } from './update-email-return';
   providedIn: 'root'
 })
 export class UpdateEmailService {
-  // public serviceURL = Globals.baseURL + 'settings';
-  // constructor(private http: HttpClient) { }
+  public serviceURL = Globals.baseURL + 'updateEmail';
+  constructor(private http: HttpClient) { }
 
-  updateEmail(data) {
+  updateEmail(APIParameter: UpdateEmailParameter): Observable<UpdateEmailReturn> {
+    const option = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    };
 
+    return this.http.post<UpdateEmailReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
+      catchError((err) => {
+        console.log(err);
+        return throwError('error');
+      }),
+    );
   }
 }

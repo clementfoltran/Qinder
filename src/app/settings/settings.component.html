@@ -9,35 +9,46 @@
         </div>
         <div class="modal-body text-center">
             <h3>Your notifications</h3><br>
-            <div class="form-group row">
-                <div class="custom-control custom-switch col-sm-10" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;">
+            <form [formGroup]="changeNotificationsForm">
+              <div class="form-group row">
+                  <div class="custom-control custom-switch col-sm-10" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;">
                     <label style="float:left;">New match</label>
-                    <input *ngIf="checkMatchNotifActivated(resolvedData)" type="checkbox" checked class="custom-control-input" id="customSwitch1">
-                    <input *ngIf="!checkMatchNotifActivated(resolvedData)" type="checkbox" class="custom-control-input" id="customSwitch1">
+                    <input  type="checkbox" 
+                            (change)="updateNotifications($event)" 
+                            class="custom-control-input" 
+                            formControlName="matchSwitch"
+                            id="customSwitch1">
                     <label class="custom-control-label" for="customSwitch1" style="float:right;"></label>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="custom-control custom-switch col-sm-10" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;">
-                    <label style="float:left;">New message</label>
-                    <input *ngIf="checkMessageNotifActivated(resolvedData)" type="checkbox" checked class="custom-control-input" id="customSwitch2">
-                    <input *ngIf="!checkMessageNotifActivated(resolvedData)" type="checkbox" class="custom-control-input" id="customSwitch2">
-                    <label class="custom-control-label" for="customSwitch2" style="float:right;"></label>
-                </div>
-            </div>
-          <div class="form-group row">
-              <div class="custom-control custom-switch col-sm-10" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;">
-                  <label style="float:left;">New like</label>
-                  <input *ngIf="checkLikeNotifActivated(resolvedData)" type="checkbox" checked class="custom-control-input" id="customSwitch3">
-                  <input *ngIf="!checkLikeNotifActivated(resolvedData)" type="checkbox" class="custom-control-input" id="customSwitch3">
-                  <label class="custom-control-label" for="customSwitch3" style="float:right;"></label>
+                  </div>
               </div>
+              <div class="form-group row">
+                  <div class="custom-control custom-switch col-sm-10" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;">
+                    <label style="float:left;">New message</label>
+                    <input  type="checkbox" 
+                            (change)="updateNotifications($event)" 
+                            class="custom-control-input" 
+                            formControlName="messageSwitch"
+                            id="customSwitch2">
+                    <label class="custom-control-label" for="customSwitch2" style="float:right;"></label>
+                  </div>
+              </div>
+              <div class="form-group row">
+                  <div class="custom-control custom-switch col-sm-10" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;">
+                    <label style="float:left;">New like</label>
+                    <input  type="checkbox" 
+                            (change)="updateNotifications($event)" 
+                            class="custom-control-input" 
+                            formControlName="likeSwitch"
+                            id="customSwitch3">
+                    <label class="custom-control-label" for="customSwitch3" style="float:right;"></label>
+                  </div>
+              </div>
+            </form>
           </div>
-        </div>
-
       </div>
     </div>
   </div>
+
 <!-- Username modal -->
 <div [hidden]="hideModal" class="modal fade" id="usernameModal" tabindex="-1" role="dialog" aria-labelledby="usernameModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -89,16 +100,17 @@
           </button>
         </div>
         <div class="modal-body text-center">
+
           <h3>{{ resolvedData.email }}</h3><br>
           <h4 *ngIf="checkAccountConfirmed(resolvedData)" style="color: green">Confirmed</h4>
           <h4 *ngIf="!checkAccountConfirmed(resolvedData)" style="color: red">Please confirm email</h4>
-          <form #settingsEmailform="ngForm" (ngSubmit)="updateEmail(settingsEmailform.value)">
+          <form [formGroup]="changeEmailForm" (ngSubmit)="updateEmail()">
             <div class="form-group">
               <input 
               type="text" 
               class="form-control" 
-              ngModel 
-              name="newEmail" 
+              name="newEmail"
+              formControlName="newEmail"
               placeholder="New email">
             </div>
             <div class="modal-footer">
@@ -120,23 +132,23 @@
           </button>
         </div>
         <div class="modal-body text-center">
-          <form #settingsPasswordForm="ngForm" (ngSubmit)="updatePassword(settingsPasswordForm.value)">
+          <form [formGroup]="changePasswordForm" (ngSubmit)="updatePassword()">
             <div class="form-group">
               <label>New password</label>
               <input 
-              type="text" 
+              type="password" 
               class="form-control" 
-              ngModel 
               name="newPassword" 
+              formControlName="newPassword"
               placeholder="New password">
             </div>
             <label>Confirm new password</label>
             <div class="form-group">
               <input 
-              type="text" 
+              type="password" 
               class="form-control" 
-              ngModel 
               name="newPasswordConfirmation" 
+              formControlName="newPasswordConfirmation"
               placeholder="Confirm new password">
             </div>
             <div class="modal-footer">

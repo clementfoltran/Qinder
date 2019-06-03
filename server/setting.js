@@ -1,4 +1,5 @@
 const db = require('./database.js');
+const passwordHash = require('password-hash');
 
 exports.enterViewSetting = (req, res) => {
   if (!req.body) {
@@ -35,40 +36,131 @@ exports.enterViewSetting = (req, res) => {
   }
 };
 
-exports.updateInfos = (req, res) => {
+exports.updateNotifications = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
   } else {
     if (res) {
-      if (req.body.firstname && req.body.lastname) {
-        let sql = 'UPDATE user SET firstname = ?, lastname = ? WHERE id_user = ?';
+      if (req.body.notifMatch || req.body.notifLike || req.body.notifMessage) {
+        let sql = 'UPDATE user SET notifMatch = ?, notifLike = ?, notifMessage = ? WHERE id_user = ?';
         let query = db.format(sql, [
-          req.body.firstname,
-          req.body.lastname,
-          req.params.id
+          req.body.notifMatch,
+          req.body.notifLike,
+          req.body.notifMessage,
+          req.body.idUser
         ]);
         db.query(query, (err, response) => {
           if (err) {
             console.log(err);
           }
-          res.send(response);
+          res.json({
+            message: '[BACK] YEAH NOTIFICATIONS PREFERENCES MODIFIED',
+            success: true,
+          });
         });
       } else {
-        // let sql = 'UPDATE user SET email = ?, notifMatch = ?, notifLike = ?, notifMessage = ?, hash = ? WHERE id_user = ?';
-        // const hash = passwordHash.generate(req.body.password);
-        // let query = db.format(sql, [
-        //   req.body.firstname,
-        //   req.body.lastname,
-        //   req.body.email,
-        //   hash,
-        // ]);
-        // db.query(query, (err, response) => {
-        //   if (err) {
-        //     console.log(err);
-        //     // Todo return ;
-        //   }
-        //   res.send(response);
-        // });
+        res.json({
+          message: '[BACK] FAILED TO UPDATE NOTIFICATIONS PREFERENCES',
+          success: true,
+        });
+      }
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.updateName = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      if (req.body.newFirstName && req.body.newLastName) {
+        let sql = 'UPDATE user SET firstname = ?, lastname = ? WHERE id_user = ?';
+        let query = db.format(sql, [
+          req.body.newFirstName,
+          req.body.newLastName,
+          req.body.idUser
+        ]);
+        db.query(query, (err, response) => {
+          if (err) {
+            console.log(err);
+          }
+          res.json({
+            message: '[BACK] YEAH USERNAME MODIFIED',
+            success: true,
+          });
+        });
+      } else {
+        res.json({
+          message: '[BACK] FAILED TO UPDATE USERNAME',
+          success: true,
+        });
+      }
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.updateEmail = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      if (req.body.newEmail) {
+        let sql = 'UPDATE user SET email = ? WHERE id_user = ?';
+        let query = db.format(sql, [
+          req.body.newEmail,
+          req.body.idUser
+        ]);
+        db.query(query, (err, response) => {
+          if (err) {
+            console.log(err);
+          }
+          res.json({
+            message: '[BACK] YEAH EMAIL MODIFIED',
+            success: true,
+          });
+        });
+      } else {
+        res.json({
+          message: '[BACK] FAILED TO UPDATE EMAIL',
+          success: true,
+        });
+      }
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.updatePassword = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      if (req.body.newPassword === req.body.newPasswordConfirmation) {
+        let sql = 'UPDATE user SET hash = ? WHERE id_user = ?';
+        const hash = passwordHash.generate(req.body.newPassword);
+        let query = db.format(sql, [
+          hash,
+          req.body.idUser
+        ]);
+        db.query(query, (err, response) => {
+          if (err) {
+            console.log(err);
+          }
+          res.json({
+            message: '[BACK] YEAH PASSWORD MODIFIED',
+            success: true,
+          });
+        });
+      } else {
+        res.json({
+          message: '[BACK] FAILED TO UPDATE PASSWORD',
+          success: true,
+        });
       }
     } else {
       res.sendStatus(401);

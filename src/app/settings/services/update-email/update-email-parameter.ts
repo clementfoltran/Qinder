@@ -1,5 +1,5 @@
 export interface UpdateEmailParameter {
     idUser: number;
-    token: string;
+    // token: string;
     newEmail: string;
 }

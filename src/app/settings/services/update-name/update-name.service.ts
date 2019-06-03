@@ -10,7 +10,6 @@ import { UpdateNameReturn } from './update-name-return';
   providedIn: 'root'
 })
 export class UpdateNameService {
-
   public serviceURL = Globals.baseURL + 'updateName';
   constructor(private http: HttpClient) { }
 
