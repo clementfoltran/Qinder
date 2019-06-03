@@ -3,7 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HomeComponent } from './home/home.component';
 import {IsLoggedInGuard} from './guards/is-logged-in-guard';
+import { SettingsComponent } from './settings/settings.component';
 import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
+import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
+import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 
 const routes: Routes = [
   {
@@ -16,12 +19,21 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     canActivate: [IsLoggedInGuard],
+  },
+  {
+    path: 'settings/:id',
+    component: SettingsComponent,
+    canActivate: [IsLoggedInGuard],
+    resolve: {viewData: EnterViewSettingsResolve}
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  providers: [IsLoggedInGuard, IsLoggedOutGuard],
+  providers: [
+    IsLoggedInGuard,
+    IsLoggedOutGuard
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule { }

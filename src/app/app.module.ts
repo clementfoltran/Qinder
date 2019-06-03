@@ -14,13 +14,21 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RegisterService} from './landing-page/services/register/register.service';
 import {LoginService} from './landing-page/services/login/login.service';
 import {SliderModule} from 'primeng/slider';
+import { SettingsComponent } from './settings/settings.component';
+import { UpdatePasswordService } from './settings/services/update-password/update-password.service';
+import { UpdateEmailService } from './settings/services/update-email/update-email.service';
+import { UpdateNameService } from './settings/services/update-name/update-name.service';
+import { UpdateNotificationsService } from './settings/services/update-notifications/update-notifications.service';
+import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
+import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 
 @NgModule({
   declarations: [
     AppComponent,
     MenuComponent,
     LandingPageComponent,
-    HomeComponent
+    HomeComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +45,12 @@ import {SliderModule} from 'primeng/slider';
     MessageService,
     RegisterService,
     LoginService,
+    UpdatePasswordService,
+    UpdateEmailService,
+    UpdateNameService,
+    UpdateNotificationsService,
+    EnterViewSettingsService,
+    EnterViewSettingsResolve
   ],
   bootstrap: [AppComponent]
 })

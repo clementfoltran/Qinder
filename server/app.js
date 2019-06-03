@@ -38,6 +38,8 @@ app.post('/login', urlencodedParser, user.login);
 
 app.post('/register', urlencodedParser, user.register);
 
+app.post('/updateName', urlencodedParser, setting.updateInfos);
+
 // GET routes
 
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
