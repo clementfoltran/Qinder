@@ -20,6 +20,7 @@ import { UpdateNameService } from './settings/services/update-name/update-name.s
 import { UpdateNotificationsService } from './settings/services/update-notifications/update-notifications.service';
 import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
+import {SliderModule} from 'primeng/slider';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { EnterViewSettingsResolve } from './settings/services/enter-view-setting
     ReactiveFormsModule,
     AccordionModule,
     ToastModule,
+    SliderModule,
   ],
   providers: [
     MessageService,
