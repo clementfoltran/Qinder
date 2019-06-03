@@ -13,6 +13,7 @@ import {AccordionModule, MessageService} from 'primeng/primeng';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RegisterService} from './landing-page/services/register/register.service';
 import {LoginService} from './landing-page/services/login/login.service';
+import {SliderModule} from 'primeng/slider';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import {LoginService} from './landing-page/services/login/login.service';
     ReactiveFormsModule,
     AccordionModule,
     ToastModule,
+    SliderModule,
   ],
   providers: [
     MessageService,
