@@ -54,54 +54,54 @@
 </div>
 <!-- Register modal -->
 <div class="modal modal-profile fade" id="modRegister" tabindex="-1" role="dialog" aria-labelledby="modRegister" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <div class="logo m-auto">
-            <img src="../../assets/img/logo-min.svg" height="100px" alt="">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="logo m-auto">
+          <img src="../../assets/img/logo-min.svg" height="100px" alt="">
+        </div>
+        <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <h2 class="m-auto p-2">WELCOME ON BOARD</h2>
+      <div class="modal-body text-center">
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+          <div class="form-group">
+            <label>Firstname</label>
+            <input type="text" formControlName="firstname" class="form-control" aria-describedby="emailHelp" placeholder="Firstname">
           </div>
-          <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <h2 class="m-auto p-2">WELCOME ON BOARD</h2>
-        <div class="modal-body text-center">
-          <form [formGroup]="registerForm" (ngSubmit)="register()">
-            <div class="form-group">
-              <label>Firstname</label>
-              <input type="text" formControlName="firstname" class="form-control" aria-describedby="emailHelp" placeholder="Firstname">
-            </div>
-            <div class="form-group">
-              <label>Lastname</label>
-              <input type="text" formControlName="lastname" class="form-control" aria-describedby="emailHelp" placeholder="Lastname">
-            </div>
-            <div class="form-group">
-              <label>Email address</label>
-              <input type="email" formControlName="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
-            </div>
-            <div class="form-group">
-              <label>Password</label>
-              <input type="password" class="form-control" placeholder="Password">
-            </div>
-            <div class="form-group">
-              <label>Confirm password</label>
-              <input type="password" formControlName="passwd" name="passwd" class="form-control" placeholder="Password">
-            </div>
-            <div class="form-group">
-              <label>Gender</label>
-              <select class="custom-select" formControlName="gender">
-                <option selected>Male</option>
-                <option>Female</option>
-              </select>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary m-auto">REGISTER</button>
-            </div>
-          </form>
-        </div>
+          <div class="form-group">
+            <label>Lastname</label>
+            <input type="text" formControlName="lastname" class="form-control" aria-describedby="emailHelp" placeholder="Lastname">
+          </div>
+          <div class="form-group">
+            <label>Email address</label>
+            <input type="email" formControlName="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label>Confirm password</label>
+            <input type="password" formControlName="passwd" name="passwd" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select class="custom-select" formControlName="gender">
+              <option selected>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary m-auto">REGISTER</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 <footer>
     <p>© 2019 made with ☕️ by Clément and Martin</p>
 </footer>

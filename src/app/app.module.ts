@@ -54,4 +54,5 @@ import { EnterViewSettingsResolve } from './settings/services/enter-view-setting
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }
