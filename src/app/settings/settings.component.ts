@@ -32,6 +32,44 @@ export class SettingsComponent implements OnInit {
   public UpdateEmailAPIParameter: UpdateEmailParameter;
   public UpdatePasswordAPIParameter: UpdatePasswordParameter;
 
+  CheckFirstName(event) {
+    const firstname_message = document.getElementById("firstname_message");
+    var newFirstName = (document.getElementById("newFirstName") as HTMLInputElement).value; 
+
+    if (newFirstName.length > 1) {
+      firstname_message.innerHTML = "✓ Beautiful name!";
+      firstname_message.style.color = "green";
+    } else {
+      firstname_message.innerHTML = "✗ Too short :(";
+      firstname_message.style.color = "red";
+    }
+  }
+  CheckLastName(event) {
+    const lastname_message = document.getElementById("lastname_message");
+    var newLastName = (document.getElementById("newLastName") as HTMLInputElement).value;
+
+    if (newLastName.length > 1) {
+      lastname_message.innerHTML = "✓ Beautiful family name!";
+      lastname_message.style.color = "green";
+    } else {
+      lastname_message.innerHTML = "✗ Too short :(";
+      lastname_message.style.color = "red";
+    }
+  }
+
+  CheckEmail(event) {
+    const email_message = document.getElementById("email_message");
+    var email = (document.getElementById("newEmail") as HTMLInputElement).value; 
+
+    if (/^[a-z0-9\_\.\-]{2,20}\@[a-z0-9\_\-]{2,20}\.[a-z]{2,9}$/.test(email)) {
+      email_message.innerHTML = "✓ Valid email format";
+      email_message.style.color = "green";
+    } else {
+      email_message.innerHTML = "✗ Wrong email format";
+      email_message.style.color = "red";
+    }
+  }
+  
   CheckPassword(event){
     const password_len_message = document.getElementById("password_len_message");
     const password_up_message = document.getElementById("password_up_message");
@@ -44,7 +82,7 @@ export class SettingsComponent implements OnInit {
     var aNumber = /[0-9]/;
     var aSpecial = /[!|@|#|$|%|^|&|*|(|)|=|+|-|_]/;
  
-        if (password.length < 12)
+        if (password.length >= 8)
         {
             password_len_message.innerHTML = "✗ 12 characters or more";
             password_len_message.style.color = "red";
