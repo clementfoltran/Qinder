@@ -139,18 +139,29 @@
               type="password" 
               class="form-control" 
               name="newPassword" 
+              id="newPassword"
+              #newPassword
               formControlName="newPassword"
-              placeholder="New password">
+              placeholder="New password"
+              (keyup)="CheckPassword($event)">
             </div>
+            <p id="password_len_message" class="password_len_message"></p>
+            <p id="password_up_message" class="password_up_message"></p>
+            <p id="password_num_message" class="password_num_message"></p>
+            <p id="password_spe_message" class="password_spe_message"></p>
             <label>Confirm new password</label>
             <div class="form-group">
               <input 
               type="password" 
               class="form-control" 
               name="newPasswordConfirmation" 
+              id="newPasswordConfirmation"
+              #newPasswordConfirmation
               formControlName="newPasswordConfirmation"
-              placeholder="Confirm new password">
+              placeholder="Confirm new password"
+              (keyup)="CheckPasswordsMatch($event)">
             </div>
+            <p id="password_match_message" class="password_match_message"></p>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
             </div>
@@ -181,3 +192,5 @@
     </div>
 
 </div>
+
+<script>src="./check-password-script.js"</script>
