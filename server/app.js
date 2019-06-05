@@ -45,6 +45,7 @@ app.post('/updateNotifications', urlencodedParser, setting.updateNotifications);
 
 app.post('/updatePreferences', urlencodedParser, home.updatePreferences);
 app.post('/uploadPhoto', urlencodedParser, home.uploadPhoto);
+app.post('/deletePhoto', urlencodedParser, home.deletePhoto);
 
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);

@@ -36,7 +36,7 @@
               <div *ngIf="userPhotos.length > 0">
                 <div *ngFor="let photo of userPhotos">
                   <div class="col-lg-4 col-sm-6">
-                    <img class="thumbnail rounded" height="150" width="150" src="data:image/png;base64,{{ photo.photo }}">
+                    <img (click)="deletePhoto(photo.id_photo, photo.id_user)" class="thumbnail rounded" height="150" width="150" src="data:image/png;base64,{{ photo.photo }}">
                   </div>
                 </div>
               </div>

@@ -12,6 +12,9 @@ import {GetUserPhotosService} from './services/get-user-photos/get-user-photos.s
 import {UploadPhotoService} from './services/upload-photo/upload-photo.service';
 import {UploadPhotoParameter} from './services/upload-photo/upload-photo-parameter';
 import {UploadPhotoReturn} from './services/upload-photo/upload-photo-return';
+import {DeletePhotoService} from './services/delete-photo/delete-photo.service';
+import {DeletePhotoParameter} from './services/delete-photo/delete-photo-parameter';
+import {DeletePhotoReturn} from './services/delete-photo/delete-photo-return';
 
 @Component({
   selector: 'app-home',
@@ -59,6 +62,11 @@ export class HomeComponent implements OnInit {
    *
    */
   public APIParameterPhoto: UploadPhotoParameter;
+  /**
+   * Delete photo expected data
+   *
+   */
+  public APIParameterDelPhoto: DeletePhotoParameter;
   public firstname: string;
 
   logOut() {
@@ -71,7 +79,6 @@ export class HomeComponent implements OnInit {
         if (result.success) {
           this.userPhotos = result.photos;
           console.log(this.userPhotos);
-          console.log(this.userPhotos.length);
         } else {
           this.messageService.add({
             severity: 'error',
@@ -114,6 +121,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  // TODO check the empty images
   uploadPhoto() {
     this.APIParameterPhoto = {
       id: 1,
@@ -151,10 +159,29 @@ export class HomeComponent implements OnInit {
     };
   }
 
+  deletePhoto(idPhoto, idUser) {
+    this.APIParameterDelPhoto = {
+      id_photo: idPhoto,
+      id_user: idUser
+    };
+    this.deletePhotoService.deletePhoto(this.APIParameterDelPhoto)
+      .subscribe((result: DeletePhotoReturn) => {
+        if (!result.success) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Network',
+            detail: 'Check your connection',
+            life: 6000,
+          });
+        }
+      });
+  }
+
   constructor(public enterViewHomeService: EnterViewHomeService,
               public messageService: MessageService,
               public getUserPhotosService: GetUserPhotosService,
               public uploadPhotoService: UploadPhotoService,
+              public deletePhotoService: DeletePhotoService,
               public updatePreferencesService: UpdatePreferencesService,
               public fb: FormBuilder,
               public loginService: LoginService) {
