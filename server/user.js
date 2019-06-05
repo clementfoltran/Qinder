@@ -43,7 +43,7 @@ exports.register = (req, res) => {
   } else {
     if (res) {
       if (checkRegisterData(req.body.firstname, req.body.lastname, req.body.email, req.body.password, req.body.passwordConfirmation)) {
-        let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
         const hash = passwordHash.generate(req.body.password);
         let query = db.format(sql, [
           req.body.firstname,
@@ -52,6 +52,8 @@ exports.register = (req, res) => {
           hash,
           req.body.gender,
           new Date().toISOString().slice(0, 19).replace('T', ' '),
+          null,
+          null,
           null,
           null,
           null,
@@ -83,6 +85,43 @@ exports.register = (req, res) => {
     }
   }
 };
+
+exports.sendMail = (req, res) => {
+  if (res)
+  {
+    nodeMailerCall(req.body.firstname, req.body.email, req.body.key, info => {
+      res.send(info);
+    });
+    res.json({
+      message: 'Email sent!',
+      success: true,
+    });
+  }
+}
+
+async function nodeMailerCall(userName, email, key, callback) {
+
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'percival.weimann@ethereal.email',
+        pass: 'u8WQJRnehmNvx9dqAA'
+    }
+  });
+
+  let info = await transporter.sendMail({
+    from: '"Martin @ MATCHA" <martin@matcha.io>',
+    to: email,
+    subject: "Validate your MATCHA account :)",
+    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:8000/activate?key=${key}`,
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+  callback(info);
+}
 
 function checkRegisterData(firstname, lastname, email, password, passwordConfirmation)
 {
@@ -119,41 +158,4 @@ function checkRegisterData(firstname, lastname, email, password, passwordConfirm
       }
     }
   }
-}
-
-exports.sendMail = (req, res) => {
-  if (res)
-  {
-    nodeMailerCall(req.body.firstname, req.body.email, info => {
-      res.send(info);
-    });
-    res.json({
-      message: 'Email sent!',
-      success: true,
-    });
-  }
-}
-
-async function nodeMailerCall(userName, email, callback) {
-
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: 'percival.weimann@ethereal.email',
-        pass: 'u8WQJRnehmNvx9dqAA'
-    }
-  });
-
-  let info = await transporter.sendMail({
-    from: '"Martin @ MATCHA" <martin@matcha.io>',
-    to: email,
-    subject: "Validate your MATCHA account :)",
-    text: `Hello ${userName}! Please click the link below to activate your Matcha account: ...`,
-  });
-
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
-  callback(info);
 }
