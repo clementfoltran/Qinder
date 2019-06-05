@@ -76,10 +76,9 @@ ngOnInit() {
         idUser: this.activatedRoute.params['_value'].id
       };
     }
-    
     this.updateNotificationsService.updateNotifications(this.UpdateNotificationsAPIParameter)
         .subscribe((result: UpdateNameReturn) => {
-          console.log('success: ', result);
+          console.log('result: ', result);
           if (result.success) {
             console.log('Username Notifications');
           } else {
