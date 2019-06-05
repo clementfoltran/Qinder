@@ -32,13 +32,12 @@ export class SettingsComponent implements OnInit {
   public UpdateEmailAPIParameter: UpdateEmailParameter;
   public UpdatePasswordAPIParameter: UpdatePasswordParameter;
 
-  constructor (public activatedRoute: ActivatedRoute, 
-    public updateNameService: UpdateNameService,
-    public updateEmailService: UpdateEmailService,
-    public updatePasswordService: UpdatePasswordService,
-    public updateNotificationsService: UpdateNotificationsService,
-    public fb: FormBuilder)
-    { 
+  constructor(public activatedRoute: ActivatedRoute,
+               public updateNameService: UpdateNameService,
+               public updateEmailService: UpdateEmailService,
+               public updatePasswordService: UpdatePasswordService,
+               public updateNotificationsService: UpdateNotificationsService,
+               public fb: FormBuilder) {
       this.changeNotificationsForm = fb.group({
         matchSwitch: ['', Validators.required],
         likeSwitch: ['', Validators.required],
@@ -73,7 +72,7 @@ ngOnInit() {
         notifMatch: this.changeNotificationsForm.get('matchSwitch').value,
         notifLike: this.changeNotificationsForm.get('likeSwitch').value,
         notifMessage: this.changeNotificationsForm.get('messageSwitch').value,
-        idUser: this.activatedRoute.params['_value'].id
+        idUser: this.activatedRoute.params._value.id
       };
     }
     this.updateNotificationsService.updateNotifications(this.UpdateNotificationsAPIParameter)
@@ -90,11 +89,11 @@ ngOnInit() {
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
         newEmail: this.changeEmailForm.get('newEmail').value,
-        idUser: this.activatedRoute.params['_value'].id
+        idUser: this.activatedRoute.params._value.id
       };
     }
 
-      this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
+    this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
       .subscribe((result: UpdateEmailReturn) => {
         if (result.success) {
           console.log('EmailModified');
@@ -108,7 +107,7 @@ ngOnInit() {
       this.UpdateNameAPIParameter = {
         newFirstName: this.changeNameForm.get('newFirstName').value,
         newLastName: this.changeNameForm.get('newLastName').value,
-        idUser: this.activatedRoute.params['_value'].id
+        idUser: this.activatedRoute.params._value.id
       };
     }
     this.updateNameService.updateName(this.UpdateNameAPIParameter)
@@ -125,7 +124,7 @@ ngOnInit() {
       this.UpdatePasswordAPIParameter = {
         newPassword: this.changePasswordForm.get('newPassword').value,
         newPasswordConfirmation: this.changePasswordForm.get('newPasswordConfirmation').value,
-        idUser: this.activatedRoute.params['_value'].id
+        idUser: this.activatedRoute.params._value.id
       };
     }
     this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)
@@ -144,21 +143,21 @@ ngOnInit() {
     }
   }
   checkMatchNotifActivated(data) {
-    if(data.notifMatch === 1) {
+    if (data.notifMatch === 1) {
       this.changeNotificationsForm.get('matchSwitch').setValue(1);
     } else {
       this.changeNotificationsForm.get('matchSwitch').setValue(0);
     }
   }
   checkLikeNotifActivated(data) {
-    if(data.notifLike === 1) {
+    if (data.notifLike === 1) {
       this.changeNotificationsForm.get('likeSwitch').setValue(1);
     } else {
       this.changeNotificationsForm.get('likeSwitch').setValue(0);
     }
   }
   checkMessageNotifActivated(data) {
-    if(data.notifMessage === 1) {
+    if (data.notifMessage === 1) {
       this.changeNotificationsForm.get('messageSwitch').setValue(1);
     } else {
       this.changeNotificationsForm.get('messageSwitch').setValue(0);
@@ -166,117 +165,109 @@ ngOnInit() {
   }
 
   CheckFirstName(event) {
-    const firstname_message = document.getElementById("firstname_message");
-    var newFirstName = (document.getElementById("newFirstName") as HTMLInputElement).value; 
+    const firstname_message = document.getElementById('firstname_message');
+    let newFirstName = (document.getElementById('newFirstName') as HTMLInputElement).value;
 
     if (newFirstName.length > 1) {
-      firstname_message.innerHTML = "✓ Beautiful name!";
-      firstname_message.style.color = "green";
+      firstname_message.innerHTML = '✓ Beautiful name!';
+      firstname_message.style.color = 'green';
     } else {
-      firstname_message.innerHTML = "✗ Too short :(";
-      firstname_message.style.color = "red";
+      firstname_message.innerHTML = '✗ Too short :(';
+      firstname_message.style.color = 'red';
     }
   }
   CheckLastName(event) {
-    const lastname_message = document.getElementById("lastname_message");
-    var newLastName = (document.getElementById("newLastName") as HTMLInputElement).value;
+    const lastname_message = document.getElementById('lastname_message');
+    let newLastName = (document.getElementById('newLastName') as HTMLInputElement).value;
 
     if (newLastName.length > 1) {
-      lastname_message.innerHTML = "✓ Beautiful family name!";
-      lastname_message.style.color = "green";
+      lastname_message.innerHTML = '✓ Beautiful family name!';
+      lastname_message.style.color = 'green';
     } else {
-      lastname_message.innerHTML = "✗ Too short :(";
-      lastname_message.style.color = "red";
+      lastname_message.innerHTML = '✗ Too short :(';
+      lastname_message.style.color = 'red';
     }
   }
 
   CheckEmail(event) {
-    const email_message = document.getElementById("email_message");
-    var email = (document.getElementById("newEmail") as HTMLInputElement).value; 
+    const email_message = document.getElementById('email_message');
+    let email = (document.getElementById('newEmail') as HTMLInputElement).value;
 
     if (/^[a-z0-9\_\.\-]{2,20}\@[a-z0-9\_\-]{2,20}\.[a-z]{2,9}$/.test(email)) {
-      email_message.innerHTML = "✓ Valid email format";
-      email_message.style.color = "green";
+      email_message.innerHTML = '✓ Valid email format';
+      email_message.style.color = 'green';
     } else {
-      email_message.innerHTML = "✗ Wrong email format";
-      email_message.style.color = "red";
+      email_message.innerHTML = '✗ Wrong email format';
+      email_message.style.color = 'red';
     }
   }
-  
+
   CheckPassword(event) {
-    const password_len_message = document.getElementById("password_len_message");
-    const password_up_message = document.getElementById("password_up_message");
-    const password_num_message = document.getElementById("password_num_message");
-    const password_spe_message = document.getElementById("password_spe_message");
-    var password = (document.getElementById("newPassword") as HTMLInputElement).value; 
-   
-    var anUpperCase = /[A-Z]/;
-    var aLowerCase = /[a-z]/; 
-    var aNumber = /[0-9]/;
-    var aSpecial = /[!|@|#|$|%|^|&|*|(|)|=|+|-|_]/;
- 
-        if (password.length < 8)
-        {
-            password_len_message.innerHTML = "✗ 8 characters or more";
-            password_len_message.style.color = "red";
+    const password_len_message = document.getElementById('password_len_message');
+    const password_up_message = document.getElementById('password_up_message');
+    const password_num_message = document.getElementById('password_num_message');
+    const password_spe_message = document.getElementById('password_spe_message');
+    let password = (document.getElementById('newPassword') as HTMLInputElement).value;
+
+    let anUpperCase = /[A-Z]/;
+    let aLowerCase = /[a-z]/;
+    let aNumber = /[0-9]/;
+    let aSpecial = /[!|@|#|$|%|^|&|*|(|)|=|+|-|_]/;
+
+    if (password.length < 8) {
+            password_len_message.innerHTML = '✗ 8 characters or more';
+            password_len_message.style.color = 'red';
         } else {
-            password_len_message.innerHTML = "✓ 8 characters or more";
-            password_len_message.style.color = "green";
+            password_len_message.innerHTML = '✓ 8 characters or more';
+            password_len_message.style.color = 'green';
         }
 
-        var numUpper = 0;
-        var numNums = 0;
-        var numSpecials = 0;
-        for (var i = 0; i < password.length; i++){
-            if (anUpperCase.test(password[i]))
+    let numUpper = 0;
+    let numNums = 0;
+    let numSpecials = 0;
+    for (let i = 0; i < password.length; i++) {
+            if (anUpperCase.test(password[i])) {
                 numUpper++;
-            else if (aNumber.test(password[i]))
+            } else if (aNumber.test(password[i])) {
                 numNums++;
-            else if (aSpecial.test(password[i]))
+                 } else if (aSpecial.test(password[i])) {
                 numSpecials++;
+                 }
         }
-        if (numUpper < 1)
-        {
-            password_up_message.innerHTML = "✗ Upper characters";
-            password_up_message.style.color = "red";
-        } else 
-        {
-            password_up_message.innerHTML = "✓ Upper characters";
-            password_up_message.style.color = "green";
+    if (numUpper < 1) {
+            password_up_message.innerHTML = '✗ Upper characters';
+            password_up_message.style.color = 'red';
+        } else {
+            password_up_message.innerHTML = '✓ Upper characters';
+            password_up_message.style.color = 'green';
         }
-        if (numNums < 1)
-        {
-            password_num_message.innerHTML = "✗ Numbers";
-            password_num_message.style.color = "red";
-        } else 
-        {
-            password_num_message.innerHTML = "✓ Numbers";
-            password_num_message.style.color = "green";
+    if (numNums < 1) {
+            password_num_message.innerHTML = '✗ Numbers';
+            password_num_message.style.color = 'red';
+        } else {
+            password_num_message.innerHTML = '✓ Numbers';
+            password_num_message.style.color = 'green';
         }
-        if (numSpecials < 1)
-        {
-            password_spe_message.innerHTML = "✗ Special characters";
-            password_spe_message.style.color = "red";
-        } else 
-        {
-            password_spe_message.innerHTML = "✓ Special characters";
-            password_spe_message.style.color = "green";
+    if (numSpecials < 1) {
+            password_spe_message.innerHTML = '✗ Special characters';
+            password_spe_message.style.color = 'red';
+        } else {
+            password_spe_message.innerHTML = '✓ Special characters';
+            password_spe_message.style.color = 'green';
         }
   }
 
   CheckPasswordsMatch(event) {
-    const password_match_message = document.getElementById("password_match_message");
-    var password = (document.getElementById("newPassword") as HTMLInputElement).value;
-    var passwordConfirmation = (document.getElementById("newPasswordConfirmation") as HTMLInputElement).value;
+    const password_match_message = document.getElementById('password_match_message');
+    let password = (document.getElementById('newPassword') as HTMLInputElement).value;
+    let passwordConfirmation = (document.getElementById('newPasswordConfirmation') as HTMLInputElement).value;
 
-    if (password !== passwordConfirmation)
-    {
-      password_match_message.innerHTML = "✗ Passwords don't match";
-      password_match_message.style.color = "red";
-    } else 
-    {
-      password_match_message.innerHTML = "✓ Passwords match";
-      password_match_message.style.color = "green";
+    if (password !== passwordConfirmation) {
+      password_match_message.innerHTML = '✗ Passwords don\'t match';
+      password_match_message.style.color = 'red';
+    } else {
+      password_match_message.innerHTML = '✓ Passwords match';
+      password_match_message.style.color = 'green';
     }
   }
 }

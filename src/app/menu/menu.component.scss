@@ -12,6 +12,7 @@
     }
 
     .nav-item:hover {
-        background-image: linear-gradient(rgba(240, 67, 33, 0.5), rgba(240, 92, 33, 0.5));
+        cursor: pointer;
+        background-image: linear-gradient(rgba(240, 67, 33, 0.7), rgba(240, 92, 33, 0.7));
     }
 }
