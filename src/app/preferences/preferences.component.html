@@ -1,0 +1,48 @@
+<form [formGroup]="prefForm" (ngSubmit)="updatePref()">
+  <div class="form-group mb-4">
+    <div class="row">
+      <div *ngIf="userPhotos.length > 0">
+        <div *ngFor="let photo of userPhotos">
+          <div class="col-lg-4 col-sm-6">
+            <img (click)="deletePhoto(photo.id_photo, photo.id_user)" class="thumbnail rounded" height="150" width="150" src="data:image/png;base64,{{ photo.photo }}">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group mb-4">
+    <div class="custom-file">
+      <input type="file" class="custom-file-input" id="customFile" (change)="onFileChanged($event)">
+      <label class="custom-file-label" for="customFile">Add photo</label>
+    </div>
+    <button type="button" (click)="uploadPhoto()" class="btn btn-primary m-2">Upload</button>
+  </div>
+  <div class="form-group mb-4">
+    <label>Write biography</label>
+    <textarea formControlName="bio" class="form-control" rows="3"></textarea>
+    <button type="submit" class="btn btn-primary m-2">Update biography</button>
+  </div>
+  <div class="form-group mb-4">
+    <label>I'm interested by</label>
+    <select class="custom-select" formControlName="gender" (change)="updatePref()">
+      <option selected>Male</option>
+      <option>Female</option>
+      <option>Both</option>
+    </select>
+  </div>
+  <div class="form-group mb-4">
+    <label>Distance {{ distance }} kms</label>
+    <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+  </div>
+  <div class="form-group mb-4">
+    <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
+    <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" (mouseup)="updatePref()"></p-slider>
+  </div>
+  <div class="form-group mb-4">
+    <button type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button>
+  </div>
+  <div class="form-group mb-4">
+    <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>
+  </div>
+</form>
+

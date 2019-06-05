@@ -23,6 +23,7 @@ import { EnterViewSettingsService } from './settings/services/enter-view-setting
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 import {UploadPhotoService} from './home/services/upload-photo/upload-photo.service';
 import {GetUserPhotosService} from './home/services/get-user-photos/get-user-photos.service';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import {GetUserPhotosService} from './home/services/get-user-photos/get-user-pho
     LandingPageComponent,
     HomeComponent,
     SettingsComponent,
+    PreferencesComponent,
   ],
   imports: [
     BrowserModule,
