@@ -37,6 +37,7 @@ app.get('/', (req, res) => {
 // POST routes
 app.post('/login', urlencodedParser, user.login);
 app.post('/register', urlencodedParser, user.register);
+app.post('/sendmail', urlencodedParser, user.sendMail);
 
 app.post('/updateName', urlencodedParser, setting.updateName);
 app.post('/updateEmail', urlencodedParser, setting.updateEmail);

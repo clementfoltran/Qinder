@@ -67,19 +67,27 @@
               type="text" 
               class="form-control" 
               name="newFirstName" 
+              id="newFirstName"
+              #newFirstName
               placeholder="Firstname"
               formControlName="newFirstName"
+              (keyup)="CheckFirstName($event)"
               >
             </div>
+            <p id="firstname_message" class="firstname_message"></p>
             <div class="form-group">
               <input 
               type="text" 
               class="form-control" 
               name="newLastName" 
+              id="newLastName"
+              #newLastName
               placeholder="Lastname"
               formControlName="newLastName"
+              (keyup)="CheckLastName($event)"
               >
             </div>
+            <p id="lastname_message" class="lastname_message"></p>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
             </div>
@@ -110,9 +118,13 @@
               type="text" 
               class="form-control" 
               name="newEmail"
+              id="newEmail"
+              #newEmail
               formControlName="newEmail"
-              placeholder="New email">
+              placeholder="New email"
+              (keyup)="CheckEmail($event)">
             </div>
+            <p id="email_message" class="email_message"></p>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
             </div>
@@ -136,21 +148,32 @@
             <div class="form-group">
               <label>New password</label>
               <input 
-              type="password" 
-              class="form-control" 
-              name="newPassword" 
-              formControlName="newPassword"
-              placeholder="New password">
+                type="password" 
+                class="form-control" 
+                name="newPassword" 
+                id="newPassword"
+                #newPassword
+                formControlName="newPassword"
+                placeholder="New password"
+                (keyup)="CheckPassword($event)">
             </div>
+            <p id="password_len_message" class="password_len_message"></p>
+            <p id="password_up_message" class="password_up_message"></p>
+            <p id="password_num_message" class="password_num_message"></p>
+            <p id="password_spe_message" class="password_spe_message"></p>
             <label>Confirm new password</label>
             <div class="form-group">
               <input 
-              type="password" 
-              class="form-control" 
-              name="newPasswordConfirmation" 
-              formControlName="newPasswordConfirmation"
-              placeholder="Confirm new password">
+                type="password" 
+                class="form-control" 
+                name="newPasswordConfirmation" 
+                id="newPasswordConfirmation"
+                #newPasswordConfirmation
+                formControlName="newPasswordConfirmation"
+                placeholder="Confirm new password"
+                (keyup)="CheckPasswordsMatch($event)">
             </div>
+            <p id="password_match_message" class="password_match_message"></p>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
             </div>
