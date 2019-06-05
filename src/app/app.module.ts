@@ -21,6 +21,7 @@ import { UpdateNotificationsService } from './settings/services/update-notificat
 import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 import {SliderModule} from 'primeng/slider';
+import { FormCheckerService } from './global-services/form-checker-service/form-checker.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import {SliderModule} from 'primeng/slider';
     UpdateNameService,
     UpdateNotificationsService,
     EnterViewSettingsService,
-    EnterViewSettingsResolve
+    EnterViewSettingsResolve,
+    FormCheckerService
   ],
   bootstrap: [AppComponent]
 })

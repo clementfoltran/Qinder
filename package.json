@@ -25,6 +25,7 @@
     "angular-jwt": "^0.1.11",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
+    "emailjs": "^2.2.0",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "jwt-decode": "^2.2.0",

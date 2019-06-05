@@ -148,14 +148,14 @@
             <div class="form-group">
               <label>New password</label>
               <input 
-              type="password" 
-              class="form-control" 
-              name="newPassword" 
-              id="newPassword"
-              #newPassword
-              formControlName="newPassword"
-              placeholder="New password"
-              (keyup)="CheckPassword($event)">
+                type="password" 
+                class="form-control" 
+                name="newPassword" 
+                id="newPassword"
+                #newPassword
+                formControlName="newPassword"
+                placeholder="New password"
+                (keyup)="CheckPassword($event)">
             </div>
             <p id="password_len_message" class="password_len_message"></p>
             <p id="password_up_message" class="password_up_message"></p>
@@ -164,14 +164,14 @@
             <label>Confirm new password</label>
             <div class="form-group">
               <input 
-              type="password" 
-              class="form-control" 
-              name="newPasswordConfirmation" 
-              id="newPasswordConfirmation"
-              #newPasswordConfirmation
-              formControlName="newPasswordConfirmation"
-              placeholder="Confirm new password"
-              (keyup)="CheckPasswordsMatch($event)">
+                type="password" 
+                class="form-control" 
+                name="newPasswordConfirmation" 
+                id="newPasswordConfirmation"
+                #newPasswordConfirmation
+                formControlName="newPasswordConfirmation"
+                placeholder="Confirm new password"
+                (keyup)="CheckPasswordsMatch($event)">
             </div>
             <p id="password_match_message" class="password_match_message"></p>
             <div class="modal-footer">
@@ -204,5 +204,3 @@
     </div>
 
 </div>
-
-<script>src="./check-password-script.js"</script>

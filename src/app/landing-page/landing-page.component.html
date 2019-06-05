@@ -69,24 +69,80 @@
           <form [formGroup]="registerForm" (ngSubmit)="register()">
             <div class="form-group">
               <label>Firstname</label>
-              <input type="text" formControlName="firstname" class="form-control" aria-describedby="emailHelp" placeholder="Firstname">
+              <div class="form-group">
+                <input 
+                type="text" 
+                class="form-control" 
+                name="firstname" 
+                id="firstname"
+                #firstname
+                placeholder="Firstname"
+                formControlName="firstname"
+                (keyup)="CheckFirstName($event)"
+                >
+              </div>
+              <p id="firstname_message" class="firstname_message"></p>
             </div>
             <div class="form-group">
               <label>Lastname</label>
-              <input type="text" formControlName="lastname" class="form-control" aria-describedby="emailHelp" placeholder="Lastname">
+              <div class="form-group">
+                <input 
+                type="text" 
+                class="form-control" 
+                name="lastname" 
+                id="lastname"
+                #newLastName
+                placeholder="Lastname"
+                formControlName="lastname"
+                (keyup)="CheckLastName($event)"
+                >
+              </div>
+              <p id="lastname_message" class="lastname_message"></p>
             </div>
             <div class="form-group">
               <label>Email address</label>
-              <input type="email" formControlName="email" class="form-control" aria-describedby="emailHelp" placeholder="Enter email">
+              <div class="form-group">
+                <input 
+                type="text" 
+                class="form-control" 
+                name="email"
+                id="email"
+                #email
+                formControlName="email"
+                placeholder="Email"
+                (keyup)="CheckEmail($event)">
+              </div>
+              <p id="email_message" class="email_message"></p>
             </div>
             <div class="form-group">
               <label>Password</label>
-              <input type="password" class="form-control" placeholder="Password">
+              <input 
+              type="password" 
+              class="form-control" 
+              name="password" 
+              id="password"
+              #password
+              formControlName="password"
+              placeholder="Password"
+              (keyup)="CheckPassword($event)">
             </div>
+            <p id="password_len_message" class="password_len_message"></p>
+            <p id="password_up_message" class="password_up_message"></p>
+            <p id="password_num_message" class="password_num_message"></p>
+            <p id="password_spe_message" class="password_spe_message"></p>
+            <label>Confirm password</label>
             <div class="form-group">
-              <label>Confirm password</label>
-              <input type="password" formControlName="passwd" name="passwd" class="form-control" placeholder="Password">
+              <input 
+              type="password" 
+              class="form-control" 
+              name="passwordConfirmation" 
+              id="passwordConfirmation"
+              #passwordConfirmation
+              formControlName="passwordConfirmation"
+              placeholder="Confirm password"
+              (keyup)="CheckPasswordsMatch($event)">
             </div>
+            <p id="password_match_message" class="password_match_message"></p>
             <div class="form-group">
               <label>Gender</label>
               <select class="custom-select" formControlName="gender">
