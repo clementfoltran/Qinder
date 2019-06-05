@@ -7,6 +7,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UpdatePreferencesParameter} from './services/update-preferences/update-preferences-parameter';
 import {UpdatePreferencesService} from './services/update-preferences/update-preferences.service';
 import {UpdatePreferencesReturn} from './services/update-preferences/update-preferences-return';
+import {GetUserPhotosReturn, Photo} from './services/get-user-photos/get-user-photos-return';
+import {GetUserPhotosService} from './services/get-user-photos/get-user-photos.service';
+import {UploadPhotoService} from './services/upload-photo/upload-photo.service';
+import {UploadPhotoParameter} from './services/upload-photo/upload-photo-parameter';
+import {UploadPhotoReturn} from './services/upload-photo/upload-photo-return';
 
 @Component({
   selector: 'app-home',
@@ -39,14 +44,46 @@ export class HomeComponent implements OnInit {
    *
    */
   public APIParameterPref: UpdatePreferencesParameter;
+  /**
+   * UserPhotos tab
+   *
+   */
+  public userPhotos: Photo[];
+  /**
+   * Selected photo to upload
+   *
+   */
+  public selectedFile: string;
+  /**
+   * Expected data for upload photo
+   *
+   */
+  public APIParameterPhoto: UploadPhotoParameter;
   public firstname: string;
 
   logOut() {
     this.loginService.logOut();
   }
 
+  resolvePhotosModal() {
+    this.getUserPhotosService.getUserPhotos(1)
+      .subscribe((result: GetUserPhotosReturn) => {
+        if (result.success) {
+          this.userPhotos = result.photos;
+          console.log(this.userPhotos);
+          console.log(this.userPhotos.length);
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Network',
+            detail: 'Check your connection',
+            life: 6000
+          });
+        }
+      });
+  }
+
   updatePref() {
-    console.log(this.prefForm.valid);
     if (this.prefForm.valid) {
       this.APIParameterPref = {
         id: 1,
@@ -77,8 +114,47 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  uploadPhoto() {
+    this.APIParameterPhoto = {
+      id: 1,
+      photo: this.selectedFile,
+      active: false,
+      ts: Date.now(),
+    };
+    this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
+      .subscribe((result: UploadPhotoReturn) => {
+        if (result.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Update',
+            detail: result.message,
+            life: 6000,
+          });
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Network',
+            detail: 'Check your connection',
+            life: 6000,
+          });
+        }
+      });
+  }
+
+  onFileChanged(e) {
+    const self = this;
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      self.selectedFile = reader.result.toString().split(',')[1];
+    };
+  }
+
   constructor(public enterViewHomeService: EnterViewHomeService,
               public messageService: MessageService,
+              public getUserPhotosService: GetUserPhotosService,
+              public uploadPhotoService: UploadPhotoService,
               public updatePreferencesService: UpdatePreferencesService,
               public fb: FormBuilder,
               public loginService: LoginService) {

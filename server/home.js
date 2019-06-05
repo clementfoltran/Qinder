@@ -68,3 +68,63 @@ exports.updatePreferences = (req, res) => {
     }
   }
 };
+
+exports.getUserPhotos = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT * FROM photo WHERE id_user = ?';
+      let query = db.format(sql, [req.params.id]);
+      db.query(query, (err, response) => {
+        console.log(response);
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Network error',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: '',
+            photos: response,
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.uploadPhoto = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, ?, ?)';
+      let query = db.format(sql, [
+        req.body.id,
+        req.body.photo,
+        req.body.active,
+        req.body.ts
+      ]);
+      db.query(query, (err, response) => {
+        console.log(response);
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Network error',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: 'Upload photo',
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};

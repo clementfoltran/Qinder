@@ -21,6 +21,8 @@ import { UpdateNameService } from './settings/services/update-name/update-name.s
 import { UpdateNotificationsService } from './settings/services/update-notifications/update-notifications.service';
 import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
+import {UploadPhotoService} from './home/services/upload-photo/upload-photo.service';
+import {GetUserPhotosService} from './home/services/get-user-photos/get-user-photos.service';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { EnterViewSettingsResolve } from './settings/services/enter-view-setting
     UpdateNameService,
     UpdateNotificationsService,
     EnterViewSettingsService,
-    EnterViewSettingsResolve
+    EnterViewSettingsResolve,
+    UploadPhotoService,
+    GetUserPhotosService,
   ],
   bootstrap: [AppComponent]
 })
