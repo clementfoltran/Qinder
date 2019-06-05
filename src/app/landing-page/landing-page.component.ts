@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {MessageService} from 'primeng/api';
-import {RegisterService} from './services/register/register.service';
-import {RegisterParameter} from './services/register/register.parameter';
-import {RegisterReturn} from './services/register/register.return';
-import {LoginParameter} from './services/login/login.parameter';
-import {LoginService} from './services/login/login.service';
-import {LoginReturn} from './services/login/login.return';
-import { MailReturn } from './services/mail/mail.return';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { LoginParameter } from './services/login/login.parameter';
+import { LoginReturn } from './services/login/login.return';
+import { LoginService } from './services/login/login.service';
 import { MailParameter } from './services/mail/mail.parameter';
+import { MailReturn } from './services/mail/mail.return';
 import { MailService } from './services/mail/mail.service';
+import { RegisterParameter } from './services/register/register.parameter';
+import { RegisterService } from './services/register/register.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -205,13 +204,16 @@ export class LandingPageComponent implements OnInit {
     var numUpper = 0;
     var numNums = 0;
     var numSpecials = 0;
-    for (var i = 0; i < password.length; i++){
-        if (anUpperCase.test(password[i]))
-            numUpper++;
-        else if (aNumber.test(password[i]))
-            numNums++;
-        else if (aSpecial.test(password[i]))
-            numSpecials++;
+    for (var i = 0; i < password.length; i++) {
+        if (anUpperCase.test(password[i])) {
+          numUpper++;
+        }
+        else if (aNumber.test(password[i])) {
+          numNums++;
+        }
+        else if (aSpecial.test(password[i])) {
+          numSpecials++;
+        }
     }
     if (numUpper < 1)
     {
@@ -224,7 +226,7 @@ export class LandingPageComponent implements OnInit {
     }
     if (numNums < 1)
     {
-        password_num_message.innerHTML = "✗ Numbers";
+        password_num_message.innerHTML =  "✗ Numbers";
         password_num_message.style.color = "red";
     } else 
     {

@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
 import {Globals} from '../../../globals';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {EnterViewHomeReturn} from './enter-view-home-return';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {UpdatePreferencesReturn} from './update-preferences-return';
+import {UpdatePreferencesParameter} from './update-preferences-parameter';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EnterViewHomeService {
+export class UpdatePreferencesService {
 
-  public serviceURL = Globals.baseURL + 'home/';
+  public serviceURL = Globals.baseURL + 'updatePreferences';
   constructor(public http: HttpClient) { }
 
-  enterView(id: number): Observable<EnterViewHomeReturn> {
+  updatePreferences(APIParameter: UpdatePreferencesParameter): Observable<UpdatePreferencesReturn> {
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     };
 
-    return this.http.get<EnterViewHomeReturn>(this.serviceURL + id, option).pipe(
+    return this.http.post<UpdatePreferencesReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');

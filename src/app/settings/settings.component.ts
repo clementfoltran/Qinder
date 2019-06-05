@@ -1,18 +1,18 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { EnterViewSettingsReturn } from './services/enter-view-settings-return';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { UpdateNameParameter } from './services/update-name/update-name-parameter';
-import { UpdateNameService } from './services/update-name/update-name.service';
-import { UpdateNameReturn } from './services/update-name/update-name-return';
 import { UpdateEmailParameter } from './services/update-email/update-email-parameter';
 import { UpdateEmailReturn } from './services/update-email/update-email-return';
 import { UpdateEmailService } from './services/update-email/update-email.service';
-import { UpdatePasswordParameter } from './services/update-password/update-password-parameter';
-import { UpdatePasswordService } from './services/update-password/update-password.service';
-import { UpdatePasswordReturn } from './services/update-password/update-password-return';
+import { UpdateNameParameter } from './services/update-name/update-name-parameter';
+import { UpdateNameReturn } from './services/update-name/update-name-return';
+import { UpdateNameService } from './services/update-name/update-name.service';
 import { UpdateNotificationsParameter } from './services/update-notifications/update-notifications-parameter';
 import { UpdateNotificationsService } from './services/update-notifications/update-notifications.service';
+import { UpdatePasswordParameter } from './services/update-password/update-password-parameter';
+import { UpdatePasswordReturn } from './services/update-password/update-password-return';
+import { UpdatePasswordService } from './services/update-password/update-password.service';
 
 @Component({
   selector: 'app-settings',
@@ -139,8 +139,9 @@ ngOnInit() {
   }
 
   checkAccountConfirmed(data) {
-    if(data.confirm === 1)
+    if (data.confirm === 1) {
       return 1;
+    }
   }
   checkMatchNotifActivated(data) {
     if(data.notifMatch === 1) {

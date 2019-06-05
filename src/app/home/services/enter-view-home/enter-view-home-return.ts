@@ -1,5 +1,13 @@
 export interface EnterViewHomeReturn {
-  success: boolean;
-  message: string;
-  userId: number;
+  success: true;
+  message: '';
+  id: number;
+  firstname: string;
+  lastname: string;
+  bio: string;
+  distance: number;
+  minage: number;
+  maxage: number;
+  interest: string;
+  confirm: boolean;
 }

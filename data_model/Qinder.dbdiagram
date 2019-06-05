@@ -8,6 +8,9 @@ Table user {
   birthdate date
   interest varchar
   bio varchar
+  distance int
+  minage int
+  maxage int
   key varchar
   confirm boolean
   popularity float

@@ -1,26 +1,27 @@
 import { Injectable } from '@angular/core';
 import {Globals} from '../../../globals';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {EnterViewHomeReturn} from './enter-view-home-return';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {DeletePhotoReturn} from './delete-photo-return';
+import {DeletePhotoParameter} from './delete-photo-parameter';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EnterViewHomeService {
+export class DeletePhotoService {
 
-  public serviceURL = Globals.baseURL + 'home/';
+  public serviceURL = Globals.baseURL + 'deletePhoto';
   constructor(public http: HttpClient) { }
 
-  enterView(id: number): Observable<EnterViewHomeReturn> {
+  deletePhoto(APIParameter: DeletePhotoParameter): Observable<DeletePhotoReturn> {
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     };
 
-    return this.http.get<EnterViewHomeReturn>(this.serviceURL + id, option).pipe(
+    return this.http.post<DeletePhotoReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');
