@@ -4,12 +4,38 @@ const jwt = require('jsonwebtoken');
 const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
 const nodemailer = require("nodemailer");
 
+exports.getProfilePhoto = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT photo FROM photo WHERE id_user = ? AND active = 1';
+      let query = db.format(sql, [req.params.id]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Network error',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: 'Upload photo',
+            photo: response[0].photo,
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.login = (req, res) => {
   if (req.body) {
-    const email = req.body.email;
     const password = req.body.password;
-    const sql = "SELECT hash FROM user WHERE email LIKE ?";
-    const query = db.format(sql, [email]);
+    const sql = "SELECT hash, id_user FROM user WHERE email LIKE ?";
+    const query = db.format(sql, [req.body.email]);
     db.query(query, (err, response) => {
       if (err) {
         res.json({
@@ -23,6 +49,7 @@ exports.login = (req, res) => {
           scope: 'user'
         }, secret);
         res.json({
+          user_id: response[0].id_user,
           token: myToken,
           message: '',
           success: true,
@@ -77,6 +104,7 @@ exports.register = (req, res) => {
       }, secret);
       res.json({
         token: myToken,
+        id_user: response[0].OkPacket.InsertId,
         message: '',
         success: true,
       });

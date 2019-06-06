@@ -89,20 +89,18 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
-  dec2hex (dec) {
-    return ('0' + dec.toString(16)).substr(-2)
+  dec2hex(dec) {
+    return ('0' + dec.toString(16)).substr(-2);
   }
-  generateId (len) {
-    var arr = new Uint8Array((len || 40) / 2)
+  generateId(len) {
+    const arr = new Uint8Array((len || 40) / 2);
     window.crypto.getRandomValues(arr)
-    return Array.from(arr, this.dec2hex).join('')
+    return Array.from(arr, this.dec2hex).join('');
   }
 
   register() {
     if (this.registerForm.valid) {
-
-      var key = this.generateId(80); 
-
+      const key = this.generateId(80);
       this.RegisterAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
         lastname: this.registerForm.get('lastname').value,
@@ -121,6 +119,7 @@ export class LandingPageComponent implements OnInit {
           if (result.success) {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
+            localStorage.setItem('id', result.id_user.toString());
             this.router.navigate(['/home']);
             this.messageService.add({
               severity: 'success',

@@ -84,7 +84,6 @@ export class PreferencesComponent implements OnInit {
   public userTags: Tag[] = [];
   public firstname: string;
 
-
   drop(event: CdkDragDrop<Tag[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
@@ -108,10 +107,6 @@ export class PreferencesComponent implements OnInit {
           });
         }
       });
-  }
-
-  ok(e) {
-    console.log(e);
   }
 
   displayTags() {
@@ -193,6 +188,14 @@ export class PreferencesComponent implements OnInit {
     this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
       .subscribe((result: UploadPhotoReturn) => {
         if (result.success) {
+          this.userPhotos.push({
+            id_photo: result.id,
+            // TODO id n'importe quoi
+            id_user: 1,
+            photo: this.selectedFile,
+            active: false,
+            ts: 10,
+          });
           this.messageService.add({
             severity: 'success',
             summary: 'Update',
@@ -220,14 +223,16 @@ export class PreferencesComponent implements OnInit {
     };
   }
 
-  deletePhoto(idPhoto, idUser) {
+  deletePhoto(idPhoto, idUser, index) {
     this.APIParameterDelPhoto = {
       id_photo: idPhoto,
       id_user: idUser
     };
     this.deletePhotoService.deletePhoto(this.APIParameterDelPhoto)
       .subscribe((result: DeletePhotoReturn) => {
-        if (!result.success) {
+        if (result.success) {
+          this.userPhotos.splice(index, 1);
+        } else {
           this.messageService.add({
             severity: 'error',
             summary: 'Network',

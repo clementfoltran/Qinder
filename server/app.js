@@ -60,6 +60,8 @@ app.get('/getUserPhotos/:id', urlencodedParser, home.getUserPhotos);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
 
+app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

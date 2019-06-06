@@ -113,6 +113,7 @@ exports.uploadPhoto = (req, res) => {
           res.json({
             success: false,
             message: 'Network error',
+            id: response[0].OkPacket.InsertId
           });
         } else {
           res.json({
