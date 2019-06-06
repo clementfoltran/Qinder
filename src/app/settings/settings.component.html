@@ -67,7 +67,6 @@
               class="form-control"
               placeholder="Firstname"
               formControlName="newFirstName"
-              (keyup)="CheckFirstName($event)"
               [(ngModel)]="newFirstNameYeah">
             </div>
             <div *ngIf="newFirstNameYeah">
@@ -82,7 +81,6 @@
               #newLastName
               placeholder="Lastname"
               formControlName="newLastName"
-              (keyup)="CheckLastName($event)"
               >
             </div>
             <p id="lastname_message" class="lastname_message"></p>
@@ -118,8 +116,7 @@
               id="newEmail"
               #newEmail
               formControlName="newEmail"
-              placeholder="New email"
-              (keyup)="CheckEmail($event)">
+              placeholder="New email">
             </div>
             <p id="email_message" class="email_message"></p>
             <div class="modal-footer">
@@ -152,7 +149,7 @@
                 #newPassword
                 formControlName="newPassword"
                 placeholder="New password"
-                (keyup)="CheckPassword($event)">
+              >
             </div>
             <p id="password_len_message" class="password_len_message"></p>
             <p id="password_up_message" class="password_up_message"></p>
@@ -168,7 +165,7 @@
                 #newPasswordConfirmation
                 formControlName="newPasswordConfirmation"
                 placeholder="Confirm new password"
-                (keyup)="CheckPasswordsMatch($event)">
+                >
             </div>
             <p id="password_match_message" class="password_match_message"></p>
             <div class="modal-footer">
