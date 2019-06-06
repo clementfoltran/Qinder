@@ -1,5 +1,6 @@
 export interface RegisterReturn {
-  token: string;
   message: string;
   success: boolean;
+  id_user: number;
+  token: string;
 }
