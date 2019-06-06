@@ -31,30 +31,31 @@ export class SettingsComponent implements OnInit {
   public UpdateNameAPIParameter: UpdateNameParameter;
   public UpdateEmailAPIParameter: UpdateEmailParameter;
   public UpdatePasswordAPIParameter: UpdatePasswordParameter;
+  newFirstNameYeah: any;
 
   constructor(public activatedRoute: ActivatedRoute,
-               public updateNameService: UpdateNameService,
-               public updateEmailService: UpdateEmailService,
-               public updatePasswordService: UpdatePasswordService,
-               public updateNotificationsService: UpdateNotificationsService,
-               public fb: FormBuilder) {
-      this.changeNotificationsForm = fb.group({
-        matchSwitch: ['', Validators.required],
-        likeSwitch: ['', Validators.required],
-        messageSwitch: ['', Validators.required]
-      });
-      this.changeNameForm = fb.group({
-        newFirstName: ['', Validators.required],
-        newLastName: ['', Validators.required]
-      });
-      this.changeEmailForm = fb.group({
-        newEmail: ['', Validators.required]
-      });
-      this.changePasswordForm = fb.group({
-        newPassword: ['', Validators.required],
-        newPasswordConfirmation: ['', Validators.required]
-      });
-    }
+              public updateNameService: UpdateNameService,
+              public updateEmailService: UpdateEmailService,
+              public updatePasswordService: UpdatePasswordService,
+              public updateNotificationsService: UpdateNotificationsService,
+              public fb: FormBuilder) {
+    this.changeNotificationsForm = fb.group({
+      matchSwitch: ['', Validators.required],
+      likeSwitch: ['', Validators.required],
+      messageSwitch: ['', Validators.required]
+    });
+    this.changeNameForm = fb.group({
+      newFirstName: ['', Validators.required],
+      newLastName: ['', Validators.required]
+    });
+    this.changeEmailForm = fb.group({
+      newEmail: ['', Validators.required]
+    });
+    this.changePasswordForm = fb.group({
+      newPassword: ['', Validators.required],
+      newPasswordConfirmation: ['', Validators.required]
+    });
+  }
 
 ngOnInit() {
   this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn }) => {
@@ -165,16 +166,16 @@ ngOnInit() {
   }
 
   CheckFirstName(event) {
-    const firstname_message = document.getElementById('firstname_message');
-    let newFirstName = (document.getElementById('newFirstName') as HTMLInputElement).value;
-
-    if (newFirstName.length > 1) {
-      firstname_message.innerHTML = '✓ Beautiful name!';
-      firstname_message.style.color = 'green';
-    } else {
-      firstname_message.innerHTML = '✗ Too short :(';
-      firstname_message.style.color = 'red';
-    }
+    // const firstname_message = document.getElementById('firstname_message');
+    // const newFirstName = (document.getElementById('newFirstName') as HTMLInputElement).value;
+    //
+    // if (newFirstName.length > 1) {
+    //   firstname_message.innerHTML = "✓ Beautiful name!";
+    //   firstname_message.style.color = "green";
+    // } else {
+    //   firstname_message.innerHTML = "✗ Too short :(";
+    //   firstname_message.style.color = "red";
+    // }
   }
   CheckLastName(event) {
     const lastname_message = document.getElementById('lastname_message');

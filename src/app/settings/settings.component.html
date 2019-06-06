@@ -1,5 +1,5 @@
 <!-- Notifications modal -->
-<div [hidden]="hideModal" class="modal fade" id="notificationsModal" tabindex="-1" role="dialog" aria-labelledby="notificationsModal" aria-hidden="true">
+<div class="modal fade" id="notificationsModal" tabindex="-1" role="dialog" aria-labelledby="notificationsModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -50,7 +50,7 @@
   </div>
 
 <!-- Username modal -->
-<div [hidden]="hideModal" class="modal fade" id="usernameModal" tabindex="-1" role="dialog" aria-labelledby="usernameModal" aria-hidden="true">
+<div class="modal fade" id="usernameModal" tabindex="-1" role="dialog" aria-labelledby="usernameModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -60,10 +60,9 @@
         </div>
         <div class="modal-body text-center">
             <h3>{{ resolvedData.firstname }} {{ resolvedData.lastname }} </h3><br>
-
           <form [formGroup]="changeNameForm" (ngSubmit)="updateName()">
             <div class="form-group">
-              <input 
+              <input
               type="text" 
               class="form-control" 
               name="newFirstName" 
@@ -72,12 +71,14 @@
               placeholder="Firstname"
               formControlName="newFirstName"
               (keyup)="CheckFirstName($event)"
-              >
+              [(ngModel)]="newFirstNameYeah">
             </div>
-            <p id="firstname_message" class="firstname_message"></p>
+            <p id="firstname_message"
+               class="firstname_message"
+               [ngStyle]="{'color': newFirstNameYeah === '100' ? 'green' : 'red'}">Bonjour</p>
             <div class="form-group">
-              <input 
-              type="text" 
+              <input
+              type="text"
               class="form-control" 
               name="newLastName" 
               id="newLastName"
@@ -92,14 +93,13 @@
               <button type="submit" class="btn btn-primary m-auto">SAVE</button>
             </div>
           </form>
-
         </div>
       </div>
     </div>
   </div>
 
 <!-- Email modal -->
-<div [hidden]="hideModal" class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
+<div class="modal fade" id="emailModal" tabindex="-1" role="dialog" aria-labelledby="emailModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -135,7 +135,7 @@
   </div>
 
 <!-- Password modal -->
-<div [hidden]="hideModal" class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModal" aria-hidden="true">
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModal" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
