@@ -9,12 +9,13 @@ import {UpdatePreferencesReturn} from '../home/services/update-preferences/updat
 import {UploadPhotoReturn} from '../home/services/upload-photo/upload-photo-return';
 import {DeletePhotoReturn} from '../home/services/delete-photo/delete-photo-return';
 import {EnterViewHomeService} from '../home/services/enter-view-home/enter-view-home.service';
-import {MessageService} from 'primeng/api';
+import {MessageService, SelectItem} from 'primeng/api';
 import {GetUserPhotosService} from '../home/services/get-user-photos/get-user-photos.service';
 import {UploadPhotoService} from '../home/services/upload-photo/upload-photo.service';
 import {DeletePhotoService} from '../home/services/delete-photo/delete-photo.service';
 import {UpdatePreferencesService} from '../home/services/update-preferences/update-preferences.service';
 import {LoginService} from '../landing-page/services/login/login.service';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-preferences',
@@ -68,6 +69,35 @@ export class PreferencesComponent implements OnInit {
    */
   public APIParameterDelPhoto: DeletePhotoParameter;
   public firstname: string;
+  todo = [
+    'Get to work',
+    'Pick up groceries',
+    'Go home',
+    'Fall asleep'
+  ];
+
+  done = [
+    'Get up',
+    'Brush teeth',
+    'Take a shower',
+    'Check e-mail',
+    'Walk dog'
+  ];
+
+  drop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+    }
+  }
+
+  displayTags() {
+
+  }
 
   logOut() {
     this.loginService.logOut();
@@ -186,7 +216,7 @@ export class PreferencesComponent implements OnInit {
               public fb: FormBuilder,
               public loginService: LoginService) {
     this.prefForm = fb.group({
-      bio: ['', Validators.required],
+      bio: [''],
       gender: ['', Validators.required],
     });
   }

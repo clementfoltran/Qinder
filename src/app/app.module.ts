@@ -24,6 +24,9 @@ import { EnterViewSettingsResolve } from './settings/services/enter-view-setting
 import {UploadPhotoService} from './home/services/upload-photo/upload-photo.service';
 import {GetUserPhotosService} from './home/services/get-user-photos/get-user-photos.service';
 import { PreferencesComponent } from './preferences/preferences.component';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+
 
 @NgModule({
   declarations: [
@@ -45,6 +48,8 @@ import { PreferencesComponent } from './preferences/preferences.component';
     ToastModule,
     SliderModule,
     MenuModule,
+    MultiSelectModule,
+    DragDropModule,
   ],
   providers: [
     MessageService,
