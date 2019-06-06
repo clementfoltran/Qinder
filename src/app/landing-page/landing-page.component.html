@@ -80,7 +80,7 @@
                 #firstname
                 placeholder="Firstname"
                 formControlName="firstname"
-                (keyup)="CheckFirstName($event)"
+
                 >
               </div>
               <p id="firstname_message" class="firstname_message"></p>
@@ -96,7 +96,7 @@
                 #newLastName
                 placeholder="Lastname"
                 formControlName="lastname"
-                (keyup)="CheckLastName($event)"
+
                 >
               </div>
               <p id="lastname_message" class="lastname_message"></p>
@@ -112,7 +112,7 @@
                 #email
                 formControlName="email"
                 placeholder="Email"
-                (keyup)="CheckEmail($event)">
+               >
               </div>
               <p id="email_message" class="email_message"></p>
             </div>
@@ -126,7 +126,7 @@
               #password
               formControlName="password"
               placeholder="Password"
-              (keyup)="CheckPassword($event)">
+              >
             </div>
             <p id="password_len_message" class="password_len_message"></p>
             <p id="password_up_message" class="password_up_message"></p>
@@ -142,7 +142,7 @@
               #passwordConfirmation
               formControlName="passwordConfirmation"
               placeholder="Confirm password"
-              (keyup)="CheckPasswordsMatch($event)">
+          >
             </div>
             <p id="password_match_message" class="password_match_message"></p>
             <div class="form-group">
