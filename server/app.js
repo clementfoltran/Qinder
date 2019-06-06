@@ -6,7 +6,7 @@ const port = 8000;
 const user = require('./user.js');
 const setting = require('./setting.js');
 const home = require('./home.js');
-const activate = require('.activate,js');
+// const activate = require('.activate,js');
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 

@@ -101,7 +101,7 @@ export class LandingPageComponent implements OnInit {
   register() {
     if (this.registerForm.valid) {
 
-      var key = this.generateId(80);
+      const key = this.generateId(80);
 
       this.RegisterAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
@@ -110,12 +110,12 @@ export class LandingPageComponent implements OnInit {
         password: this.registerForm.get('password').value,
         passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
         gender: this.registerForm.get('gender').value,
-        key: key
+        key
       };
       this.MailAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
         email: this.registerForm.get('email').value,
-        key: key
+        key
       };
       this.registerService.register(this.RegisterAPIParameter)
         .subscribe((result: RegisterReturn) => {
