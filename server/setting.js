@@ -38,39 +38,6 @@ exports.enterViewSetting = (req, res) => {
   }
 };
 
-// UPDATE NOTIFICATIONS
-// -----------------------------------------------------------------------------------------
-exports.updateNotifications = (req, res) => {
-  if (!req.body) {
-    res.sendStatus(500);
-  } else {
-    if (res) {
-      let sql = 'UPDATE user SET notifMatch = ?, notifLike = ?, notifMessage = ? WHERE id_user = ?';
-      let query = db.format(sql, [
-        req.body.notifMatch,
-        req.body.notifLike,
-        req.body.notifMessage,
-        req.body.idUser
-      ]);
-      db.query(query, (err, response) => {
-        if (err) {
-          console.log(err);
-        }
-        res.json({
-          message: '[BACK] YEAH NOTIFICATIONS PREFERENCES MODIFIED',
-          success: true,
-        });
-      });
-    } else {
-      res.json({
-        message: '[BACK] FAILED TO UPDATE NOTIFICATIONS PREFERENCES',
-        success: true,
-      });
-      res.sendStatus(401);
-    }
-  }
-};
-
 // UPDATE NAME
 // -----------------------------------------------------------------------------------------
 exports.updateName = (req, res) => {
@@ -85,7 +52,7 @@ exports.updateName = (req, res) => {
           if (req.body.newFirstName.length > 1 && req.body.newLastName.length > 1)
           {
             let sql = 'UPDATE user SET firstname = ?, lastname = ? WHERE id_user = ?';
-            var query = db.format(sql, [req.body.newFirstName, req.body.newLastName, req.body.idUser]);
+            const query = db.format(sql, [req.body.newFirstName, req.body.newLastName, req.body.idUser]);
           }
         }
         else if (req.body.newFirstName)
@@ -93,7 +60,7 @@ exports.updateName = (req, res) => {
           if (req.body.newFirstName.length > 1) 
           {
             let sql = 'UPDATE user SET firstname = ? WHERE id_user = ?';
-            var query = db.format(sql, [req.body.newFirstName, req.body.idUser]);
+            const query = db.format(sql, [req.body.newFirstName, req.body.idUser]);
           }
         } else if (req.body.newLastName)
         {

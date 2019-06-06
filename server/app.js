@@ -42,7 +42,6 @@ app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/updateName', urlencodedParser, setting.updateName);
 app.post('/updateEmail', urlencodedParser, setting.updateEmail);
 app.post('/updatePassword', urlencodedParser, setting.updatePassword);
-app.post('/updateNotifications', urlencodedParser, setting.updateNotifications);
 
 app.post('/updatePreferences', urlencodedParser, home.updatePreferences);
 app.post('/uploadPhoto', urlencodedParser, home.uploadPhoto);

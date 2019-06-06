@@ -14,7 +14,7 @@
               <input
               type="text"
               class="form-control"
-              placeholder="Firstname"
+              placeholder="New firstname"
               formControlName="newFirstName">
             </div>
             <div class="form-group">
@@ -24,7 +24,7 @@
               name="newLastName" 
               id="newLastName"
               #newLastName
-              placeholder="Lastname"
+              placeholder="New lastname"
               formControlName="newLastName"
               >
             </div>
@@ -122,21 +122,26 @@
     </div>
   </div>
 
-<div class="" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;">
-    <div class="">
-      <div class="top_elem">
-          <h3 style="float:left;">Settings</h3>
-          <h5 style="color:blue; float:right;">Back</h5>
-      </div>
-    </div>
-    <div class="form-group row">
-      <button class="btn btn-light col-sm-2" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;" data-toggle="modal" data-target="#usernameModal"> Username </button>
-    </div>
-    <div class="form-group row">
-      <button class="btn btn-light col-sm-2" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;" data-toggle="modal" data-target="#emailModal"> Email </button>
-    </div>
-    <div class="form-group row">
-      <button class="btn btn-light col-sm-2" style="border: 1px solid rgb(0, 0, 0, 0.1); border-radius: 5px;" data-toggle="modal" data-target="#passwordModal"> Password </button>
-    </div>
 
-</div>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="logo m-auto">
+          <img class="rounded-circle" src="../../assets/img/59602086_2073623432930369_109684333639368704_o.jpg" height="100" alt="">
+        </div>
+        <a href="http://localhost:4200/home">
+          <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </a>
+      </div>
+
+      <div class="modal-body text-center">
+          <button class="btn btn-light col-sm-2"  data-toggle="modal" data-target="#usernameModal"> Username </button>
+          <button class="btn btn-light col-sm-2"  data-toggle="modal" data-target="#emailModal"> Email </button>
+          <button class="btn btn-light col-sm-2" data-toggle="modal" data-target="#passwordModal"> Password </button>
+      </div>
+
+    </div>
+  </div>
+

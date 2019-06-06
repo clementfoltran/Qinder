@@ -59,7 +59,7 @@ ngOnInit() {
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
         newEmail: this.changeEmailForm.get('newEmail').value,
-        idUser: this.activatedRoute.params._value.id
+        idUser: this.activatedRoute.params['_value'].id
       };
     }
 
