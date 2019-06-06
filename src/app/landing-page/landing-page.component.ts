@@ -10,6 +10,7 @@ import { MailReturn } from './services/mail/mail.return';
 import { MailService } from './services/mail/mail.service';
 import { RegisterParameter } from './services/register/register.parameter';
 import { RegisterService } from './services/register/register.service';
+import {RegisterReturn} from './services/register/register.return';
 
 @Component({
   selector: 'app-landing-page',
@@ -115,22 +116,22 @@ export class LandingPageComponent implements OnInit {
         email: this.registerForm.get('email').value,
         key: key
       };
-      // this.registerService.register(this.RegisterAPIParameter)
-      //   .subscribe((result: RegisterReturn) => {
-      //     if (result.success) {
-      //       // Connect successfully let's store the token
-      //       localStorage.setItem('token', result.token);
-      //       this.router.navigate(['/home']);
-      //       this.messageService.add({
-      //         severity: 'success',
-      //         summary: 'Welcome',
-      //         detail: 'Welcome on Qinder',
-      //         life: 6000
-      //       });
-      //     } else {
-      //       // TODO error handler (same email, password doesn't match)
-      //     }
-      //   });
+      this.registerService.register(this.RegisterAPIParameter)
+        .subscribe((result: RegisterReturn) => {
+          if (result.success) {
+            // Connect successfully let's store the token
+            localStorage.setItem('token', result.token);
+            this.router.navigate(['/home']);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Welcome',
+              detail: 'Welcome on Qinder',
+              life: 6000
+            });
+          } else {
+            // TODO error handler (same email, password doesn't match)
+          }
+        });
       this.mailService.sendMail(this.MailAPIParameter)
       .subscribe((result: MailReturn) => {
         if (result.success) {
