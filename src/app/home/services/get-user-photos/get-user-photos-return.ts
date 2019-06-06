@@ -5,7 +5,7 @@ export interface GetUserPhotosReturn {
 }
 
 export interface Photo {
-  id: number;
+  id_photo: number;
   id_user: number;
   photo: string;
   active: boolean;

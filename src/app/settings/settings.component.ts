@@ -54,15 +54,16 @@ ngOnInit() {
   this.checkAccountConfirmed(this.resolvedData);
 }
 
+
   updateEmail() {
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
         newEmail: this.changeEmailForm.get('newEmail').value,
-        idUser: this.activatedRoute.params['_value'].id
+        idUser: this.activatedRoute.params._value.id
       };
     }
 
-      this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
+    this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
       .subscribe((result: UpdateEmailReturn) => {
         if (result.success) {
           console.log('EmailModified');
@@ -112,21 +113,21 @@ ngOnInit() {
     }
   }
   checkMatchNotifActivated(data) {
-    if(data.notifMatch === 1) {
+    if (data.notifMatch === 1) {
       this.changeNotificationsForm.get('matchSwitch').setValue(1);
     } else {
       this.changeNotificationsForm.get('matchSwitch').setValue(0);
     }
   }
   checkLikeNotifActivated(data) {
-    if(data.notifLike === 1) {
+    if (data.notifLike === 1) {
       this.changeNotificationsForm.get('likeSwitch').setValue(1);
     } else {
       this.changeNotificationsForm.get('likeSwitch').setValue(0);
     }
   }
   checkMessageNotifActivated(data) {
-    if(data.notifMessage === 1) {
+    if (data.notifMessage === 1) {
       this.changeNotificationsForm.get('messageSwitch').setValue(1);
     } else {
       this.changeNotificationsForm.get('messageSwitch').setValue(0);

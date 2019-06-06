@@ -77,7 +77,6 @@ exports.getUserPhotos = (req, res) => {
       const sql = 'SELECT * FROM photo WHERE id_user = ?';
       let query = db.format(sql, [req.params.id]);
       db.query(query, (err, response) => {
-        console.log(response);
         if (err) {
           res.json({
             success: false,
@@ -110,7 +109,6 @@ exports.uploadPhoto = (req, res) => {
         req.body.ts
       ]);
       db.query(query, (err, response) => {
-        console.log(response);
         if (err) {
           res.json({
             success: false,
@@ -120,6 +118,37 @@ exports.uploadPhoto = (req, res) => {
           res.json({
             success: true,
             message: 'Upload photo',
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+
+exports.deletePhoto = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'DELETE FROM photo WHERE id_photo = ? AND id_user = ?';
+      let query = db.format(sql, [
+        req.body.id_photo,
+        req.body.id_user,
+      ]);
+      db.query(query, (err, response) => {
+        console.log(response);
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Network error',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: 'Delete photo',
           });
         }
       });

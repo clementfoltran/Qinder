@@ -9,7 +9,7 @@ import { HomeComponent } from './home/home.component';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToastModule} from 'primeng/toast';
-import {AccordionModule, MessageService} from 'primeng/primeng';
+import {AccordionModule, MenuModule, MessageService} from 'primeng/primeng';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RegisterService} from './landing-page/services/register/register.service';
 import {LoginService} from './landing-page/services/login/login.service';
@@ -22,6 +22,7 @@ import { EnterViewSettingsService } from './settings/services/enter-view-setting
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 import {UploadPhotoService} from './home/services/upload-photo/upload-photo.service';
 import {GetUserPhotosService} from './home/services/get-user-photos/get-user-photos.service';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {GetUserPhotosService} from './home/services/get-user-photos/get-user-pho
     MenuComponent,
     LandingPageComponent,
     HomeComponent,
-    SettingsComponent
+    SettingsComponent,
+    PreferencesComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,7 @@ import {GetUserPhotosService} from './home/services/get-user-photos/get-user-pho
     AccordionModule,
     ToastModule,
     SliderModule,
+    MenuModule,
   ],
   providers: [
     MessageService,
