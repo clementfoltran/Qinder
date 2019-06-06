@@ -73,7 +73,7 @@ ngOnInit() {
         notifMatch: this.changeNotificationsForm.get('matchSwitch').value,
         notifLike: this.changeNotificationsForm.get('likeSwitch').value,
         notifMessage: this.changeNotificationsForm.get('messageSwitch').value,
-        idUser: this.activatedRoute.params._value.id
+        idUser: this.resolvedData.idUser
       };
     }
     this.updateNotificationsService.updateNotifications(this.UpdateNotificationsAPIParameter)
@@ -90,7 +90,7 @@ ngOnInit() {
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
         newEmail: this.changeEmailForm.get('newEmail').value,
-        idUser: this.activatedRoute.params._value.id
+        idUser: this.resolvedData.idUser
       };
     }
 
@@ -108,7 +108,7 @@ ngOnInit() {
       this.UpdateNameAPIParameter = {
         newFirstName: this.changeNameForm.get('newFirstName').value,
         newLastName: this.changeNameForm.get('newLastName').value,
-        idUser: this.activatedRoute.params._value.id
+        idUser: this.resolvedData.idUser
       };
     }
     this.updateNameService.updateName(this.UpdateNameAPIParameter)
@@ -125,7 +125,7 @@ ngOnInit() {
       this.UpdatePasswordAPIParameter = {
         newPassword: this.changePasswordForm.get('newPassword').value,
         newPasswordConfirmation: this.changePasswordForm.get('newPasswordConfirmation').value,
-        idUser: this.activatedRoute.params._value.id
+        idUser: this.resolvedData.idUser
       };
     }
     this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)
