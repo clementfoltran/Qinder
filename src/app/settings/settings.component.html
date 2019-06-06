@@ -63,19 +63,16 @@
           <form [formGroup]="changeNameForm" (ngSubmit)="updateName()">
             <div class="form-group">
               <input
-              type="text" 
-              class="form-control" 
-              name="newFirstName" 
-              id="newFirstName"
-              #newFirstName
+              type="text"
+              class="form-control"
               placeholder="Firstname"
               formControlName="newFirstName"
               (keyup)="CheckFirstName($event)"
               [(ngModel)]="newFirstNameYeah">
             </div>
-            <p id="firstname_message"
-               class="firstname_message"
-               [ngStyle]="{'color': newFirstNameYeah === '100' ? 'green' : 'red'}">Bonjour</p>
+            <div *ngIf="newFirstNameYeah">
+              <p class="firstnameMessage" [ngStyle]="{'color': newFirstNameYeah === '100' ? 'green' : 'red'}">Bonjour</p>
+            </div>
             <div class="form-group">
               <input
               type="text"
