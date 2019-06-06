@@ -95,7 +95,7 @@ export class LandingPageComponent implements OnInit {
   generateId(len) {
     var arr = new Uint8Array((len || 40) / 2)
     window.crypto.getRandomValues(arr)
-    return Array.from(arr, this.dec2hex).join('')
+    return Array.from(arr, this.dec2hex).join('');
   }
 
   register() {
@@ -109,7 +109,8 @@ export class LandingPageComponent implements OnInit {
         email: this.registerForm.get('email').value,
         password: this.registerForm.get('password').value,
         passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
-        gender: this.registerForm.get('gender').value
+        gender: this.registerForm.get('gender').value,
+        key: key
       };
       this.MailAPIParameter = {
         firstname: this.registerForm.get('firstname').value,

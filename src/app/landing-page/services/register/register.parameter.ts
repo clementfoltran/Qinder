@@ -5,4 +5,5 @@ export interface RegisterParameter {
   password: string;
   passwordConfirmation: string;
   gender: string;
+  key: string;
 }

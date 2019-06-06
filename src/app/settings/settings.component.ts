@@ -56,6 +56,8 @@ ngOnInit() {
 
 
   updateEmail() {
+    console.log(this.activatedRoute.params['_value'].id);
+
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
         newEmail: this.changeEmailForm.get('newEmail').value,
@@ -134,4 +136,3 @@ ngOnInit() {
     }
   }
 }
-
