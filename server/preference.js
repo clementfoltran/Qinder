@@ -16,10 +16,7 @@ exports.getTags = (req, res) => {
           res.json({
             success: true,
             message: '',
-            id: response[0].id_tag,
-            tag: response[0].tag,
-            label: response[0].label,
-            logo: response[0].photo,
+            tags: response
           });
         }
       });
@@ -28,3 +25,34 @@ exports.getTags = (req, res) => {
     }
   }
 };
+
+exports.addUserTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO usertag VALUE(id_utag, ?, ?)';
+      const query = db.query(sql, [
+        req.body.id_tag,
+        req.body.id_user
+      ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Tag not found',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: '',
+            tags: response
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+

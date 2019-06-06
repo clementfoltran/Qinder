@@ -1,15 +1,15 @@
 <form [formGroup]="prefForm" (ngSubmit)="updatePref()">
-  <div class="form-group mb-4">
-    <div class="row">
-      <div *ngIf="userPhotos.length > 0">
-        <div *ngFor="let photo of userPhotos">
-          <div class="col-lg-4 col-sm-6">
-            <img (click)="deletePhoto(photo.id_photo, photo.id_user)" class="thumbnail rounded" height="150" width="150" src="data:image/png;base64,{{ photo.photo }}">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<!--  <div class="form-group mb-4">-->
+<!--    <div class="row">-->
+<!--      <div *ngIf="userPhotos.length > 0">-->
+<!--        <div *ngFor="let photo of userPhotos">-->
+<!--          <div class="col-lg-4 col-sm-6">-->
+<!--            <img (click)="deletePhoto(photo.id_photo, photo.id_user)" class="thumbnail rounded" height="150" width="150" src="data:image/png;base64,{{ photo.photo }}">-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
   <div class="form-group mb-4">
     <div class="custom-file">
       <input type="file" class="custom-file-input" id="customFile" (change)="onFileChanged($event)">
@@ -31,22 +31,28 @@
       <div
         cdkDropList
         #todoList="cdkDropList"
-        [cdkDropListData]="todo"
+        [cdkDropListData]="tags"
         [cdkDropListConnectedTo]="[doneList]"
         class="col-md-6"
         (cdkDropListDropped)="drop($event)">
         <h3 class="m-2">Tags</h3>
-        <div class="card p-2" *ngFor="let item of todo" cdkDrag>{{item}}</div>
+        <div class="card p-2" *ngFor="let item of tags" cdkDrag>
+          <h5>{{ item.tag }}</h5>
+          <p>{{ item.label }}</p>
+        </div>
       </div>
       <div
         cdkDropList
         #doneList="cdkDropList"
-        [cdkDropListData]="done"
+        [cdkDropListData]="userTags"
         [cdkDropListConnectedTo]="[todoList]"
         class="col-md-6"
         (cdkDropListDropped)="drop($event)">
         <h3 class="m-2"> Your tags</h3>
-        <div class="card p-2" *ngFor="let item of done" cdkDrag>{{item}}</div>
+        <div class="card p-2" *ngFor="let item of userTags" cdkDrag>
+          <h5>{{ item.tag }}</h5>
+          <p>{{ item.label }}</p>
+        </div>
       </div>
     </div>
   </div>
