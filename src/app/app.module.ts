@@ -18,7 +18,6 @@ import { SettingsComponent } from './settings/settings.component';
 import { UpdatePasswordService } from './settings/services/update-password/update-password.service';
 import { UpdateEmailService } from './settings/services/update-email/update-email.service';
 import { UpdateNameService } from './settings/services/update-name/update-name.service';
-import { UpdateNotificationsService } from './settings/services/update-notifications/update-notifications.service';
 import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 import {UploadPhotoService} from './home/services/upload-photo/upload-photo.service';
@@ -50,7 +49,6 @@ import {GetUserPhotosService} from './home/services/get-user-photos/get-user-pho
     UpdatePasswordService,
     UpdateEmailService,
     UpdateNameService,
-    UpdateNotificationsService,
     EnterViewSettingsService,
     EnterViewSettingsResolve,
     UploadPhotoService,

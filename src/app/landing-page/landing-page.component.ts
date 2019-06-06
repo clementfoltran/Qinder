@@ -90,9 +90,9 @@ export class LandingPageComponent implements OnInit {
   }
 
   dec2hex (dec) {
-    return ('0' + dec.toString(16)).substr(-2)
+    return ('0' + dec.toString(16)).substr(-2);
   }
-  generateId (len) {
+  generateId(len) {
     var arr = new Uint8Array((len || 40) / 2)
     window.crypto.getRandomValues(arr)
     return Array.from(arr, this.dec2hex).join('')
@@ -101,7 +101,7 @@ export class LandingPageComponent implements OnInit {
   register() {
     if (this.registerForm.valid) {
 
-      var key = this.generateId(80); 
+      var key = this.generateId(80);
 
       this.RegisterAPIParameter = {
         firstname: this.registerForm.get('firstname').value,

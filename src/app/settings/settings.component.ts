@@ -8,8 +8,6 @@ import { UpdateEmailService } from './services/update-email/update-email.service
 import { UpdateNameParameter } from './services/update-name/update-name-parameter';
 import { UpdateNameReturn } from './services/update-name/update-name-return';
 import { UpdateNameService } from './services/update-name/update-name.service';
-import { UpdateNotificationsParameter } from './services/update-notifications/update-notifications-parameter';
-import { UpdateNotificationsService } from './services/update-notifications/update-notifications.service';
 import { UpdatePasswordParameter } from './services/update-password/update-password-parameter';
 import { UpdatePasswordReturn } from './services/update-password/update-password-return';
 import { UpdatePasswordService } from './services/update-password/update-password.service';
@@ -27,23 +25,15 @@ export class SettingsComponent implements OnInit {
   public changeNameForm: FormGroup;
   public changeEmailForm: FormGroup;
   public changePasswordForm: FormGroup;
-  public UpdateNotificationsAPIParameter: UpdateNotificationsParameter;
   public UpdateNameAPIParameter: UpdateNameParameter;
   public UpdateEmailAPIParameter: UpdateEmailParameter;
   public UpdatePasswordAPIParameter: UpdatePasswordParameter;
-  newFirstNameYeah: any;
 
   constructor(public activatedRoute: ActivatedRoute,
               public updateNameService: UpdateNameService,
               public updateEmailService: UpdateEmailService,
               public updatePasswordService: UpdatePasswordService,
-              public updateNotificationsService: UpdateNotificationsService,
               public fb: FormBuilder) {
-    this.changeNotificationsForm = fb.group({
-      matchSwitch: ['', Validators.required],
-      likeSwitch: ['', Validators.required],
-      messageSwitch: ['', Validators.required]
-    });
     this.changeNameForm = fb.group({
       newFirstName: ['', Validators.required],
       newLastName: ['', Validators.required],
@@ -62,30 +52,8 @@ ngOnInit() {
     this.resolvedData = data.viewData;
   });
   this.checkAccountConfirmed(this.resolvedData);
-  this.checkMatchNotifActivated(this.resolvedData);
-  this.checkLikeNotifActivated(this.resolvedData);
-  this.checkMessageNotifActivated(this.resolvedData);
 }
 
-  updateNotifications() {
-    if (this.changeNotificationsForm.valid) {
-      this.UpdateNotificationsAPIParameter = {
-        notifMatch: this.changeNotificationsForm.get('matchSwitch').value,
-        notifLike: this.changeNotificationsForm.get('likeSwitch').value,
-        notifMessage: this.changeNotificationsForm.get('messageSwitch').value,
-        idUser: this.activatedRoute.params['_value'].id
-      };
-    }
-    this.updateNotificationsService.updateNotifications(this.UpdateNotificationsAPIParameter)
-        .subscribe((result: UpdateNameReturn) => {
-          console.log('result: ', result);
-          if (result.success) {
-            console.log('Username Notifications');
-          } else {
-            console.log('Failed to update the notifications');
-          }
-        });
-  }
   updateEmail() {
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
