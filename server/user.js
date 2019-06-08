@@ -70,16 +70,16 @@ exports.register = (req, res) => {
         }
         res.send(response);
       });
-      const myToken = jwt.sign({
-        iss: 'https://qinder.com',
-        user: 'Clément',
-        scope: 'user'
-      }, secret);
+      // const myToken = jwt.sign({
+      //   iss: 'https://qinder.com',
+      //   user: 'Clément',
+      //   scope: 'user'
+      // }, secret);
       res.json({
         token: myToken,
-        message: '',
+        message: 'Okay',
         success: true,
-      });
+      // });
     } else {
       res.sendStatus(401);
     }
@@ -92,12 +92,12 @@ exports.sendMail = (req, res) => {
   if (res)
   {
     nodeMailerCall(req.body.firstname, req.body.email, req.body.key, info => {
-      res.send(info);
+      // res.send(info);
     });
-    res.json({
-      message: 'Email sent!',
-      success: true,
-    });
+    // res.json({
+    //   message: 'Email sent!',
+    //   success: true,
+    // });
   }
 }
 

@@ -93,8 +93,8 @@ export class LandingPageComponent implements OnInit {
     return ('0' + dec.toString(16)).substr(-2);
   }
   generateId(len) {
-    var arr = new Uint8Array((len || 40) / 2)
-    window.crypto.getRandomValues(arr)
+    const arr = new Uint8Array((len || 40) / 2);
+    window.crypto.getRandomValues(arr);
     return Array.from(arr, this.dec2hex).join('');
   }
 
@@ -122,7 +122,7 @@ export class LandingPageComponent implements OnInit {
           if (result.success) {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
-            this.router.navigate(['/home']);
+            // this.router.navigate(['/home']);
             this.messageService.add({
               severity: 'success',
               summary: 'Welcome',
