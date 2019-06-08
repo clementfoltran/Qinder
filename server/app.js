@@ -7,6 +7,7 @@ const user = require('./user.js');
 const setting = require('./setting.js');
 const home = require('./home.js');
 // const activate = require('.activate,js');
+const preference = require('./preference.js');
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -48,11 +49,17 @@ app.post('/updatePreferences', urlencodedParser, home.updatePreferences);
 app.post('/uploadPhoto', urlencodedParser, home.uploadPhoto);
 app.post('/deletePhoto', urlencodedParser, home.deletePhoto);
 
+app.post('/addUserTag', urlencodedParser, preference.addUserTag);
+
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 // app.get('/activate/:key', urlencodedParser, activate.verifyKey);
 app.get('/home/:id', urlencodedParser, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, home.getUserPhotos);
+
+app.get('/getTags', urlencodedParser, preference.getTags);
+
+app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

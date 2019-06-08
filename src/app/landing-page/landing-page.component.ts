@@ -40,12 +40,12 @@ export class LandingPageComponent implements OnInit {
   public LoginAPIParameter: LoginParameter;
   public MailAPIParameter: MailParameter;
 
-  constructor (public fb: FormBuilder,
-    public router: Router,
-    public registerService: RegisterService,
-    public loginService: LoginService,
-    private messageService: MessageService,
-    private mailService: MailService) {
+  constructor(public fb: FormBuilder,
+               public router: Router,
+               public registerService: RegisterService,
+               public loginService: LoginService,
+               private messageService: MessageService,
+               private mailService: MailService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -89,7 +89,7 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
-  dec2hex (dec) {
+  dec2hex(dec) {
     return ('0' + dec.toString(16)).substr(-2);
   }
   generateId(len) {

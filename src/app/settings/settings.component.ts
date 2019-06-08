@@ -53,15 +53,17 @@ ngOnInit() {
   });
   this.checkAccountConfirmed(this.resolvedData);
 }
-
-
   updateEmail() {
     console.log(this.activatedRoute.params['_value'].id);
 
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
         newEmail: this.changeEmailForm.get('newEmail').value,
+<<<<<<< HEAD
         idUser: this.activatedRoute.params['_value'].id
+=======
+        idUser: this.resolvedData.idUser
+>>>>>>> clfoltra
       };
     }
 
@@ -79,7 +81,11 @@ ngOnInit() {
       this.UpdateNameAPIParameter = {
         newFirstName: this.changeNameForm.get('newFirstName').value,
         newLastName: this.changeNameForm.get('newLastName').value,
+<<<<<<< HEAD
         idUser: this.activatedRoute.params['_value'].id
+=======
+        idUser: this.resolvedData.idUser
+>>>>>>> clfoltra
       };
     }
     this.updateNameService.updateName(this.UpdateNameAPIParameter)
@@ -96,7 +102,11 @@ ngOnInit() {
       this.UpdatePasswordAPIParameter = {
         newPassword: this.changePasswordForm.get('newPassword').value,
         newPasswordConfirmation: this.changePasswordForm.get('newPasswordConfirmation').value,
+<<<<<<< HEAD
         idUser: this.activatedRoute.params['_value'].id
+=======
+        idUser: this.resolvedData.idUser
+>>>>>>> clfoltra
       };
     }
     this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)

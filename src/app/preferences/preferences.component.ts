@@ -9,13 +9,17 @@ import {UpdatePreferencesReturn} from '../home/services/update-preferences/updat
 import {UploadPhotoReturn} from '../home/services/upload-photo/upload-photo-return';
 import {DeletePhotoReturn} from '../home/services/delete-photo/delete-photo-return';
 import {EnterViewHomeService} from '../home/services/enter-view-home/enter-view-home.service';
-import {MessageService, SelectItem} from 'primeng/api';
+import {MessageService} from 'primeng/api';
 import {GetUserPhotosService} from '../home/services/get-user-photos/get-user-photos.service';
 import {UploadPhotoService} from '../home/services/upload-photo/upload-photo.service';
 import {DeletePhotoService} from '../home/services/delete-photo/delete-photo.service';
 import {UpdatePreferencesService} from '../home/services/update-preferences/update-preferences.service';
 import {LoginService} from '../landing-page/services/login/login.service';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {GetTagsService} from './services/get-tags/get-tags.service';
+import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
+import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
+import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
 
 @Component({
   selector: 'app-preferences',
@@ -68,23 +72,19 @@ export class PreferencesComponent implements OnInit {
    *
    */
   public APIParameterDelPhoto: DeletePhotoParameter;
+  /**
+   * All tags
+   *
+   */
+  public tags: Tag[] = [];
+  /**
+   * User selected tags
+   *
+   */
+  public userTags: Tag[] = [];
   public firstname: string;
-  todo = [
-    'Get to work',
-    'Pick up groceries',
-    'Go home',
-    'Fall asleep'
-  ];
 
-  done = [
-    'Get up',
-    'Brush teeth',
-    'Take a shower',
-    'Check e-mail',
-    'Walk dog'
-  ];
-
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<Tag[]>) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -95,8 +95,34 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  displayTags() {
+  addUserTag(idTag: number) {
+    this.addUserTagService.addUserTag({id_tag: idTag, id_user: 1})
+      .subscribe((result: AddUserTagReturn) => {
+        if (!result.success) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Network',
+            detail: 'Check your connection',
+            life: 6000
+          });
+        }
+      });
+  }
 
+  displayTags() {
+    this.getTagsService.getTags()
+      .subscribe((result: GetTagsReturn) => {
+        if (result.success) {
+          this.tags = result.tags;
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Network',
+            detail: 'Check your connection',
+            life: 6000
+          });
+        }
+      });
   }
 
   logOut() {
@@ -162,6 +188,14 @@ export class PreferencesComponent implements OnInit {
     this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
       .subscribe((result: UploadPhotoReturn) => {
         if (result.success) {
+          this.userPhotos.push({
+            id_photo: result.id,
+            // TODO id n'importe quoi
+            id_user: 1,
+            photo: this.selectedFile,
+            active: false,
+            ts: 10,
+          });
           this.messageService.add({
             severity: 'success',
             summary: 'Update',
@@ -189,14 +223,16 @@ export class PreferencesComponent implements OnInit {
     };
   }
 
-  deletePhoto(idPhoto, idUser) {
+  deletePhoto(idPhoto, idUser, index) {
     this.APIParameterDelPhoto = {
       id_photo: idPhoto,
       id_user: idUser
     };
     this.deletePhotoService.deletePhoto(this.APIParameterDelPhoto)
       .subscribe((result: DeletePhotoReturn) => {
-        if (!result.success) {
+        if (result.success) {
+          this.userPhotos.splice(index, 1);
+        } else {
           this.messageService.add({
             severity: 'error',
             summary: 'Network',
@@ -212,6 +248,8 @@ export class PreferencesComponent implements OnInit {
               public getUserPhotosService: GetUserPhotosService,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
+              public addUserTagService: AddUserTagService,
+              public getTagsService: GetTagsService,
               public updatePreferencesService: UpdatePreferencesService,
               public fb: FormBuilder,
               public loginService: LoginService) {
@@ -223,6 +261,7 @@ export class PreferencesComponent implements OnInit {
 
   ngOnInit() {
     this.resolvePhotosModal();
+    this.displayTags();
     this.enterViewHomeService.enterView(1)
       .subscribe((result: EnterViewHomeReturn) => {
         if (result.success) {
