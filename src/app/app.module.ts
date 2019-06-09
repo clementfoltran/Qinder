@@ -27,6 +27,8 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ActivateComponent } from './activate/activate.component';
 import { ActivateService } from './activate/services/activate.service';
+import { EnterViewActivateService } from './activate/services/enter-view-activate.service';
+import { EnterViewActivateResolve } from './activate/services/enter-view-activate.resolve';
 
 
 @NgModule({
@@ -64,7 +66,9 @@ import { ActivateService } from './activate/services/activate.service';
     EnterViewSettingsResolve,
     UploadPhotoService,
     GetUserPhotosService,
-    ActivateService
+    ActivateService,
+    EnterViewActivateService,
+    EnterViewActivateResolve
   ],
   bootstrap: [AppComponent]
 })
