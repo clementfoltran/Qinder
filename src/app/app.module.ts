@@ -25,6 +25,8 @@ import {GetUserPhotosService} from './home/services/get-user-photos/get-user-pho
 import { PreferencesComponent } from './preferences/preferences.component';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { ActivateComponent } from './activate/activate.component';
+import { ActivateService } from './activate/services/activate.service';
 
 
 @NgModule({
@@ -35,6 +37,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     HomeComponent,
     SettingsComponent,
     PreferencesComponent,
+    ActivateComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,6 +64,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     EnterViewSettingsResolve,
     UploadPhotoService,
     GetUserPhotosService,
+    ActivateService
   ],
   bootstrap: [AppComponent]
 })

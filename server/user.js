@@ -107,7 +107,7 @@ exports.register = (req, res) => {
         id_user: response[0].OkPacket.InsertId,
         message: '',
         success: true,
-      // });
+      });
     } else {
       res.sendStatus(401);
     }
@@ -144,7 +144,7 @@ async function nodeMailerCall(userName, email, key, callback) {
     from: '"Martin @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Validate your MATCHA account :)",
-    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:8000/activate/${key}`,
+    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:4200/activate/${email}/${key}`,
   });
 
   console.log("Message sent: %s", info.messageId);

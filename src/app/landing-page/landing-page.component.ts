@@ -41,11 +41,11 @@ export class LandingPageComponent implements OnInit {
   public MailAPIParameter: MailParameter;
 
   constructor(public fb: FormBuilder,
-               public router: Router,
-               public registerService: RegisterService,
-               public loginService: LoginService,
-               private messageService: MessageService,
-               private mailService: MailService) {
+              public router: Router,
+              public registerService: RegisterService,
+              public loginService: LoginService,
+              private messageService: MessageService,
+              private mailService: MailService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],

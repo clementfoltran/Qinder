@@ -9,15 +9,15 @@ import { map } from 'rxjs/operators';
 export class EnterViewSettingsResolve implements Resolve<EnterViewSettingsReturn> {
 
     constructor(public enterViewSettingsService: EnterViewSettingsService) {}
- 
+
     resolve(route: ActivatedRouteSnapshot) {
 
-        const id = +route.params['id'];
+        const id = +route.params.id;
 
-    return this.enterViewSettingsService.enterView(id).pipe(
+        return this.enterViewSettingsService.enterView(id).pipe(
         map(response => {
             return response;
         })
-    )
+    );
   }
 }
