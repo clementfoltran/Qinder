@@ -6,7 +6,7 @@ const port = 8000;
 const user = require('./user.js');
 const setting = require('./setting.js');
 const home = require('./home.js');
-// const activate = require('.activate,js');
+const activate = require('./activate.js');
 const preference = require('./preference.js');
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
@@ -53,7 +53,7 @@ app.post('/addUserTag', urlencodedParser, preference.addUserTag);
 
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
-// app.get('/activate/:key', urlencodedParser, activate.verifyKey);
+app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
 app.get('/home/:id', urlencodedParser, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, home.getUserPhotos);
 

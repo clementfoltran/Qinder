@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EnterViewSettingsReturn } from '../settings/services/enter-view-settings-return';
+import { EnterViewActivateReturn } from './services/enter-view-activate-return';
 
 @Component({
   selector: 'app-activate',
@@ -9,12 +9,12 @@ import { EnterViewSettingsReturn } from '../settings/services/enter-view-setting
 })
 export class ActivateComponent implements OnInit {
 
-  public resolvedData: EnterViewSettingsReturn;
+  public resolvedData: EnterViewActivateReturn;
 
   constructor(public activatedRoute: ActivatedRoute) { }
 
 ngOnInit() {
-    this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn }) => {
+    this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
       this.resolvedData = data.viewData;
     });
     this.checkAccount(this.resolvedData);
@@ -23,9 +23,17 @@ ngOnInit() {
 checkAccount(data) {
   const email = this.activatedRoute.snapshot.paramMap.get('email');
   const key = this.activatedRoute.snapshot.paramMap.get('key');
-  console.log(data.email);
-    // check the url param key to email account
-  }
+
+  console.log(data.message);
+  console.log(data.key);
+
+  // if (data.email === email && data.key === key && data.confirm === 0) {
+  //   console.log('account not confirmed yet');
+  // } else {
+  //   console.log('account already confirmed');
+  // }
+
+}
 
 verifyAccount() {
     // verifiy account (1) to db

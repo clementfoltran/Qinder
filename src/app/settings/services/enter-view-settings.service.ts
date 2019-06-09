@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Globals } from 'src/app/globals';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { EnterViewSettingsParameter } from './enter-view-settings-parameter';
 import { EnterViewSettingsReturn } from './enter-view-settings-return';
 import { Observable, throwError } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';

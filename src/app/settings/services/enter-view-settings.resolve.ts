@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { EnterViewSettingsReturn} from './enter-view-settings-return';
 import { EnterViewSettingsService } from './enter-view-settings.service';
 import { map } from 'rxjs/operators';

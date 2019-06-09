@@ -10,7 +10,6 @@ exports.enterViewSetting = (req, res) => {
     if (res) {
       const sql = 'SELECT firstname, lastname, email, confirm, notifMatch, notifLike, notifMessage FROM user WHERE id_user = ?';
       const query = db.format(sql, [req.params.id]);
-      console.log();
       db.query(query, (err, response) => {
         if (err) {
           res.json({
@@ -20,7 +19,7 @@ exports.enterViewSetting = (req, res) => {
         } else {
           res.json({
             success: true,
-            message: '',
+            message: 'Successfully fetched user data',
             id_user: req.params.id,
             firstname: response[0].firstname,
             lastname: response[0].lastname,
