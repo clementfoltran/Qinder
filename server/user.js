@@ -34,7 +34,7 @@ exports.getProfilePhoto = (req, res) => {
 exports.login = (req, res) => {
   if (req.body) {
     const password = req.body.password;
-    const sql = "SELECT hash, id_user FROM user WHERE email LIKE ?";
+    const sql = "SELECT hash, id_user, confirm FROM user WHERE email LIKE ?";
     const query = db.format(sql, [req.body.email]);
     db.query(query, (err, response) => {
       if (err) {
@@ -42,7 +42,7 @@ exports.login = (req, res) => {
           message: 'Cannot find user with this email address',
           success: false,
         });
-      } else if (passwordHash.verify(password, response[0].hash)) {
+      } else if (passwordHash.verify(password, response[0].hash) && response[0].confirm === 1) {
         const myToken = jwt.sign({
           iss: 'https://qinder.com',
           user: 'Clément',
@@ -102,12 +102,12 @@ exports.register = (req, res) => {
       //   user: 'Clément',
       //   scope: 'user'
       // }, secret);
-      res.json({
-        token: myToken,
-        id_user: response[0].OkPacket.InsertId,
-        message: '',
-        success: true,
-      });
+      // res.json({
+      //   token: myToken,
+      //   id_user: response[0].OkPacket.InsertId,
+      //   message: '',
+      //   success: true,
+      // });
     } else {
       res.sendStatus(401);
     }
