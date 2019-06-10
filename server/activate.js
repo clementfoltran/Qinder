@@ -7,10 +7,11 @@ exports.enterViewActivate = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = "SELECT id_user, firstname, email, confirm, key FROM user WHERE email = ?";
+      const sql = "SELECT id_user, firstname, email, confirm FROM user WHERE email = ?";
       const query = db.format(sql, [req.params.email]);
       db.query(query, (err, response) => {
         if (err) {
+          console.error(err);
           res.json({
             success: false,
             message: 'User not found',

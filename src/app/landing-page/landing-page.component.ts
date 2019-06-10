@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { LoginParameter } from './services/login/login.parameter';
 import { LoginReturn } from './services/login/login.return';
@@ -11,6 +11,9 @@ import { MailService } from './services/mail/mail.service';
 import { RegisterParameter } from './services/register/register.parameter';
 import { RegisterService } from './services/register/register.service';
 import {RegisterReturn} from './services/register/register.return';
+import { ActivateService } from '../activate/services/activate/activate.service';
+import { EnterViewActivateReturn } from '../activate/services/enter-view-activate/enter-view-activate-return';
+import { ActivateReturn } from '../activate/services/activate/activate.service-return';
 
 @Component({
   selector: 'app-landing-page',
@@ -39,13 +42,16 @@ export class LandingPageComponent implements OnInit {
    */
   public LoginAPIParameter: LoginParameter;
   public MailAPIParameter: MailParameter;
+  public resolvedData: EnterViewActivateReturn;
 
   constructor(public fb: FormBuilder,
               public router: Router,
               public registerService: RegisterService,
               public loginService: LoginService,
               private messageService: MessageService,
-              private mailService: MailService) {
+              private mailService: MailService,
+              public activatedRoute: ActivatedRoute,
+              public activateService: ActivateService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -62,6 +68,10 @@ export class LandingPageComponent implements OnInit {
 }
 
   ngOnInit() {
+    this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
+      this.resolvedData = data.viewData;
+    });
+    this.checkAccount(this.resolvedData);
   }
 
   login() {
@@ -143,4 +153,29 @@ export class LandingPageComponent implements OnInit {
       });
     }
   }
+
+  checkAccount(data) {
+    const email = this.activatedRoute.snapshot.paramMap.get('email');
+    const key = this.activatedRoute.snapshot.paramMap.get('key');
+
+    console.log(data.message);
+    console.log(data.email);
+
+    // if (data.email === email && data.key === key && data.confirm === 0) {
+    //   this.verifyAccount(email);
+    // } else {
+    //   console.log('account already confirmed');
+    // }
+  }
+
+  verifyAccount(email) {
+      this.activateService.activateAccount(email)
+        .subscribe((result: ActivateReturn) => {
+          if (result.success) {
+            console.log(result.message);
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
 }

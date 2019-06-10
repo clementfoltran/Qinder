@@ -6,8 +6,7 @@ import {IsLoggedInGuard} from './guards/is-logged-in-guard';
 import { SettingsComponent } from './settings/settings.component';
 import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
-import { ActivateComponent } from './activate/activate.component';
-import { EnterViewActivateResolve } from './activate/services/enter-view-activate/enter-view-activate.resolve';
+import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
 
 const routes: Routes = [
   {
@@ -29,7 +28,7 @@ const routes: Routes = [
   },
   {
     path: 'activate/:email/:key',
-    component: ActivateComponent,
+    component: LandingPageComponent,
     canActivate: [IsLoggedInGuard],
     resolve: {viewData: EnterViewActivateResolve}
   }
