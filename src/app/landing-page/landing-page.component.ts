@@ -159,14 +159,15 @@ export class LandingPageComponent implements OnInit {
     const email = this.activatedRoute.snapshot.paramMap.get('email');
     const key = this.activatedRoute.snapshot.paramMap.get('key');
 
-    console.log(data.message);
-    console.log(data.email);
-    console.log(data.key);
-
     if (data.email === email && data.key === key && data.confirm === 0) {
       this.verifyAccount(email);
     } else {
-      console.log('account already confirmed');
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Welcome',
+        detail: 'This account is already confirmed, you may login with your credentials :)',
+        life: 6000
+      });
     }
   }
 
@@ -174,7 +175,12 @@ export class LandingPageComponent implements OnInit {
       this.activateService.activateAccount(email)
         .subscribe((result: ActivateReturn) => {
           if (result.success) {
-            console.log(result.message);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Welcome',
+              detail: 'Account successfully activated! You can now login :)',
+              life: 6000
+            });
           } else {
             console.log(result.message);
           }
