@@ -39,7 +39,7 @@ exports.login = (req, res) => {
     db.query(query, (err, response) => {
       if (err) {
         res.json({
-          message: '',
+          message: 'Cannot find user with this email address',
           success: false,
         });
       } else if (passwordHash.verify(password, response[0].hash)) {
@@ -51,7 +51,7 @@ exports.login = (req, res) => {
         res.json({
           user_id: response[0].id_user,
           token: myToken,
-          message: '',
+          message: 'Successfully logged user',
           success: true,
         });
       } else {

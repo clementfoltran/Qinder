@@ -7,7 +7,7 @@ exports.enterViewActivate = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT id_user, firstname, email, confirm, key FROM user WHERE email = ?';
+      const sql = "SELECT id_user, firstname, email, confirm, key FROM user WHERE email = ?";
       const query = db.format(sql, [req.params.email]);
       db.query(query, (err, response) => {
         if (err) {
@@ -33,6 +33,28 @@ exports.enterViewActivate = (req, res) => {
   }
 };
 
-function verifyKey() {
-
-}
+exports.activateAccount = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = "UPDATE user SET confirm = ? WHERE email = ?";
+      const query = db.format(sql, [1, req.params.email]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Failed to activate user account',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: 'Successfully activated user account',
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};

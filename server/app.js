@@ -54,6 +54,7 @@ app.post('/addUserTag', urlencodedParser, preference.addUserTag);
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
+app.get('/activateAccount/:email', urlencodedParser, activate.activateAccount);
 app.get('/home/:id', urlencodedParser, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, home.getUserPhotos);
 

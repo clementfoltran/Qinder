@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EnterViewActivateReturn } from './services/enter-view-activate-return';
+import { EnterViewActivateReturn } from './services/enter-view-activate/enter-view-activate-return';
+import { ActivateService } from './services/activate/activate.service';
+import { ActivateReturn } from './services/activate/activate.service-return';
 
 @Component({
   selector: 'app-activate',
@@ -11,7 +13,8 @@ export class ActivateComponent implements OnInit {
 
   public resolvedData: EnterViewActivateReturn;
 
-  constructor(public activatedRoute: ActivatedRoute) { }
+  constructor(public activatedRoute: ActivatedRoute,
+              public activateService: ActivateService) { }
 
 ngOnInit() {
     this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
@@ -28,15 +31,21 @@ checkAccount(data) {
   console.log(data.key);
 
   // if (data.email === email && data.key === key && data.confirm === 0) {
-  //   console.log('account not confirmed yet');
+  //   this.verifyAccount(email);
   // } else {
   //   console.log('account already confirmed');
   // }
-
 }
 
-verifyAccount() {
-    // verifiy account (1) to db
+verifyAccount(email) {
+    this.activateService.activateAccount(email)
+      .subscribe((result: ActivateReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
   }
 
 }

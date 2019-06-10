@@ -7,7 +7,7 @@ import { SettingsComponent } from './settings/settings.component';
 import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 import { ActivateComponent } from './activate/activate.component';
-import { EnterViewActivateResolve } from './activate/services/enter-view-activate.resolve';
+import { EnterViewActivateResolve } from './activate/services/enter-view-activate/enter-view-activate.resolve';
 
 const routes: Routes = [
   {
