@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {EnterViewHomeReturn} from '../home/services/enter-view-home/enter-view-home-return';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UpdatePreferencesParameter} from '../home/services/update-preferences/update-preferences-parameter';
@@ -20,6 +20,7 @@ import {GetTagsService} from './services/get-tags/get-tags.service';
 import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
 import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
 import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-preferences',
@@ -31,7 +32,7 @@ export class PreferencesComponent implements OnInit {
    *  Resolve data for the view
    *
    */
-  public resolveData: EnterViewHomeReturn;
+  @Input() resolveData: EnterViewHomeReturn = null;
   /**
    * Update form preferences
    *
@@ -243,8 +244,8 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  constructor(public enterViewHomeService: EnterViewHomeService,
-              public messageService: MessageService,
+  constructor(public messageService: MessageService,
+              public activatedRoute: ActivatedRoute,
               public getUserPhotosService: GetUserPhotosService,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
@@ -259,29 +260,23 @@ export class PreferencesComponent implements OnInit {
     });
   }
 
+  initVariables() {
+    this.ageRange[0] = this.resolveData.minage;
+    this.ageRange[1] = this.resolveData.maxage;
+    this.distance = this.resolveData.distance;
+    this.firstname = this.resolveData.firstname;
+    if (this.resolveData.bio) {
+      this.prefForm.get('bio').setValue(this.resolveData.bio);
+    }
+    this.prefForm.get('gender').setValue('Both');
+  }
+
   ngOnInit() {
     this.resolvePhotosModal();
     this.displayTags();
-    this.enterViewHomeService.enterView(1)
-      .subscribe((result: EnterViewHomeReturn) => {
-        if (result.success) {
-          this.resolveData = result;
-          this.ageRange[0] = this.resolveData.minage;
-          this.ageRange[1] = this.resolveData.maxage;
-          this.distance = this.resolveData.distance;
-          this.firstname = this.resolveData.firstname;
-          if (this.resolveData.bio) {
-            this.prefForm.get('bio').setValue(this.resolveData.bio);
-          }
-          this.prefForm.get('gender').setValue('Both');
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
-          });
-        }
-      });
+    this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
+      this.resolveData = data.viewData;
+    });
+    this.initVariables();
   }
 }

@@ -25,7 +25,9 @@
       </div>
       <h2 class="m-auto p-2">{{ this.firstname | uppercase }}</h2>
       <div class="modal-body text-center">
-        <app-preferences></app-preferences>
+        <app-preferences [resolveData]="resolveData"
+        >
+        </app-preferences>
       </div>
     </div>
   </div>

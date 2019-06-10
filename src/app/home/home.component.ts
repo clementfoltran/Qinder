@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {EnterViewHomeReturn} from './services/enter-view-home/enter-view-home-return';
 import {ActivatedRoute} from '@angular/router';
 
@@ -8,6 +8,7 @@ import {ActivatedRoute} from '@angular/router';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  @ViewChild(HomeComponent) homeComponent: HomeComponent;
   /**
    *  Resolve data for the view
    *
@@ -32,6 +33,5 @@ export class HomeComponent implements OnInit {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
-    console.log(this.resolveData);
   }
 }
