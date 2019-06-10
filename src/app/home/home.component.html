@@ -17,15 +17,23 @@
     <div class="modal-content">
       <div class="modal-header">
         <div class="logo m-auto">
-          <img class="rounded-circle" src="../../assets/img/59602086_2073623432930369_109684333639368704_o.jpg" height="100" alt="">
+          <div *ngIf="userPicture; else noPic">
+            <img class="rounded-circle" src="data:image/png;base64,{{ userPicture }}" height="100" alt="">
+          </div>
+          <ng-template #noPic>
+            <div class="rounded-circle text-center noPic">
+              <i class="fas fa-user"></i>
+            </div>
+          </ng-template>
         </div>
         <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <h2 class="m-auto p-2">{{ this.firstname | uppercase }}</h2>
+      <h2 class="m-auto p-2">{{ firstName | uppercase }}</h2>
       <div class="modal-body text-center">
         <app-preferences [resolveData]="resolveData"
+                         [userPhotos]="userPhotos"
         >
         </app-preferences>
       </div>

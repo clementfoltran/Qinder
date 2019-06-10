@@ -43,3 +43,13 @@ body .ui-slider .ui-slider-range {
   width: 150px;
   background-image: linear-gradient(rgba(240, 67, 33, 0.5), rgba(240, 92, 33, 0.5));
 }
+
+.noPic {
+  background-image: linear-gradient(rgba(240, 67, 33, 0.8), rgba(240, 92, 33, 0.8));
+  width: 100px;
+  height: 100px;
+  i {
+    font-size: 40px;
+    vertical-align: middle;
+  }
+}

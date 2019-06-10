@@ -57,7 +57,7 @@ export class PreferencesComponent implements OnInit {
    * UserPhotos tab
    *
    */
-  public userPhotos: Photo[];
+  @Input() userPhotos: Photo[] = null;
   /**
    * Selected photo to upload
    *
@@ -83,7 +83,6 @@ export class PreferencesComponent implements OnInit {
    *
    */
   public userTags: Tag[] = [];
-  public firstname: string;
 
   drop(event: CdkDragDrop<Tag[]>) {
     if (event.previousContainer === event.container) {
@@ -128,23 +127,6 @@ export class PreferencesComponent implements OnInit {
 
   logOut() {
     this.loginService.logOut();
-  }
-
-  resolvePhotosModal() {
-    this.getUserPhotosService.getUserPhotos(1)
-      .subscribe((result: GetUserPhotosReturn) => {
-        if (result.success) {
-          this.userPhotos = result.photos;
-          console.log(this.userPhotos);
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
-          });
-        }
-      });
   }
 
   updatePref() {
@@ -246,7 +228,6 @@ export class PreferencesComponent implements OnInit {
 
   constructor(public messageService: MessageService,
               public activatedRoute: ActivatedRoute,
-              public getUserPhotosService: GetUserPhotosService,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
               public addUserTagService: AddUserTagService,
@@ -264,7 +245,6 @@ export class PreferencesComponent implements OnInit {
     this.ageRange[0] = this.resolveData.minage;
     this.ageRange[1] = this.resolveData.maxage;
     this.distance = this.resolveData.distance;
-    this.firstname = this.resolveData.firstname;
     if (this.resolveData.bio) {
       this.prefForm.get('bio').setValue(this.resolveData.bio);
     }
@@ -272,7 +252,6 @@ export class PreferencesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.resolvePhotosModal();
     this.displayTags();
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;

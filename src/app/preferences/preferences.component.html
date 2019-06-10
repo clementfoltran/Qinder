@@ -1,6 +1,6 @@
 <form [formGroup]="prefForm" (ngSubmit)="updatePref()">
   <div class="form-group mb-4">
-    <div *ngIf="userPhotos.length > 0">
+    <div *ngIf="userPhotos">
       <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
         <div class="img-wrap d-inline-block position-relative">
           <img height="150px" width="150px"
