@@ -21,7 +21,6 @@ import { UpdatePasswordService } from './services/update-password/update-passwor
 export class SettingsComponent implements OnInit {
 
   public resolvedData: EnterViewSettingsReturn;
-  public changeNotificationsForm: FormGroup;
   public changeNameForm: FormGroup;
   public changeEmailForm: FormGroup;
   public changePasswordForm: FormGroup;
@@ -35,8 +34,8 @@ export class SettingsComponent implements OnInit {
               public updatePasswordService: UpdatePasswordService,
               public fb: FormBuilder) {
     this.changeNameForm = fb.group({
-      newFirstName: ['', Validators.required],
-      newLastName: ['', Validators.required],
+      newFirstName: [],
+      newLastName: [],
   });
     this.changeEmailForm = fb.group({
       newEmail: ['', Validators.required]
@@ -47,12 +46,12 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-ngOnInit() {
-  this.activatedRoute.data.forEach((data: {viewData: EnterViewSettingsReturn }) => {
-    this.resolvedData = data.viewData;
-  });
-  this.checkAccountConfirmed(this.resolvedData);
-}
+  ngOnInit() {
+    this.activatedRoute.data.forEach((data: { viewData: EnterViewSettingsReturn }) => {
+      this.resolvedData = data.viewData;
+    });
+    this.checkAccountConfirmed(this.resolvedData);
+  }
 
   updateEmail() {
     if (this.changeEmailForm.valid) {
@@ -61,13 +60,12 @@ ngOnInit() {
         idUser: this.resolvedData.idUser
       };
     }
-
     this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
       .subscribe((result: UpdateEmailReturn) => {
         if (result.success) {
-          console.log('EmailModified');
+          console.log(result.message);
         } else {
-          console.log('Failed to update the email');
+          console.log(result.message);
         }
       });
   }
@@ -82,9 +80,9 @@ ngOnInit() {
     this.updateNameService.updateName(this.UpdateNameAPIParameter)
         .subscribe((result: UpdateNameReturn) => {
           if (result.success) {
-            console.log('Username Modified');
+            console.log(result.message);
           } else {
-            console.log('Failed to update the name');
+            console.log(result.message);
           }
         });
   }
@@ -99,9 +97,9 @@ ngOnInit() {
     this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)
         .subscribe((result: UpdatePasswordReturn) => {
           if (result.success) {
-            console.log('Password Modified');
+            console.log(result.message);
           } else {
-            console.log('Failed to update the password');
+            console.log(result.message);
           }
         });
   }
@@ -109,27 +107,6 @@ ngOnInit() {
   checkAccountConfirmed(data) {
     if (data.confirm === 1) {
       return 1;
-    }
-  }
-  checkMatchNotifActivated(data) {
-    if (data.notifMatch === 1) {
-      this.changeNotificationsForm.get('matchSwitch').setValue(1);
-    } else {
-      this.changeNotificationsForm.get('matchSwitch').setValue(0);
-    }
-  }
-  checkLikeNotifActivated(data) {
-    if (data.notifLike === 1) {
-      this.changeNotificationsForm.get('likeSwitch').setValue(1);
-    } else {
-      this.changeNotificationsForm.get('likeSwitch').setValue(0);
-    }
-  }
-  checkMessageNotifActivated(data) {
-    if (data.notifMessage === 1) {
-      this.changeNotificationsForm.get('messageSwitch').setValue(1);
-    } else {
-      this.changeNotificationsForm.get('messageSwitch').setValue(0);
     }
   }
 }

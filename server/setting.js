@@ -8,7 +8,7 @@ exports.enterViewSetting = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT firstname, lastname, email, confirm, notifMatch, notifLike, notifMessage FROM user WHERE id_user = ?';
+      const sql = 'SELECT id_user, firstname, lastname, email, confirm FROM user WHERE id_user = ?';
       const query = db.format(sql, [req.params.id]);
       db.query(query, (err, response) => {
         if (err) {
@@ -20,14 +20,11 @@ exports.enterViewSetting = (req, res) => {
           res.json({
             success: true,
             message: 'Successfully fetched user data',
-            id_user: req.params.id,
+            idUser: response[0].id_user,
             firstname: response[0].firstname,
             lastname: response[0].lastname,
             email: response[0].email,
-            confirm: response[0].confirm,
-            notifLike: response[0].notifLike,
-            notifMatch: response[0].notifMatch,
-            notifMessage: response[0].notifMessage,
+            confirm: response[0].confirm
           });
         }
       });
@@ -48,26 +45,17 @@ exports.updateName = (req, res) => {
       {
         if (req.body.newFirstName && req.body.newLastName)
         {
-          if (req.body.newFirstName.length > 1 && req.body.newLastName.length > 1)
-          {
-            let sql = 'UPDATE user SET firstname = ?, lastname = ? WHERE id_user = ?';
-            const query = db.format(sql, [req.body.newFirstName, req.body.newLastName, req.body.idUser]);
-          }
+          let sql = 'UPDATE user SET firstname = ?, lastname = ? WHERE id_user = ?';
+          var query = db.format(sql, [req.body.newFirstName, req.body.newLastName, req.body.idUser]);
         }
-        else if (req.body.newFirstName)
+        else if (req.body.newFirstName && !req.body.newLastName)
         {
-          if (req.body.newFirstName.length > 1) 
-          {
-            let sql = 'UPDATE user SET firstname = ? WHERE id_user = ?';
-            const query = db.format(sql, [req.body.newFirstName, req.body.idUser]);
-          }
-        } else if (req.body.newLastName)
+          let sql = 'UPDATE user SET firstname = ? WHERE id_user = ?';
+          var query = db.format(sql, [req.body.newFirstName, req.body.idUser]);
+        } else if (req.body.newLastName && !req.body.newFirstName)
         {
-          if (req.body.newLastName.length > 1)
-          {
-            let sql = 'UPDATE user SET lastname = ? WHERE id_user = ?';
-            var query = db.format(sql, [req.body.newLastName, req.body.idUser]);
-          }
+          let sql = 'UPDATE user SET lastname = ? WHERE id_user = ?';
+          var query = db.format(sql, [req.body.newLastName, req.body.idUser]);
         }
         db.query(query, (err, response) => {
           if (err) {
@@ -81,7 +69,7 @@ exports.updateName = (req, res) => {
       } else {
         res.json({
           message: '[BACK] FAILED TO UPDATE USERNAME',
-          success: true,
+          success: false,
         });
       }
     } else {
@@ -97,7 +85,7 @@ exports.updateEmail = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      if (checkEmail(req.body.newEmail)) {
+      if (req.body.newEmail) {
         let sql = 'UPDATE user SET email = ? WHERE id_user = ?';
         let query = db.format(sql, [
           req.body.newEmail,
@@ -139,7 +127,7 @@ exports.updatePassword = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      if (checkPassword(req.body.newPassword, req.body.newPasswordConfirmation)) {
+      if (req.body.newPassword && req.body.newPasswordConfirmation) {
         let sql = 'UPDATE user SET hash = ? WHERE id_user = ?';
         const hash = passwordHash.generate(req.body.newPassword);
         let query = db.format(sql, [
