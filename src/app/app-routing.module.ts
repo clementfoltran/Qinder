@@ -8,6 +8,7 @@ import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 import { ActivateComponent } from './activate/activate.component';
 import { EnterViewActivateResolve } from './activate/services/enter-view-activate/enter-view-activate.resolve';
+import {EnterViewHomeResolve} from './home/enter-view-home.resolve';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     canActivate: [IsLoggedInGuard],
+    resolve: {viewData: EnterViewHomeResolve}
   },
   {
     path: 'settings/:id',
@@ -39,7 +41,9 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   providers: [
     IsLoggedInGuard,
-    IsLoggedOutGuard
+    IsLoggedOutGuard,
+    EnterViewHomeResolve,
+    HomeComponent,
   ],
   exports: [RouterModule],
 })

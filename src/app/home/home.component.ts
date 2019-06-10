@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {EnterViewHomeReturn} from './services/enter-view-home/enter-view-home-return';
-import {EnterViewHomeService} from './services/enter-view-home/enter-view-home.service';
-import {MessageService} from 'primeng/api';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -26,24 +25,13 @@ export class HomeComponent implements OnInit {
   public firstname: string;
 
 
-  constructor(public enterViewHomeService: EnterViewHomeService,
-              public messageService: MessageService) {
+  constructor(public activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
-    this.enterViewHomeService.enterView(1)
-      .subscribe((result: EnterViewHomeReturn) => {
-        if (result.success) {
-          this.resolveData = result;
-          this.firstname = this.resolveData.firstname;
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
-          });
-        }
-      });
+    this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
+      this.resolveData = data.viewData;
+    });
+    console.log(this.resolveData);
   }
 }

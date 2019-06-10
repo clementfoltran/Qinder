@@ -29,6 +29,8 @@ import { ActivateComponent } from './activate/activate.component';
 import { ActivateService } from './activate/services/activate/activate.service';
 import { EnterViewActivateService } from './activate/services/enter-view-activate/enter-view-activate.service';
 import { EnterViewActivateResolve } from './activate/services/enter-view-activate/enter-view-activate.resolve';
+import {EnterViewHomeResolve} from './home/enter-view-home.resolve';
+import {EnterViewHomeService} from './home/services/enter-view-home/enter-view-home.service';
 
 
 @NgModule({
@@ -68,7 +70,9 @@ import { EnterViewActivateResolve } from './activate/services/enter-view-activat
     GetUserPhotosService,
     ActivateService,
     EnterViewActivateService,
-    EnterViewActivateResolve
+    EnterViewActivateResolve,
+    EnterViewHomeResolve,
+    EnterViewHomeService,
   ],
   bootstrap: [AppComponent]
 })

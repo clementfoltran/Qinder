@@ -72,11 +72,10 @@ export class LandingPageComponent implements OnInit {
       };
       this.loginService.auth(this.LoginAPIParameter)
         .subscribe((result: LoginReturn) => {
-          console.log(result);
           if (result.success) {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
-            this.router.navigate(['/home']);
+            this.router.navigate(['/home'], { queryParams: { id: result.id_user } });
           } else {
             this.messageService.add({
               severity: 'error',
