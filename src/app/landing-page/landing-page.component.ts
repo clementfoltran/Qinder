@@ -68,12 +68,11 @@ export class LandingPageComponent implements OnInit {
 }
 
   ngOnInit() {
-    // add condition to not fetch data if account is already verified here:
-    this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
-      this.resolvedData = data.viewData;
-    });
     if (this.activatedRoute.snapshot.paramMap.get('email') &&
         this.activatedRoute.snapshot.paramMap.get('key')) {
+      this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
+        this.resolvedData = data.viewData;
+      });
       this.checkAccount(this.resolvedData);
     }
   }
@@ -135,18 +134,8 @@ export class LandingPageComponent implements OnInit {
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
             console.log(result.message);
-            // Connect successfully let's store the token
-            // localStorage.setItem('token', result.token);
-            // // this.router.navigate(['/home']);
-            // this.messageService.add({
-            //   severity: 'success',
-            //   summary: 'Welcome',
-            //   detail: 'Welcome on Qinder',
-            //   life: 6000
-            // });
           } else {
             console.log(result.message);
-            // TODO error handler (same email, password doesn't match)
           }
         });
       this.mailService.sendMail(this.MailAPIParameter)

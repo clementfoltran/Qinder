@@ -29,7 +29,7 @@ const routes: Routes = [
   {
     path: 'activate/:email/:key',
     component: LandingPageComponent,
-    canActivate: [IsLoggedInGuard],
+    canActivate: [IsLoggedOutGuard],
     resolve: {viewData: EnterViewActivateResolve}
   }
 ];
