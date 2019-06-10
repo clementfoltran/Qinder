@@ -11,9 +11,9 @@ import { MailService } from './services/mail/mail.service';
 import { RegisterParameter } from './services/register/register.parameter';
 import { RegisterService } from './services/register/register.service';
 import {RegisterReturn} from './services/register/register.return';
-import { ActivateService } from '../activate/services/activate/activate.service';
-import { EnterViewActivateReturn } from '../activate/services/enter-view-activate/enter-view-activate-return';
-import { ActivateReturn } from '../activate/services/activate/activate.service-return';
+import { ActivateService } from './services/activate/activate.service';
+import { EnterViewActivateReturn } from './services/enter-view-activate/enter-view-activate-return';
+import { ActivateReturn } from './services/activate/activate.service-return';
 
 @Component({
   selector: 'app-landing-page',
@@ -68,6 +68,7 @@ export class LandingPageComponent implements OnInit {
 }
 
   ngOnInit() {
+    // add condition to not fetch data if account is already verified here:
     this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
       this.resolvedData = data.viewData;
     });
@@ -160,12 +161,13 @@ export class LandingPageComponent implements OnInit {
 
     console.log(data.message);
     console.log(data.email);
+    console.log(data.key);
 
-    // if (data.email === email && data.key === key && data.confirm === 0) {
-    //   this.verifyAccount(email);
-    // } else {
-    //   console.log('account already confirmed');
-    // }
+    if (data.email === email && data.key === key && data.confirm === 0) {
+      this.verifyAccount(email);
+    } else {
+      console.log('account already confirmed');
+    }
   }
 
   verifyAccount(email) {
