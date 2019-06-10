@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, Router} from '@angular/router';
 import {EnterViewHomeReturn} from './services/enter-view-home/enter-view-home-return';
 import {EnterViewHomeService} from './services/enter-view-home/enter-view-home.service';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class EnterViewHomeResolve implements Resolve<EnterViewHomeReturn> {
@@ -11,8 +12,12 @@ export class EnterViewHomeResolve implements Resolve<EnterViewHomeReturn> {
 
   resolve(route: ActivatedRouteSnapshot) {
 
-    const id = +route.params['id'];
+    const id = +route.queryParams.id;
 
-    return this.enterViewHomeService.enterView({id});
+    return this.enterViewHomeService.enterView({id}).pipe(
+      map(response => {
+        return response;
+      })
+    );
   }
 }

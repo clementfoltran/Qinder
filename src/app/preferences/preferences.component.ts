@@ -20,7 +20,7 @@ import {GetTagsService} from './services/get-tags/get-tags.service';
 import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
 import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
 import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, NavigationExtras} from '@angular/router';
 
 @Component({
   selector: 'app-preferences',
@@ -235,6 +235,7 @@ export class PreferencesComponent implements OnInit {
               public updatePreferencesService: UpdatePreferencesService,
               public fb: FormBuilder,
               public loginService: LoginService) {
+
     this.prefForm = fb.group({
       bio: [''],
       gender: ['', Validators.required],

@@ -49,8 +49,10 @@ export class HomeComponent implements OnInit {
       .subscribe((result: GetUserPhotosReturn) => {
         if (result.success) {
           this.userPhotos = result.photos;
-          localStorage.setItem('user-img', this.userPhotos[0].photo);
-          this.userPicture = this.userPhotos[0].photo;
+          if (this.userPhotos.length > 0) {
+            localStorage.setItem('user-img', this.userPhotos[0].photo);
+            this.userPicture = this.userPhotos[0].photo;
+          }
         } else {
           this.messageService.add({
             severity: 'error',
