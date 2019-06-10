@@ -12,7 +12,7 @@ export class EnterViewHomeResolve implements Resolve<EnterViewHomeReturn> {
 
   resolve(route: ActivatedRouteSnapshot) {
 
-    const id = +route.queryParams.id;
+    const id = +localStorage.getItem('userId');
 
     return this.enterViewHomeService.enterView({id}).pipe(
       map(response => {

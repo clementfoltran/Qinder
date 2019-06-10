@@ -88,7 +88,8 @@ export class LandingPageComponent implements OnInit {
           if (result.success) {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
-            this.router.navigate(['/home'], { queryParams: { id: result.user_id } });
+            localStorage.setItem('userId', result.user_id.toString());
+            this.router.navigate(['/home']);
           } else {
             this.messageService.add({
               severity: 'error',
