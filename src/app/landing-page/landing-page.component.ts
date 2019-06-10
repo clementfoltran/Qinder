@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { LoginParameter } from './services/login/login.parameter';
 import { LoginReturn } from './services/login/login.return';
@@ -11,6 +11,9 @@ import { MailService } from './services/mail/mail.service';
 import { RegisterParameter } from './services/register/register.parameter';
 import { RegisterService } from './services/register/register.service';
 import {RegisterReturn} from './services/register/register.return';
+import { ActivateService } from './services/activate/activate.service';
+import { EnterViewActivateReturn } from './services/enter-view-activate/enter-view-activate-return';
+import { ActivateReturn } from './services/activate/activate.service-return';
 
 @Component({
   selector: 'app-landing-page',
@@ -39,13 +42,16 @@ export class LandingPageComponent implements OnInit {
    */
   public LoginAPIParameter: LoginParameter;
   public MailAPIParameter: MailParameter;
+  public resolvedData: EnterViewActivateReturn;
 
   constructor(public fb: FormBuilder,
               public router: Router,
               public registerService: RegisterService,
               public loginService: LoginService,
               private messageService: MessageService,
-              private mailService: MailService) {
+              private mailService: MailService,
+              public activatedRoute: ActivatedRoute,
+              public activateService: ActivateService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -62,6 +68,13 @@ export class LandingPageComponent implements OnInit {
 }
 
   ngOnInit() {
+    if (this.activatedRoute.snapshot.paramMap.get('email') &&
+        this.activatedRoute.snapshot.paramMap.get('key')) {
+      this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
+        this.resolvedData = data.viewData;
+      });
+      this.checkAccount(this.resolvedData);
+    }
   }
 
   login() {
@@ -119,17 +132,9 @@ export class LandingPageComponent implements OnInit {
       this.registerService.register(this.RegisterAPIParameter)
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
-            // Connect successfully let's store the token
-            localStorage.setItem('token', result.token);
-            // this.router.navigate(['/home']);
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Welcome',
-              detail: 'Welcome on Qinder',
-              life: 6000
-            });
+            console.log(result.message);
           } else {
-            // TODO error handler (same email, password doesn't match)
+            console.log(result.message);
           }
         });
       this.mailService.sendMail(this.MailAPIParameter)
@@ -142,4 +147,36 @@ export class LandingPageComponent implements OnInit {
       });
     }
   }
+
+  checkAccount(data) {
+    const email = this.activatedRoute.snapshot.paramMap.get('email');
+    const key = this.activatedRoute.snapshot.paramMap.get('key');
+
+    if (data.email === email && data.key === key && data.confirm === 0) {
+      this.verifyAccount(email);
+    } else {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Welcome',
+        detail: 'This account is already confirmed, you may login with your credentials :)',
+        life: 6000
+      });
+    }
+  }
+
+  verifyAccount(email) {
+      this.activateService.activateAccount(email)
+        .subscribe((result: ActivateReturn) => {
+          if (result.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Welcome',
+              detail: 'Account successfully activated! You can now login :)',
+              life: 6000
+            });
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
 }

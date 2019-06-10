@@ -25,12 +25,11 @@ import {GetUserPhotosService} from './home/services/get-user-photos/get-user-pho
 import { PreferencesComponent } from './preferences/preferences.component';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-import { ActivateComponent } from './activate/activate.component';
-import { ActivateService } from './activate/services/activate/activate.service';
-import { EnterViewActivateService } from './activate/services/enter-view-activate/enter-view-activate.service';
-import { EnterViewActivateResolve } from './activate/services/enter-view-activate/enter-view-activate.resolve';
 import {EnterViewHomeResolve} from './home/enter-view-home.resolve';
 import {EnterViewHomeService} from './home/services/enter-view-home/enter-view-home.service';
+import { ActivateService } from './landing-page/services/activate/activate.service';
+import { EnterViewActivateService } from './landing-page/services/enter-view-activate/enter-view-activate.service';
+import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
 
 
 @NgModule({
@@ -40,8 +39,7 @@ import {EnterViewHomeService} from './home/services/enter-view-home/enter-view-h
     LandingPageComponent,
     HomeComponent,
     SettingsComponent,
-    PreferencesComponent,
-    ActivateComponent,
+    PreferencesComponent
   ],
   imports: [
     BrowserModule,
