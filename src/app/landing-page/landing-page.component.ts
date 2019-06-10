@@ -40,12 +40,12 @@ export class LandingPageComponent implements OnInit {
   public LoginAPIParameter: LoginParameter;
   public MailAPIParameter: MailParameter;
 
-  constructor (public fb: FormBuilder,
-    public router: Router,
-    public registerService: RegisterService,
-    public loginService: LoginService,
-    private messageService: MessageService,
-    private mailService: MailService) {
+  constructor(public fb: FormBuilder,
+              public router: Router,
+              public registerService: RegisterService,
+              public loginService: LoginService,
+              private messageService: MessageService,
+              private mailService: MailService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -89,12 +89,12 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
-  dec2hex (dec) {
+  dec2hex(dec) {
     return ('0' + dec.toString(16)).substr(-2);
   }
   generateId(len) {
-    var arr = new Uint8Array((len || 40) / 2)
-    window.crypto.getRandomValues(arr)
+    const arr = new Uint8Array((len || 40) / 2);
+    window.crypto.getRandomValues(arr);
     return Array.from(arr, this.dec2hex).join('');
   }
 
@@ -122,8 +122,7 @@ export class LandingPageComponent implements OnInit {
           if (result.success) {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
-            localStorage.setItem('id', result.id_user.toString());
-            this.router.navigate(['/home']);
+            // this.router.navigate(['/home']);
             this.messageService.add({
               severity: 'success',
               summary: 'Welcome',

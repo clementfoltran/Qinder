@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Globals } from 'src/app/globals';
 import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { EnterViewSettingsReturn } from './enter-view-settings-return';
+import { EnterViewActivateReturn } from './enter-view-activate-return';
 import { Observable, throwError } from 'rxjs';
 import { HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class EnterViewSettingsService {
+export class EnterViewActivateService {
 
-  public serviceURL = Globals.baseURL + 'setting/';
+  public serviceURL = Globals.baseURL + 'activate/';
 
   constructor(private http: HttpClient) { }
 
-  enterView(id): Observable<EnterViewSettingsReturn> {
+  enterView(email): Observable<EnterViewActivateReturn> {
 
     const option = {
       headers: new HttpHeaders({
@@ -23,7 +23,7 @@ export class EnterViewSettingsService {
       }),
     };
 
-    return this.http.get<EnterViewSettingsReturn>(this.serviceURL + id, option).pipe(
+    return this.http.get<EnterViewActivateReturn>(this.serviceURL + email, option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');

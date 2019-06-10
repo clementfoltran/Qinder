@@ -39,7 +39,7 @@ exports.login = (req, res) => {
     db.query(query, (err, response) => {
       if (err) {
         res.json({
-          message: '',
+          message: 'Cannot find user with this email address',
           success: false,
         });
       } else if (passwordHash.verify(password, response[0].hash)) {
@@ -51,7 +51,7 @@ exports.login = (req, res) => {
         res.json({
           user_id: response[0].id_user,
           token: myToken,
-          message: '',
+          message: 'Successfully logged user',
           success: true,
         });
       } else {
@@ -97,11 +97,11 @@ exports.register = (req, res) => {
         }
         res.send(response);
       });
-      const myToken = jwt.sign({
-        iss: 'https://qinder.com',
-        user: 'Clément',
-        scope: 'user'
-      }, secret);
+      // const myToken = jwt.sign({
+      //   iss: 'https://qinder.com',
+      //   user: 'Clément',
+      //   scope: 'user'
+      // }, secret);
       res.json({
         token: myToken,
         id_user: response[0].OkPacket.InsertId,
@@ -120,12 +120,12 @@ exports.sendMail = (req, res) => {
   if (res)
   {
     nodeMailerCall(req.body.firstname, req.body.email, req.body.key, info => {
-      res.send(info);
+      // res.send(info);
     });
-    res.json({
-      message: 'Email sent!',
-      success: true,
-    });
+    // res.json({
+    //   message: 'Email sent!',
+    //   success: true,
+    // });
   }
 }
 
@@ -144,7 +144,7 @@ async function nodeMailerCall(userName, email, key, callback) {
     from: '"Martin @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Validate your MATCHA account :)",
-    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:8000/activate/${key}`,
+    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:4200/activate/${email}/${key}`,
   });
 
   console.log("Message sent: %s", info.messageId);
