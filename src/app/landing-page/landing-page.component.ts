@@ -89,30 +89,33 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
-  dec2hex(dec) {
+  dec2hex (dec) {
     return ('0' + dec.toString(16)).substr(-2);
   }
   generateId(len) {
-    const arr = new Uint8Array((len || 40) / 2);
+    var arr = new Uint8Array((len || 40) / 2)
     window.crypto.getRandomValues(arr)
     return Array.from(arr, this.dec2hex).join('');
   }
 
   register() {
     if (this.registerForm.valid) {
+
       const key = this.generateId(80);
+
       this.RegisterAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
         lastname: this.registerForm.get('lastname').value,
         email: this.registerForm.get('email').value,
         password: this.registerForm.get('password').value,
         passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
-        gender: this.registerForm.get('gender').value
+        gender: this.registerForm.get('gender').value,
+        key
       };
       this.MailAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
         email: this.registerForm.get('email').value,
-        key: key
+        key
       };
       this.registerService.register(this.RegisterAPIParameter)
         .subscribe((result: RegisterReturn) => {

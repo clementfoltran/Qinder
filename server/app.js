@@ -7,6 +7,7 @@ const user = require('./user.js');
 const setting = require('./setting.js');
 const home = require('./home.js');
 const preference = require('./preference.js');
+const activate = require('.activate.js');
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -43,7 +44,6 @@ app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/updateName', urlencodedParser, setting.updateName);
 app.post('/updateEmail', urlencodedParser, setting.updateEmail);
 app.post('/updatePassword', urlencodedParser, setting.updatePassword);
-app.post('/updateNotifications', urlencodedParser, setting.updateNotifications);
 
 app.post('/updatePreferences', urlencodedParser, home.updatePreferences);
 app.post('/uploadPhoto', urlencodedParser, home.uploadPhoto);
@@ -53,9 +53,8 @@ app.post('/addUserTag', urlencodedParser, preference.addUserTag);
 
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
-
+app.get('/activate/:key', urlencodedParser, activate.verifyKey);
 app.get('/home/:id', urlencodedParser, home.enterViewHome);
-
 app.get('/getUserPhotos/:id', urlencodedParser, home.getUserPhotos);
 
 app.get('/getTags', urlencodedParser, preference.getTags);

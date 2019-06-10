@@ -84,7 +84,7 @@ exports.register = (req, res) => {
         10,
         18,
         25,
-        null,
+        req.body.key,
         1,
         null,
         null,
@@ -114,6 +114,8 @@ exports.register = (req, res) => {
   }
 };
 
+// MAIL
+//----------------------------------------------
 exports.sendMail = (req, res) => {
   if (res)
   {
@@ -142,7 +144,7 @@ async function nodeMailerCall(userName, email, key, callback) {
     from: '"Martin @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Validate your MATCHA account :)",
-    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:8000/activate?key=${key}`,
+    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:8000/activate/${key}`,
   });
 
   console.log("Message sent: %s", info.messageId);
@@ -151,6 +153,8 @@ async function nodeMailerCall(userName, email, key, callback) {
   callback(info);
 }
 
+// CHECK FIELDS
+//---------------------------------------------------
 function checkRegisterData(firstname, lastname, email, password, passwordConfirmation)
 {
   if (firstname.length > 1 && lastname.length > 1)
