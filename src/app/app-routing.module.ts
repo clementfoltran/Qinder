@@ -9,6 +9,7 @@ import { EnterViewSettingsResolve } from './settings/enter-view-settings.resolve
 import {EnterViewHomeResolve} from './home/enter-view-home.resolve';
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
 import { ChatComponent } from './chat/chat.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,11 @@ const routes: Routes = [
   {
     path: 'chat',
     component: ChatComponent,
+    canActivate: [IsLoggedInGuard],
+  },
+  {
+    path: 'notifications',
+    component: NotificationsComponent,
     canActivate: [IsLoggedInGuard],
   },
   {
