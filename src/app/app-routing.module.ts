@@ -7,6 +7,7 @@ import { SettingsComponent } from './settings/settings.component';
 import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
 import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
+import { ChatComponent } from './chat/chat.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,11 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [IsLoggedInGuard],
+  },
+  {
+    path: 'chat',
+    component: ChatComponent,
     canActivate: [IsLoggedInGuard],
   },
   {

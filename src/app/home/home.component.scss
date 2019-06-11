@@ -34,6 +34,10 @@
   }
 }
 
+h2:hover {
+  background: yellow;
+}
+
 body .ui-slider .ui-slider-range {
   background-color: black;
 }
@@ -42,4 +46,19 @@ body .ui-slider .ui-slider-range {
   height: 150px;
   width: 150px;
   background-image: linear-gradient(rgba(240, 67, 33, 0.5), rgba(240, 92, 33, 0.5));
+}
+
+.slider {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  overflow: hidden;
+  background-color: #000; color: #FFF;
+  transition: all 1s;
+}
+
+.slider.close {
+  top: 100%;
+  height: 0;
 }

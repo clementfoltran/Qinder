@@ -28,6 +28,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { ActivateService } from './landing-page/services/activate/activate.service';
 import { EnterViewActivateService } from './landing-page/services/enter-view-activate/enter-view-activate.service';
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
+import { ChatComponent } from './chat/chat.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { EnterViewActivateResolve } from './landing-page/services/enter-view-act
     LandingPageComponent,
     HomeComponent,
     SettingsComponent,
-    PreferencesComponent
+    PreferencesComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

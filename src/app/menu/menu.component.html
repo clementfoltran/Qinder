@@ -2,16 +2,16 @@
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav col-md-12 p-0">
       <li class="nav-item col-md-4">
-        <a class="nav-link" [routerLink]="['/']"><i class="fas fa-comments"></i></a>
-      </li>
-      <li class="nav-item col-md-4">
-        <a class="nav-link" [routerLink]="['/home']"><i class="fas fa-home"></i></a>
-        <!-- swap to user here -->
+        <a class="nav-link" [routerLink]="['/chat']"><i class="fas fa-comments"></i></a>
       </li>
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modSignIn"><i class="fas fa-user"></i></a>
         <!-- swap to notifications here -->
       </li>
+      <li class="nav-item col-md-4">
+          <a class="nav-link" [routerLink]="['']"><i class="fas fa-bell"></i></a>
+          <!-- swap to user here -->
+        </li>
     </ul>
   </div>
 </nav>

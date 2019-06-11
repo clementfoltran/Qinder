@@ -10,7 +10,7 @@ import { MailReturn } from './services/mail/mail.return';
 import { MailService } from './services/mail/mail.service';
 import { RegisterParameter } from './services/register/register.parameter';
 import { RegisterService } from './services/register/register.service';
-import {RegisterReturn} from './services/register/register.return';
+import { RegisterReturn } from './services/register/register.return';
 import { ActivateService } from './services/activate/activate.service';
 import { EnterViewActivateReturn } from './services/enter-view-activate/enter-view-activate-return';
 import { ActivateReturn } from './services/activate/activate.service-return';
