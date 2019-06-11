@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {EnterViewHomeReturn} from '../home/services/enter-view-home/enter-view-home-return';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UpdatePreferencesParameter} from '../home/services/update-preferences/update-preferences-parameter';
@@ -20,6 +20,7 @@ import {GetTagsService} from './services/get-tags/get-tags.service';
 import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
 import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
 import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
+import {ActivatedRoute, NavigationExtras} from '@angular/router';
 
 @Component({
   selector: 'app-preferences',
@@ -31,7 +32,7 @@ export class PreferencesComponent implements OnInit {
    *  Resolve data for the view
    *
    */
-  public resolveData: EnterViewHomeReturn;
+  @Input() resolveData: EnterViewHomeReturn = null;
   /**
    * Update form preferences
    *
@@ -56,7 +57,7 @@ export class PreferencesComponent implements OnInit {
    * UserPhotos tab
    *
    */
-  public userPhotos: Photo[];
+  @Input() userPhotos: Photo[] = null;
   /**
    * Selected photo to upload
    *
@@ -82,7 +83,6 @@ export class PreferencesComponent implements OnInit {
    *
    */
   public userTags: Tag[] = [];
-  public firstname: string;
 
   drop(event: CdkDragDrop<Tag[]>) {
     if (event.previousContainer === event.container) {
@@ -127,23 +127,6 @@ export class PreferencesComponent implements OnInit {
 
   logOut() {
     this.loginService.logOut();
-  }
-
-  resolvePhotosModal() {
-    this.getUserPhotosService.getUserPhotos(1)
-      .subscribe((result: GetUserPhotosReturn) => {
-        if (result.success) {
-          this.userPhotos = result.photos;
-          console.log(this.userPhotos);
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
-          });
-        }
-      });
   }
 
   updatePref() {
@@ -243,9 +226,8 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  constructor(public enterViewHomeService: EnterViewHomeService,
-              public messageService: MessageService,
-              public getUserPhotosService: GetUserPhotosService,
+  constructor(public messageService: MessageService,
+              public activatedRoute: ActivatedRoute,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
               public addUserTagService: AddUserTagService,
@@ -253,35 +235,28 @@ export class PreferencesComponent implements OnInit {
               public updatePreferencesService: UpdatePreferencesService,
               public fb: FormBuilder,
               public loginService: LoginService) {
+
     this.prefForm = fb.group({
       bio: [''],
       gender: ['', Validators.required],
     });
   }
 
+  initVariables() {
+    this.ageRange[0] = this.resolveData.minage;
+    this.ageRange[1] = this.resolveData.maxage;
+    this.distance = this.resolveData.distance;
+    if (this.resolveData.bio) {
+      this.prefForm.get('bio').setValue(this.resolveData.bio);
+    }
+    this.prefForm.get('gender').setValue('Both');
+  }
+
   ngOnInit() {
-    this.resolvePhotosModal();
     this.displayTags();
-    this.enterViewHomeService.enterView(1)
-      .subscribe((result: EnterViewHomeReturn) => {
-        if (result.success) {
-          this.resolveData = result;
-          this.ageRange[0] = this.resolveData.minage;
-          this.ageRange[1] = this.resolveData.maxage;
-          this.distance = this.resolveData.distance;
-          this.firstname = this.resolveData.firstname;
-          if (this.resolveData.bio) {
-            this.prefForm.get('bio').setValue(this.resolveData.bio);
-          }
-          this.prefForm.get('gender').setValue('Both');
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
-          });
-        }
-      });
+    this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
+      this.resolveData = data.viewData;
+    });
+    this.initVariables();
   }
 }

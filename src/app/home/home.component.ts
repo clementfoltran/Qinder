@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {EnterViewHomeReturn} from './services/enter-view-home/enter-view-home-return';
-import {EnterViewHomeService} from './services/enter-view-home/enter-view-home.service';
+import {ActivatedRoute} from '@angular/router';
+import {GetUserPhotosReturn, Photo} from './services/get-user-photos/get-user-photos-return';
+import {GetUserPhotosService} from './services/get-user-photos/get-user-photos.service';
 import {MessageService} from 'primeng/api';
 
 @Component({
@@ -9,6 +11,7 @@ import {MessageService} from 'primeng/api';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  @ViewChild(HomeComponent) homeComponent: HomeComponent;
   /**
    *  Resolve data for the view
    *
@@ -20,22 +23,36 @@ export class HomeComponent implements OnInit {
    */
   public distance: number;
   /**
-   * Expected data for the servers
+   * UserPhotos tab
    *
    */
-  public firstname: string;
+  public userPhotos: Photo[];
+  /**
+   * User profile picture
+   *
+   */
+  public userPicture: string;
+  /**
+   * User first name
+   *
+   */
+  public firstName: string;
 
 
-  constructor(public enterViewHomeService: EnterViewHomeService,
+  constructor(public activatedRoute: ActivatedRoute,
+              public getUserPhotosService: GetUserPhotosService,
               public messageService: MessageService) {
   }
 
-  ngOnInit() {
-    this.enterViewHomeService.enterView(1)
-      .subscribe((result: EnterViewHomeReturn) => {
+  initUserPic() {
+    this.getUserPhotosService.getUserPhotos(this.resolveData.id)
+      .subscribe((result: GetUserPhotosReturn) => {
         if (result.success) {
-          this.resolveData = result;
-          this.firstname = this.resolveData.firstname;
+          this.userPhotos = result.photos;
+          if (this.userPhotos.length > 0) {
+            localStorage.setItem('user-img', this.userPhotos[0].photo);
+            this.userPicture = this.userPhotos[0].photo;
+          }
         } else {
           this.messageService.add({
             severity: 'error',
@@ -45,5 +62,13 @@ export class HomeComponent implements OnInit {
           });
         }
       });
+  }
+
+  ngOnInit() {
+    this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
+      this.resolveData = data.viewData;
+    });
+    this.initUserPic();
+    this.firstName = this.resolveData.firstname;
   }
 }

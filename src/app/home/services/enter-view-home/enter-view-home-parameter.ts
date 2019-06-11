@@ -1,3 +1,3 @@
 export interface EnterViewHomeParameter {
-  userId: number;
+  id: number;
 }

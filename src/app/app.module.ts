@@ -19,12 +19,14 @@ import { UpdatePasswordService } from './settings/services/update-password/updat
 import { UpdateEmailService } from './settings/services/update-email/update-email.service';
 import { UpdateNameService } from './settings/services/update-name/update-name.service';
 import { EnterViewSettingsService } from './settings/services/enter-view-settings.service';
-import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
+import { EnterViewSettingsResolve } from './settings/enter-view-settings.resolve';
 import {UploadPhotoService} from './home/services/upload-photo/upload-photo.service';
 import {GetUserPhotosService} from './home/services/get-user-photos/get-user-photos.service';
 import { PreferencesComponent } from './preferences/preferences.component';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {EnterViewHomeResolve} from './home/enter-view-home.resolve';
+import {EnterViewHomeService} from './home/services/enter-view-home/enter-view-home.service';
 import { ActivateService } from './landing-page/services/activate/activate.service';
 import { EnterViewActivateService } from './landing-page/services/enter-view-activate/enter-view-activate.service';
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
@@ -68,7 +70,9 @@ import { ChatComponent } from './chat/chat.component';
     GetUserPhotosService,
     ActivateService,
     EnterViewActivateService,
-    EnterViewActivateResolve
+    EnterViewActivateResolve,
+    EnterViewHomeResolve,
+    EnterViewHomeService,
   ],
   bootstrap: [AppComponent]
 })

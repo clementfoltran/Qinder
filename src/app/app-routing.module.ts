@@ -5,7 +5,8 @@ import { HomeComponent } from './home/home.component';
 import {IsLoggedInGuard} from './guards/is-logged-in-guard';
 import { SettingsComponent } from './settings/settings.component';
 import {IsLoggedOutGuard} from './guards/is-logged-out-guard';
-import { EnterViewSettingsResolve } from './settings/services/enter-view-settings.resolve';
+import { EnterViewSettingsResolve } from './settings/enter-view-settings.resolve';
+import {EnterViewHomeResolve} from './home/enter-view-home.resolve';
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
 import { ChatComponent } from './chat/chat.component';
 
@@ -14,12 +15,12 @@ const routes: Routes = [
     path: '',
     component: LandingPageComponent,
     canActivate: [IsLoggedOutGuard],
-
   },
   {
     path: 'home',
     component: HomeComponent,
     canActivate: [IsLoggedInGuard],
+    resolve: {viewData: EnterViewHomeResolve}
   },
   {
     path: 'chat',
@@ -27,7 +28,7 @@ const routes: Routes = [
     canActivate: [IsLoggedInGuard],
   },
   {
-    path: 'settings/:id',
+    path: 'settings',
     component: SettingsComponent,
     canActivate: [IsLoggedInGuard],
     resolve: {viewData: EnterViewSettingsResolve}
@@ -44,7 +45,11 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   providers: [
     IsLoggedInGuard,
-    IsLoggedOutGuard
+    IsLoggedOutGuard,
+    EnterViewHomeResolve,
+    HomeComponent,
+    SettingsComponent,
+    EnterViewSettingsResolve,
   ],
   exports: [RouterModule],
 })

@@ -1,6 +1,6 @@
 <form [formGroup]="prefForm" (ngSubmit)="updatePref()">
   <div class="form-group mb-4">
-    <div *ngIf="userPhotos.length > 0">
+    <div *ngIf="userPhotos">
       <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
         <div class="img-wrap d-inline-block position-relative">
           <img height="150px" width="150px"
@@ -79,9 +79,7 @@
     <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" (mouseup)="updatePref()"></p-slider>
   </div>
   <div class="form-group mb-4">
-    <a href="http://localhost:4200/settings/1">
-      <button type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button>
-    </a>
+<!--    <button [routerLink]="['/settings']" [queryParams]="{id: '1'}" type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button>-->
   </div>
   <div class="form-group mb-4">
     <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>

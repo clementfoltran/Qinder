@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import {Router, ActivatedRoute, NavigationExtras} from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { LoginParameter } from './services/login/login.parameter';
 import { LoginReturn } from './services/login/login.return';
@@ -85,10 +85,10 @@ export class LandingPageComponent implements OnInit {
       };
       this.loginService.auth(this.LoginAPIParameter)
         .subscribe((result: LoginReturn) => {
-          console.log(result);
           if (result.success) {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
+            localStorage.setItem('userId', result.user_id.toString());
             this.router.navigate(['/home']);
           } else {
             this.messageService.add({
