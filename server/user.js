@@ -80,7 +80,7 @@ exports.register = (req, res) => {
         hash,
         req.body.gender,
         new Date().toISOString().slice(0, 19).replace('T', ' '),
-        null,
+        'Both',
         null,
         10,
         18,
