@@ -69,7 +69,7 @@ exports.register = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql, [
@@ -85,10 +85,9 @@ exports.register = (req, res) => {
         18,
         25,
         req.body.key,
-        0,
+        false,
         null,
         null,
-        1, 1, 1
       ]);
       db.query(query, (err, response) => {
         if (err) {
@@ -102,12 +101,11 @@ exports.register = (req, res) => {
       //   user: 'Clément',
       //   scope: 'user'
       // }, secret);
-      // res.json({
-      //   token: myToken,
-      //   id_user: response[0].OkPacket.InsertId,
-      //   message: '',
-      //   success: true,
-      // });
+      res.json({
+        // token: myToken,
+        success: true,
+        message: 'Check your mailbox to confirm your account',
+      });
     } else {
       res.sendStatus(401);
     }
