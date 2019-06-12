@@ -87,6 +87,7 @@ export class LandingPageComponent implements OnInit {
         .subscribe((result: LoginReturn) => {
           if (result.success) {
             // Connect successfully let's store the token
+            console.log(result.message);
             localStorage.setItem('token', result.token);
             localStorage.setItem('userId', result.user_id.toString());
             this.router.navigate(['/home']);

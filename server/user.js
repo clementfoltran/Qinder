@@ -80,7 +80,7 @@ exports.register = (req, res) => {
         hash,
         req.body.gender,
         new Date().toISOString().slice(0, 19).replace('T', ' '),
-        'Both',
+        null,
         null,
         10,
         18,
@@ -92,6 +92,7 @@ exports.register = (req, res) => {
       ]);
       db.query(query, (err, response) => {
         if (err) {
+          console.log(err);
         } else {
           res.json({
             success: true,
@@ -131,7 +132,7 @@ async function nodeMailerCall(userName, email, key, callback) {
     }
   });
 
-  let info = await transporter.sendMail({
+  let info = await transporter.sendMail({ 
     from: '"Martin @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Validate your MATCHA account :)",

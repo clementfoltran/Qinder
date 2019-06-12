@@ -1,6 +1,6 @@
 .chatView {
-    height: 630px;
-    width: 400px;
+    height: 790px;
+    width: 450px;
     background-color: rgba(231, 231, 231, 0.555);
     display: inline-block;
     border-radius: 10px;
@@ -10,18 +10,43 @@
     margin-left: auto;
     margin-right: auto;
     width: 95%;
-    height: 10%;
+    height: 20%;
 }
-
+.matchesList {
+    height: 62px;
+    width: 90%;
+    margin-top: 5px;
+    // background-color: grey;
+}
+.matchPicture {
+    float: left;
+    margin-right: 5px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    border: 1px solid #000;
+}
+.matchInfos {
+    height: 65px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.user {
+    float: left;
+}
 .contentArea {
     margin-left: auto;
     margin-right: auto;
     margin-top: 10px;
     margin-bottom: 20px;
     width: 90%;
-    height: 60%;
+    height: 55%;
     background-color: rgba(255, 255, 255, 0.897);
     border-radius: 10px;
+}
+.infos {
+    height: 35px;
 }
 .infosLabel1 {
     float: left;
@@ -68,7 +93,7 @@ label {
 
 .messageInput {
     width: 100%;
-    height: 45%;
+    height: 40%;
     margin-bottom: 5px;
 }
 .bottom {

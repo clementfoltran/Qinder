@@ -8,7 +8,6 @@ export interface EnterViewHomeReturn {
   distance: number;
   minage: number;
   maxage: number;
-  gender: string;
   interest: string;
   confirm: boolean;
 }
