@@ -5,7 +5,7 @@ exports.enterViewHome = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT * from user';
+      const sql = 'SELECT * from user WHERE id_user = ?';
       const query = db.format(sql, [req.params.id]);
       db.query(query, (err, response) => {
         if (err) {
@@ -24,8 +24,8 @@ exports.enterViewHome = (req, res) => {
             distance: response[0].distance,
             minage: response[0].minage,
             maxage: response[0].maxage,
-            gender: response[0].gender,
             interest: response[0].interest,
+            gender: response[0].gender,
             confirm: response[0].confirm,
           });
         }
@@ -42,7 +42,6 @@ exports.updatePreferences = (req, res) => {
   } else {
     if (res) {
       const sql = 'UPDATE user SET bio = ?, gender = ?, interest = ?, distance = ?, minage = ?, maxage = ? WHERE id_user = ?';
-      console.log(req.body.id);
       let query = db.format(sql, [
         req.body.bio,
         req.body.gender,
@@ -53,6 +52,7 @@ exports.updatePreferences = (req, res) => {
         req.body.id
       ]);
       db.query(query, (err, response) => {
+        console.log(response);
         if (err) {
           res.json({
             success: false,
