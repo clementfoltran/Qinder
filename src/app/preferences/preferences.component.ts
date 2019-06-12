@@ -83,6 +83,11 @@ export class PreferencesComponent implements OnInit {
    *
    */
   public userTags: Tag[] = [];
+  /**
+   * User id
+   *
+   */
+  // public userTags: Tag[] = [];
 
   drop(event: CdkDragDrop<Tag[]>) {
     if (event.previousContainer === event.container) {
@@ -132,12 +137,8 @@ export class PreferencesComponent implements OnInit {
   updatePref() {
     if (this.prefForm.valid) {
       this.APIParameterPref = {
-<<<<<<< HEAD
-        id: 1,
-=======
         // PUSH UTILE
         id: this.userId,
->>>>>>> clfoltra
         bio: this.prefForm.get('bio').value,
         gender: this.prefForm.get('gender').value,
         distance: this.distance,
