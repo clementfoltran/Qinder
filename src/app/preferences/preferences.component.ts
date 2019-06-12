@@ -137,6 +137,7 @@ export class PreferencesComponent implements OnInit {
   updatePref() {
     if (this.prefForm.valid) {
       this.APIParameterPref = {
+        // PUSH UTILE
         id: this.userId,
         bio: this.prefForm.get('bio').value,
         gender: this.prefForm.get('gender').value,
