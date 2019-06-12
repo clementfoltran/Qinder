@@ -1,0 +1,95 @@
+<form [formGroup]="prefForm" (ngSubmit)="updatePref()">
+  <div class="form-group mb-4">
+    <div *ngIf="userPhotos">
+      <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
+        <div class="img-wrap d-inline-block position-relative">
+          <img height="150px" width="150px"
+               class="rounded m-2" src="data:image/png;base64,{{ photo.photo }}">
+          <button type="button" class="close pull-right" aria-label="Close" (click)="deletePhoto(photo.id_photo, photo.id_user, i)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group mb-4">
+    <div class="input-group mb-3">
+      <div class="custom-file">
+        <input type="file" class="custom-file-input" id="inputGroupFile02" (change)="onFileChanged($event)">
+        <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+      </div>
+      <div class="input-group-append">
+        <span class="input-group-text" id="inputGroupFileAddon02" (click)="uploadPhoto()">Upload</span>
+      </div>
+    </div>
+  </div>
+  <div class="form-group mb-4">
+    <label>Write biography</label>
+    <textarea formControlName="bio" class="form-control" rows="3"></textarea>
+    <button type="submit" class="btn btn-primary m-2">Update biography</button>
+  </div>
+  <div class="form-group mb-4">
+    <a class="btn btn-light btn-block" data-toggle="collapse" href="#tags" role="button" aria-expanded="false"
+       aria-controls="tags" (click)="displayTags()">
+      Tags
+    </a>
+    <div class="row collapse" id="tags">
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="tags"
+        [cdkDropListConnectedTo]="[doneList]"
+        class="col-md-6"
+        (cdkDropListDropped)="drop($event)">
+        <h3 class="m-2">Tags</h3>
+        <div class="card p-2" *ngFor="let item of tags" cdkDrag>
+          <h5>{{ item.tag }}</h5>
+          <p>{{ item.label }}</p>
+        </div>
+      </div>
+      <div
+        cdkDropList
+        #doneList="cdkDropList"
+        [cdkDropListData]="userTags"
+        [cdkDropListConnectedTo]="[todoList]"
+        class="col-md-6"
+        (cdkDropListDropped)="drop($event)">
+        <h3 class="m-2"> Your tags</h3>
+        <div class="card p-2" *ngFor="let item of userTags" cdkDrag>
+          <h5>{{ item.tag }}</h5>
+          <p>{{ item.label }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group mb-4">
+    <label>I'm a</label>
+    <select class="custom-select" formControlName="gender" (change)="updatePref()">
+      <option selected>Male</option>
+      <option>Female</option>
+    </select>
+  </div>
+  <div class="form-group mb-4">
+    <label>I'm interested by</label>
+    <select class="custom-select" formControlName="interest" (change)="updatePref()">
+      <option selected>Male</option>
+      <option>Female</option>
+      <option>Both</option>
+    </select>
+  </div>
+  <div class="form-group mb-4">
+    <label>Distance {{ distance }} kms</label>
+    <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+  </div>
+  <div class="form-group mb-4">
+    <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
+    <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" (mouseup)="updatePref()"></p-slider>
+  </div>
+  <div class="form-group mb-4">
+<!--    <button [routerLink]="['/settings']" [queryParams]="{id: '1'}" type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button>-->
+  </div>
+  <div class="form-group mb-4">
+    <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>
+  </div>
+</form>
+

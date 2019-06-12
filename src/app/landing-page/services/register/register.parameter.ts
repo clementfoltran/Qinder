@@ -3,5 +3,7 @@ export interface RegisterParameter {
   lastname: string;
   email: string;
   password: string;
+  passwordConfirmation: string;
   gender: string;
+  key: string;
 }

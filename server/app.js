@@ -1,26 +1,15 @@
 const express = require('express');
-const mysql = require('mysql');
 const app = express();
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-
 const port = 8000;
-const db = mysql.createConnection({
-  host      : 'localhost',
-  user      : 'adm',
-  password  : 'clemclem',
-  database  : 'qinder'
-});
-const secret = "7hDwfF<k780-S0F9g0hj8yyt01-20fasvcxvbnmujrhnj";
-let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-// Connect to database
-db.connect((err) => {
-  if (err) {
-    console.log('Failed to connect to mysql database');
-  }
-  console.log('Successfully connect to qinder mysql database');
-});
+const user = require('./user.js');
+const setting = require('./setting.js');
+const home = require('./home.js');
+const activate = require('./activate.js');
+const preference = require('./preference.js');
+
+let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(bodyParser.json());
 
@@ -34,70 +23,44 @@ app.get('/', (req, res) => {
   res.send('Server works');
 });
 
-const fakeUser = { email: "cf@quinder.com", passwd: "asdf"};
-app.post('/login', urlencodedParser, (req, res) => {
-  console.log(`login post ${req.body}`);
-  if (!req.body) {
-    res.sendStatus(500);
-  } else {
-    if (fakeUser.email === req.body && fakeUser.passwd === req.body.passwd) {
-      const myToken = jwt.sign({
-        iss: 'https://qinder.com',
-        user: 'Clément',
-        scope: 'user'
-      }, secret);
-      res.json({token: myToken});
-    } else {
-      res.sendStatus(401);
-    }
-  }
-});
+// Check the request
+// const checkUserToken = (req, res, next) => {
+//   if (!req.header('Authorization')) {
+//     return res.status(401).json({
+//       success: false,
+//       message: 'Missing authentication header'
+//     });
+//   }
+//   const token = req.header('authorization').split(' ')[1];
+//   jwt.verify(token, secret);
+//   next();
+// };
 
-app.post('/register', (req, res) => {
-  console.log(`register post ${req.body.email}`);
-  if (!req.body) {
-    res.sendStatus(500);
-  } else {
-    if (res) {
-      let sql = 'INSERT INTO users VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-      let query = db.format(sql, [
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        req.body.gender,
-        new Date().toISOString().slice(0, 19).replace('T', ' '),
-        null, null, null, null, null,
-      ]);
-      db.query(query, (err, response) => {
-        if (err) {
-          console.log(err);
-          // return ;
-        }
-        res.send(response);
-      });
-      const myToken = jwt.sign({
-        iss: 'https://qinder.com',
-        user: 'Clément',
-        scope: 'user'
-      }, secret);
-      res.json({
-        token: myToken,
-        message: '',
-        success: true,
-      });
-    } else {
-      res.sendStatus(401);
-    }
-  }
-});
+// POST routes
+app.post('/login', urlencodedParser, user.login);
+app.post('/register', urlencodedParser, user.register);
+app.post('/sendmail', urlencodedParser, user.sendMail);
 
-app.get('/getUsers', (req, res) => {
-  let sql = 'SELECT * FROM users';
-  db.query(sql, (err, result) => {
-    console.log(result);
-    res.send(result);
-  });
-});
+app.post('/updateName', urlencodedParser, setting.updateName);
+app.post('/updateEmail', urlencodedParser, setting.updateEmail);
+app.post('/updatePassword', urlencodedParser, setting.updatePassword);
+
+app.post('/updatePreferences', urlencodedParser, home.updatePreferences);
+app.post('/uploadPhoto', urlencodedParser, home.uploadPhoto);
+app.post('/deletePhoto', urlencodedParser, home.deletePhoto);
+
+app.post('/addUserTag', urlencodedParser, preference.addUserTag);
+
+// GET routes
+app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
+app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
+app.get('/activateAccount/:email', urlencodedParser, activate.activateAccount);
+app.get('/home/:id', urlencodedParser, home.enterViewHome);
+app.get('/getUserPhotos/:id', urlencodedParser, home.getUserPhotos);
+
+app.get('/getTags', urlencodedParser, preference.getTags);
+
+app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
