@@ -134,7 +134,12 @@ export class LandingPageComponent implements OnInit {
       this.registerService.register(this.RegisterAPIParameter)
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
-            console.log(result.message);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Register',
+              detail: result.message,
+              life: 6000
+            });
           } else {
             console.log(result.message);
           }
