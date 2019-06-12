@@ -4,6 +4,10 @@ import {ActivatedRoute} from '@angular/router';
 import {GetUserPhotosReturn, Photo} from './services/get-user-photos/get-user-photos-return';
 import {GetUserPhotosService} from './services/get-user-photos/get-user-photos.service';
 import {MessageService} from 'primeng/api';
+import { GetUserToSwipeService } from './services/get-user-to-swipe/get-user-to-swipe.service';
+import { GetUserToSwipeParameter } from './services/get-user-to-swipe/get-user-to-swipe-parameter';
+import { GetUserToSwipeReturn } from './services/get-user-to-swipe/get-user-to-swipe-return';
+import { toBase64String } from '@angular/compiler/src/output/source_map';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +15,7 @@ import {MessageService} from 'primeng/api';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  @ViewChild(HomeComponent) homeComponent: HomeComponent;
+  @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
   /**
    *  Resolve data for the view
    *
@@ -38,12 +42,6 @@ export class HomeComponent implements OnInit {
    */
   public firstName: string;
 
-
-  constructor(public activatedRoute: ActivatedRoute,
-              public getUserPhotosService: GetUserPhotosService,
-              public messageService: MessageService) {
-  }
-
   initUserPic() {
     this.getUserPhotosService.getUserPhotos(this.resolveData.id)
       .subscribe((result: GetUserPhotosReturn) => {
@@ -64,12 +62,42 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  getUserToSwipe() {
+    const APIParameter: GetUserToSwipeParameter = {
+      id: this.resolveData.id,
+      interest: this.resolveData.interest,
+      gender: this.resolveData.gender,
+      minage: this.resolveData.minage,
+      maxage: this.resolveData.maxage,
+      distance: this.resolveData.distance,
+    };
+    this.getUserToSwipeService.getUserToSwipe(APIParameter)
+    .subscribe((result: GetUserToSwipeReturn) => {
+      if (result.success) {
+        console.log(result);
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Network',
+          detail: 'Check your connection',
+          life: 6000
+        });
+      }
+    });
+  }
+
+  constructor(public activatedRoute: ActivatedRoute,
+              public getUserPhotosService: GetUserPhotosService,
+              public getUserToSwipeService: GetUserToSwipeService,
+              public messageService: MessageService) {
+}
+
   ngOnInit() {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
-    console.log(this.resolveData.firstname);
+    this.getUserToSwipe();
   }
 }
