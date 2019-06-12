@@ -5,7 +5,7 @@ exports.enterViewHome = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT * from user';
+      const sql = 'SELECT * from user wher';
       const query = db.format(sql, [req.params.id]);
       db.query(query, (err, response) => {
         if (err) {

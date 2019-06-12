@@ -70,5 +70,6 @@ export class HomeComponent implements OnInit {
     });
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
+    console.log(this.resolveData.firstname);
   }
 }
