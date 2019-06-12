@@ -17,7 +17,7 @@ exports.enterViewHome = (req, res) => {
           res.json({
             success: true,
             message: '',
-            id_user: response[0].id_user,
+            id: response[0].id_user,
             firstname: response[0].firstname,
             lastname: response[0].lastname,
             bio: response[0].bio,
@@ -25,6 +25,7 @@ exports.enterViewHome = (req, res) => {
             minage: response[0].minage,
             maxage: response[0].maxage,
             interest: response[0].interest,
+            gender: response[0].gender,
             confirm: response[0].confirm,
           });
         }
@@ -40,10 +41,11 @@ exports.updatePreferences = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'UPDATE user SET bio = ?, gender = ?, distance = ?, minage = ?, maxage = ? WHERE id_user = ?';
+      const sql = 'UPDATE user SET bio = ?, gender = ?, interest = ?, distance = ?, minage = ?, maxage = ? WHERE id_user = ?';
       let query = db.format(sql, [
         req.body.bio,
         req.body.gender,
+        req.body.interest,
         req.body.distance,
         req.body.minage,
         req.body.maxage,
