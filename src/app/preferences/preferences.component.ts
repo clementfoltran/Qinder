@@ -83,6 +83,11 @@ export class PreferencesComponent implements OnInit {
    *
    */
   public userTags: Tag[] = [];
+  /**
+   * User id
+   *
+   */
+  public userId: number = null;
 
   drop(event: CdkDragDrop<Tag[]>) {
     if (event.previousContainer === event.container) {
@@ -132,9 +137,10 @@ export class PreferencesComponent implements OnInit {
   updatePref() {
     if (this.prefForm.valid) {
       this.APIParameterPref = {
-        id: 1,
+        id: this.userId,
         bio: this.prefForm.get('bio').value,
         gender: this.prefForm.get('gender').value,
+        interest: this.prefForm.get('interest').value,
         distance: this.distance,
         minage: this.ageRange[0],
         maxage: this.ageRange[1]
@@ -163,7 +169,7 @@ export class PreferencesComponent implements OnInit {
   // TODO check the empty images
   uploadPhoto() {
     this.APIParameterPhoto = {
-      id: 1,
+      id: this.userId,
       photo: this.selectedFile,
       active: false,
       ts: Date.now(),
@@ -239,6 +245,7 @@ export class PreferencesComponent implements OnInit {
     this.prefForm = fb.group({
       bio: [''],
       gender: ['', Validators.required],
+      interest: ['', Validators.required],
     });
   }
 
@@ -246,10 +253,12 @@ export class PreferencesComponent implements OnInit {
     this.ageRange[0] = this.resolveData.minage;
     this.ageRange[1] = this.resolveData.maxage;
     this.distance = this.resolveData.distance;
+    this.userId = this.resolveData.id;
     if (this.resolveData.bio) {
       this.prefForm.get('bio').setValue(this.resolveData.bio);
     }
-    this.prefForm.get('gender').setValue('Both');
+    this.prefForm.get('gender').setValue(this.resolveData.gender);
+    this.prefForm.get('interest').setValue(this.resolveData.interest);
   }
 
   ngOnInit() {

@@ -80,7 +80,7 @@ exports.register = (req, res) => {
         hash,
         req.body.gender,
         new Date().toISOString().slice(0, 19).replace('T', ' '),
-        null,
+        'Both',
         null,
         10,
         18,
@@ -92,7 +92,6 @@ exports.register = (req, res) => {
       ]);
       db.query(query, (err, response) => {
         if (err) {
-          console.log(err);
         } else {
           res.json({
             success: true,
