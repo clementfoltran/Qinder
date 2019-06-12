@@ -140,7 +140,7 @@ async function nodeMailerCall(userName, email, key, callback) {
     }
   });
 
-  let info = await transporter.sendMail({
+  let info = await transporter.sendMail({ 
     from: '"Martin @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Validate your MATCHA account :)",
