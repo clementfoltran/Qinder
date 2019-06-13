@@ -44,39 +44,6 @@ export class LandingPageComponent implements OnInit {
   public MailAPIParameter: MailParameter;
   public resolvedData: EnterViewActivateReturn;
 
-  constructor(public fb: FormBuilder,
-              public router: Router,
-              public registerService: RegisterService,
-              public loginService: LoginService,
-              private messageService: MessageService,
-              private mailService: MailService,
-              public activatedRoute: ActivatedRoute,
-              public activateService: ActivateService) {
-    this.registerForm = fb.group({
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      passwordConfirmation: ['', Validators.required],
-      gender: ['', Validators.required],
-    });
-
-    this.loginForm = fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-    });
-}
-
-  ngOnInit() {
-    if (this.activatedRoute.snapshot.paramMap.get('email') &&
-        this.activatedRoute.snapshot.paramMap.get('key')) {
-      this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
-        this.resolvedData = data.viewData;
-      });
-      this.checkAccount(this.resolvedData);
-    }
-  }
-
   login() {
     if (this.loginForm.valid) {
       this.LoginAPIParameter = {
@@ -186,4 +153,38 @@ export class LandingPageComponent implements OnInit {
           }
         });
     }
+
+    constructor(public fb: FormBuilder,
+                public router: Router,
+                public registerService: RegisterService,
+                public loginService: LoginService,
+                private messageService: MessageService,
+                private mailService: MailService,
+                public activatedRoute: ActivatedRoute,
+                public activateService: ActivateService) {
+      this.registerForm = fb.group({
+        firstname: ['', Validators.required],
+        lastname: ['', Validators.required],
+        email: ['', Validators.required],
+        password: ['', Validators.required],
+        passwordConfirmation: ['', Validators.required],
+        gender: ['', Validators.required],
+      });
+
+      this.loginForm = fb.group({
+      email: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+  }
+
+  ngOnInit() {
+    if (this.activatedRoute.snapshot.paramMap.get('email') &&
+        this.activatedRoute.snapshot.paramMap.get('key')) {
+      this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
+        this.resolvedData = data.viewData;
+      });
+      this.checkAccount(this.resolvedData);
+    }
+    this.registerForm.get('gender').setValue('Female');
+  }
 }

@@ -31,6 +31,33 @@ exports.getProfilePhoto = (req, res) => {
   }
 };
 
+exports.getUserPhotos = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT * FROM photo WHERE id_user = ?';
+      let query = db.format(sql, [req.params.id]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Network error',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: '',
+            photos: response,
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.login = (req, res) => {
   if (req.body) {
     const password = req.body.password;

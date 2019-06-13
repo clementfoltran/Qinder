@@ -45,18 +45,19 @@ app.post('/updateName', urlencodedParser, setting.updateName);
 app.post('/updateEmail', urlencodedParser, setting.updateEmail);
 app.post('/updatePassword', urlencodedParser, setting.updatePassword);
 
-app.post('/updatePreferences', urlencodedParser, home.updatePreferences);
-app.post('/uploadPhoto', urlencodedParser, home.uploadPhoto);
-app.post('/deletePhoto', urlencodedParser, home.deletePhoto);
-
 app.post('/addUserTag', urlencodedParser, preference.addUserTag);
+app.post('/updatePreferences', urlencodedParser, preference.updatePreferences);
+app.post('/uploadPhoto', urlencodedParser, preference.uploadPhoto);
+app.post('/deletePhoto', urlencodedParser, preference.deletePhoto);
+
+app.post('/getUserToSwipe/', urlencodedParser, home.getUserToSwipe);
 
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
 app.get('/activateAccount/:email', urlencodedParser, activate.activateAccount);
 app.get('/home/:id', urlencodedParser, home.enterViewHome);
-app.get('/getUserPhotos/:id', urlencodedParser, home.getUserPhotos);
+app.get('/getUserPhotos/:id', urlencodedParser, user.getUserPhotos);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
 

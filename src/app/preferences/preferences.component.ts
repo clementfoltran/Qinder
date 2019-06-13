@@ -172,15 +172,13 @@ export class PreferencesComponent implements OnInit {
       id: this.userId,
       photo: this.selectedFile,
       active: false,
-      ts: Date.now(),
     };
     this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
       .subscribe((result: UploadPhotoReturn) => {
         if (result.success) {
           this.userPhotos.push({
             id_photo: result.id,
-            // TODO id n'importe quoi
-            id_user: 1,
+            id_user: this.userId,
             photo: this.selectedFile,
             active: false,
             ts: 10,
