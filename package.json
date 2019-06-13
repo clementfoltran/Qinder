@@ -34,6 +34,7 @@
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "ng-bootstrap": "^1.6.3",
+    "ngx-bootstrap": "^4.3.0",
     "nodemailer": "^6.2.1",
     "popper.js": "^1.15.0",
     "primeicons": "^1.0.0",

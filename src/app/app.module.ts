@@ -32,10 +32,8 @@ import { EnterViewActivateService } from './landing-page/services/enter-view-act
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
 import { ChatComponent } from './chat/chat.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import {MatDatepickerModule, MatDatepickerContent, MatDatepickerToggleIcon} from '@angular/material/datepicker';
-import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { MatNativeDateModule } from '@angular/material/core';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -62,9 +60,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MenuModule,
     MultiSelectModule,
     DragDropModule,
-    MatDatepickerModule,
-    MatButtonModule,
-    MatNativeDateModule,
+    BsDatepickerModule,
+    BsDatepickerModule.forRoot(),
   ],
   providers: [
     MessageService,

@@ -106,7 +106,7 @@ exports.register = (req, res) => {
         req.body.email,
         hash,
         req.body.gender,
-        new Date().toISOString().slice(0, 19).replace('T', ' '),
+        req.body.birthdate,
         'Both',
         null,
         10,
