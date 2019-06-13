@@ -3,7 +3,8 @@
   <div class="top" style="text-align: center; font-size: 30px;">
     <!-- <a href=""><button class="close">x</button></a> -->
     <div class="matchesList" *ngFor="let match of matchesList">
-      <div class="matchPicture">{{match}}</div>
+      <!-- <p>{{match}}</p> -->
+      <img class="matchPicture" src="data:image/png;base64,{{ userPicture }}" alt="">
     </div>
     <hr>
     <div class="matchInfos">
