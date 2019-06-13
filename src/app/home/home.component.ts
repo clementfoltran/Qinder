@@ -86,6 +86,18 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  showChat($event: any) {
+    const slider = document.querySelector('.slider');
+
+    if (slider.classList.contains('opened')) {
+      slider.classList.remove('opened');
+      slider.classList.add('closed');
+    } else {
+        slider.classList.remove('closed');
+        slider.classList.add('opened');
+    }
+  }
+
   constructor(public activatedRoute: ActivatedRoute,
               public getUserPhotosService: GetUserPhotosService,
               public getUserToSwipeService: GetUserToSwipeService,
