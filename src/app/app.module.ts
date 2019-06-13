@@ -34,6 +34,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { CommonModule } from '@angular/common';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-user-to-swipe.service';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-use
     DragDropModule,
     BsDatepickerModule,
     BsDatepickerModule.forRoot(),
+    CarouselModule.forRoot(),
   ],
   providers: [
     MessageService,

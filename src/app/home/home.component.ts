@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit {
    * User to swipe photos
    *
    */
-  public userToSwipePhotos: string;
+  public userToSwipePhotos: Photo[];
 
   initUserPic() {
     this.getUserPhotosService.getUserPhotos(this.resolveData.id)
@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
     this.getUserPhotosService.getUserPhotos(userId)
     .subscribe((result: GetUserPhotosReturn) => {
       if (result.success) {
-        this.userToSwipePhotos = result.photos[0].photo;
+        this.userToSwipePhotos = result.photos;
       } else {
         this.messageService.add({
           severity: 'error',
