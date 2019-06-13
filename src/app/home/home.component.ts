@@ -10,7 +10,6 @@ import { GetUserToSwipeReturn } from './services/get-user-to-swipe/get-user-to-s
 import { ChatComponent } from '../chat/chat.component';
 
 @Component({
-  providers: [ChatComponent],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
@@ -20,10 +19,10 @@ export class HomeComponent implements OnInit {
   constructor(public activatedRoute: ActivatedRoute,
               public getUserPhotosService: GetUserPhotosService,
               public getUserToSwipeService: GetUserToSwipeService,
-              public messageService: MessageService,
-              private chatComp: ChatComponent) {
+              public messageService: MessageService) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
+  @ViewChild(ChatComponent, {static: false}) chatComponent: ChatComponent;
   /**
    *  Resolve data for the view
    *
@@ -101,15 +100,15 @@ export class HomeComponent implements OnInit {
       slider.classList.remove('opened');
       slider.classList.add('closed');
       // load data
+      this.chatComponent.loadMatches();
     } else {
         slider.classList.remove('closed');
         slider.classList.add('opened');
     }
   }
 
-  showNotifs($event: any) {
+  showNotifs() {
     const slider = document.querySelector('.slider3');
-
     if (slider.classList.contains('opened')) {
       slider.classList.remove('opened');
       slider.classList.add('closed');
@@ -117,10 +116,6 @@ export class HomeComponent implements OnInit {
         slider.classList.remove('closed');
         slider.classList.add('opened');
     }
-  }
-
-  loadChatViewData() {
-    this.chatComp.loadMatches();
   }
 
   ngOnInit() {
