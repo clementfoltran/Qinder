@@ -16,7 +16,6 @@
 .match-zone {
   overflow: hidden;
   right: 0;
-  position: absolute;
   height: 100%;
   padding: 0;
   background-color: rgb(245, 247, 250);
@@ -29,7 +28,11 @@
       background-image: linear-gradient(rgb(255, 255, 255), rgba(70, 70, 70, 0.13));
       border-radius: 10px;
       height: 90%;
-      width: 600px;
+      padding: 10px;
+      .card {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 }

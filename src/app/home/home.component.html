@@ -2,8 +2,20 @@
 
 <div class="match-zone col-md-12 text-center">
   <img src="../../assets/img/logo.svg" height="100" alt="">
-  <div class="swipe-zone">
-    <div class="swipe">
+  <div class="swipe-zone mt-4">
+    <div class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
+      <div class="card">
+          <img src="data:image/png;base64,{{ userToSwipePhotos }}" class="card-img-top">
+          <div class="card-body">
+            <h2>{{ userT }}</h2>
+            <div *ngIf="userToSwipeBio; else noBio">
+              <p class="card-text">{{ userToSwipeBio }}</p>
+            </div>
+            <ng-template #noBio>
+              <p class="card-text">{{ userToSwipeName | titlecase}} did nothing in his life 😥</p>
+            </ng-template>
+          </div>
+      </div>
     </div>
     <div class="row">
       <div class="swipe-buttons m-auto align-items-center">

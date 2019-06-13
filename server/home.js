@@ -41,24 +41,34 @@ exports.getUserToSwipe = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
+      // To calculate birthdate of users
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const minAge = currentYear - req.body.minage;
+      const maxAge = currentYear - req.body.maxage;
       let sql;
       if (req.body.interest === 'Both') {
-        sql = 'SELECT u.* FROM user AS u INNER JOIN swipe AS s \
+        sql = 'SELECT u.id_user, firstname, bio, position FROM user \
+                      AS u INNER JOIN swipe AS s \
                       ON u.id_user != s.id_user \
                       WHERE u.id_user != ? AND u.id_user <= ? \
-                      ';
+                      AND YEAR(birthdate) BETWEEN ? AND ? LIMIT 1';
       } else {
-        sql = 'SELECT u.* FROM user AS u INNER JOIN swipe AS s \
+        sql = 'SELECT u.id_user, firstname, bio, position FROM user \
+                      FROM user AS u INNER JOIN swipe AS s \
                       ON u.id_user != s.id_user \
-                      WHERE u.id_user != ? AND u.id_user <= ? AND gender = ?';
+                      WHERE u.id_user != ? AND u.id_user <= ? AND gender = ? \
+                      AND YEAR(birthdate) BETWEEN ? AND ? LIMIT 1';
       }
-      console.log(req.body.interest);
       const query = db.format(sql, [
         req.body.id,
         req.body.distance,
         req.body.interest,
+        minAge,
+        maxAge,
       ]);
       db.query(query, (err, response) => {
+        console.log(response);
         if (err) {
           res.json({
             success: false,
@@ -68,7 +78,10 @@ exports.getUserToSwipe = (req, res) => {
           res.json({
             success: true,
             message: '',
-            return: response
+            id: response[0].id_user,
+            firstname: response[0].firstname,
+            bio: response[0].bio,
+            position: response[0].position,
           });
         }
       });

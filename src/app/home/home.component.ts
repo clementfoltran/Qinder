@@ -41,6 +41,21 @@ export class HomeComponent implements OnInit {
    *
    */
   public firstName: string;
+  /**
+   * User to swipe name
+   *
+   */
+  public userToSwipeName: string;
+  /**
+   * User to swipe biographie
+   *
+   */
+  public userToSwipeBio: string;
+  /**
+   * User to swipe photos
+   *
+   */
+  public userToSwipePhotos: string;
 
   initUserPic() {
     this.getUserPhotosService.getUserPhotos(this.resolveData.id)
@@ -62,6 +77,22 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  getUserPhotos(userId: number) {
+    this.getUserPhotosService.getUserPhotos(userId)
+    .subscribe((result: GetUserPhotosReturn) => {
+      if (result.success) {
+        this.userToSwipePhotos = result.photos[0].photo;
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Network',
+          detail: 'Check your connection',
+          life: 6000
+        });
+      }
+    });
+  }
+
   getUserToSwipe() {
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
@@ -74,7 +105,9 @@ export class HomeComponent implements OnInit {
     this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
       if (result.success) {
-        console.log(result);
+        this.getUserPhotos(result.id);
+        this.userToSwipeName = result.firstname;
+        this.userToSwipeBio = result.bio;
       } else {
         this.messageService.add({
           severity: 'error',
