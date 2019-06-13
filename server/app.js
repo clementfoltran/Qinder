@@ -8,6 +8,7 @@ const setting = require('./setting.js');
 const home = require('./home.js');
 const activate = require('./activate.js');
 const preference = require('./preference.js');
+const chat = require('./chat.js');
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -58,6 +59,8 @@ app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
 app.get('/activateAccount/:email', urlencodedParser, activate.activateAccount);
 app.get('/home/:id', urlencodedParser, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, user.getUserPhotos);
+
+app.get('/chat/:id', urlencodedParser, chat.loadMatches);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
 

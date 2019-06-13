@@ -24,6 +24,16 @@
       </div>
     </div>
   </div>
+  <div class="container">
+      <div class="slider1 opened">
+        <app-chat></app-chat>
+      </div>
+    </div>
+    <div class="container3">
+      <div class="slider3 opened">
+          <app-notifications></app-notifications>
+        </div>
+    </div>
 </div>
 <!-- Profile modal -->
 <div class="modal fade" id="modSignIn" tabindex="-1" role="dialog" aria-labelledby="modSignIn" aria-hidden="true">
@@ -55,4 +65,19 @@
   </div>
 </div>
 
-<app-menu></app-menu>
+<nav class="navbar navbar-expand-lg fixed-bottom">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav col-md-12 p-0">
+      <li class="nav-item col-md-4">
+        <a class="nav-link" (click)="showChat()"><i class="fas fa-comments"></i></a>
+      </li>
+      <li class="nav-item col-md-4">
+        <a class="nav-link" data-toggle="modal" data-target="#modSignIn"><i class="fas fa-user"></i></a>
+      </li>
+      <li class="nav-item col-md-4">
+          <a class="nav-link" (click)="showNotifs($event)"><i class="fas fa-bell"></i></a> 
+          <!-- <i class="fas fa-bell-exclamation"></i> for new notification! -->
+        </li>
+    </ul>
+  </div>
+</nav>

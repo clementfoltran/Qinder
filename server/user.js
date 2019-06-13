@@ -64,12 +64,14 @@ exports.login = (req, res) => {
     const sql = "SELECT hash, id_user, confirm FROM user WHERE email LIKE ?";
     const query = db.format(sql, [req.body.email]);
     db.query(query, (err, response) => {
+      const hash = response[0].hash;
+      const confirm = response[0].confirm;
       if (err) {
         res.json({
           message: 'Cannot find user with this email address',
           success: false,
         });
-      } else if (passwordHash.verify(password, response[0].hash) && response[0].confirm === 1) {
+      } else if (passwordHash.verify(password, hash) && confirm === 1) {
         const myToken = jwt.sign({
           iss: 'https://qinder.com',
           user: 'Clément',

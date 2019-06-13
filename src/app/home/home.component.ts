@@ -7,7 +7,7 @@ import {MessageService} from 'primeng/api';
 import { GetUserToSwipeService } from './services/get-user-to-swipe/get-user-to-swipe.service';
 import { GetUserToSwipeParameter } from './services/get-user-to-swipe/get-user-to-swipe-parameter';
 import { GetUserToSwipeReturn } from './services/get-user-to-swipe/get-user-to-swipe-return';
-import { toBase64String } from '@angular/compiler/src/output/source_map';
+import { ChatComponent } from '../chat/chat.component';
 
 @Component({
   selector: 'app-home',
@@ -15,7 +15,14 @@ import { toBase64String } from '@angular/compiler/src/output/source_map';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
+  constructor(public activatedRoute: ActivatedRoute,
+              public getUserPhotosService: GetUserPhotosService,
+              public getUserToSwipeService: GetUserToSwipeService,
+              public messageService: MessageService) {
+}
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
+  @ViewChild(ChatComponent, {static: false}) chatComponent: ChatComponent;
   /**
    *  Resolve data for the view
    *
@@ -119,11 +126,30 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  constructor(public activatedRoute: ActivatedRoute,
-              public getUserPhotosService: GetUserPhotosService,
-              public getUserToSwipeService: GetUserToSwipeService,
-              public messageService: MessageService) {
-}
+  showChat($event: any) {
+    const slider = document.querySelector('.slider1');
+
+    if (slider.classList.contains('opened')) {
+      slider.classList.remove('opened');
+      slider.classList.add('closed');
+      // load data
+      this.chatComponent.loadMatches();
+    } else {
+        slider.classList.remove('closed');
+        slider.classList.add('opened');
+    }
+  }
+
+  showNotifs() {
+    const slider = document.querySelector('.slider3');
+    if (slider.classList.contains('opened')) {
+      slider.classList.remove('opened');
+      slider.classList.add('closed');
+    } else {
+        slider.classList.remove('closed');
+        slider.classList.add('opened');
+    }
+  }
 
   ngOnInit() {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
