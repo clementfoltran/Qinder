@@ -1,3 +1,14 @@
+.fullView {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: url("../../assets/img/home.jpg");
+  background-size: cover;
+}
+
+.logo {
+  margin-top: 50px;
+}
 .swipe-buttons {
   text-align: center;
 
@@ -19,14 +30,14 @@
   position: absolute;
   height: 100%;
   padding: 0;
-  background-color: rgb(245, 247, 250);
+  background-color: rgba(245, 247, 250, 0.884);
 
   .swipe-zone {
     height: 70%;
     width: 100%;
     .swipe {
       margin: auto;
-      background-image: linear-gradient(rgb(255, 255, 255), rgba(70, 70, 70, 0.13));
+      background-image: linear-gradient(rgba(255, 255, 255, 0.534), rgba(70, 70, 70, 0.301));
       border-radius: 10px;
       height: 90%;
       width: 600px;
@@ -75,38 +86,46 @@ body .ui-slider .ui-slider-range {
 }
 
 //----------------------------------------------------------------------------------
-.container {
-  border:1px solid lime;
-  overflow:hidden;
-  position:relative;
+.container, .container3 {
+  // border: 1px solid lime;
+  overflow: hidden;
+  position: relative;
   /* the container's height will determine the height of its slider  */
-  height:350px; 
+  height: 790px; 
+  width: 530px;
+  margin-top: 460px;
 }
 
+.container {
+  float: left;
+}
+.container3 {
+  float: right;
+}
 
-.slider {
-overflow-y: scroll;
-/* complete liquid height based on the parent's height!! */
-  height:100%;
+.slider1, .slider3 {
+  overflow-y: scroll;
+  /* complete liquid height based on the parent's height!! */
+  height: 100%;
+  width: 100%;
 
   /* only transition on transform properties which are hardware accelerated = way better performances */
--webkit-transition:-webkit-transform .3s ease;
-     -moz-transition:   -moz-transform .3s ease;
-      -ms-transition:    -ms-transform .3s ease;
-          transition:        transform .3s ease;
+  -webkit-transition: -webkit-transform .3s ease;
+     -moz-transition:    -moz-transform .3s ease;
+      -ms-transition:     -ms-transform .3s ease;
+          transition:         transform .3s ease;
 }
 
-.slider.opened { 
+.slider1.opened, .slider3.opened { 
   /* visible */
-
-          -webkit-transform: translate(0, 100%);
+  -webkit-transform: translate(0, 100%);
      -moz-transform: translate(0, 100%);
       -ms-transform: translate(0, 100%);
           transform: translate(0, 100%);
 }
-.slider.closed { 
+.slider1.closed, .slider3.closed { 
   /* completely offscreen */
- -webkit-transform: translate(0, 0%);
+  -webkit-transform: translate(0, 0%);
      -moz-transform: translate(0, 0%);
       -ms-transform: translate(0, 0%);
           transform: translate(0, 0%);
@@ -115,17 +134,13 @@ overflow-y: scroll;
 
 
 /* -------- not interesting styles ----------- */
-body {
-  background:#eee;
-  margin:50px;
-}
-.slider {
+
+.slider1, .slider3 {
   -webkit-box-sizing:border-box;
      -moz-box-sizing:border-box;
       -ms-box-sizing:border-box;
           box-sizing:border-box;
 
-  padding:20px;
-  background: pink;
-  border:1px solid hotpink;
+  // background: rgba(255, 192, 203, 0.562);
+  // border:1px solid hotpink;
 }

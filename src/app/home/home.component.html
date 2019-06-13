@@ -1,26 +1,27 @@
-<button id="toggle">slider toggle</button>
-
-<div class="container">
-    <div class="slider opened">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-    </div>
-</div>
-
-<div class="match-zone col-md-12 text-center">
-  <img src="../../assets/img/logo.svg" height="100" alt="">
-  <div class="swipe-zone">
-    <div class="swipe">
-    </div>
-    <div class="row">
-      <div class="swipe-buttons m-auto align-items-center">
-        <button style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
-        <button style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
+<div class="fullView">
+  <div class="match-zone col-md-12 text-center">
+    <img class="logo" src="../../assets/img/logo.svg" height="100" alt="">
+    <div class="swipe-zone">
+      <div class="swipe">
+      </div>
+      <div class="row">
+        <div class="swipe-buttons m-auto align-items-center">
+          <button style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
+          <button style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
+        </div>
       </div>
     </div>
   </div>
+  <div class="container">
+      <div class="slider1 opened">
+        <app-chat></app-chat>
+      </div>
+    </div>
+    <div class="container3">
+      <div class="slider3 opened">
+          <app-notifications></app-notifications>
+        </div>
+    </div>
 </div>
 <!-- Profile modal -->
 <div class="modal fade" id="modSignIn" tabindex="-1" role="dialog" aria-labelledby="modSignIn" aria-hidden="true">
@@ -56,13 +57,13 @@
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav col-md-12 p-0">
       <li class="nav-item col-md-4">
-        <a class="nav-link" (click)="showChat($event)"><i class="fas fa-comments"></i></a>
+        <a class="nav-link" (click)="showChat($event)" (click)="loadChatViewData()"><i class="fas fa-comments"></i></a>
       </li>
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modSignIn"><i class="fas fa-user"></i></a>
       </li>
       <li class="nav-item col-md-4">
-          <a class="nav-link" [routerLink]="['/notifications']"><i class="fas fa-bell"></i></a> 
+          <a class="nav-link" (click)="showNotifs($event)"><i class="fas fa-bell"></i></a> 
           <!-- <i class="fas fa-bell-exclamation"></i> for new notification! -->
         </li>
     </ul>
