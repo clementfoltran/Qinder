@@ -34,6 +34,7 @@ import { ChatComponent } from './chat/chat.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { CommonModule } from '@angular/common';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-user-to-swipe.service';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     EnterViewActivateResolve,
     EnterViewHomeResolve,
     EnterViewHomeService,
+    GetUserToSwipeService,
   ],
   bootstrap: [AppComponent]
 })
