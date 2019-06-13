@@ -40,16 +40,6 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="logo m-auto">
-          <div *ngIf="userPicture; else noPic">
-            <img class="rounded-circle" src="data:image/png;base64,{{ userPicture }}" height="100" alt="">
-          </div>
-          <ng-template #noPic>
-            <div class="rounded-circle text-center noPic">
-              <i class="fas fa-user"></i>
-            </div>
-          </ng-template>
-        </div>
         <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -72,7 +62,14 @@
         <a class="nav-link" (click)="showChat()"><i class="fas fa-comments"></i></a>
       </li>
       <li class="nav-item col-md-4">
-        <a class="nav-link" data-toggle="modal" data-target="#modSignIn"><i class="fas fa-user"></i></a>
+        <a class="nav-link" data-toggle="modal" data-target="#modSignIn">
+          <div *ngIf="userPicture; else noPicBar">
+            <img class="rounded-circle" src="data:image/png;base64,{{ userPicture }}" height="40" alt="">
+          </div>
+          <ng-template #noPicBar>
+            <i class="fas fa-user"></i>
+          </ng-template>
+        </a>
       </li>
       <li class="nav-item col-md-4">
           <a class="nav-link" (click)="showNotifs($event)"><i class="fas fa-bell"></i></a> 

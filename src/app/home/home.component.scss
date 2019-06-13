@@ -6,9 +6,6 @@
   background-size: cover;
 }
 
-.logo {
-  margin-top: 50px;
-}
 .swipe-buttons {
   text-align: center;
 
@@ -62,13 +59,6 @@ body .ui-slider .ui-slider-range {
   background-image: linear-gradient(rgba(240, 67, 33, 0.5), rgba(240, 92, 33, 0.5));
 }
 
-.noPic {
-  i {
-    font-size: 60px;
-    vertical-align: middle;
-  }
-}
-
 .navbar {
   padding: 0;
   
@@ -76,6 +66,7 @@ body .ui-slider .ui-slider-range {
       text-align: center;
       color: white;
       font-size: 25px;
+      height: 50px;
   }
 
   .nav-item {
