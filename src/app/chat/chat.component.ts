@@ -34,19 +34,21 @@ export class ChatComponent implements OnInit {
   }
 
   initMatchPic(matchesList) {
-    for (const match of matchesList) {
-      if (match) {
-        this.getUserPhotosService.getUserPhotos(parseInt(match, 10))
-            .subscribe((result: GetUserPhotosReturn) => {
-              if (result.success) {
-                this.userPhotos = result.photos;
-                if (this.userPhotos.length > 0) {
-                  this.userPicture.push(this.userPhotos[0].photo);
+    if (this.userPicture.length === 0) {
+      for (const match of matchesList) {
+        if (match) {
+          this.getUserPhotosService.getUserPhotos(parseInt(match, 10))
+              .subscribe((result: GetUserPhotosReturn) => {
+                if (result.success) {
+                  this.userPhotos = result.photos;
+                  if (this.userPhotos.length > 0) {
+                    this.userPicture.push(this.userPhotos[0].photo);
+                  }
+                } else {
+                    console.log(result.message);
                 }
-              } else {
-            // todo
-              }
-            });
+              });
+        }
       }
     }
   }
