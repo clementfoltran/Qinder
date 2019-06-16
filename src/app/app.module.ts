@@ -35,6 +35,7 @@ import {MatDatepickerModule, MatDatepickerContent, MatDatepickerToggleIcon} from
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SanitizerPipe } from './pipes/sanitizer.pipe';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     SettingsComponent,
     PreferencesComponent,
     ChatComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    SanitizerPipe
   ],
   imports: [
     CommonModule,
