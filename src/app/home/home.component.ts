@@ -8,6 +8,9 @@ import { GetUserToSwipeService } from './services/get-user-to-swipe/get-user-to-
 import { GetUserToSwipeParameter } from './services/get-user-to-swipe/get-user-to-swipe-parameter';
 import { GetUserToSwipeReturn } from './services/get-user-to-swipe/get-user-to-swipe-return';
 import { ChatComponent } from '../chat/chat.component';
+import { SwipeParameter } from './services/swipe/swipe-parameter';
+import { SwipeService } from './services/swipe/swipe.service';
+import { SwipeReturn } from './services/swipe/swipe-return';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +22,7 @@ export class HomeComponent implements OnInit {
   constructor(public activatedRoute: ActivatedRoute,
               public getUserPhotosService: GetUserPhotosService,
               public getUserToSwipeService: GetUserToSwipeService,
+              public swipeService: SwipeService,
               public messageService: MessageService) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
@@ -63,6 +67,11 @@ export class HomeComponent implements OnInit {
    *
    */
   public userToSwipePhotos: Photo[];
+  /**
+   * User to swipe id
+   *
+   */
+  public userToSwipeId: number;
 
   initUserPic() {
     this.getUserPhotosService.getUserPhotos(this.resolveData.id)
@@ -115,6 +124,7 @@ export class HomeComponent implements OnInit {
         this.getUserPhotos(result.id);
         this.userToSwipeName = result.firstname;
         this.userToSwipeBio = result.bio;
+        this.userToSwipeId = result.id;
       } else {
         this.messageService.add({
           severity: 'error',
@@ -124,6 +134,21 @@ export class HomeComponent implements OnInit {
         });
       }
     });
+  }
+
+  swipe(like: boolean) {
+    const APIParameter: SwipeParameter = {
+      id_user: this.resolveData.id,
+      id_user_: this.userToSwipeId,
+      like,
+    };
+    this.swipeService.swipe(APIParameter)
+      .subscribe((result: SwipeReturn) => {
+        if (result.success) {
+          // Todo new getUserToSwipe
+
+        }
+      });
   }
 
   showChat($event: any) {

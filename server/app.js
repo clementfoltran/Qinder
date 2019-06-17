@@ -52,6 +52,7 @@ app.post('/uploadPhoto', urlencodedParser, preference.uploadPhoto);
 app.post('/deletePhoto', urlencodedParser, preference.deletePhoto);
 
 app.post('/getUserToSwipe/', urlencodedParser, home.getUserToSwipe);
+app.post('/swipe/', urlencodedParser, home.swipe);
 
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);

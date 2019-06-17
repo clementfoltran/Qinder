@@ -90,3 +90,61 @@ exports.getUserToSwipe = (req, res) => {
     }
   }
 };
+
+exports.swipe = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO swipe VALUES(id_swipe, ?, ?, ?)';
+      const query = db.format(sql, [
+        req.body.id_user,
+        req.body.id_user_,
+        req.body.like
+      ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'User not found',
+          });
+        } else {
+          // this.checkMatch(req, res);
+          console.log(response);
+          res.json({
+            success: true,
+            message: '',
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+// exports.checkMatch = (req, res) => {
+//   if (!req.body) {
+//     res.sendStatus(500);
+//   } else {
+//     if (res) {
+//       const sql = 'SELECT id_user, id_user_ FROM user WHERE id_user = ? AND id_user_ = ?';
+//       const query = db.format(sql, [
+//         req.body.id_user,
+//         req.body.id_user_,
+//       ]);
+//       db.query(query, (err, response) => {
+//         if (err) {
+//           res.json({
+//             success: false,
+//             message: 'User not found',
+//           });
+//         } else {
+//           console.log(response);
+//         }
+//       });
+//     } else {
+//       res.sendStatus(401);
+//     }
+//   }
+// };
