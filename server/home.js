@@ -46,30 +46,34 @@ exports.getUserToSwipe = (req, res) => {
       const currentYear = currentDate.getFullYear();
       const minAge = currentYear - req.body.minage;
       const maxAge = currentYear - req.body.maxage;
-      let sql;
+      let sql = '';
+      let query;
       if (req.body.interest === 'Both') {
-        sql = 'SELECT u.id_user, firstname, bio, position FROM user \
-                      AS u INNER JOIN swipe AS s \
-                      ON u.id_user != s.id_user \
-                      WHERE u.id_user != ? AND u.id_user <= ? \
-                      AND YEAR(birthdate) BETWEEN ? AND ? LIMIT 1';
+        // ADD DISTANCE CHECK
+        sql = 'SELECT user.id_user, firstname, bio, position, birthdate FROM user \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? LIMIT 1';
+        query = db.format(sql, [
+          req.body.id,
+          maxAge,
+          minAge
+        ]);
       } else {
-        sql = 'SELECT u.id_user, firstname, bio, position FROM user \
-                      FROM user AS u INNER JOIN swipe AS s \
-                      ON u.id_user != s.id_user \
-                      WHERE u.id_user != ? AND u.id_user <= ? AND gender = ? \
-                      AND YEAR(birthdate) BETWEEN ? AND ? LIMIT 1';
+        sql = 'SELECT user.id_user, firstname, bio, position, birthdate FROM user \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
+        AND user.gender = ? LIMIT 1';
+        query = db.format(sql, [
+          req.body.id,
+          maxAge,
+          minAge,
+          req.body.interest,
+        ]);
       }
-      const query = db.format(sql, [
-        req.body.id,
-        req.body.distance,
-        req.body.interest,
-        minAge,
-        maxAge,
-      ]);
       db.query(query, (err, response) => {
         console.log(response);
         if (err) {
+          console.log(err);
           res.json({
             success: false,
             message: 'User not found',
@@ -109,7 +113,6 @@ exports.swipe = (req, res) => {
             message: 'User not found',
           });
         } else {
-          // this.checkMatch(req, res);
           console.log(response);
           res.json({
             success: true,

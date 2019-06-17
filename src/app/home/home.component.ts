@@ -146,7 +146,6 @@ export class HomeComponent implements OnInit {
       .subscribe((result: SwipeReturn) => {
         if (result.success) {
           // Todo new getUserToSwipe
-
         }
       });
   }
