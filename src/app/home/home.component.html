@@ -13,7 +13,7 @@
           </div>
         </carousel>
         <div class="card-body">
-          <h2>{{ userToSwipeName | titlecase }}</h2>
+          <h2>{{ userToSwipeName | titlecase }} {{ userToSwipeAge }}</h2>
           <div *ngIf="userToSwipeBio; else noBio">
             <p class="card-text">{{ userToSwipeBio }}</p>
           </div>

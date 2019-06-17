@@ -11,6 +11,7 @@ import { ChatComponent } from '../chat/chat.component';
 import { SwipeParameter } from './services/swipe/swipe-parameter';
 import { SwipeService } from './services/swipe/swipe.service';
 import { SwipeReturn } from './services/swipe/swipe-return';
+import { registerOutsideClick } from 'ngx-bootstrap/utils/triggers';
 
 @Component({
   selector: 'app-home',
@@ -72,6 +73,12 @@ export class HomeComponent implements OnInit {
    *
    */
   public userToSwipeId: number;
+  /**
+   * User to swipe age
+   *
+   */
+  public userToSwipeAge: number;
+
 
   initUserPic() {
     this.getUserPhotosService.getUserPhotos(this.resolveData.id)
@@ -125,6 +132,9 @@ export class HomeComponent implements OnInit {
         this.userToSwipeName = result.firstname;
         this.userToSwipeBio = result.bio;
         this.userToSwipeId = result.id;
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        this.userToSwipeAge = currentYear - +result.year;
       } else {
         this.messageService.add({
           severity: 'error',
@@ -145,7 +155,7 @@ export class HomeComponent implements OnInit {
     this.swipeService.swipe(APIParameter)
       .subscribe((result: SwipeReturn) => {
         if (result.success) {
-          // Todo new getUserToSwipe
+          this.getUserToSwipe();
         }
       });
   }

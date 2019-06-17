@@ -5,4 +5,5 @@ export interface GetUserToSwipeReturn {
     firstname: string;
     bio: string;
     position: string;
+    year: number;
 }

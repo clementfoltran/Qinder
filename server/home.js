@@ -50,7 +50,7 @@ exports.getUserToSwipe = (req, res) => {
       let query;
       if (req.body.interest === 'Both') {
         // ADD DISTANCE CHECK
-        sql = 'SELECT user.id_user, firstname, bio, position, birthdate FROM user \
+        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? LIMIT 1';
         query = db.format(sql, [
@@ -59,7 +59,7 @@ exports.getUserToSwipe = (req, res) => {
           minAge
         ]);
       } else {
-        sql = 'SELECT user.id_user, firstname, bio, position, birthdate FROM user \
+        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
         AND user.gender = ? LIMIT 1';
@@ -71,7 +71,6 @@ exports.getUserToSwipe = (req, res) => {
         ]);
       }
       db.query(query, (err, response) => {
-        console.log(response);
         if (err) {
           console.log(err);
           res.json({
@@ -86,6 +85,7 @@ exports.getUserToSwipe = (req, res) => {
             firstname: response[0].firstname,
             bio: response[0].bio,
             position: response[0].position,
+            year: response[0].year
           });
         }
       });
@@ -100,24 +100,24 @@ exports.swipe = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'INSERT INTO swipe VALUES(id_swipe, ?, ?, ?)';
+      const sql = 'INSERT INTO swipe VALUES(id_swipe, ?, ?, ?, NULL)';
       const query = db.format(sql, [
         req.body.id_user,
         req.body.id_user_,
         req.body.like
       ]);
-      db.query(query, (err, response) => {
+      db.query(query, (err) => {
         if (err) {
           res.json({
             success: false,
             message: 'User not found',
           });
         } else {
-          console.log(response);
-          res.json({
-            success: true,
-            message: '',
-          });
+          if (req.body.like && checkMatch(req.body.id_user, req.body.id_user_)) {
+            res.json({ success: true, message: '', match: true });
+          } else {
+            res.json({ success: true, message: '', match: false });
+          }
         }
       });
     } else {
@@ -126,28 +126,46 @@ exports.swipe = (req, res) => {
   }
 };
 
-// exports.checkMatch = (req, res) => {
-//   if (!req.body) {
-//     res.sendStatus(500);
-//   } else {
-//     if (res) {
-//       const sql = 'SELECT id_user, id_user_ FROM user WHERE id_user = ? AND id_user_ = ?';
-//       const query = db.format(sql, [
-//         req.body.id_user,
-//         req.body.id_user_,
-//       ]);
-//       db.query(query, (err, response) => {
-//         if (err) {
-//           res.json({
-//             success: false,
-//             message: 'User not found',
-//           });
-//         } else {
-//           console.log(response);
-//         }
-//       });
-//     } else {
-//       res.sendStatus(401);
-//     }
-//   }
-// };
+const match = (id_user, id_user_matched) => {
+  const insertMatch = 'INSERT INTO `match` VALUES(id_match, NOW())';
+  let query = db.format(insertMatch);
+  db.query(query, (err, response) => {
+    console.log(response.insertId);
+    if (err) {
+      console.log(err);
+      return (false);
+    } else {
+      const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user = ? AND id_user_matched = ?';
+      query = db.format(updateSwipe, [ response.insertId, id_user, id_user_matched ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          console.log(err);
+          return (false);
+        } else {
+          return (true);
+        }
+      });
+    }
+  });
+}
+
+const checkMatch = (id_user, id_user_) => {
+  const sql = 'SELECT id_user FROM swipe WHERE id_user = ? AND id_user_matched = ? AND swipe.like = 1';
+  const query = db.format(sql, [
+    id_user_,
+    id_user
+  ]);
+  db.query(query, (err, response) => {
+    if (err) {
+      console.log(err);
+      return (false);
+    } else if (response[0].id_user) {
+      if (!match(id_user, id_user_)) {
+        return (false);
+      }
+      return (true);
+    } else {
+      return (false);
+    }
+  });  
+};

@@ -29,7 +29,6 @@
   background-color: rgba(245, 247, 250, 0.884);
 
   .swipe-zone {
-    height: 70%;
     width: 100%;
     .swipe {
       margin: auto;
@@ -43,10 +42,6 @@
       }
     }
   }
-}
-
-h2:hover {
-  background: yellow;
 }
 
 body .ui-slider .ui-slider-range {
