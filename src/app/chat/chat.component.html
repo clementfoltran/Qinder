@@ -17,7 +17,10 @@
   </div>
 
   <div class="contentArea">
-    <div class="fullMessage">
+    <ul ng-class="messageList" id="messageList">
+      <!-- <li *ngFor="let message of messageList">{{ message }}</li> -->
+    </ul>
+    <!-- <div class="fullMessage">
       <div class="message1">
           <label>J'adore les kinder surprise :p</label>
       </div>
@@ -28,12 +31,29 @@
         <label>Moi aussi hihi</label>
       </div>
       <label class="infosLabel2">le 12/02/2019 à 21h37</label>
-    </div>
+    </div> -->
   </div>
 
   <div class="bottom">
-      <input class="messageInput">
-      <button type="button" class="btn btn-primary btn-lg btn-block">SEND</button>
+    <form action="" [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+      <input id="message" formControlName="message" #message class="form-control" class="messageInput" autocomplete="off"/>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">SEND</button>
+    </form>
   </div>
 
 </div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script>
+  $(function () {
+    $('form').submit(function(e){
+      e.preventDefault();
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+    });
+    socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+  });
+</script>

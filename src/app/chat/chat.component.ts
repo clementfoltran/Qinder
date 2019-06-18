@@ -4,7 +4,8 @@ import { LoadMatchesReturn } from './services/load-matches/load-matches-return';
 import { LoadMatchesService } from './services/load-matches/load-matches.service';
 import { GetUserPhotosReturn, Photo } from '../home/services/get-user-photos/get-user-photos-return';
 import { GetUserPhotosService } from '../home/services/get-user-photos/get-user-photos.service';
-import {DomSanitizer} from '@angular/platform-browser';
+import * as io from 'socket.io-client'; // And then connect using
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
@@ -17,6 +18,11 @@ export class ChatComponent implements OnInit {
   public userPicture = [];
   public APIParameterLoadMatches: LoadMatchesParameter;
   public matchesList = [];
+  public messageForm: FormGroup;
+  public socket;
+  public message: string;
+  public messageList = [];
+
 
   loadMatches() {
     this.APIParameterLoadMatches = {
@@ -31,6 +37,12 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
+    // move to loading function
+    try {
+        this.socket = io.connect('http://localhost:3000');
+      } catch (e) {
+          console.log('Could not connect socket.io');
+      }
   }
 
   initMatchPic(matchesList) {
@@ -38,23 +50,46 @@ export class ChatComponent implements OnInit {
       for (const match of matchesList) {
         if (match) {
           this.getUserPhotosService.getUserPhotos(parseInt(match, 10))
-              .subscribe((result: GetUserPhotosReturn) => {
-                if (result.success) {
-                  this.userPhotos = result.photos;
-                  if (this.userPhotos.length > 0) {
-                    this.userPicture.push(this.userPhotos[0].photo);
-                  }
-                } else {
-                    console.log(result.message);
+            .subscribe((result: GetUserPhotosReturn) => {
+              if (result.success) {
+                this.userPhotos = result.photos;
+                if (this.userPhotos.length > 0) {
+                  this.userPicture.push(this.userPhotos[0].photo);
                 }
-              });
+              } else {
+                  console.log(result.message);
+              }
+            });
         }
       }
     }
   }
 
+  sendMessage() {
+    if (this.messageForm.valid) {
+      this.message = this.messageForm.get('message').value;
+
+      const ul = document.getElementById('messageList');
+
+      this.socket.emit('chat message', this.message);
+
+      this.messageForm.reset();
+
+      this.socket.on('chat message', function(msg) {
+        const li = document.createElement('li');
+        ul.appendChild(li);
+        li.innerHTML = li.innerHTML + msg;
+      });
+    }
+  }
+
   constructor(public loadMatchesService: LoadMatchesService,
-              public getUserPhotosService: GetUserPhotosService) { }
+              public getUserPhotosService: GetUserPhotosService,
+              public fb: FormBuilder) {
+                this.messageForm = fb.group({
+                  message: ['', Validators.required]
+                });
+               }
 
   ngOnInit() {
   }

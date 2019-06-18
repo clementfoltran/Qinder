@@ -1,7 +1,18 @@
-const express = require('express');
-const app = express();
+const app = require('express')();
 const bodyParser = require('body-parser');
 const port = 8000;
+
+// SOCKET.IO
+var http = require('http').Server(app);
+var http2 = require('http').Server(app);
+var io = require('socket.io')(http2);
+
+http.listen(8000, function(){
+  console.log('listening on *:8000');
+});
+http2.listen(3000, function(){
+  console.log('listening on *:3000');
+});
 
 const user = require('./user.js');
 const setting = require('./setting.js');
@@ -20,8 +31,16 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.send('Server works');
+// SOCKET.IO
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+  socket.on('chat message', function(msg){
+    console.log('message reçu = ', msg);
+    io.emit('chat message', msg);
+  });
 });
 
 // Check the request
@@ -66,6 +85,6 @@ app.get('/getTags', urlencodedParser, preference.getTags);
 
 app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
