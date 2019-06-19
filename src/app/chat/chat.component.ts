@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit {
   public socket;
   public message: string;
   public messageList = [];
-    public ul: HTMLElement = document.getElementById('messageList');
+  public ul: HTMLElement = document.getElementById('messageList');
 
 
   loadMatches() {
@@ -46,12 +46,6 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
-    // move to loading function
-    try {
-        this.socket = io.connect('http://localhost:3000');
-      } catch (e) {
-          console.log('Could not connect socket.io');
-      }
   }
 
   initMatchPic(matchesList) {
@@ -79,7 +73,6 @@ export class ChatComponent implements OnInit {
       this.message = this.messageForm.get('message').value;
       this.messageForm.reset();
       this.socket.emit('chat message', this.message);
-      this.socket.on('chat message', this.receive);
     }
   }
 
@@ -91,6 +84,13 @@ export class ChatComponent implements OnInit {
   };
 
   ngOnInit() {
+    // move to loading function
+    try {
+      this.socket = io.connect('http://localhost:3000');
+      this.socket.on('chat message', this.receive);
+    } catch (e) {
+        console.log('Could not connect socket.io');
+    }
   }
 
 }
