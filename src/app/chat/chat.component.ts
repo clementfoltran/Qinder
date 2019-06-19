@@ -14,6 +14,14 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 })
 export class ChatComponent implements OnInit {
 
+  constructor(public loadMatchesService: LoadMatchesService,
+              public getUserPhotosService: GetUserPhotosService,
+              public fb: FormBuilder) {
+                this.messageForm = fb.group({
+                  message: ['', Validators.required]
+                });
+              }
+
   public userPhotos: Photo[];
   public userPicture = [];
   public APIParameterLoadMatches: LoadMatchesParameter;
@@ -22,6 +30,7 @@ export class ChatComponent implements OnInit {
   public socket;
   public message: string;
   public messageList = [];
+    public ul: HTMLElement = document.getElementById('messageList');
 
 
   loadMatches() {
@@ -68,28 +77,18 @@ export class ChatComponent implements OnInit {
   sendMessage() {
     if (this.messageForm.valid) {
       this.message = this.messageForm.get('message').value;
-
-      const ul = document.getElementById('messageList');
-
-      this.socket.emit('chat message', this.message);
-
       this.messageForm.reset();
-
-      this.socket.on('chat message', function(msg) {
-        const li = document.createElement('li');
-        ul.appendChild(li);
-        li.innerHTML = li.innerHTML + msg;
-      });
+      this.socket.emit('chat message', this.message);
+      this.socket.on('chat message', this.receive);
     }
   }
 
-  constructor(public loadMatchesService: LoadMatchesService,
-              public getUserPhotosService: GetUserPhotosService,
-              public fb: FormBuilder) {
-                this.messageForm = fb.group({
-                  message: ['', Validators.required]
-                });
-               }
+  receive = function(msg) {
+    console.log('receive called');
+    const li = document.createElement('li');
+    document.getElementById('messageList').appendChild(li);
+    li.innerHTML = msg;
+  };
 
   ngOnInit() {
   }
