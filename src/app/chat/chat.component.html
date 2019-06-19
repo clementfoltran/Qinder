@@ -17,21 +17,14 @@
   </div>
 
   <div class="contentArea">
-    <ul ng-class="messageList" id="messageList">
-      <!-- <li *ngFor="let message of messageList">{{ message }}</li> -->
-    </ul>
-    <!-- <div class="fullMessage">
-      <div class="message1">
-          <label>J'adore les kinder surprise :p</label>
+
+    <div class="fullMessage" *ngFor="let message of messageList | keyvalue">
+      <div [ngClass]="message.id === id ? 'message1' : 'message2'">
+          <label>{{ message.value }}</label>
       </div>
-      <label class="infosLabel1">le 12/02/2019 à 21h30</label>
+      <label [ngClass]="message.id === id ? 'infosLabel1' : 'infosLabel2'">le 12/02/2019 à 21h30</label>
     </div>
-    <div class="fullMessage">
-      <div class="message2">
-        <label>Moi aussi hihi</label>
-      </div>
-      <label class="infosLabel2">le 12/02/2019 à 21h37</label>
-    </div> -->
+
   </div>
 
   <div class="bottom">

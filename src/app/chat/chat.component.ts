@@ -28,10 +28,7 @@ export class ChatComponent implements OnInit {
   public matchesList = [];
   public messageForm: FormGroup;
   public socket;
-  public message: string;
   public messageList = [];
-  public ul: HTMLElement = document.getElementById('messageList');
-
 
   loadMatches() {
     this.APIParameterLoadMatches = {
@@ -70,18 +67,23 @@ export class ChatComponent implements OnInit {
 
   sendMessage() {
     if (this.messageForm.valid) {
-      this.message = this.messageForm.get('message').value;
+      this.socket.emit('chat message', this.messageForm.get('message').value);
       this.messageForm.reset();
-      this.socket.emit('chat message', this.message);
     }
   }
 
-  receive = function(msg) {
-    console.log('receive called');
-    const li = document.createElement('li');
-    document.getElementById('messageList').appendChild(li);
-    li.innerHTML = msg;
-  };
+  receive = (msg) => {
+    if (msg && msg.length > 0) {
+      const obj = {};
+      const id = localStorage.getItem('userId');
+      obj[id] = msg;
+      this.messageList.push(obj);
+
+      console.log(this.messageList[0]);
+      console.log(Object.keys(this.messageList[0]));
+      console.log(Object.values(this.messageList[0]));
+    }
+  }
 
   ngOnInit() {
     // move to loading function
