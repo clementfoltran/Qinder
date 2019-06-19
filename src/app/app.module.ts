@@ -44,7 +44,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     SettingsComponent,
     PreferencesComponent,
     ChatComponent,
-    NotificationsComponent
+    NotificationsComponent,
   ],
   imports: [
     CommonModule,

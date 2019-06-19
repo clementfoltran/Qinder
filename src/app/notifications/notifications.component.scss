@@ -13,57 +13,53 @@
     width: 95%;
     height: 10%;
 }
+.title {
+    font-size: 30px;
+    margin-top: 30px;
+}
 
 .contentArea {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 10px;
-    margin-bottom: 20px;
     width: 90%;
-    height: 60%;
+    height: 86%;
     border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.267);
 }
-.infos {
-    height: 20px;
+.fullNotif {
+    height: 10%;
+    width: 95%;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .infosLabel {
     float: right;
     font-size: 12px;
+    margin-right: 20px;
 }
-.messages {
-    height: 20px;
+.messages1, .messages2 {
+    width: 100%;
+    height: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
+}
+.messages1 {
+    background-image: linear-gradient(rgba(240, 67, 33, 0.8), rgba(240, 92, 33, 0.8));
+}
+.messages2 {
+    color: white;
+    background-image: linear-gradient(rgba(0, 65, 255, 0.795), rgba(0, 99, 255, 0.795));
 }
 .messagesLabel {
     margin-bottom: auto;
-    margin-top: 14px;
-    font-size: 18px;
+    font-size: 17px;
 }
 
 label {
     margin-left: 10px;
     margin-top: 5px;
-}
-.fullNotif1 {
-    width: 100%;
-    height: 15%;
-    float: left;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5px;
-    background-image: linear-gradient(rgba(240, 67, 33, 0.8), rgba(240, 92, 33, 0.8));
-    border-radius: 10px;
-}
-.fullNotif2 {
-    width: 100%;
-    height: 15%;
-    float: left;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5px;
-    color: white;
-    background-image: linear-gradient(rgba(0, 65, 255, 0.795), rgba(0, 99, 255, 0.795));
-    background-color: rgba(0, 89, 255, 0.795);
-    border-radius: 10px;
 }
 
 .messageInput {
