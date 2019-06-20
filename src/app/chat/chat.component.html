@@ -20,7 +20,7 @@
 
     <div class="fullMessage" *ngFor="let message of messageList">
       <div [ngClass]="message.id === id ? 'message2' : 'message1'">
-          <label>{{ message.id }}</label>
+          <label>{{ message.msg }}</label>
       </div>
       <label [ngClass]="message.id === id ? 'infosLabel2' : 'infosLabel1'">le 12/02/2019 à 21h30</label>
     </div>

@@ -72,6 +72,8 @@ app.post('/deletePhoto', urlencodedParser, preference.deletePhoto);
 
 app.post('/getUserToSwipe/', urlencodedParser, home.getUserToSwipe);
 
+app.post('/saveMessage', urlencodedParser, chat.saveMessage);
+
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);

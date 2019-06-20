@@ -6,6 +6,10 @@ import { GetUserPhotosReturn, Photo } from '../home/services/get-user-photos/get
 import { GetUserPhotosService } from '../home/services/get-user-photos/get-user-photos.service';
 import * as io from 'socket.io-client'; // And then connect using
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { SaveMessageService } from './services/save-message/save-message.service';
+import { SaveMessageParameter } from './services/save-message/save-message-parameter';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { SaveMessageReturn } from './services/save-message/save-message-return';
 
 @Component({
   selector: 'app-chat',
@@ -16,6 +20,7 @@ export class ChatComponent implements OnInit {
 
   constructor(public loadMatchesService: LoadMatchesService,
               public getUserPhotosService: GetUserPhotosService,
+              public saveMessageService: SaveMessageService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -25,6 +30,7 @@ export class ChatComponent implements OnInit {
   public userPhotos: Photo[];
   public userPicture = [];
   public APIParameterLoadMatches: LoadMatchesParameter;
+  public APIParameterSaveMessage: SaveMessageParameter;
   public matchesList = [];
   public messageForm: FormGroup;
   public socket;
@@ -74,11 +80,29 @@ export class ChatComponent implements OnInit {
         const me = Object.create(obj);
         const id = localStorage.getItem('userId');
         me.id = id;
-        me.message = msg;
+        me.msg = msg;
         this.socket.emit('chat message', me);
         this.messageForm.reset();
+        this.saveMessage(id, msg);
       }
     }
+  }
+
+  saveMessage(idUser, message) {
+    this.APIParameterSaveMessage = {
+      idMessage: 1,
+      idUser,
+      message,
+      idMatch: 1
+    };
+    this.saveMessageService.saveMessage(this.APIParameterSaveMessage)
+      .subscribe((result: SaveMessageReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
   }
 
   receive = (obj) => {
@@ -88,7 +112,6 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
-    // move to loading function
     try {
       this.socket = io.connect('http://localhost:3000');
       this.socket.on('chat message', this.receive);
