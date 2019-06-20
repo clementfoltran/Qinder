@@ -29,6 +29,7 @@ export class ChatComponent implements OnInit {
   public messageForm: FormGroup;
   public socket;
   public messageList = [];
+  public id = localStorage.getItem('userId');
 
   loadMatches() {
     this.APIParameterLoadMatches = {
@@ -67,21 +68,22 @@ export class ChatComponent implements OnInit {
 
   sendMessage() {
     if (this.messageForm.valid) {
-      this.socket.emit('chat message', this.messageForm.get('message').value);
-      this.messageForm.reset();
+      const msg = this.messageForm.get('message').value;
+      if (msg && msg.length > 0) {
+        const obj = {};
+        const me = Object.create(obj);
+        const id = localStorage.getItem('userId');
+        me.id = id;
+        me.message = msg;
+        this.socket.emit('chat message', me);
+        this.messageForm.reset();
+      }
     }
   }
 
-  receive = (msg) => {
-    if (msg && msg.length > 0) {
-      const obj = {};
-      const id = localStorage.getItem('userId');
-      obj[id] = msg;
+  receive = (obj) => {
+    if (obj) {
       this.messageList.push(obj);
-
-      console.log(this.messageList[0]);
-      console.log(Object.keys(this.messageList[0]));
-      console.log(Object.values(this.messageList[0]));
     }
   }
 

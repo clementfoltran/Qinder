@@ -18,11 +18,11 @@
 
   <div class="contentArea">
 
-    <div class="fullMessage" *ngFor="let message of messageList | keyvalue">
-      <div [ngClass]="message.id === id ? 'message1' : 'message2'">
-          <label>{{ message.value }}</label>
+    <div class="fullMessage" *ngFor="let message of messageList">
+      <div [ngClass]="message.id === id ? 'message2' : 'message1'">
+          <label>{{ message.id }}</label>
       </div>
-      <label [ngClass]="message.id === id ? 'infosLabel1' : 'infosLabel2'">le 12/02/2019 à 21h30</label>
+      <label [ngClass]="message.id === id ? 'infosLabel2' : 'infosLabel1'">le 12/02/2019 à 21h30</label>
     </div>
 
   </div>
