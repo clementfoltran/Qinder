@@ -58,8 +58,11 @@ io.on('connection', function(socket){
 
 // POST routes
 app.post('/login', urlencodedParser, user.login);
+app.post('/updateGeolocation', urlencodedParser, user.updateGeolocation);
 app.post('/register', urlencodedParser, user.register);
 app.post('/sendmail', urlencodedParser, user.sendMail);
+
+app.get('/test/:id', urlencodedParser, user.test);
 
 app.post('/updateName', urlencodedParser, setting.updateName);
 app.post('/updateEmail', urlencodedParser, setting.updateEmail);
