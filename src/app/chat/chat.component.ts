@@ -12,6 +12,9 @@ import { SaveMessageReturn } from './services/save-message/save-message-return';
 import { GetMatchIdService } from './services/get-match-id/get-match-id.service';
 import { GetMatchIdParameter } from './services/get-match-id/get-match-id-parameter';
 import { GetMatchIdReturn } from './services/get-match-id/get-match-id-return';
+import { LoadConversationService } from './services/load-conversation/load-conversation.service';
+import { LoadConversationParameter } from './services/load-conversation/load-conversation-parameter';
+import { LoadConversationReturn } from './services/load-conversation/load-conversation-return';
 
 @Component({
   selector: 'app-chat',
@@ -24,6 +27,7 @@ export class ChatComponent implements OnInit {
               public getUserPhotosService: GetUserPhotosService,
               public saveMessageService: SaveMessageService,
               public getMatchIdService: GetMatchIdService,
+              public getMessagesArrayService: LoadConversationService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -35,6 +39,7 @@ export class ChatComponent implements OnInit {
   public APIParameterLoadMatches: LoadMatchesParameter;
   public APIParameterGetMatchId: GetMatchIdParameter;
   public APIParameterSaveMessage: SaveMessageParameter;
+  public APIParameterLoadConversation: LoadConversationParameter;
   public matchesList = [];
   public matchId: number;
   public messageForm: FormGroup;
@@ -62,29 +67,40 @@ export class ChatComponent implements OnInit {
       userId: +localStorage.getItem('userId'),
       userId_: parseInt(id, 10)
     };
-    console.log(this.APIParameterGetMatchId);
+    // console.log(this.APIParameterGetMatchId);
     this.getMatchIdService.getMatchId(this.APIParameterGetMatchId)
-    .subscribe((result: GetMatchIdReturn) => {
-      if (result.success) {
-        this.matchId = result.matchId;
-        console.log(result.message);
-      } else {
-        console.log(result.message);
-      }
-    });
+      .subscribe((result: GetMatchIdReturn) => {
+        if (result.success) {
+          this.matchId = result.matchId;
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
     this.loadMessages(this.matchId);
   }
 
   loadMessages(matchId) {
-    if (this.messageList) {
-      this.messageList = [];
-    }
-    const obj = {};
-    const me = Object.create(obj);
-    const id2 = localStorage.getItem('userId');
-    me.id = id2;
-    me.msg = 'Help me';
-    this.messageList.push(me);
+    this.APIParameterLoadConversation = {
+      id: matchId
+    };
+    this.getMessagesArrayService.getMessagesArray(this.APIParameterLoadConversation)
+      .subscribe((result: LoadConversationReturn) => {
+        if (result.success) {
+          console.log(result.messageArray);
+        } else {
+          console.log(result.message);
+        }
+      });
+    // if (this.messageList) {
+    //   this.messageList = [];
+    // }
+    // const obj = {};
+    // const me = Object.create(obj);
+    // const id2 = localStorage.getItem('userId');
+    // me.id = id2;
+    // me.msg = 'Help me';
+    // this.messageList.push(me);
   }
 
   initMatchPic(matchesList) {

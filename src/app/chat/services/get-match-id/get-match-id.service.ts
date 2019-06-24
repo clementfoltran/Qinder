@@ -21,7 +21,7 @@ export class GetMatchIdService {
       }),
     };
 
-    return this.http.get<GetMatchIdReturn>(this.serviceURL, option).pipe(
+    return this.http.post<GetMatchIdReturn>(this.serviceURL, JSON.stringify(APIParameter), option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');

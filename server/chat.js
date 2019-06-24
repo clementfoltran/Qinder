@@ -32,13 +32,13 @@ exports.getMatchId = (req, res) => {
       res.sendStatus(500);
     } else {
       if (res) {
-        const sql = 'SELECT match_id FROM match WHERE id_user = ? AND id_user_ = ?';
-        const query = db.format(sql, [req.params.userId], [req.params.userId_]);
+        const sql = 'SELECT match_id FROM `match` WHERE id_user = ? AND id_user_ = ?';
+        const query = db.format(sql, [req.body.userId, req.body.userId_]);
         db.query(query, (err, response) => {
           if (err) {
             res.json({
               success: false,
-              message: 'User not found',
+              message: 'Could not get match_id for these users',
             });
           } else {
             res.json({
@@ -59,8 +59,8 @@ exports.loadConversation = (req, res) => {
       res.sendStatus(500);
     } else {
       if (res) {
-        const sql = 'SELECT message, ts, id_user FROM message WHERE id_match = ?';
-        const query = db.format(sql, [req.params.id]);
+        const sql = 'SELECT message, ts, id_user FROM `message` WHERE id_match = ?';
+        const query = db.format(sql, 1); //[req.params.id]
         db.query(query, (err, response) => {
           if (err) {
             res.json({
@@ -71,7 +71,7 @@ exports.loadConversation = (req, res) => {
             res.json({
               success: true,
               message: 'Successfully loaded conversation messages',
-              matches_list: response[0].matches_ids,
+              messageArray: response[0]
             });
           }
         });

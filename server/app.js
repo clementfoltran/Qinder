@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 
 // SOCKET.IO
 io.on('connection', function(socket){
-  console.log('a user connected');
+  // console.log('a user connected');
   socket.on('disconnect', function(){
     // console.log('user disconnected');
   });
@@ -74,6 +74,8 @@ app.post('/getUserToSwipe/', urlencodedParser, home.getUserToSwipe);
 
 app.post('/saveMessage', urlencodedParser, chat.saveMessage);
 
+app.post('/getMatchId', urlencodedParser, chat.getMatchId);
+
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
@@ -82,7 +84,7 @@ app.get('/home/:id', urlencodedParser, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, user.getUserPhotos);
 
 app.get('/chat/:id', urlencodedParser, chat.loadMatches);
-app.get('/getMatchId', urlencodedParser, chat.getMatchId);
+app.get('/getMessagesArray/:id', urlencodedParser, chat.loadConversation);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
 
