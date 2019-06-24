@@ -27,6 +27,60 @@ exports.loadMatches = (req, res) => {
     }
 }
 
+exports.getMatchId = (req, res) => {
+  if (!req.body) {
+      res.sendStatus(500);
+    } else {
+      if (res) {
+        const sql = 'SELECT match_id FROM match WHERE id_user = ? AND id_user_ = ?';
+        const query = db.format(sql, [req.params.userId], [req.params.userId_]);
+        db.query(query, (err, response) => {
+          if (err) {
+            res.json({
+              success: false,
+              message: 'User not found',
+            });
+          } else {
+            res.json({
+              success: true,
+              message: 'Successfully found the match id for these users',
+              matchId: response[0].match_id,
+            });
+          }
+        });
+      } else {
+        res.sendStatus(401);
+      }
+    }
+}
+
+exports.loadConversation = (req, res) => {
+  if (!req.body) {
+      res.sendStatus(500);
+    } else {
+      if (res) {
+        const sql = 'SELECT message, ts, id_user FROM message WHERE id_match = ?';
+        const query = db.format(sql, [req.params.id]);
+        db.query(query, (err, response) => {
+          if (err) {
+            res.json({
+              success: false,
+              message: 'User not found',
+            });
+          } else {
+            res.json({
+              success: true,
+              message: 'Successfully loaded conversation messages',
+              matches_list: response[0].matches_ids,
+            });
+          }
+        });
+      } else {
+        res.sendStatus(401);
+      }
+    }
+}
+
 exports.saveMessage = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
@@ -38,7 +92,7 @@ exports.saveMessage = (req, res) => {
           null,
           req.body.idUser,
           req.body.message,
-          new Date().toISOString().slice(0, 19).replace('T', ' '),
+          req.body.ts,
           null
         ]);
         db.query(query, (err, response) => {

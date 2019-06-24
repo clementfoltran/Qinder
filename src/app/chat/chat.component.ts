@@ -4,12 +4,14 @@ import { LoadMatchesReturn } from './services/load-matches/load-matches-return';
 import { LoadMatchesService } from './services/load-matches/load-matches.service';
 import { GetUserPhotosReturn, Photo } from '../home/services/get-user-photos/get-user-photos-return';
 import { GetUserPhotosService } from '../home/services/get-user-photos/get-user-photos.service';
-import * as io from 'socket.io-client'; // And then connect using
+import * as io from 'socket.io-client';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SaveMessageService } from './services/save-message/save-message.service';
 import { SaveMessageParameter } from './services/save-message/save-message-parameter';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { SaveMessageReturn } from './services/save-message/save-message-return';
+import { GetMatchIdService } from './services/get-match-id/get-match-id.service';
+import { GetMatchIdParameter } from './services/get-match-id/get-match-id-parameter';
+import { GetMatchIdReturn } from './services/get-match-id/get-match-id-return';
 
 @Component({
   selector: 'app-chat',
@@ -21,6 +23,7 @@ export class ChatComponent implements OnInit {
   constructor(public loadMatchesService: LoadMatchesService,
               public getUserPhotosService: GetUserPhotosService,
               public saveMessageService: SaveMessageService,
+              public getMatchIdService: GetMatchIdService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -28,10 +31,12 @@ export class ChatComponent implements OnInit {
               }
 
   public userPhotos: Photo[];
-  public userPicture = [];
+  public matchesObjects = [];
   public APIParameterLoadMatches: LoadMatchesParameter;
+  public APIParameterGetMatchId: GetMatchIdParameter;
   public APIParameterSaveMessage: SaveMessageParameter;
   public matchesList = [];
+  public matchId: number;
   public messageForm: FormGroup;
   public socket;
   public messageList = [];
@@ -52,8 +57,38 @@ export class ChatComponent implements OnInit {
       });
   }
 
+  openConversation(id) {
+    this.APIParameterGetMatchId = {
+      userId: +localStorage.getItem('userId'),
+      userId_: parseInt(id, 10)
+    };
+    console.log(this.APIParameterGetMatchId);
+    this.getMatchIdService.getMatchId(this.APIParameterGetMatchId)
+    .subscribe((result: GetMatchIdReturn) => {
+      if (result.success) {
+        this.matchId = result.matchId;
+        console.log(result.message);
+      } else {
+        console.log(result.message);
+      }
+    });
+    this.loadMessages(this.matchId);
+  }
+
+  loadMessages(matchId) {
+    if (this.messageList) {
+      this.messageList = [];
+    }
+    const obj = {};
+    const me = Object.create(obj);
+    const id2 = localStorage.getItem('userId');
+    me.id = id2;
+    me.msg = 'Help me';
+    this.messageList.push(me);
+  }
+
   initMatchPic(matchesList) {
-    if (this.userPicture.length === 0) {
+    if (this.matchesObjects.length === 0) {
       for (const match of matchesList) {
         if (match) {
           this.getUserPhotosService.getUserPhotos(parseInt(match, 10))
@@ -61,7 +96,11 @@ export class ChatComponent implements OnInit {
               if (result.success) {
                 this.userPhotos = result.photos;
                 if (this.userPhotos.length > 0) {
-                  this.userPicture.push(this.userPhotos[0].photo);
+                  const obj = {};
+                  const me = Object.create(obj);
+                  me.id = match;
+                  me.picture = this.userPhotos[0].photo;
+                  this.matchesObjects.push(me);
                 }
               } else {
                   console.log(result.message);
@@ -89,10 +128,12 @@ export class ChatComponent implements OnInit {
   }
 
   saveMessage(idUser, message) {
+    const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
     this.APIParameterSaveMessage = {
       idMessage: 1,
       idUser,
       message,
+      ts,
       idMatch: 1
     };
     this.saveMessageService.saveMessage(this.APIParameterSaveMessage)

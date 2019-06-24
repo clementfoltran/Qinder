@@ -3,19 +3,19 @@
   <div class="top" style="text-align: center; font-size: 30px;">
     <!-- <a href=""><button class="close">x</button></a> -->
     <div class="matchesList">
-      <!-- add link to conversation around img -->
-      <div class="matchPicDiv" *ngFor="let picture of userPicture">
-        <img class="matchPicture" src="data:image/png;base64,{{ picture }}" alt="">
+      <div class="matchPicDiv" *ngFor="let match of matchesObjects">
+        <a (click)="openConversation(match.id)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
       </div>
     </div>
     <hr>
     <div class="matchInfos">
-      <!-- selected conversation pic -->
-      <!-- <img class="conversationPicture" src="data:image/png;base64,{{ userPicture }}" alt=""> -->
+      <!-- selected conversation pic & match name -->
+      <!-- <img class="conversationPicture" src="data:image/png;base64,{{ match.picture }}" alt=""> -->
       <label class="user"><strong>Martin</strong></label>
     </div>
   </div>
 
+  <!-- add "Select a conversation :)" message -->
   <div class="contentArea">
 
     <div class="fullMessage" *ngFor="let message of messageList">

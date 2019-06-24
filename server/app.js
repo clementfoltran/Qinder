@@ -35,10 +35,10 @@ app.use((req, res, next) => {
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('disconnect', function(){
-    console.log('user disconnected');
+    // console.log('user disconnected');
   });
   socket.on('chat message', function(obj){
-    console.log('message reçu = ', obj);
+    // console.log('message reçu = ', obj);
     io.emit('chat message', obj);
   });
 });
@@ -82,6 +82,7 @@ app.get('/home/:id', urlencodedParser, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, user.getUserPhotos);
 
 app.get('/chat/:id', urlencodedParser, chat.loadMatches);
+app.get('/getMatchId', urlencodedParser, chat.getMatchId);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
 
