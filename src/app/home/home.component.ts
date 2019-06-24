@@ -11,7 +11,8 @@ import { ChatComponent } from '../chat/chat.component';
 import { SwipeParameter } from './services/swipe/swipe-parameter';
 import { SwipeService } from './services/swipe/swipe.service';
 import { SwipeReturn } from './services/swipe/swipe-return';
-import { registerOutsideClick } from 'ngx-bootstrap/utils/triggers';
+import {} from 'googlemaps';
+
 
 @Component({
   selector: 'app-home',
@@ -192,5 +193,15 @@ export class HomeComponent implements OnInit {
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.getUserToSwipe();
+    const mapProperties = {
+      center: new google.maps.LatLng(35.2271, -80.8431),
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    console.log(mapProperties);
+    const mexicoCity = new google.maps.LatLng(19.432608, -99.133209);
+    const jacksonville = new google.maps.LatLng(40.730610, -73.935242);
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(mexicoCity, jacksonville);
+    console.log(distance);
   }
 }

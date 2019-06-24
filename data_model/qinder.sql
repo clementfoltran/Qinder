@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 17, 2019 at 08:19 AM
+-- Generation Time: Jun 24, 2019 at 08:14 AM
 -- Server version: 5.6.43
 -- PHP Version: 5.6.40
 
@@ -32,6 +32,13 @@ CREATE TABLE `match` (
   `id_match` int(11) NOT NULL,
   `started` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `match`
+--
+
+INSERT INTO `match` (`id_match`, `started`) VALUES
+(5, '2019-06-24 15:12:38');
 
 -- --------------------------------------------------------
 
@@ -88,6 +95,14 @@ CREATE TABLE `swipe` (
   `like` tinyint(1) DEFAULT NULL,
   `id_match` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `swipe`
+--
+
+INSERT INTO `swipe` (`id_swipe`, `id_user`, `id_user_matched`, `like`, `id_match`) VALUES
+(79, 4, 2, 1, 5),
+(80, 2, 4, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -146,7 +161,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id_user`, `firstname`, `lastname`, `email`, `hash`, `gender`, `birthdate`, `interest`, `bio`, `distance`, `minage`, `maxage`, `validation_key`, `confirm`, `popularity`, `position`) VALUES
 (1, 'Gabriel', 'Drai', 'gdrai@student.42.fr', 'sha1$3454bdef$1$4ee1e2cec9f9b42ff3ca7fc63a6d9b2a8b8fdd78', 'Female', '1995-02-14', 'Male', 'TOP\n', 30, 18, 71, '232b10255d2189b73a8dc75c0048293155e2c398dbb241b0bda3d588c91d7bc2e354812036c85e6d', 1, NULL, NULL),
-(2, 'clement', 'foltran', 'clfoltra@student.42.fr', 'sha1$b102e18a$1$e43c2bfe71dbff22f342a32dde27783541d83fd4', 'Male', '2000-02-14', 'Male', '', 10, 0, 81, '742c24baeefac817c055b7e971894d1925bed69c5839920a2de9f5472c2b089d5a14a12bb9ea1e84', 1, NULL, NULL),
+(2, 'clement', 'foltran', 'clfoltra@student.42.fr', 'sha1$b102e18a$1$e43c2bfe71dbff22f342a32dde27783541d83fd4', 'Male', '2000-02-14', 'Male', '', 43, 0, 83, '742c24baeefac817c055b7e971894d1925bed69c5839920a2de9f5472c2b089d5a14a12bb9ea1e84', 1, NULL, NULL),
 (3, 'Charles', 'Vignal', 'cvignal@student.42.fr', 'sha1$d37d65ef$1$ab2786a5798aa369921cd0108b4a837496f62789', 'Female', '2002-06-12', 'Both', NULL, 10, 18, 25, '108ae206ab43fc59b202a0b59296f91fe60150b33c943deb8e6bfc8f2daf89b7ebdad5c7018ae69c', 0, NULL, NULL),
 (4, 'Guillaume', 'Lavignotte', 'glavigno@student.42.fr', 'sha1$95baced6$1$6b1728f9345b7f742f1c4892a3c199d9ffec5dfb', 'Male', '2003-06-12', 'Both', NULL, 10, 18, 25, '3e0fe7253d23faadfea04f774d9aeddf285abba27135dac29e26fa88f116efa7554f73adca4cf94e', 0, NULL, NULL),
 (5, 'Guillaume', 'Chainet', 'gchainet@student.42.fr', 'sha1$42df584d$1$55dc2d52654f7d76c9869cb66c12e0d708a61bbf', 'Male', '1998-06-12', 'Both', NULL, 10, 18, 25, 'd82a6d1f50ad2f6f7741d6cb1a622ba3a3725c5498d673d3925f7d7bd68ce1835ec588b35fe877c5', 0, NULL, NULL),
@@ -226,7 +241,7 @@ ALTER TABLE `usertag`
 -- AUTO_INCREMENT for table `match`
 --
 ALTER TABLE `match`
-  MODIFY `id_match` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_match` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `message`
@@ -244,7 +259,7 @@ ALTER TABLE `photo`
 -- AUTO_INCREMENT for table `swipe`
 --
 ALTER TABLE `swipe`
-  MODIFY `id_swipe` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_swipe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `tag`
