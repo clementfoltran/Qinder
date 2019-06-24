@@ -152,17 +152,15 @@ const match = (id_user, id_user_matched) => {
 const checkMatch = (id_user, id_user_) => {
   const sql = 'SELECT id_user FROM swipe WHERE id_user = ? AND id_user_matched = ? AND swipe.like = 1';
   const query = db.format(sql, [
-    id_user_,
-    id_user
+    id_user,
+    id_user_
   ]);
   db.query(query, (err, response) => {
     if (err) {
       console.log(err);
       return (false);
     } else if (response[0].id_user) {
-      if (!match(id_user, id_user_)) {
-        return (false);
-      }
+      match(id_user, id_user_);
       return (true);
     } else {
       return (false);
