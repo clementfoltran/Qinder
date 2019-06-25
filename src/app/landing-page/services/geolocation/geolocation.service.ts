@@ -17,7 +17,6 @@ export class GeolocationService {
   constructor(public http: HttpClient,
               public router: Router) {}
   
-  // const distance = google.maps.geometry.spherical.computeDistanceBetween(mexicoCity, jacksonville);
   sendPosition(APIParameter: GeolocationParameter): Observable<GeolocationReturn> {
     const option = {
       headers: new HttpHeaders({
