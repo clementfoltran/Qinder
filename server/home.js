@@ -26,6 +26,7 @@ exports.enterViewHome = (req, res) => {
             maxage: response[0].maxage,
             interest: response[0].interest,
             gender: response[0].gender,
+            position: JSON.parse(response[0].position),
             confirm: response[0].confirm,
           });
         }
@@ -73,10 +74,7 @@ exports.getUserToSwipe = (req, res) => {
       db.query(query, (err, response) => {
         if (err) {
           console.log(err);
-          res.json({
-            success: false,
-            message: 'User not found',
-          });
+          res.json({ success: false, message: 'User not found' });
         } else {
           res.json({
             success: true,
@@ -84,7 +82,7 @@ exports.getUserToSwipe = (req, res) => {
             id: response[0].id_user,
             firstname: response[0].firstname,
             bio: response[0].bio,
-            position: response[0].position,
+            position: JSON.parse(response[0].position),
             year: response[0].year
           });
         }
@@ -130,7 +128,6 @@ const match = (id_user, id_user_matched) => {
   const insertMatch = 'INSERT INTO `match` VALUES(id_match, NOW())';
   let query = db.format(insertMatch);
   db.query(query, (err, response) => {
-    console.log(response.insertId);
     if (err) {
       console.log(err);
       return (false);
