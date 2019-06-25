@@ -135,9 +135,10 @@ const match = (id_user, id_user_matched) => {
       console.log(err);
       return (false);
     } else {
-      const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user = ? AND id_user_matched = ?';
+      const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user IN (?, ?)';
       query = db.format(updateSwipe, [ response.insertId, id_user, id_user_matched ]);
       db.query(query, (err, response) => {
+        console.log(response);
         if (err) {
           console.log(err);
           return (false);
