@@ -8,6 +8,11 @@ import { GetUserToSwipeService } from './services/get-user-to-swipe/get-user-to-
 import { GetUserToSwipeParameter } from './services/get-user-to-swipe/get-user-to-swipe-parameter';
 import { GetUserToSwipeReturn } from './services/get-user-to-swipe/get-user-to-swipe-return';
 import { ChatComponent } from '../chat/chat.component';
+import { SwipeParameter } from './services/swipe/swipe-parameter';
+import { SwipeService } from './services/swipe/swipe.service';
+import { SwipeReturn } from './services/swipe/swipe-return';
+import {} from 'googlemaps';
+
 
 @Component({
   selector: 'app-home',
@@ -19,6 +24,7 @@ export class HomeComponent implements OnInit {
   constructor(public activatedRoute: ActivatedRoute,
               public getUserPhotosService: GetUserPhotosService,
               public getUserToSwipeService: GetUserToSwipeService,
+              public swipeService: SwipeService,
               public messageService: MessageService) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
@@ -48,6 +54,32 @@ export class HomeComponent implements OnInit {
    *
    */
   public firstName: string;
+  /**
+   * User to swipe name
+   *
+   */
+  public userToSwipeName: string;
+  /**
+   * User to swipe biographie
+   *
+   */
+  public userToSwipeBio: string;
+  /**
+   * User to swipe photos
+   *
+   */
+  public userToSwipePhotos: Photo[];
+  /**
+   * User to swipe id
+   *
+   */
+  public userToSwipeId: number;
+  /**
+   * User to swipe age
+   *
+   */
+  public userToSwipeAge: number;
+
 
   initUserPic() {
     this.getUserPhotosService.getUserPhotos(this.resolveData.id)
@@ -69,6 +101,22 @@ export class HomeComponent implements OnInit {
       });
   }
 
+  getUserPhotos(userId: number) {
+    this.getUserPhotosService.getUserPhotos(userId)
+    .subscribe((result: GetUserPhotosReturn) => {
+      if (result.success) {
+        this.userToSwipePhotos = result.photos;
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Network',
+          detail: 'Check your connection',
+          life: 6000
+        });
+      }
+    });
+  }
+
   getUserToSwipe() {
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
@@ -81,7 +129,13 @@ export class HomeComponent implements OnInit {
     this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
       if (result.success) {
-        console.log(result);
+        this.getUserPhotos(result.id);
+        this.userToSwipeName = result.firstname;
+        this.userToSwipeBio = result.bio;
+        this.userToSwipeId = result.id;
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        this.userToSwipeAge = currentYear - +result.year;
       } else {
         this.messageService.add({
           severity: 'error',
@@ -91,6 +145,20 @@ export class HomeComponent implements OnInit {
         });
       }
     });
+  }
+
+  swipe(like: boolean) {
+    const APIParameter: SwipeParameter = {
+      id_user: this.resolveData.id,
+      id_user_: this.userToSwipeId,
+      like,
+    };
+    this.swipeService.swipe(APIParameter)
+      .subscribe((result: SwipeReturn) => {
+        if (result.success) {
+          this.getUserToSwipe();
+        }
+      });
   }
 
   showChat($event: any) {
@@ -125,5 +193,15 @@ export class HomeComponent implements OnInit {
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.getUserToSwipe();
+    const mapProperties = {
+      center: new google.maps.LatLng(35.2271, -80.8431),
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    console.log(mapProperties);
+    const mexicoCity = new google.maps.LatLng(19.432608, -99.133209);
+    const jacksonville = new google.maps.LatLng(40.730610, -73.935242);
+    const distance = google.maps.geometry.spherical.computeDistanceBetween(mexicoCity, jacksonville);
+    console.log(distance);
   }
 }

@@ -14,6 +14,8 @@ import { RegisterReturn } from './services/register/register.return';
 import { ActivateService } from './services/activate/activate.service';
 import { EnterViewActivateReturn } from './services/enter-view-activate/enter-view-activate-return';
 import { ActivateReturn } from './services/activate/activate.service-return';
+import { DatepickerConfig } from 'ngx-bootstrap/datepicker/public_api';
+import { splitAtColon } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-landing-page',
@@ -43,6 +45,8 @@ export class LandingPageComponent implements OnInit {
   public LoginAPIParameter: LoginParameter;
   public MailAPIParameter: MailParameter;
   public resolvedData: EnterViewActivateReturn;
+  public bsValue: Date = new Date();
+  public datePickerConfig: Partial<DatepickerConfig>;
 
   login() {
     if (this.loginForm.valid) {
@@ -81,13 +85,12 @@ export class LandingPageComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid) {
-
       const key = this.generateId(80);
-
       this.RegisterAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
         lastname: this.registerForm.get('lastname').value,
         email: this.registerForm.get('email').value,
+        birthdate: this.registerForm.get('birthdate').value.toISOString().slice(0, 10),
         password: this.registerForm.get('password').value,
         passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
         gender: this.registerForm.get('gender').value,
@@ -118,6 +121,13 @@ export class LandingPageComponent implements OnInit {
         } else {
           console.log('fail: ', result);
         }
+      });
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Empty fields',
+        detail: 'Fill all inputs',
+        life: 6000
       });
     }
   }
@@ -162,18 +172,25 @@ export class LandingPageComponent implements OnInit {
                 private mailService: MailService,
                 public activatedRoute: ActivatedRoute,
                 public activateService: ActivateService) {
-      this.registerForm = fb.group({
-        firstname: ['', Validators.required],
-        lastname: ['', Validators.required],
-        email: ['', Validators.required],
-        password: ['', Validators.required],
-        passwordConfirmation: ['', Validators.required],
-        gender: ['', Validators.required],
-      });
-
-      this.loginForm = fb.group({
+    this.registerForm = fb.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       email: ['', Validators.required],
+      birthdate: ['', Validators.required],
       password: ['', Validators.required],
+      passwordConfirmation: ['', Validators.required],
+      gender: ['', Validators.required],
+    });
+
+    this.loginForm = fb.group({
+    email: ['', Validators.required],
+    password: ['', Validators.required],
+    });
+
+    this.datePickerConfig = Object.assign({
+      containerClass: 'theme-orange',
+      showWeekNumbers: false,
+      maxDate: new Date(),
     });
   }
 

@@ -1,13 +1,31 @@
 <div class="fullView">
   <div class="match-zone col-md-12 text-center">
-    <img class="logo" src="../../assets/img/logo.svg" height="100" alt="">
-    <div class="swipe-zone">
-      <div class="swipe">
+    <img src="../../assets/img/logo.svg" height="100" alt="">
+    <div class="swipe-zone mt-4">
+      <div class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
+        <div class="card">
+          <carousel>
+            <div *ngFor="let photo of userToSwipePhotos">
+              <slide>
+                <img src="data:image/png;base64,{{ photo.photo }}" style="display: block; width: 100%;">
+              </slide>
+            </div>
+          </carousel>
+          <div class="card-body">
+            <h2>{{ userToSwipeName | titlecase }} {{ userToSwipeAge }}</h2>
+            <div *ngIf="userToSwipeBio; else noBio">
+              <p class="card-text">{{ userToSwipeBio }}</p>
+            </div>
+            <ng-template #noBio>
+              <p class="card-text">{{ userToSwipeName | titlecase}} did nothing in his life 😥</p>
+            </ng-template>
+          </div>
+        </div>
       </div>
       <div class="row">
         <div class="swipe-buttons m-auto align-items-center">
-          <button style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
-          <button style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
+          <button (click)="swipe(false)" style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
+          <button (click)="swipe(true)" style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
         </div>
       </div>
     </div>
@@ -28,16 +46,6 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="logo m-auto">
-          <div *ngIf="userPicture; else noPic">
-            <img class="rounded-circle" src="data:image/png;base64,{{ userPicture }}" height="100" alt="">
-          </div>
-          <ng-template #noPic>
-            <div class="rounded-circle text-center noPic">
-              <i class="fas fa-user"></i>
-            </div>
-          </ng-template>
-        </div>
         <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -53,6 +61,7 @@
   </div>
 </div>
 
+
 <nav class="navbar navbar-expand-lg fixed-bottom">
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav col-md-12 p-0">
@@ -60,7 +69,14 @@
         <a class="nav-link" (click)="showChat()"><i class="fas fa-comments"></i></a>
       </li>
       <li class="nav-item col-md-4">
-        <a class="nav-link" data-toggle="modal" data-target="#modSignIn"><i class="fas fa-user"></i></a>
+        <a class="nav-link" data-toggle="modal" data-target="#modSignIn">
+          <div *ngIf="userPicture; else noPicBar">
+            <img class="rounded-circle" src="data:image/png;base64,{{ userPicture }}" height="40" alt="">
+          </div>
+          <ng-template #noPicBar>
+            <i class="fas fa-user"></i>
+          </ng-template>
+        </a>
       </li>
       <li class="nav-item col-md-4">
           <a class="nav-link" (click)="showNotifs($event)"><i class="fas fa-bell"></i></a> 

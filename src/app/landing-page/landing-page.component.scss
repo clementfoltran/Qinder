@@ -46,6 +46,8 @@ footer {
     padding: 20px;
     text-align: center;
 }
+
+.bs-datepicker-container { position: relative; z-index: 10000 !important}; 
   
 @media screen and (max-width: 600px) {
     footer {
