@@ -94,19 +94,30 @@ export class ChatComponent implements OnInit {
   // ----------------------------------------------------------------------------------------
   loadMatchInfos(userMatchedId) {
     this.aConversationWasOpened = 1;
-    this.userMatchedPicture = this.userPhotos[0].photo;
+
+    this.getUserPhotosService.getUserPhotos(userMatchedId)
+      .subscribe((result: GetUserPhotosReturn) => {
+        if (result.success) {
+          this.userPhotos = result.photos;
+          if (this.userPhotos.length > 0) {
+            this.userMatchedPicture = this.userPhotos[0].photo;
+          }
+        } else {
+            console.log(result.message);
+        }
+      });
 
     this.APIEnterViewHomeParameter = {
       id: userMatchedId
     };
     this.getUserMatchedInfos.enterView(this.APIEnterViewHomeParameter)
-            .subscribe((result: EnterViewHomeReturn) => {
-              if (result.success) {
-                this.userMatchedName = result.firstname;
-              } else {
-                  console.log(result.message);
-              }
-            });
+      .subscribe((result: EnterViewHomeReturn) => {
+        if (result.success) {
+          this.userMatchedName = result.firstname;
+        } else {
+            console.log(result.message);
+        }
+      });
   }
 
   // LOAD MESSAGES
