@@ -4,14 +4,17 @@
     <!-- <a href=""><button class="close">x</button></a> -->
     <div class="matchesList">
       <div class="matchPicDiv" *ngFor="let match of matchesObjects">
-        <a (click)="loadMessages(match.id.id_match)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
+        <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
       </div>
     </div>
     <hr>
     <div class="matchInfos">
       <!-- selected conversation pic & match name -->
-      <!-- <img class="conversationPicture" src="data:image/png;base64,{{ match.picture }}" alt=""> -->
-      <label class="user"><strong>Martin</strong></label>
+      <div *ngIf="!userMatchedName; else elseBlock"><label>Click on a match to open a conversation :)</label></div>
+      <ng-template #elseBlock>
+          <img class="conversationPicture" src="data:image/png;base64,{{ userMatchedPicture }}" alt="">
+          <label class="user"><strong>{{userMatchedName}}</strong></label>
+      </ng-template>
     </div>
   </div>
 

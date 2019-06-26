@@ -12,6 +12,10 @@ import { SaveMessageReturn } from './services/save-message/save-message-return';
 import { LoadConversationService } from './services/load-conversation/load-conversation.service';
 import { LoadConversationParameter } from './services/load-conversation/load-conversation-parameter';
 import { LoadConversationReturn } from './services/load-conversation/load-conversation-return';
+import { Settings } from 'http2';
+import { EnterViewHomeService } from '../home/services/enter-view-home/enter-view-home.service';
+import { EnterViewHomeParameter } from '../home/services/enter-view-home/enter-view-home-parameter';
+import { EnterViewHomeReturn } from '../home/services/enter-view-home/enter-view-home-return';
 
 @Component({
   selector: 'app-chat',
@@ -24,6 +28,7 @@ export class ChatComponent implements OnInit {
               public getUserPhotosService: GetUserPhotosService,
               public saveMessageService: SaveMessageService,
               public getMessagesArrayService: LoadConversationService,
+              public getUserMatchedInfos: EnterViewHomeService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -35,12 +40,15 @@ export class ChatComponent implements OnInit {
   public APIParameterLoadMatches: LoadMatchesParameter;
   public APIParameterSaveMessage: SaveMessageParameter;
   public APIParameterLoadConversation: LoadConversationParameter;
+  public APIEnterViewHomeParameter: EnterViewHomeParameter;
   public matchId: number;
   public messageForm: FormGroup;
   public socket;
   public messageList = [];
   public id: number;
   public currentOpenedConversationMatchId: number;
+  public userMatchedPicture: string;
+  public userMatchedName: string;
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -61,7 +69,7 @@ export class ChatComponent implements OnInit {
     if (this.matchesObjects.length === 0) {
       for (const match of matchesList) {
         if (match) {
-          this.getUserPhotosService.getUserPhotos(parseInt(match.id_match, 10))
+          this.getUserPhotosService.getUserPhotos(parseInt(match.id_user_matched, 10))
             .subscribe((result: GetUserPhotosReturn) => {
               if (result.success) {
                 this.userPhotos = result.photos;
@@ -79,6 +87,24 @@ export class ChatComponent implements OnInit {
         }
       }
     }
+  }
+
+  // LOAD USER_MATCHED INFOS
+  // ----------------------------------------------------------------------------------------
+  loadMatchInfos(userMatchedId) {
+    this.userMatchedPicture = this.userPhotos[0].photo;
+
+    this.APIEnterViewHomeParameter = {
+      id: userMatchedId
+    };
+    this.getUserMatchedInfos.enterView(this.APIEnterViewHomeParameter)
+            .subscribe((result: EnterViewHomeReturn) => {
+              if (result.success) {
+                this.userMatchedName = result.firstname;
+              } else {
+                  console.log(result.message);
+              }
+            });
   }
 
   // LOAD MESSAGES
