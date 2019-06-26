@@ -11,7 +11,7 @@ import { Observable, throwError } from 'rxjs';
 })
 export class LoadConversationService {
 
-  public serviceURL = Globals.baseURL + 'getMessagesArray/';
+  public serviceURL = Globals.baseURL + 'loadConversation/';
   constructor(public http: HttpClient) { }
 
   getMessagesArray(APIParameter: LoadConversationParameter): Observable<LoadConversationReturn> {

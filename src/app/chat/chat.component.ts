@@ -9,9 +9,6 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { SaveMessageService } from './services/save-message/save-message.service';
 import { SaveMessageParameter } from './services/save-message/save-message-parameter';
 import { SaveMessageReturn } from './services/save-message/save-message-return';
-import { GetMatchIdService } from './services/get-match-id/get-match-id.service';
-import { GetMatchIdParameter } from './services/get-match-id/get-match-id-parameter';
-import { GetMatchIdReturn } from './services/get-match-id/get-match-id-return';
 import { LoadConversationService } from './services/load-conversation/load-conversation.service';
 import { LoadConversationParameter } from './services/load-conversation/load-conversation-parameter';
 import { LoadConversationReturn } from './services/load-conversation/load-conversation-return';
@@ -26,7 +23,6 @@ export class ChatComponent implements OnInit {
   constructor(public loadMatchesService: LoadMatchesService,
               public getUserPhotosService: GetUserPhotosService,
               public saveMessageService: SaveMessageService,
-              public getMatchIdService: GetMatchIdService,
               public getMessagesArrayService: LoadConversationService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
@@ -37,16 +33,17 @@ export class ChatComponent implements OnInit {
   public userPhotos: Photo[];
   public matchesObjects = [];
   public APIParameterLoadMatches: LoadMatchesParameter;
-  public APIParameterGetMatchId: GetMatchIdParameter;
   public APIParameterSaveMessage: SaveMessageParameter;
   public APIParameterLoadConversation: LoadConversationParameter;
-  public matchesList = [];
   public matchId: number;
   public messageForm: FormGroup;
   public socket;
   public messageList = [];
-  public id = localStorage.getItem('userId');
+  public id: number;
+  public currentOpenedConversationMatchId: number;
 
+  // LOAD MATCHES DATA
+  // ----------------------------------------------------------------------------------------
   loadMatches() {
     this.APIParameterLoadMatches = {
       id: +localStorage.getItem('userId')
@@ -54,61 +51,17 @@ export class ChatComponent implements OnInit {
     this.loadMatchesService.loadMatches(this.APIParameterLoadMatches)
       .subscribe((result: LoadMatchesReturn) => {
         if (result.success) {
-          // this.matchesList = result.matches_list.split(',');
-          // this.initMatchPic(this.matchesList);
-          console.log(result.matches_list);
+          this.initMatchPic(result.matches_list);
         } else {
           console.log(result.message);
         }
       });
   }
-
-  openConversation(id) {
-    this.APIParameterGetMatchId = {
-      userId: +localStorage.getItem('userId'),
-      userId_: parseInt(id, 10)
-    };
-    // console.log(this.APIParameterGetMatchId);
-    this.getMatchIdService.getMatchId(this.APIParameterGetMatchId)
-      .subscribe((result: GetMatchIdReturn) => {
-        if (result.success) {
-          this.matchId = result.matchId;
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
-    this.loadMessages(this.matchId);
-  }
-
-  loadMessages(matchId) {
-    this.APIParameterLoadConversation = {
-      id: matchId
-    };
-    this.getMessagesArrayService.getMessagesArray(this.APIParameterLoadConversation)
-      .subscribe((result: LoadConversationReturn) => {
-        if (result.success) {
-          console.log(result.messageArray);
-        } else {
-          console.log(result.message);
-        }
-      });
-    // if (this.messageList) {
-    //   this.messageList = [];
-    // }
-    // const obj = {};
-    // const me = Object.create(obj);
-    // const id2 = localStorage.getItem('userId');
-    // me.id = id2;
-    // me.msg = 'Help me';
-    // this.messageList.push(me);
-  }
-
   initMatchPic(matchesList) {
     if (this.matchesObjects.length === 0) {
       for (const match of matchesList) {
         if (match) {
-          this.getUserPhotosService.getUserPhotos(parseInt(match, 10))
+          this.getUserPhotosService.getUserPhotos(parseInt(match.id_match, 10))
             .subscribe((result: GetUserPhotosReturn) => {
               if (result.success) {
                 this.userPhotos = result.photos;
@@ -128,30 +81,63 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  sendMessage() {
-    if (this.messageForm.valid) {
-      const msg = this.messageForm.get('message').value;
-      if (msg && msg.length > 0) {
+  // LOAD MESSAGES
+  // ----------------------------------------------------------------------------------------
+  loadMessages(matchId) {
+    this.APIParameterLoadConversation = {
+      id: matchId
+    };
+    this.currentOpenedConversationMatchId = matchId;
+    this.getMessagesArrayService.getMessagesArray(this.APIParameterLoadConversation)
+      .subscribe((result: LoadConversationReturn) => {
+        if (result.success) {
+          this.fillMessagesArray(result.messageArray);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+  fillMessagesArray(messageArray) {
+    if (this.messageList) {
+      this.messageList = [];
+    }
+    for (const mess of messageArray) {
+      if (mess) {
         const obj = {};
         const me = Object.create(obj);
-        const id = localStorage.getItem('userId');
-        me.id = id;
-        me.msg = msg;
-        this.socket.emit('chat message', me);
-        this.messageForm.reset();
-        this.saveMessage(id, msg);
+        me.id = mess.id_user;
+        me.msg = mess.message;
+        me.ts = mess.ts;
+        this.messageList.push(me);
       }
     }
   }
 
-  saveMessage(idUser, message) {
-    const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  // SEND AND SAVE MESSAGES
+  // ----------------------------------------------------------------------------------------
+  sendMessage() {
+    if (this.messageForm.valid) {
+      const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
+      const msg = this.messageForm.get('message').value;
+      if (msg && msg.length > 0) {
+        const obj = {};
+        const me = Object.create(obj);
+        me.id = this.id;
+        me.msg = msg;
+        me.ts = ts;
+        this.socket.emit('chat message', me);
+        this.messageForm.reset();
+        this.saveMessage(this.id, msg, ts);
+      }
+    }
+  }
+  saveMessage(idUser, message, ts) {
     this.APIParameterSaveMessage = {
       idMessage: 1,
       idUser,
       message,
       ts,
-      idMatch: 1
+      idMatch: this.currentOpenedConversationMatchId
     };
     this.saveMessageService.saveMessage(this.APIParameterSaveMessage)
       .subscribe((result: SaveMessageReturn) => {
@@ -170,6 +156,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
       this.socket = io.connect('http://localhost:3000');
       this.socket.on('chat message', this.receive);

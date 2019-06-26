@@ -78,8 +78,6 @@ app.post('/swipe/', urlencodedParser, home.swipe);
 
 app.post('/saveMessage', urlencodedParser, chat.saveMessage);
 
-app.post('/getMatchId', urlencodedParser, chat.getMatchId);
-
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
@@ -88,7 +86,7 @@ app.get('/home/:id', urlencodedParser, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, user.getUserPhotos);
 
 app.get('/chat/:id', urlencodedParser, chat.loadMatches);
-app.get('/getMessagesArray/:id', urlencodedParser, chat.loadConversation);
+app.get('/loadConversation/:id', urlencodedParser, chat.loadConversation);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
 

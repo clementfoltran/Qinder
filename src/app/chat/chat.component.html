@@ -4,7 +4,7 @@
     <!-- <a href=""><button class="close">x</button></a> -->
     <div class="matchesList">
       <div class="matchPicDiv" *ngFor="let match of matchesObjects">
-        <a (click)="openConversation(match.id)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
+        <a (click)="loadMessages(match.id.id_match)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
       </div>
     </div>
     <hr>
@@ -22,7 +22,7 @@
       <div [ngClass]="message.id === id ? 'message2' : 'message1'">
           <label>{{ message.msg }}</label>
       </div>
-      <label [ngClass]="message.id === id ? 'infosLabel2' : 'infosLabel1'">le 12/02/2019 à 21h30</label>
+      <label [ngClass]="message.id === id ? 'infosLabel2' : 'infosLabel1'">{{ message.ts }}</label>
     </div>
 
   </div>
