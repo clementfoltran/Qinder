@@ -54,8 +54,9 @@ export class ChatComponent implements OnInit {
     this.loadMatchesService.loadMatches(this.APIParameterLoadMatches)
       .subscribe((result: LoadMatchesReturn) => {
         if (result.success) {
-          this.matchesList = result.matches_list.split(',');
-          this.initMatchPic(this.matchesList);
+          // this.matchesList = result.matches_list.split(',');
+          // this.initMatchPic(this.matchesList);
+          console.log(result.matches_list);
         } else {
           console.log(result.message);
         }

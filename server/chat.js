@@ -5,8 +5,8 @@ exports.loadMatches = (req, res) => {
       res.sendStatus(500);
     } else {
       if (res) {
-        const sql = 'SELECT matches_ids FROM user WHERE id_user = ?';
-        const query = db.format(sql, [req.params.id]);
+        const sql = 'SELECT s2.id_match, s1.id_user_matched FROM swipe s1 INNER JOIN swipe s2 ON s2.id_user = s1.id_user_matched AND s2.id_user_matched = ? WHERE s1.id_user = ?';
+        const query = db.format(sql, [req.params.id, req.params.id]);
         db.query(query, (err, response) => {
           if (err) {
             res.json({
@@ -17,7 +17,7 @@ exports.loadMatches = (req, res) => {
             res.json({
               success: true,
               message: 'Successfully loaded matches',
-              matches_list: response[0].matches_ids,
+              matches_list: response[0].id_match,
             });
           }
         });
