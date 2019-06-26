@@ -4,6 +4,54 @@ const jwt = require('jsonwebtoken');
 const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
 const nodemailer = require("nodemailer");
 
+exports.updateGeolocation = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'UPDATE user SET position = ? WHERE id_user = ?';
+      const position = {
+        latitude: req.body.latitude,
+        longitude: req.body.longitude
+      };
+      let query = db.format(sql, [
+        JSON.stringify(position),
+        req.body.id_user
+      ]);
+      db.query(query, (err, response) => {
+        console.log(response);
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.test = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT position FROM user WHERE id_user = ?';
+      let query = db.format(sql, [req.params.id]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '', response: response });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.getProfilePhoto = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);

@@ -13,7 +13,6 @@ import { SwipeService } from './services/swipe/swipe.service';
 import { SwipeReturn } from './services/swipe/swipe-return';
 import {} from 'googlemaps';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -79,7 +78,24 @@ export class HomeComponent implements OnInit {
    *
    */
   public userToSwipeAge: number;
+  /**
+   * The user to swipe distance from the log user
+   */
+  public userToSwipeDistance: any;
+  /**
+   * The user current postion
+   */
+  public userCurrentPosition: any;
 
+  getUserPosition() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
+      });
+    }
+  }
 
   initUserPic() {
     this.getUserPhotosService.getUserPhotos(this.resolveData.id)
@@ -124,7 +140,7 @@ export class HomeComponent implements OnInit {
       gender: this.resolveData.gender,
       minage: this.resolveData.minage,
       maxage: this.resolveData.maxage,
-      distance: this.resolveData.distance,
+      distance: this.resolveData.distance
     };
     this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
@@ -136,6 +152,11 @@ export class HomeComponent implements OnInit {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
+        const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
+        this.userToSwipeDistance = Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
+          this.userCurrentPosition,
+          userToSwipePos
+        ));
       } else {
         this.messageService.add({
           severity: 'error',
@@ -189,19 +210,10 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
+      this.getUserPosition();
     });
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.getUserToSwipe();
-    const mapProperties = {
-      center: new google.maps.LatLng(35.2271, -80.8431),
-      zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    console.log(mapProperties);
-    const mexicoCity = new google.maps.LatLng(19.432608, -99.133209);
-    const jacksonville = new google.maps.LatLng(40.730610, -73.935242);
-    const distance = google.maps.geometry.spherical.computeDistanceBetween(mexicoCity, jacksonville);
-    console.log(distance);
   }
 }

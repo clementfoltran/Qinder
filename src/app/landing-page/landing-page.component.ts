@@ -16,6 +16,9 @@ import { EnterViewActivateReturn } from './services/enter-view-activate/enter-vi
 import { ActivateReturn } from './services/activate/activate.service-return';
 import { DatepickerConfig } from 'ngx-bootstrap/datepicker/public_api';
 import { splitAtColon } from '@angular/compiler/src/util';
+import { GeolocationService } from './services/geolocation/geolocation.service';
+import { GeolocationReturn } from './services/geolocation/geolocation.return';
+import { GeolocationParameter } from './services/geolocation/geolocation.parameter';
 
 @Component({
   selector: 'app-landing-page',
@@ -43,10 +46,33 @@ export class LandingPageComponent implements OnInit {
    *
    */
   public LoginAPIParameter: LoginParameter;
+  /**
+   * User geolocation
+   */
+  public latitude: number;
+  public longitude: number;
   public MailAPIParameter: MailParameter;
   public resolvedData: EnterViewActivateReturn;
   public bsValue: Date = new Date();
   public datePickerConfig: Partial<DatepickerConfig>;
+
+  getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+      });
+    }
+  }
+
+  sendGeolocation(id_user: number) {
+    const APIParameter: GeolocationParameter = {
+      id_user,
+      latitude: this.latitude,
+      longitude: this.longitude
+    }
+    this.geolocationService.sendPosition(APIParameter).subscribe()
+  }
 
   login() {
     if (this.loginForm.valid) {
@@ -58,9 +84,9 @@ export class LandingPageComponent implements OnInit {
         .subscribe((result: LoginReturn) => {
           if (result.success) {
             // Connect successfully let's store the token
-            console.log(result.message);
             localStorage.setItem('token', result.token);
             localStorage.setItem('userId', result.user_id.toString());
+            this.sendGeolocation(result.user_id);
             this.router.navigate(['/home']);
           } else {
             this.messageService.add({
@@ -171,6 +197,7 @@ export class LandingPageComponent implements OnInit {
                 private messageService: MessageService,
                 private mailService: MailService,
                 public activatedRoute: ActivatedRoute,
+                public geolocationService: GeolocationService,
                 public activateService: ActivateService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
@@ -203,5 +230,6 @@ export class LandingPageComponent implements OnInit {
       this.checkAccount(this.resolvedData);
     }
     this.registerForm.get('gender').setValue('Female');
+    this.getLocation();
   }
 }

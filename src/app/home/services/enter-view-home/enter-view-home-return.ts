@@ -10,5 +10,9 @@ export interface EnterViewHomeReturn {
   maxage: number;
   gender: string;
   interest: string;
+  position: {
+    latitude: number,
+    longitude: number
+  };
   confirm: boolean;
 }
