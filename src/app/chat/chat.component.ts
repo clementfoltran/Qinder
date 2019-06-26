@@ -88,10 +88,11 @@ export class ChatComponent implements OnInit {
       id: matchId
     };
     this.currentOpenedConversationMatchId = matchId;
-    this.getMessagesArrayService.getMessagesArray(this.APIParameterLoadConversation)
+    this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
       .subscribe((result: LoadConversationReturn) => {
         if (result.success) {
           this.fillMessagesArray(result.messageArray);
+          console.log(result.messageArray);
         } else {
           console.log(result.message);
         }
@@ -107,7 +108,7 @@ export class ChatComponent implements OnInit {
         const me = Object.create(obj);
         me.id = mess.id_user;
         me.msg = mess.message;
-        me.ts = mess.ts;
+        me.ts = mess.ts.slice(0, 19).replace('T', ' ');
         this.messageList.push(me);
       }
     }

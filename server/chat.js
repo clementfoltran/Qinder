@@ -33,7 +33,7 @@ exports.loadConversation = (req, res) => {
     } else {
       if (res) {
         const sql = 'SELECT * FROM `message` WHERE id_match = ?';
-        let query = db.format(sql, [req.params.id]);
+        let query = db.format(sql, req.params.id);
         db.query(query, (err, response) => {
           if (err) {
             res.json({

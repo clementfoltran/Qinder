@@ -14,14 +14,14 @@ export class LoadConversationService {
   public serviceURL = Globals.baseURL + 'loadConversation/';
   constructor(public http: HttpClient) { }
 
-  getMessagesArray(APIParameter: LoadConversationParameter): Observable<LoadConversationReturn> {
+  loadConversation(APIParameter: LoadConversationParameter): Observable<LoadConversationReturn> {
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     };
 
-    return this.http.get<LoadConversationReturn>(this.serviceURL + APIParameter, option).pipe(
+    return this.http.get<LoadConversationReturn>(this.serviceURL + APIParameter.id, option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');
