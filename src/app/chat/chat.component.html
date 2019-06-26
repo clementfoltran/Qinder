@@ -21,11 +21,18 @@
   <!-- add "Select a conversation :)" message -->
   <div class="contentArea">
 
-    <div class="fullMessage" *ngFor="let message of messageList">
-      <div [ngClass]="message.id === id ? 'message2' : 'message1'">
-          <label>{{ message.msg }}</label>
+    <div *ngIf="aConversationWasOpened === 1">
+      <div *ngIf="messageList.length > 0; else elseBlock2">
+        <div class="fullMessage" *ngFor="let message of messageList">
+          <div [ngClass]="message.id === id ? 'message2' : 'message1'">
+            <label>{{ message.msg }}</label>
+          </div>
+          <label [ngClass]="message.id === id ? 'infosLabel2' : 'infosLabel1'">{{ message.ts }}</label>
+        </div>
       </div>
-      <label [ngClass]="message.id === id ? 'infosLabel2' : 'infosLabel1'">{{ message.ts }}</label>
+      <ng-template #elseBlock2>
+        <label>Don't be shy, make the first step!</label>
+      </ng-template>
     </div>
 
   </div>

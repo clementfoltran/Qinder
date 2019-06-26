@@ -49,6 +49,7 @@ export class ChatComponent implements OnInit {
   public currentOpenedConversationMatchId: number;
   public userMatchedPicture: string;
   public userMatchedName: string;
+  public aConversationWasOpened = 0;
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -92,6 +93,7 @@ export class ChatComponent implements OnInit {
   // LOAD USER_MATCHED INFOS
   // ----------------------------------------------------------------------------------------
   loadMatchInfos(userMatchedId) {
+    this.aConversationWasOpened = 1;
     this.userMatchedPicture = this.userPhotos[0].photo;
 
     this.APIEnterViewHomeParameter = {
