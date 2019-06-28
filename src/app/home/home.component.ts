@@ -142,30 +142,31 @@ export class HomeComponent implements OnInit {
       maxage: this.resolveData.maxage,
       distance: this.resolveData.distance
     };
-    // this.getUserToSwipeService.getUserToSwipe(APIParameter)
-    // .subscribe((result: GetUserToSwipeReturn) => {
-    //   if (result.success) {
-    //     this.getUserPhotos(result.id);
-    //     this.userToSwipeName = result.firstname;
-    //     this.userToSwipeBio = result.bio;
-    //     this.userToSwipeId = result.id;
-    //     const currentDate = new Date();
-    //     const currentYear = currentDate.getFullYear();
-    //     this.userToSwipeAge = currentYear - +result.year;
-    //     const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
-    //     this.userToSwipeDistance = Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
-    //       this.userCurrentPosition,
-    //       userToSwipePos
-    //     ));
-    //   } else {
-    //     this.messageService.add({
-    //       severity: 'error',
-    //       summary: 'Network',
-    //       detail: 'Check your connection',
-    //       life: 6000
-    //     });
-    //   }
-    // });
+    this.getUserToSwipeService.getUserToSwipe(APIParameter)
+    .subscribe((result: GetUserToSwipeReturn) => {
+      if (result.success) {
+        this.getUserPhotos(result.id);
+        this.userToSwipeName = result.firstname;
+        this.userToSwipeBio = result.bio;
+        this.userToSwipeId = result.id;
+        const currentDate = new Date();
+        const currentYear = currentDate.getFullYear();
+        this.userToSwipeAge = currentYear - +result.year;
+        console.log(result.position);
+        const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
+        this.userToSwipeDistance = Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
+          this.userCurrentPosition,
+          userToSwipePos
+        ));
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Network',
+          detail: 'Check your connection',
+          life: 6000
+        });
+      }
+    });
   }
 
   swipe(like: boolean) {

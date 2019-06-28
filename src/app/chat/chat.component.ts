@@ -12,7 +12,6 @@ import { SaveMessageReturn } from './services/save-message/save-message-return';
 import { LoadConversationService } from './services/load-conversation/load-conversation.service';
 import { LoadConversationParameter } from './services/load-conversation/load-conversation-parameter';
 import { LoadConversationReturn } from './services/load-conversation/load-conversation-return';
-import { Settings } from 'http2';
 import { EnterViewHomeService } from '../home/services/enter-view-home/enter-view-home.service';
 import { EnterViewHomeParameter } from '../home/services/enter-view-home/enter-view-home-parameter';
 import { EnterViewHomeReturn } from '../home/services/enter-view-home/enter-view-home-return';
