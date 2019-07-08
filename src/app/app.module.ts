@@ -35,6 +35,7 @@ import { CommonModule } from '@angular/common';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-user-to-swipe.service';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { GetNotificationsService } from './notifications/services/get-notifications/get-notifications.service';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
     EnterViewHomeResolve,
     EnterViewHomeService,
     GetUserToSwipeService,
+    GetNotificationsService,
   ],
   bootstrap: [AppComponent]
 })

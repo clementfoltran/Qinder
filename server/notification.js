@@ -27,3 +27,14 @@ exports.getNotifications = (req, res) => {
     }
   }
 }
+
+exports.newNotification = (id_user,  id_user_, notif) => {
+  const sql = 'INSERT INTO notification VALUES(id_notif, ?, ?, NOW(), ?)';
+  let query = db.format(sql, [id_user_, notif, id_user]);
+  db.query(query, (err) => {
+    if (err) {
+      return (false);
+    }
+  });
+  return (true);
+}

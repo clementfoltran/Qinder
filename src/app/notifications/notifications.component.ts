@@ -30,6 +30,7 @@ export class NotificationsComponent implements OnInit {
    * Notification list
    */
   public notificationList: Notification[];
+  
   receive = (obj) => {
     if (obj) {
       this.notificationList.push(obj);
@@ -57,7 +58,6 @@ export class NotificationsComponent implements OnInit {
     } catch (e) {
         console.log('Could not connect socket.io');
     }
-    this.getNotifications();
   }
   
 }

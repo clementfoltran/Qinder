@@ -11,6 +11,7 @@ import { ChatComponent } from '../chat/chat.component';
 import { SwipeParameter } from './services/swipe/swipe-parameter';
 import { SwipeService } from './services/swipe/swipe.service';
 import { SwipeReturn } from './services/swipe/swipe-return';
+import * as io from 'socket.io-client';
 import {} from 'googlemaps';
 
 @Component({
@@ -86,6 +87,22 @@ export class HomeComponent implements OnInit {
    * The user current postion
    */
   public userCurrentPosition: any;
+  /**
+   * 
+   * Socket for notifications
+   */
+  public socket;
+  /**
+   * 
+   * Notification list
+   */
+  public notificationList: Notification[];
+  
+  receive = (obj) => {
+    if (obj) {
+      this.notificationList.push(obj);
+    }
+  }
 
   getUserPosition() {
     if (navigator.geolocation) {
@@ -152,7 +169,6 @@ export class HomeComponent implements OnInit {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
-        console.log(result.position);
         const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
         this.userToSwipeDistance = Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
           this.userCurrentPosition,
@@ -178,6 +194,11 @@ export class HomeComponent implements OnInit {
     this.swipeService.swipe(APIParameter)
       .subscribe((result: SwipeReturn) => {
         if (result.success) {
+          console.log(result.match);
+          if (result.match) {
+            console.log(result.match);
+            this.socket.emit('notification', 3);
+          }
           this.getUserToSwipe();
         }
       });
@@ -216,5 +237,11 @@ export class HomeComponent implements OnInit {
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.getUserToSwipe();
+    try {
+      this.socket = io.connect('http://localhost:3001');
+      this.socket.on('chat message', this.receive);
+    } catch (e) {
+        console.log('Could not connect socket.io');
+    }
   }
 }

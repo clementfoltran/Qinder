@@ -1,4 +1,5 @@
 const db = require('./database.js');
+const notification = require('./notification.js')
 
 exports.enterViewHome = (req, res) => {
   if (!req.body) {
@@ -111,10 +112,10 @@ exports.swipe = (req, res) => {
             message: 'User not found',
           });
         } else {
-          if (req.body.like && checkMatch(req.body.id_user, req.body.id_user_)) {
+          if (checkMatch(req.body.id_user, req.body.id_user_)) {
             res.json({ success: true, message: '', match: true });
           } else {
-            res.json({ success: true, message: '', match: false });
+            res.json({ success: false, message: '', match: false });
           }
         }
       });
@@ -134,9 +135,8 @@ const match = (id_user, id_user_matched) => {
     } else {
       const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user IN (?, ?)';
       query = db.format(updateSwipe, [ response.insertId, id_user, id_user_matched ]);
-      db.query(query, (err, response) => {
-        console.log(response);
-        if (err) {
+      db.query(query, (err) => {
+        if (err || !notification.newNotification(id_user, id_user_matched, 3)) {
           console.log(err);
           return (false);
         } else {

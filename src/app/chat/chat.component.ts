@@ -65,6 +65,7 @@ export class ChatComponent implements OnInit {
         }
       });
   }
+
   initMatchPic(matchesList) {
     if (this.matchesObjects.length === 0) {
       for (const match of matchesList) {
@@ -136,6 +137,7 @@ export class ChatComponent implements OnInit {
         }
       });
   }
+  
   fillMessagesArray(messageArray) {
     if (this.messageList) {
       this.messageList = [];
