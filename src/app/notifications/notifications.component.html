@@ -1,33 +1,25 @@
 <div class="notifView">
-
-    <div class="top" style="text-align: center; font-size: 30px;">
-      <label class="title"><strong>Notifications</strong></label>
-      <!-- <a href=""><button class="close">x</button></a> -->
-    </div>
-  
-    <div class="contentArea">
-  
-      <div class="fullNotif">
-        <div class="messages1">
-          <label class="messagesLabel">Justine vous a envoyé un message !</label>
-        </div>
-        <label class="infosLabel">le 12/02/2019 à 21h37</label>
-      </div>
-
-      <div class="fullNotif">
-        <div class="messages2">
-            <label class="messagesLabel">Vous avez un nouveau match !</label>
-        </div>
-        <label class="infosLabel">le 12/02/2019 à 21h30</label>
-      </div>
-  
-      <div class="fullNotif">
-        <div class="messages2">
-            <label class="messagesLabel">Justine a aimé votre profil !</label>
-        </div>
-        <label class="infosLabel">le 12/02/2019 à 21h29</label>
-      </div>
-
-    </div>
-  
+  <div class="top" style="text-align: center; font-size: 30px;">
+    <label class="title"><strong>Notifications</strong></label>
+    <!-- <a href=""><button class="close">x</button></a> -->
   </div>
+  <div class="contentArea">
+    <div class="fullNotif" *ngFor="let notif of notificationList">
+      <div class="messages1">
+        <label *ngIf="notif.notif === 1" class="messagesLabel">
+          An user liked your profile, let's swipe
+        </label>
+        <label *ngIf="notif.notif === 2" class="messagesLabel">
+          {{notif.firstname }} {{ notif.lastname }} send a message
+        </label>
+        <label *ngIf="notif.notif === 3" class="messagesLabel">
+          NEW MATCH ! Say hi to {{notif.firstname }} {{ notif.lastname }}
+        </label>
+        <label *ngIf="notif.notif === 3" class="messagesLabel">
+          Ho, {{notif.firstname }} {{ notif.lastname }} unmatch you
+        </label>
+      </div>
+      <label class="infosLabel">{{ notif.ts | date:"dd/MM/yyyy HH:mm"}}</label>
+    </div>
+  </div>
+</div>
