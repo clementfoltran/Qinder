@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:3307
--- Généré le :  lun. 08 juil. 2019 à 00:37
+-- Généré le :  lun. 08 juil. 2019 à 05:15
 -- Version du serveur :  5.7.25
 -- Version de PHP :  7.1.27
 
@@ -57,8 +57,17 @@ CREATE TABLE `notification` (
   `id_notif` int(11) NOT NULL,
   `id_user_` int(11) DEFAULT NULL,
   `notif` int(11) DEFAULT NULL,
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `id_user` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `notification`
+--
+
+INSERT INTO `notification` (`id_notif`, `id_user_`, `notif`, `ts`, `id_user`) VALUES
+(1, 1, 2, '2019-07-08 11:18:34', 2),
+(2, 1, 3, '2019-07-08 11:18:34', 4);
 
 -- --------------------------------------------------------
 
@@ -178,7 +187,7 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id_user`, `firstname`, `lastname`, `email`, `hash`, `gender`, `birthdate`, `interest`, `bio`, `distance`, `minage`, `maxage`, `validation_key`, `confirm`, `popularity`, `position`) VALUES
 (1, 'Gabriel', 'Drai', 'gdrai@student.42.fr', 'sha1$3454bdef$1$4ee1e2cec9f9b42ff3ca7fc63a6d9b2a8b8fdd78', 'Female', '1995-02-14', 'Male', 'TOP\n', 30, 18, 71, '232b10255d2189b73a8dc75c0048293155e2c398dbb241b0bda3d588c91d7bc2e354812036c85e6d', 1, NULL, '{\"latitude\":48.85,\"longitude\":5.3598923}'),
-(2, 'clement', 'foltran', 'clfoltra@student.42.fr', 'sha1$b102e18a$1$e43c2bfe71dbff22f342a32dde27783541d83fd4', 'Male', '2000-02-14', 'Male', '', 10, 0, 81, '742c24baeefac817c055b7e971894d1925bed69c5839920a2de9f5472c2b089d5a14a12bb9ea1e84', 1, NULL, '{\"latitude\":48.849919799999995,\"longitude\":2.6370411}'),
+(2, 'clement', 'foltran', 'clfoltra@student.42.fr', 'sha1$b102e18a$1$e43c2bfe71dbff22f342a32dde27783541d83fd4', 'Male', '2000-02-14', 'Male', '', 82, 0, 81, '742c24baeefac817c055b7e971894d1925bed69c5839920a2de9f5472c2b089d5a14a12bb9ea1e84', 1, NULL, '{\"latitude\":48.849919799999995,\"longitude\":2.6370411}'),
 (3, 'Charles', 'Vignal', 'cvignal@student.42.fr', 'sha1$d37d65ef$1$ab2786a5798aa369921cd0108b4a837496f62789', 'Female', '2002-06-12', 'Both', NULL, 10, 18, 25, '108ae206ab43fc59b202a0b59296f91fe60150b33c943deb8e6bfc8f2daf89b7ebdad5c7018ae69c', 0, NULL, '{\"latitude\":46.85,\"longitude\":2.3598923}'),
 (4, 'Guillaume', 'Lavignotte', 'glavigno@student.42.fr', 'sha1$95baced6$1$6b1728f9345b7f742f1c4892a3c199d9ffec5dfb', 'Male', '2003-06-12', 'Both', NULL, 10, 18, 25, '3e0fe7253d23faadfea04f774d9aeddf285abba27135dac29e26fa88f116efa7554f73adca4cf94e', 0, NULL, '{\"latitude\":48.85,\"longitude\":2.3598923}'),
 (5, 'Guillaume', 'Chainet', 'gchainet@student.42.fr', 'sha1$42df584d$1$55dc2d52654f7d76c9869cb66c12e0d708a61bbf', 'Male', '1998-06-12', 'Both', NULL, 10, 18, 25, 'd82a6d1f50ad2f6f7741d6cb1a622ba3a3725c5498d673d3925f7d7bd68ce1835ec588b35fe877c5', 0, NULL, NULL),
@@ -284,7 +293,7 @@ ALTER TABLE `message`
 -- AUTO_INCREMENT pour la table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `id_notif` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_notif` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `photo`
