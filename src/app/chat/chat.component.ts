@@ -41,6 +41,7 @@ export class ChatComponent implements OnInit {
   public APIParameterLoadConversation: LoadConversationParameter;
   public APIEnterViewHomeParameter: EnterViewHomeParameter;
   public matchId: number;
+  public currentMatchId: number;
   public messageForm: FormGroup;
   public socket;
   public messageList = [];
@@ -60,7 +61,6 @@ export class ChatComponent implements OnInit {
       .subscribe((result: LoadMatchesReturn) => {
         if (result.success) {
           this.initMatchPic(result.matches_list);
-          console.log(this.initMatchPic(result.matches_list));
         } else {
           console.log(result.message);
         }
@@ -124,19 +124,22 @@ export class ChatComponent implements OnInit {
   // LOAD MESSAGES
   // ----------------------------------------------------------------------------------------
   loadMessages(matchId) {
-    this.APIParameterLoadConversation = {
-      id: matchId
-    };
-    this.currentOpenedConversationMatchId = matchId;
-    this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
-      .subscribe((result: LoadConversationReturn) => {
-        if (result.success) {
-          this.fillMessagesArray(result.messageArray);
-          console.log(result.messageArray);
-        } else {
-          console.log(result.message);
-        }
-      });
+    if (matchId) {
+      this.currentMatchId = matchId;
+      this.APIParameterLoadConversation = {
+        id: matchId
+      };
+      this.currentOpenedConversationMatchId = matchId;
+      this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
+        .subscribe((result: LoadConversationReturn) => {
+          if (result.success) {
+            this.fillMessagesArray(result.messageArray);
+            console.log(result.messageArray);
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
   }
   fillMessagesArray(messageArray) {
     if (this.messageList) {
@@ -157,18 +160,20 @@ export class ChatComponent implements OnInit {
   // SEND AND SAVE MESSAGES
   // ----------------------------------------------------------------------------------------
   sendMessage() {
-    if (this.messageForm.valid) { // add that match exists
-      const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
-      const msg = this.messageForm.get('message').value;
-      if (msg && msg.length > 0) {
-        const obj = {};
-        const me = Object.create(obj);
-        me.id = this.id;
-        me.msg = msg;
-        me.ts = ts;
-        this.socket.emit('chat message', me);
-        this.messageForm.reset();
-        this.saveMessage(this.id, msg, ts);
+    if (this.currentMatchId > 0) {
+      if (this.messageForm.valid) { // add that match exists
+        const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const msg = this.messageForm.get('message').value;
+        if (msg && msg.length > 0) {
+          const obj = {};
+          const me = Object.create(obj);
+          me.id = this.id;
+          me.msg = msg;
+          me.ts = ts;
+          this.socket.emit('chat message', me);
+          this.messageForm.reset();
+          this.saveMessage(this.id, msg, ts);
+        }
       }
     }
   }
