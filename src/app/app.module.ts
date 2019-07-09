@@ -36,6 +36,9 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-user-to-swipe.service';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { GetNotificationsService } from './notifications/services/get-notifications/get-notifications.service';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
 
 @NgModule({
   declarations: [
@@ -64,6 +67,7 @@ import { GetNotificationsService } from './notifications/services/get-notificati
     BsDatepickerModule,
     BsDatepickerModule.forRoot(),
     CarouselModule.forRoot(),
+    SocketIoModule.forRoot(config),
   ],
   providers: [
     MessageService,

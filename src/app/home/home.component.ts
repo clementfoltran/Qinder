@@ -13,6 +13,7 @@ import { SwipeService } from './services/swipe/swipe.service';
 import { SwipeReturn } from './services/swipe/swipe-return';
 import * as io from 'socket.io-client';
 import {} from 'googlemaps';
+import { NotificationsService } from '../notifications/services/notifications.service';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
   constructor(public activatedRoute: ActivatedRoute,
               public getUserPhotosService: GetUserPhotosService,
               public getUserToSwipeService: GetUserToSwipeService,
+              public notificationsService: NotificationsService,
               public swipeService: SwipeService,
               public messageService: MessageService) {
 }
@@ -89,20 +91,9 @@ export class HomeComponent implements OnInit {
   public userCurrentPosition: any;
   /**
    * 
-   * Socket for notifications
-   */
-  public socket;
-  /**
-   * 
    * Notification list
    */
   public notificationList: Notification[];
-  
-  receive = (obj) => {
-    if (obj) {
-      this.notificationList.push(obj);
-    }
-  }
 
   getUserPosition() {
     if (navigator.geolocation) {
@@ -193,12 +184,8 @@ export class HomeComponent implements OnInit {
     };
     this.swipeService.swipe(APIParameter)
       .subscribe((result: SwipeReturn) => {
+        console.log(result);
         if (result.success) {
-          console.log(result.match);
-          if (result.match) {
-            console.log(result.match);
-            this.socket.emit('notification', 3);
-          }
           this.getUserToSwipe();
         }
       });
@@ -236,12 +223,6 @@ export class HomeComponent implements OnInit {
     });
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
-    this.getUserToSwipe();
-    try {
-      this.socket = io.connect('http://localhost:3001');
-      this.socket.on('chat message', this.receive);
-    } catch (e) {
-        console.log('Could not connect socket.io');
-    }
+    this.getUserToSwipe();    
   }
 }
