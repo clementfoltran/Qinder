@@ -70,8 +70,8 @@ export class LandingPageComponent implements OnInit {
       id_user,
       latitude: this.latitude,
       longitude: this.longitude
-    }
-    this.geolocationService.sendPosition(APIParameter).subscribe()
+    };
+    this.geolocationService.sendPosition(APIParameter).subscribe();
   }
 
   login() {

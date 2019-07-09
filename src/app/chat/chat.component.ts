@@ -60,6 +60,7 @@ export class ChatComponent implements OnInit {
       .subscribe((result: LoadMatchesReturn) => {
         if (result.success) {
           this.initMatchPic(result.matches_list);
+          console.log(this.initMatchPic(result.matches_list));
         } else {
           console.log(result.message);
         }
@@ -155,7 +156,7 @@ export class ChatComponent implements OnInit {
   // SEND AND SAVE MESSAGES
   // ----------------------------------------------------------------------------------------
   sendMessage() {
-    if (this.messageForm.valid) {
+    if (this.messageForm.valid) { // add that match exists
       const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
       const msg = this.messageForm.get('message').value;
       if (msg && msg.length > 0) {

@@ -7,10 +7,10 @@ var http = require('http').Server(app);
 var http2 = require('http').Server(app);
 var io = require('socket.io')(http2);
 
-http.listen(8000, function(){
+http.listen(8000, function() {
   console.log('listening on *:8000');
 });
-http2.listen(3000, function(){
+http2.listen(3000, function() {
   console.log('listening on *:3000');
 });
 
@@ -32,12 +32,12 @@ app.use((req, res, next) => {
 });
 
 // SOCKET.IO
-io.on('connection', function(socket){
+io.on('connection', function(socket) {
   // console.log('a user connected');
-  socket.on('disconnect', function(){
+  socket.on('disconnect', function() {
     // console.log('user disconnected');
   });
-  socket.on('chat message', function(obj){
+  socket.on('chat message', function(obj) {
     // console.log('message reçu = ', obj);
     io.emit('chat message', obj);
   });
