@@ -138,7 +138,6 @@ export class ChatComponent implements OnInit {
         }
       });
   }
-  
   fillMessagesArray(messageArray) {
     if (this.messageList) {
       this.messageList = [];
