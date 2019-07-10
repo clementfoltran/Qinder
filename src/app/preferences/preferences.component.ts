@@ -94,19 +94,16 @@ export class PreferencesComponent implements OnInit {
   public userId: number = null;
   public unselectedTags: Tag[] = [];
 
-  // addUserTag(idTag: number) {
-  //   this.addUserTagService.addUserTag({id_tag: idTag, id_user: 1})
-  //     .subscribe((result: AddUserTagReturn) => {
-  //       if (!result.success) {
-  //         this.messageService.add({
-  //           severity: 'error',
-  //           summary: 'Network',
-  //           detail: 'Check your connection',
-  //           life: 6000
-  //         });
-  //       }
-  //     });
-  // }
+  addUserTag(tag: UserTag) {
+    console.log(tag);
+    this.addUserTagService.addUserTag({id_tag: tag.id_tag, id_user: this.userId})
+      .subscribe((result: AddUserTagReturn) => {
+        if (result.success) {
+          // this.userTags.push(tag);
+          console.log(result);
+        }
+      });
+  }
 
   displayTags() {
     this.getTagsService.getTags()
@@ -246,7 +243,6 @@ export class PreferencesComponent implements OnInit {
       }
       this.unselectedTags.push(this.tags[i]);
     }
-    console.log(this.unselectedTags);
   }
 
   removeUserTag(idUtag: number, index: number) {

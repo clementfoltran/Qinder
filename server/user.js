@@ -25,6 +25,26 @@ exports.removeUserTag  = (req, res) => {
   }
 };
 
+exports.addUserTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO usertag VALUES(id_utag, ?, ?)';
+      const query = db.query(sql, [ req.body.id_tag, req.body.id_user ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Tag not found' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.getUserTags  = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);

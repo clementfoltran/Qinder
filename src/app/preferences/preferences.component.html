@@ -49,7 +49,7 @@
                   </div>
                 </div>
                 <div *ngFor="let item of unselectedTags; let i = index">
-                  <div class="card m-1" style="cursor: pointer;" (click)="removeUserTag(userTag.id_utag, i)">
+                  <div class="card m-1" style="cursor: pointer;" (click)="addUserTag(item)">
                     <h5 class="card-title">{{ item.tag }}</h5>
                     <p class="card-text">{{ item.label }}</p>
                   </div>

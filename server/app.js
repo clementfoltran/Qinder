@@ -69,7 +69,7 @@ app.post('/updateName', urlencodedParser, setting.updateName);
 app.post('/updateEmail', urlencodedParser, setting.updateEmail);
 app.post('/updatePassword', urlencodedParser, setting.updatePassword);
 
-app.post('/addUserTag', urlencodedParser, preference.addUserTag);
+app.post('/addUserTag', urlencodedParser, user.addUserTag);
 app.post('/updatePreferences', urlencodedParser, preference.updatePreferences);
 app.post('/uploadPhoto', urlencodedParser, preference.uploadPhoto);
 app.post('/deletePhoto', urlencodedParser, preference.deletePhoto);
