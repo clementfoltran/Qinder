@@ -1,4 +1,36 @@
 const db = require('./database.js');
+const index = require('./app.js');
+const app = index.app;
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+const notifications = {};
+
+io.on('connection', socket => {
+  let previousId;
+  const safeJoin = currentId => {
+      socket.leave(previousId);
+      socket.join(currentId, () => console.log(`Socket ${socket.id} joined room ${currentId}`));
+      previousId = currentId;
+  }
+
+  socket.on('addNotification', notif => {
+    notifications[notif.id_user] = notif;
+      safeJoin(notif.id_user);
+      io.emit('notifications', Object.keys(notifications));
+      socket.emit('document', notif);
+  });
+
+  socket.on('getNotifications', id => {
+    safeJoin(id);
+    socket.emit('notifications', notifications[id]);
+    console.log(notifications[id]);
+  });
+
+  io.emit('notifications', Object.keys(notifications));
+
+  console.log(`Socket ${socket.id} has connected`);
+});
 
 exports.getNotifications = (req, res) => {
   if (!req.body) {
@@ -38,3 +70,7 @@ exports.newNotification = (id_user,  id_user_, notif) => {
   });
   return (true);
 }
+
+http.listen(3001, () => {
+  console.log('listening on *:3001');
+});

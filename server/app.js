@@ -3,20 +3,15 @@ const bodyParser = require('body-parser');
 const port = 8000;
 
 // SOCKET.IO
-var http = require('http').Server(app);
-var http2 = require('http').Server(app);
-var http3 = require('http').Server(app);
-var io = require('socket.io')(http2);
-var socketNotif = require('socket.io')(http3);
+let http = require('http').Server(app);
+let http2 = require('http').Server(app);
+let io = require('socket.io')(http2);
 
 http.listen(8000, function() {
   console.log('listening on *:8000');
 });
 http2.listen(3000, function() {
   console.log('listening on *:3000');
-});
-http3.listen(3001, function(){
-  console.log('listening on *:3001');
 });
 
 const user = require('./user.js');
@@ -46,17 +41,6 @@ io.on('connection', (socket) => {
   socket.on('chat message', (obj) => {
     // console.log('message reçu = ', obj);
     io.emit('chat message', obj);
-  });
-});
-
-socketNotif.on('connection', (socket) => {
-  // console.log('a user connected');
-  socket.on('disconnect', () => {
-    // console.log('user disconnected');
-  });
-  socket.on('Notifications', (obj) => {
-    // console.log('message reçu = ', obj);
-    io.emit('Notifications', obj);
   });
 });
 
