@@ -35,12 +35,13 @@ app.use((req, res, next) => {
 // SOCKET.IO
 io.on('connection', (socket) => {
   // console.log('a user connected');
+  socket.join('chat1');
   socket.on('disconnect', () => {
     // console.log('user disconnected');
   });
   socket.on('chat message', (obj) => {
     // console.log('message reçu = ', obj);
-    io.emit('chat message', obj);
+    io.to('chat1').emit('chat message', obj); // TO ROOM
   });
 });
 

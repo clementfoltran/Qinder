@@ -170,7 +170,7 @@ export class ChatComponent implements OnInit {
           me.id = this.id;
           me.msg = msg;
           me.ts = ts;
-          this.socket.emit('chat message', me);
+          this.socket.to('chat1').emit('chat message', me); // TO ROOM
           this.messageForm.reset();
           this.saveMessage(this.id, msg, ts);
         }
@@ -205,7 +205,7 @@ export class ChatComponent implements OnInit {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
       this.socket = io.connect('http://localhost:3000');
-      this.socket.on('chat message', this.receive);
+      this.socket.to('chat1').on('chat message', this.receive); // TO ROOM
     } catch (e) {
         console.log('Could not connect socket.io');
     }
