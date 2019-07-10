@@ -165,6 +165,20 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  // JOIN CHAT ROOM
+  // ----------------------------------------------------------------------------------------
+  joinRoom(matchId) {
+    if (this.previousId > 0) {
+      this.socket.emit('leave room', this.previousId.toString());
+    }
+    try {
+      this.socket.emit('join room', matchId.toString());
+      this.previousId = matchId;
+    } catch (e) {
+        console.log('Could not connect socket.io');
+    }
+  }
+
   // SEND AND SAVE MESSAGES
   // ----------------------------------------------------------------------------------------
   sendMessage() {
@@ -201,18 +215,6 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
-  }
-
-  joinRoom(matchId) {
-    if (this.previousId > 0) {
-      this.socket.emit('leave room', this.previousId.toString());
-    }
-    try {
-      this.socket.emit('join room', matchId.toString());
-      this.previousId = matchId;
-    } catch (e) {
-        console.log('Could not connect socket.io');
-    }
   }
 
   receive = (obj) => {
