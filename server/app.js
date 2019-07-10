@@ -90,6 +90,8 @@ app.get('/chat/:id', urlencodedParser, chat.loadMatches);
 app.get('/loadConversation/:id', urlencodedParser, chat.loadConversation);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
+app.get('/getUserTags/:id', urlencodedParser, user.getUserTags);
+app.get('/removeUserTag/:id', urlencodedParser, user.removeUserTag);
 
 app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 

@@ -29,35 +29,34 @@
     <button type="submit" class="btn btn-primary m-2">Update</button>
   </div>
   <div class="form-group mb-4">
-    <a class="btn btn-light btn-block" data-toggle="collapse" href="#tags" role="button" aria-expanded="false"
-       aria-controls="tags" (click)="displayTags()">
-      Tags
-    </a>
-    <div class="row collapse" id="tags">
-      <div
-        cdkDropList
-        #todoList="cdkDropList"
-        [cdkDropListData]="tags"
-        [cdkDropListConnectedTo]="[doneList]"
-        class="col-md-6"
-        (cdkDropListDropped)="drop($event)">
-        <h3 class="m-2">Tags</h3>
-        <div class="card p-2" *ngFor="let item of tags" cdkDrag>
-          <h5>{{ item.tag }}</h5>
-          <p>{{ item.label }}</p>
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header" id="tagsHeading">
+          <h5 class="mb-0">
+            <button type="button" class="btn btn-link collapsed" data-toggle="collapse" data-target="#tagsCollapse" aria-expanded="false" aria-controls="tagsCollapse">
+              Choose your favorite tags
+            </button>
+          </h5>
         </div>
-      </div>
-      <div
-        cdkDropList
-        #doneList="cdkDropList"
-        [cdkDropListData]="userTags"
-        [cdkDropListConnectedTo]="[todoList]"
-        class="col-md-6"
-        (cdkDropListDropped)="drop($event)">
-        <h3 class="m-2"> Your tags</h3>
-        <div class="card p-2" *ngFor="let item of userTags" cdkDrag>
-          <h5>{{ item.tag }}</h5>
-          <p>{{ item.label }}</p>
+        <div id="tagsCollapse" class="collapse" aria-labelledby="tagsHeading" data-parent="#accordion">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <div *ngFor="let userTag of userTags; let i = index">
+                  <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(userTag.id_utag, i)">
+                    <h5 class="card-title">{{ userTag.tag }}</h5>
+                    <p class="card-text">{{ userTag.label }}</p>
+                  </div>
+                </div>
+                <div *ngFor="let item of unselectedTags; let i = index">
+                  <div class="card m-1" style="cursor: pointer;" (click)="removeUserTag(userTag.id_utag, i)">
+                    <h5 class="card-title">{{ item.tag }}</h5>
+                    <p class="card-text">{{ item.label }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

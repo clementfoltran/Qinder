@@ -15,12 +15,16 @@ import {UploadPhotoService} from '../home/services/upload-photo/upload-photo.ser
 import {DeletePhotoService} from '../home/services/delete-photo/delete-photo.service';
 import {UpdatePreferencesService} from '../home/services/update-preferences/update-preferences.service';
 import {LoginService} from '../landing-page/services/login/login.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {GetTagsService} from './services/get-tags/get-tags.service';
 import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
 import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
 import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
 import {ActivatedRoute, NavigationExtras} from '@angular/router';
+import { GetUserTagsService } from './services/get-user-tags/get-user-tags.service';
+import { GetUserTagsReturn, UserTag } from './services/get-user-tags/get-user-tags.return';
+import { RemoveUserTagService } from './services/remove-user-tag/remove-user-tag.service';
+import { RemoveUserTagReturn } from './services/remove-user-tag/remove-user-tag.return';
+import { nextTick } from 'q';
 
 @Component({
   selector: 'app-preferences',
@@ -82,37 +86,27 @@ export class PreferencesComponent implements OnInit {
    * User selected tags
    *
    */
-  public userTags: Tag[] = [];
+  public userTags: UserTag[] = [];
   /**
    * User id
    *
    */
   public userId: number = null;
+  public unselectedTags: Tag[] = [];
 
-  drop(event: CdkDragDrop<Tag[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
-    }
-  }
-
-  addUserTag(idTag: number) {
-    this.addUserTagService.addUserTag({id_tag: idTag, id_user: 1})
-      .subscribe((result: AddUserTagReturn) => {
-        if (!result.success) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
-          });
-        }
-      });
-  }
+  // addUserTag(idTag: number) {
+  //   this.addUserTagService.addUserTag({id_tag: idTag, id_user: 1})
+  //     .subscribe((result: AddUserTagReturn) => {
+  //       if (!result.success) {
+  //         this.messageService.add({
+  //           severity: 'error',
+  //           summary: 'Network',
+  //           detail: 'Check your connection',
+  //           life: 6000
+  //         });
+  //       }
+  //     });
+  // }
 
   displayTags() {
     this.getTagsService.getTags()
@@ -230,12 +224,49 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
+  getUserTags() {
+    this.getUserTagsService.getUserTags(this.userId)
+      .subscribe((result: GetUserTagsReturn) => {
+        if (result.success) {
+          this.userTags = result.userTags;
+          this.updateUnselectedTags();
+        }
+      });
+  }
+
+  updateUnselectedTags() {
+    let j = 0;
+    for (let i = 0; i < this.tags.length; i++) {
+      j = 0 ;
+      while(j < this.userTags.length) {
+        if (this.tags[i].id_tag === this.userTags[j].id_tag) {
+          i++;                
+        } 
+        j++;
+      }
+      this.unselectedTags.push(this.tags[i]);
+    }
+    console.log(this.unselectedTags);
+  }
+
+  removeUserTag(idUtag: number, index: number) {
+    this.removeUserTagService.removeUserTag(idUtag)
+      .subscribe((result: RemoveUserTagReturn) => {
+        if (result.success) {
+          this.userTags.splice(index, 1);
+          this.updateUnselectedTags();
+        }
+      });
+  }
+
   constructor(public messageService: MessageService,
               public activatedRoute: ActivatedRoute,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
               public addUserTagService: AddUserTagService,
               public getTagsService: GetTagsService,
+              public removeUserTagService: RemoveUserTagService,
+              public getUserTagsService: GetUserTagsService,
               public updatePreferencesService: UpdatePreferencesService,
               public fb: FormBuilder,
               public loginService: LoginService) {
@@ -265,5 +296,6 @@ export class PreferencesComponent implements OnInit {
       this.resolveData = data.viewData;
     });
     this.initVariables();
+    this.getUserTags();
   }
 }
