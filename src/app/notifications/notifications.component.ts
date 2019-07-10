@@ -51,7 +51,7 @@ export class NotificationsComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.userId = this.resolveData.id;
+    // this.userId = this.resolveData.id;
     // try {
     //   this.socket = io.connect('http://localhost:3001');
     //   this.socket.on('chat message', this.receive);

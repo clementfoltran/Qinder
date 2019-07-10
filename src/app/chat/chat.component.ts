@@ -15,6 +15,9 @@ import { LoadConversationReturn } from './services/load-conversation/load-conver
 import { EnterViewHomeService } from '../home/services/enter-view-home/enter-view-home.service';
 import { EnterViewHomeParameter } from '../home/services/enter-view-home/enter-view-home-parameter';
 import { EnterViewHomeReturn } from '../home/services/enter-view-home/enter-view-home-return';
+import { JoinRoomService } from './services/join-room/join-room.service';
+import { JoinRoomParameter } from './services/join-room/join-room-parameter';
+import { JoinRoomReturn } from './services/join-room/join-room-return';
 
 @Component({
   selector: 'app-chat',
@@ -28,6 +31,7 @@ export class ChatComponent implements OnInit {
               public saveMessageService: SaveMessageService,
               public getMessagesArrayService: LoadConversationService,
               public getUserMatchedInfos: EnterViewHomeService,
+              public joinRoomService: JoinRoomService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -40,6 +44,7 @@ export class ChatComponent implements OnInit {
   public APIParameterSaveMessage: SaveMessageParameter;
   public APIParameterLoadConversation: LoadConversationParameter;
   public APIEnterViewHomeParameter: EnterViewHomeParameter;
+  public APIJoinRoomParameter: JoinRoomParameter;
   public matchId: number;
   public currentMatchId: number;
   public messageForm: FormGroup;
@@ -125,6 +130,8 @@ export class ChatComponent implements OnInit {
   // ----------------------------------------------------------------------------------------
   loadMessages(matchId) {
     if (matchId) {
+      console.log('matchId = ', matchId);
+      this.joinRoom(matchId);
       this.currentMatchId = matchId;
       this.APIParameterLoadConversation = {
         id: matchId
@@ -170,7 +177,7 @@ export class ChatComponent implements OnInit {
           me.id = this.id;
           me.msg = msg;
           me.ts = ts;
-          this.socket.to('chat1').emit('chat message', me); // TO ROOM
+          this.socket.emit('send message', me);
           this.messageForm.reset();
           this.saveMessage(this.id, msg, ts);
         }
@@ -195,6 +202,15 @@ export class ChatComponent implements OnInit {
       });
   }
 
+  joinRoom(matchId) {
+    try {
+      this.socket = io.connect('http://localhost:3000');
+      this.socket.emit('join room', matchId.toString());
+    } catch (e) {
+        console.log('Could not connect socket.io');
+    }
+  }
+
   receive = (obj) => {
     if (obj) {
       this.messageList.push(obj);
@@ -204,8 +220,7 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
-      this.socket = io.connect('http://localhost:3000');
-      this.socket.to('chat1').on('chat message', this.receive); // TO ROOM
+      this.socket.on('receive message', this.receive);
     } catch (e) {
         console.log('Could not connect socket.io');
     }
