@@ -55,6 +55,7 @@ export class ChatComponent implements OnInit {
   public userMatchedPicture: string;
   public userMatchedName: string;
   public aConversationWasOpened = 0;
+  public previousId = 0;
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -203,9 +204,12 @@ export class ChatComponent implements OnInit {
   }
 
   joinRoom(matchId) {
+    if (this.previousId > 0) {
+      this.socket.emit('leave room', this.previousId.toString());
+    }
     try {
-      this.socket = io.connect('http://localhost:3000');
       this.socket.emit('join room', matchId.toString());
+      this.previousId = matchId;
     } catch (e) {
         console.log('Could not connect socket.io');
     }
@@ -220,6 +224,7 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
+      this.socket = io.connect('http://localhost:3000');
       this.socket.on('receive message', this.receive);
     } catch (e) {
         console.log('Could not connect socket.io');
