@@ -1,4 +1,27 @@
 const db = require('./database.js');
+const app = require('express')();
+let http2 = require('http').Server(app);
+let io = require('socket.io')(http2);
+
+http2.listen(3000, function() {
+  console.log('listening on *:3000');
+});
+
+io.sockets.on('connection', function(socket) {
+  var roomId;
+  socket.on('leave room', function(room) {
+    socket.leave(room);
+  });
+  socket.on('join room', function(room) {
+    socket.join(room);
+    console.log('a user connected to room', room);
+    roomId = room;
+  });
+  socket.on('send message', (obj) => {
+    console.log(roomId);
+    io.to(roomId).emit('receive message', obj);
+  });
+});
 
 exports.loadMatches = (req, res) => {
   if (!req.body) {

@@ -18,9 +18,8 @@
     </div>
   </div>
 
-  <!-- add "Select a conversation :)" message -->
   <div class="contentArea">
-
+    
     <div *ngIf="aConversationWasOpened === 1">
       <div *ngIf="messageList.length > 0; else elseBlock2">
         <div class="fullMessage" *ngFor="let message of messageList">

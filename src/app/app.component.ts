@@ -14,13 +14,13 @@ export class AppComponent {
   notifications: Observable<Notification[]>;
   currentNot: Notification;
   private _notSub: Subscription;
-  
+
   constructor(public messageService: MessageService,
               public notificationsService: NotificationsService) { }
 
   ngOnInit() {
     this.notificationsService.newNotification(1, 2, 3);
-    
+
     this.notificationsService.getNotifications(parseInt(localStorage.getItem('userId')));
   }
 }

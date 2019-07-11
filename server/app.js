@@ -4,14 +4,9 @@ const port = 8000;
 
 // SOCKET.IO
 let http = require('http').Server(app);
-let http2 = require('http').Server(app);
-let io = require('socket.io')(http2);
 
-http.listen(8000, function(){
+http.listen(8000, function() {
   console.log('listening on *:8000');
-});
-http2.listen(3000, function(){
-  console.log('listening on *:3000');
 });
 
 const user = require('./user.js');
@@ -30,18 +25,6 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
-});
-
-// SOCKET.IO
-io.on('connection', (socket) => {
-  // console.log('a user connected');
-  socket.on('disconnect', () => {
-    // console.log('user disconnected');
-  });
-  socket.on('chat message', (obj) => {
-    // console.log('message reçu = ', obj);
-    io.emit('chat message', obj);
-  });
 });
 
 // Check the request

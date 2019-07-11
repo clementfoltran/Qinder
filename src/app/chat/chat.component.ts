@@ -15,6 +15,9 @@ import { LoadConversationReturn } from './services/load-conversation/load-conver
 import { EnterViewHomeService } from '../home/services/enter-view-home/enter-view-home.service';
 import { EnterViewHomeParameter } from '../home/services/enter-view-home/enter-view-home-parameter';
 import { EnterViewHomeReturn } from '../home/services/enter-view-home/enter-view-home-return';
+import { JoinRoomService } from './services/join-room/join-room.service';
+import { JoinRoomParameter } from './services/join-room/join-room-parameter';
+import { JoinRoomReturn } from './services/join-room/join-room-return';
 
 @Component({
   selector: 'app-chat',
@@ -28,6 +31,7 @@ export class ChatComponent implements OnInit {
               public saveMessageService: SaveMessageService,
               public getMessagesArrayService: LoadConversationService,
               public getUserMatchedInfos: EnterViewHomeService,
+              public joinRoomService: JoinRoomService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -40,7 +44,9 @@ export class ChatComponent implements OnInit {
   public APIParameterSaveMessage: SaveMessageParameter;
   public APIParameterLoadConversation: LoadConversationParameter;
   public APIEnterViewHomeParameter: EnterViewHomeParameter;
+  public APIJoinRoomParameter: JoinRoomParameter;
   public matchId: number;
+  public currentMatchId: number;
   public messageForm: FormGroup;
   public socket;
   public messageList = [];
@@ -49,6 +55,7 @@ export class ChatComponent implements OnInit {
   public userMatchedPicture: string;
   public userMatchedName: string;
   public aConversationWasOpened = 0;
+  public previousId = 0;
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -123,21 +130,25 @@ export class ChatComponent implements OnInit {
   // LOAD MESSAGES
   // ----------------------------------------------------------------------------------------
   loadMessages(matchId) {
-    this.APIParameterLoadConversation = {
-      id: matchId
-    };
-    this.currentOpenedConversationMatchId = matchId;
-    this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
-      .subscribe((result: LoadConversationReturn) => {
-        if (result.success) {
-          this.fillMessagesArray(result.messageArray);
-          console.log(result.messageArray);
-        } else {
-          console.log(result.message);
-        }
-      });
+    if (matchId) {
+      console.log('matchId = ', matchId);
+      this.joinRoom(matchId);
+      this.currentMatchId = matchId;
+      this.APIParameterLoadConversation = {
+        id: matchId
+      };
+      this.currentOpenedConversationMatchId = matchId;
+      this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
+        .subscribe((result: LoadConversationReturn) => {
+          if (result.success) {
+            this.fillMessagesArray(result.messageArray);
+            console.log(result.messageArray);
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
   }
-  
   fillMessagesArray(messageArray) {
     if (this.messageList) {
       this.messageList = [];
@@ -154,21 +165,37 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  // JOIN CHAT ROOM
+  // ----------------------------------------------------------------------------------------
+  joinRoom(matchId) {
+    if (this.previousId > 0) {
+      this.socket.emit('leave room', this.previousId.toString());
+    }
+    try {
+      this.socket.emit('join room', matchId.toString());
+      this.previousId = matchId;
+    } catch (e) {
+        console.log('Could not connect socket.io');
+    }
+  }
+
   // SEND AND SAVE MESSAGES
   // ----------------------------------------------------------------------------------------
   sendMessage() {
-    if (this.messageForm.valid) {
-      const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
-      const msg = this.messageForm.get('message').value;
-      if (msg && msg.length > 0) {
-        const obj = {};
-        const me = Object.create(obj);
-        me.id = this.id;
-        me.msg = msg;
-        me.ts = ts;
-        this.socket.emit('chat message', me);
-        this.messageForm.reset();
-        this.saveMessage(this.id, msg, ts);
+    if (this.currentMatchId > 0) {
+      if (this.messageForm.valid) { // add that match exists
+        const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const msg = this.messageForm.get('message').value;
+        if (msg && msg.length > 0) {
+          const obj = {};
+          const me = Object.create(obj);
+          me.id = this.id;
+          me.msg = msg;
+          me.ts = ts;
+          this.socket.emit('send message', me);
+          this.messageForm.reset();
+          this.saveMessage(this.id, msg, ts);
+        }
       }
     }
   }
@@ -200,7 +227,7 @@ export class ChatComponent implements OnInit {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
       this.socket = io.connect('http://localhost:3000');
-      this.socket.on('chat message', this.receive);
+      this.socket.on('receive message', this.receive);
     } catch (e) {
         console.log('Could not connect socket.io');
     }
