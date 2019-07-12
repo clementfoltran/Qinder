@@ -228,6 +228,10 @@ export class ChatComponent implements OnInit {
     if (obj) {
       this.messageList.push(obj);
     }
+    setTimeout(function() {
+      const div = document.getElementById('contentArea');
+      div.scrollTop = div.scrollHeight - div.clientHeight;
+     }, 25);
   }
 
   // SCROLL THAT VIEW
