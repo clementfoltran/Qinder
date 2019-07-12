@@ -12,14 +12,26 @@
       <!-- selected conversation pic & match name -->
       <div *ngIf="!userMatchedName; else elseBlock"><label>Click on a match to open a conversation :)</label></div>
       <ng-template #elseBlock>
-          <img class="conversationPicture" src="data:image/png;base64,{{ userMatchedPicture }}" alt="">
+          <a (click)="loadMatchProfile()" style="cursor: pointer;"><img class="conversationPicture" src="data:image/png;base64,{{ userMatchedPicture }}" alt=""></a>
           <label class="user"><strong>{{userMatchedName}}</strong></label>
       </ng-template>
     </div>
   </div>
-
+<!-- if select is profile, display profile, if not display contentArea -->
+<div *ngIf="profileWasOpened === 1; else elseBlock3">
+    <div class="profileArea" id="profileArea">
+        <label>AGE :</label>
+        <label>{{ userInfos[0].birthdate }} ans</label>
+        <br>
+        <label>DISTANCE :</label>
+        <label>{{ userInfos[0].distance }} km</label>
+        <br>
+        <label>BIO :</label>
+        <label>{{ userInfos[0].bio }}</label>
+    </div>
+</div>
+<ng-template #elseBlock3>
   <div class="contentArea" id="contentArea">
-    
     <div *ngIf="aConversationWasOpened === 1">
       <div *ngIf="messageList.length > 0; else elseBlock2">
         <div class="fullMessage" *ngFor="let message of messageList">
@@ -33,14 +45,13 @@
         <label>Don't be shy, make the first step!</label>
       </ng-template>
     </div>
-
   </div>
-
   <div class="bottom">
     <form action="" [formGroup]="messageForm" (ngSubmit)="sendMessage()">
       <input id="message" formControlName="message" #message class="form-control" class="messageInput" autocomplete="off"/>
       <button type="submit" class="btn btn-primary btn-lg btn-block">SEND</button>
     </form>
   </div>
+</ng-template>
 
 </div>

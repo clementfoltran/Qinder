@@ -18,6 +18,9 @@ import { EnterViewHomeReturn } from '../home/services/enter-view-home/enter-view
 import { JoinRoomService } from './services/join-room/join-room.service';
 import { JoinRoomParameter } from './services/join-room/join-room-parameter';
 import { JoinRoomReturn } from './services/join-room/join-room-return';
+import { EnterViewSettingsService } from '../settings/services/enter-view-settings.service';
+import { EnterViewSettingsParameter } from '../settings/services/enter-view-settings-parameter';
+import { EnterViewSettingsReturn } from '../settings/services/enter-view-settings-return';
 
 @Component({
   selector: 'app-chat',
@@ -32,6 +35,7 @@ export class ChatComponent implements OnInit {
               public getMessagesArrayService: LoadConversationService,
               public getUserMatchedInfos: EnterViewHomeService,
               public joinRoomService: JoinRoomService,
+              public getUserInfosService: EnterViewSettingsService,
               public fb: FormBuilder) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -45,8 +49,10 @@ export class ChatComponent implements OnInit {
   public APIParameterLoadConversation: LoadConversationParameter;
   public APIEnterViewHomeParameter: EnterViewHomeParameter;
   public APIJoinRoomParameter: JoinRoomParameter;
+  public APIGetUserInfosParameter: EnterViewSettingsParameter;
   public matchId: number;
   public currentMatchId: number;
+  public userMatchedId: number;
   public messageForm: FormGroup;
   public socket;
   public messageList = [];
@@ -55,7 +61,9 @@ export class ChatComponent implements OnInit {
   public userMatchedPicture: string;
   public userMatchedName: string;
   public aConversationWasOpened = 0;
+  public profileWasOpened = 0;
   public previousId = 0;
+  public userInfos = [];
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -101,7 +109,7 @@ export class ChatComponent implements OnInit {
   // ----------------------------------------------------------------------------------------
   loadMatchInfos(userMatchedId) {
     this.aConversationWasOpened = 1;
-
+    this.userMatchedId = userMatchedId;
     this.getUserPhotosService.getUserPhotos(userMatchedId)
       .subscribe((result: GetUserPhotosReturn) => {
         if (result.success) {
@@ -126,6 +134,32 @@ export class ChatComponent implements OnInit {
         }
       });
   }
+
+  loadMatchProfile() {
+    this.profileWasOpened = 1;
+    this.getUserInfosService.enterView(this.userMatchedId)
+      .subscribe((result: EnterViewSettingsReturn) => {
+        if (result.success) {
+          this.userInfos = result.user;
+          this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
+          console.log(this.userInfos[0].birthdate);
+        } else {
+            console.log(result.message);
+        }
+      });
+      // add pictures
+  }
+
+  getAge(dateString) {
+    const today = new Date();
+    const birthDate = new Date(dateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
 
   // LOAD MESSAGES
   // ----------------------------------------------------------------------------------------
@@ -233,16 +267,7 @@ export class ChatComponent implements OnInit {
       div.scrollTop = div.scrollHeight - div.clientHeight;
      }, 25);
   }
-
-  // SCROLL THAT VIEW
-  // ----------------------------------------------------------------------------------------
-  scrollToBottom() {
-    const div = document.getElementById('contentArea');
-    div.scrollTop = div.scrollHeight - div.clientHeight;
-    console.log('height : ', div.scrollHeight);
-  }
-
-  ngOnInit() {
+ ngOnInit() {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
       this.socket = io.connect('http://localhost:3000');

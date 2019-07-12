@@ -15,7 +15,7 @@ export class EnterViewSettingsService {
 
   constructor(private http: HttpClient) { }
 
-  enterView(id): Observable<EnterViewSettingsReturn> {
+  enterView(id: number): Observable<EnterViewSettingsReturn> {
 
     const option = {
       headers: new HttpHeaders({

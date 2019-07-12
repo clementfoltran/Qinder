@@ -8,7 +8,7 @@ exports.enterViewSetting = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT id_user, firstname, lastname, email, confirm FROM user WHERE id_user = ?';
+      const sql = 'SELECT * FROM user WHERE id_user = ?';
       const query = db.format(sql, [req.params.id]);
       db.query(query, (err, response) => {
         if (err) {
@@ -20,11 +20,7 @@ exports.enterViewSetting = (req, res) => {
           res.json({
             success: true,
             message: 'Successfully fetched user data',
-            idUser: response[0].id_user,
-            firstname: response[0].firstname,
-            lastname: response[0].lastname,
-            email: response[0].email,
-            confirm: response[0].confirm
+            user: response
           });
         }
       });
