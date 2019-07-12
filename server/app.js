@@ -80,6 +80,8 @@ app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
 app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
 
+app.get('/randomUser', urlencodedParser, user.randomUser);
+
 // app.listen(port, () => {
 //   console.log(`Server is running on port ${port}`);
 // });
