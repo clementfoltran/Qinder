@@ -136,7 +136,12 @@ export class ChatComponent implements OnInit {
   }
 
   loadMatchProfile() {
-    this.profileWasOpened = 1;
+    if (this.profileWasOpened === 0) {
+      this.profileWasOpened = 1;
+    } else {
+      this.profileWasOpened = 0;
+      this.scrollMessages();
+    }
     this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
         if (result.success) {
@@ -179,10 +184,7 @@ export class ChatComponent implements OnInit {
             console.log(result.message);
           }
         });
-      setTimeout(function() {
-        const div = document.getElementById('contentArea');
-        div.scrollTop = div.scrollHeight - div.clientHeight;
-       }, 25);
+      this.scrollMessages();
     }
   }
   fillMessagesArray(messageArray) {
@@ -252,21 +254,23 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
-    setTimeout(function() {
-        const div = document.getElementById('contentArea');
-        div.scrollTop = div.scrollHeight - div.clientHeight;
-       }, 25);
+    this.scrollMessages();
   }
 
   receive = (obj) => {
     if (obj) {
       this.messageList.push(obj);
     }
+    this.scrollMessages();
+  }
+
+  scrollMessages() {
     setTimeout(function() {
       const div = document.getElementById('contentArea');
       div.scrollTop = div.scrollHeight - div.clientHeight;
      }, 25);
   }
+
  ngOnInit() {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
