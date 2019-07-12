@@ -11,8 +11,7 @@ exports.removeUserTag  = (req, res) => {
     if (res) {
       const sql = 'DELETE FROM userTag WHERE id_utag = ?';
       let query = db.format(sql, [ req.params.id ]);
-      db.query(query, (err, response) => {
-        console.log(response);
+      db.query(query, (err) => {
         if (err) {
           res.json({ success: false, message: 'Network error' });
         } else {
@@ -31,12 +30,12 @@ exports.addUserTag = (req, res) => {
   } else {
     if (res) {
       const sql = 'INSERT INTO usertag VALUES(id_utag, ?, ?)';
-      const query = db.query(sql, [ req.body.id_tag, req.body.id_user ]);
-      db.query(query, (err) => {
+      const query = db.format(sql, [ req.body.id_tag, req.body.id_user ]);
+      db.query(query, (err, response) => {
         if (err) {
           res.json({ success: false, message: 'Tag not found' });
         } else {
-          res.json({ success: true, message: '' });
+          res.json({ success: true, message: '', id_utag: response.insertId });
         }
       });
     } else {
@@ -53,7 +52,6 @@ exports.getUserTags  = (req, res) => {
       const sql = 'SELECT usertag.*, tag.label, tag.tag FROM usertag INNER JOIN tag ON usertag.id_tag = tag.id_tag WHERE id_user = ?';
       let query = db.format(sql, [ req.params.id ]);
       db.query(query, (err, response) => {
-        console.log(response);
         if (err) {
           res.json({ success: false, message: 'Network error' });
         } else {

@@ -42,17 +42,19 @@
           <div class="card-body">
             <div class="row">
               <div class="col-sm-12">
-                <div *ngFor="let userTag of userTags; let i = index">
-                  <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(userTag.id_utag, i)">
-                    <h5 class="card-title">{{ userTag.tag }}</h5>
-                    <p class="card-text">{{ userTag.label }}</p>
+                <div *ngFor="let tag of tags; let i = index">
+                  <div *ngIf="isSelectedTag(tag.id_tag); else notSelected">
+                    <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(tag.id_tag, i)">
+                      <h5 class="card-title">{{ tag.tag }}</h5>
+                      <p class="card-text">{{ tag.label }}</p>
+                    </div>
                   </div>
-                </div>
-                <div *ngFor="let item of unselectedTags; let i = index">
-                  <div class="card m-1" style="cursor: pointer;" (click)="addUserTag(item)">
-                    <h5 class="card-title">{{ item.tag }}</h5>
-                    <p class="card-text">{{ item.label }}</p>
-                  </div>
+                  <ng-template #notSelected>
+                    <div class="card m-1" div="selected-tag" style="cursor: pointer;" (click)="addUserTag(tag)">
+                      <h5 class="card-title">{{ tag.tag }}</h5>
+                      <p class="card-text">{{ tag.label }}</p>
+                    </div>
+                  </ng-template>
                 </div>
               </div>
             </div>

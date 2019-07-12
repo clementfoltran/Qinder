@@ -38,6 +38,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { GetNotificationsService } from './notifications/services/get-notifications/get-notifications.service';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
+
 const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
 
 @NgModule({

@@ -92,15 +92,29 @@ export class PreferencesComponent implements OnInit {
    *
    */
   public userId: number = null;
-  public unselectedTags: Tag[] = [];
 
-  addUserTag(tag: UserTag) {
+  isSelectedTag(idTag: number) {
+    let find = false;
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        find = true;
+      }
+    }
+    return (find) ? true : false;
+  }
+
+  addUserTag(tag: Tag) {
     console.log(tag);
     this.addUserTagService.addUserTag({id_tag: tag.id_tag, id_user: this.userId})
       .subscribe((result: AddUserTagReturn) => {
         if (result.success) {
-          // this.userTags.push(tag);
-          console.log(result);
+          this.userTags.push({
+            id_utag: result.id_utag,
+            id_tag: tag.id_tag,
+            id_user: this.userId,
+            label: tag.label,
+            tag: tag.tag
+          });
         }
       });
   }
@@ -226,31 +240,24 @@ export class PreferencesComponent implements OnInit {
       .subscribe((result: GetUserTagsReturn) => {
         if (result.success) {
           this.userTags = result.userTags;
-          this.updateUnselectedTags();
         }
       });
   }
 
-  updateUnselectedTags() {
-    let j = 0;
-    for (let i = 0; i < this.tags.length; i++) {
-      j = 0 ;
-      while(j < this.userTags.length) {
-        if (this.tags[i].id_tag === this.userTags[j].id_tag) {
-          i++;                
-        } 
-        j++;
+  getUserTagId(idTag: number): number {
+    for (let i = 0; i < this.userTags.length; i++) {
+      console.log(this.userTags[i].id_utag);
+      if (this.userTags[i].id_tag === idTag) {
+        return (this.userTags[i].id_utag)
       }
-      this.unselectedTags.push(this.tags[i]);
     }
   }
 
-  removeUserTag(idUtag: number, index: number) {
-    this.removeUserTagService.removeUserTag(idUtag)
+  removeUserTag(idTag: number, index: number) {
+    this.removeUserTagService.removeUserTag(this.getUserTagId(idTag))
       .subscribe((result: RemoveUserTagReturn) => {
         if (result.success) {
           this.userTags.splice(index, 1);
-          this.updateUnselectedTags();
         }
       });
   }

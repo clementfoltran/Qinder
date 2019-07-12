@@ -5,7 +5,7 @@ export interface GetUserTagsReturn {
 }
 
 export interface UserTag {
-    id_usertag: number;
+    id_utag: number;
     id_tag: number;
     id_user: number;
     label: string;
