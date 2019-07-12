@@ -131,7 +131,6 @@ export class ChatComponent implements OnInit {
   // ----------------------------------------------------------------------------------------
   loadMessages(matchId) {
     if (matchId) {
-      console.log('matchId = ', matchId);
       this.joinRoom(matchId);
       this.currentMatchId = matchId;
       this.APIParameterLoadConversation = {
@@ -142,11 +141,14 @@ export class ChatComponent implements OnInit {
         .subscribe((result: LoadConversationReturn) => {
           if (result.success) {
             this.fillMessagesArray(result.messageArray);
-            console.log(result.messageArray);
           } else {
             console.log(result.message);
           }
         });
+      setTimeout(function() {
+        const div = document.getElementById('contentArea');
+        div.scrollTop = div.scrollHeight - div.clientHeight;
+       }, 25);
     }
   }
   fillMessagesArray(messageArray) {
@@ -195,6 +197,7 @@ export class ChatComponent implements OnInit {
           this.socket.emit('send message', me);
           this.messageForm.reset();
           this.saveMessage(this.id, msg, ts);
+
         }
       }
     }
@@ -215,12 +218,24 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
+    setTimeout(function() {
+        const div = document.getElementById('contentArea');
+        div.scrollTop = div.scrollHeight - div.clientHeight;
+       }, 25);
   }
 
   receive = (obj) => {
     if (obj) {
       this.messageList.push(obj);
     }
+  }
+
+  // SCROLL THAT VIEW
+  // ----------------------------------------------------------------------------------------
+  scrollToBottom() {
+    const div = document.getElementById('contentArea');
+    div.scrollTop = div.scrollHeight - div.clientHeight;
+    console.log('height : ', div.scrollHeight);
   }
 
   ngOnInit() {

@@ -83,11 +83,9 @@ body .ui-slider .ui-slider-range {
 
 //----------------------------------------------------------------------------------
 .container, .container3 {
-  // border: 1px solid lime;
   overflow: hidden;
   position: relative;
-  /* the container's height will determine the height of its slider  */
-  height: 790px; 
+  height: 710px; 
   width: 530px;
   margin-top: 460px;
 }
@@ -138,5 +136,4 @@ body .ui-slider .ui-slider-range {
           box-sizing:border-box;
 
   // background: rgba(255, 192, 203, 0.562);
-  // border:1px solid hotpink;
 }

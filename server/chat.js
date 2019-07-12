@@ -18,7 +18,6 @@ io.sockets.on('connection', function(socket) {
     roomId = room;
   });
   socket.on('send message', (obj) => {
-    console.log(roomId);
     io.to(roomId).emit('receive message', obj);
   });
 });
