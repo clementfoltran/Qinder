@@ -109,6 +109,8 @@ export class ChatComponent implements OnInit {
   // ----------------------------------------------------------------------------------------
   loadMatchInfos(userMatchedId) {
     this.aConversationWasOpened = 1;
+    this.profileWasOpened = 0;
+    this.scrollMessages();
     this.userMatchedId = userMatchedId;
     this.getUserPhotosService.getUserPhotos(userMatchedId)
       .subscribe((result: GetUserPhotosReturn) => {
