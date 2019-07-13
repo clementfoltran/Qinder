@@ -7,7 +7,7 @@
           <carousel>
             <div *ngFor="let photo of userToSwipePhotos">
               <slide>
-                <img src="data:image/png;base64,{{ photo.photo }}" style="display: block; width: 100%;">
+                <img src="{{ photo.photo }}" style="display: block; width: 100%;">
               </slide>
             </div>
           </carousel>

@@ -8,9 +8,7 @@ import {DeletePhotoParameter} from '../home/services/delete-photo/delete-photo-p
 import {UpdatePreferencesReturn} from '../home/services/update-preferences/update-preferences-return';
 import {UploadPhotoReturn} from '../home/services/upload-photo/upload-photo-return';
 import {DeletePhotoReturn} from '../home/services/delete-photo/delete-photo-return';
-import {EnterViewHomeService} from '../home/services/enter-view-home/enter-view-home.service';
 import {MessageService} from 'primeng/api';
-import {GetUserPhotosService} from '../home/services/get-user-photos/get-user-photos.service';
 import {UploadPhotoService} from '../home/services/upload-photo/upload-photo.service';
 import {DeletePhotoService} from '../home/services/delete-photo/delete-photo.service';
 import {UpdatePreferencesService} from '../home/services/update-preferences/update-preferences.service';
@@ -104,7 +102,6 @@ export class PreferencesComponent implements OnInit {
   }
 
   addUserTag(tag: Tag) {
-    console.log(tag);
     this.addUserTagService.addUserTag({id_tag: tag.id_tag, id_user: this.userId})
       .subscribe((result: AddUserTagReturn) => {
         if (result.success) {
@@ -115,6 +112,15 @@ export class PreferencesComponent implements OnInit {
             label: tag.label,
             tag: tag.tag
           });
+        }
+      });
+  }
+
+  removeUserTag(idTag: number) {
+    this.removeUserTagService.removeUserTag(this.getUserTagId(idTag))
+      .subscribe((result: RemoveUserTagReturn) => {
+        if (result.success) {
+          this.userTags.splice(this.getUserTagIndex(idTag), 1);
         }
       });
   }
@@ -246,20 +252,18 @@ export class PreferencesComponent implements OnInit {
 
   getUserTagId(idTag: number): number {
     for (let i = 0; i < this.userTags.length; i++) {
-      console.log(this.userTags[i].id_utag);
       if (this.userTags[i].id_tag === idTag) {
         return (this.userTags[i].id_utag)
       }
     }
   }
 
-  removeUserTag(idTag: number, index: number) {
-    this.removeUserTagService.removeUserTag(this.getUserTagId(idTag))
-      .subscribe((result: RemoveUserTagReturn) => {
-        if (result.success) {
-          this.userTags.splice(index, 1);
-        }
-      });
+  getUserTagIndex(idTag: number): number {
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        return (i);
+      }
+    }
   }
 
   constructor(public messageService: MessageService,

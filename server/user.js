@@ -9,11 +9,11 @@ exports.randomUser = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
   } else {
+    
     request('https://randomuser.me/api/', { json: true }, (err, response) => {
       if (err) { 
         res.json({ success: false, message: 'Failed to retrieve randomuser' });
       } else {
-        // res.json({ ok: response.body.results[0].gender });
         if (res) {
           let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
           let index = response.body.results[0];
@@ -38,8 +38,10 @@ exports.randomUser = (req, res) => {
             } else {
               const idUser = response.insertId;
               sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())'
-              
-              query = db.format(sql, [ idUser, index.picture.thumbnail ]);
+              query = db.format(sql, [ 
+                idUser,
+                index.picture.large
+              ]);
               db.query(query, (err, response) => {
                 console.log(response);
                 if (err) {
@@ -56,6 +58,7 @@ exports.randomUser = (req, res) => {
       }
     });
   }
+
 };
 
 exports.removeUserTag = (req, res) => {
