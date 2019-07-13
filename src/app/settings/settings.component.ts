@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit {
     if (this.changeEmailForm.valid) {
       this.UpdateEmailAPIParameter = {
         newEmail: this.changeEmailForm.get('newEmail').value,
-        idUser: this.resolvedData.idUser
+        idUser: this.resolvedData.user[0].idUser
       };
     }
     this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
@@ -74,7 +74,7 @@ export class SettingsComponent implements OnInit {
       this.UpdateNameAPIParameter = {
         newFirstName: this.changeNameForm.get('newFirstName').value,
         newLastName: this.changeNameForm.get('newLastName').value,
-        idUser: this.resolvedData.idUser
+        idUser: this.resolvedData.user[0].idUser
       };
     }
     this.updateNameService.updateName(this.UpdateNameAPIParameter)
@@ -91,7 +91,7 @@ export class SettingsComponent implements OnInit {
       this.UpdatePasswordAPIParameter = {
         newPassword: this.changePasswordForm.get('newPassword').value,
         newPasswordConfirmation: this.changePasswordForm.get('newPasswordConfirmation').value,
-        idUser: this.resolvedData.idUser
+        idUser: this.resolvedData.user[0].idUser
       };
     }
     this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)

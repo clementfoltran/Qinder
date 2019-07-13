@@ -2,24 +2,32 @@
 
   <div class="top" style="text-align: center; font-size: 30px;">
     <!-- <a href=""><button class="close">x</button></a> -->
-    <div class="matchesList">
-      <div class="matchPicDiv" *ngFor="let match of matchesObjects">
-        <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
+    <div *ngIf="matchesObject; else elseBlock5">
+      <div class="matchesList">
+        <div class="matchPicDiv" *ngFor="let match of matchesObjects">
+          <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
+        </div>
+      </div>
+      <hr>
+      <div class="matchInfos">
+        <!-- selected conversation pic & match name -->
+        <div *ngIf="!userMatchedName; else elseBlock"><label>Click on a match to open a conversation :)</label></div>
+        <ng-template #elseBlock>
+            <a (click)="loadMatchProfileData()" style="cursor: pointer;"><img class="conversationPicture" src="data:image/png;base64,{{ userMatchedPicture }}" alt=""></a>
+            <label class="user"><strong>{{userMatchedName}}</strong></label>
+        </ng-template>
       </div>
     </div>
-    <hr>
-    <div class="matchInfos">
-      <!-- selected conversation pic & match name -->
-      <div *ngIf="!userMatchedName; else elseBlock"><label>Click on a match to open a conversation :)</label></div>
-      <ng-template #elseBlock>
-          <a (click)="loadMatchProfile()" style="cursor: pointer;"><img class="conversationPicture" src="data:image/png;base64,{{ userMatchedPicture }}" alt=""></a>
-          <label class="user"><strong>{{userMatchedName}}</strong></label>
-      </ng-template>
-    </div>
+    <ng-template #elseBlock5>
+      <h5>No matches yet! Time to make some swipes :)</h5>
+    </ng-template>
   </div>
 <!-- if select is profile, display profile, if not display contentArea -->
 <div *ngIf="profileWasOpened === 1; else elseBlock3">
     <div class="profileArea" id="profileArea">
+        <div class="userPicsDiv" *ngFor="let pic of userMatchedPhotos">
+          <a style="cursor: pointer;"><img class="userPicture" src="data:image/png;base64,{{ pic.photo }}" alt=""></a>
+        </div>
         <label>AGE :</label>
         <label>{{ userInfos[0].birthdate }} ans</label>
         <br>
@@ -46,11 +54,13 @@
       </ng-template>
     </div>
   </div>
-  <div class="bottom">
-    <form action="" [formGroup]="messageForm" (ngSubmit)="sendMessage()">
-      <input id="message" formControlName="message" #message class="form-control" class="messageInput" autocomplete="off"/>
-      <button type="submit" class="btn btn-primary btn-lg btn-block">SEND</button>
-    </form>
+  <div *ngIf="aConversationWasOpened === 1">
+    <div class="bottom">
+      <form action="" [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+        <input id="message" formControlName="message" #message class="form-control" class="messageInput" autocomplete="off"/>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">SEND</button>
+      </form>
+    </div>
   </div>
 </ng-template>
 

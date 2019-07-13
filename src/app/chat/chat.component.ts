@@ -64,6 +64,7 @@ export class ChatComponent implements OnInit {
   public profileWasOpened = 0;
   public previousId = 0;
   public userInfos = [];
+  public userMatchedPhotos: Photo[];
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -107,7 +108,14 @@ export class ChatComponent implements OnInit {
 
   // LOAD USER_MATCHED INFOS
   // ----------------------------------------------------------------------------------------
+  transition() {
+    const div = document.getElementById('contentArea');
+    div.style.opacity = '1';
+    div.style.transition = 'opacity 2s';
+  }
+
   loadMatchInfos(userMatchedId) {
+    this.transition();
     this.aConversationWasOpened = 1;
     this.profileWasOpened = 0;
     this.scrollMessages();
@@ -132,12 +140,12 @@ export class ChatComponent implements OnInit {
         if (result.success) {
           this.userMatchedName = result.firstname;
         } else {
-            console.log(result.message);
+          console.log(result.message);
         }
       });
   }
 
-  loadMatchProfile() {
+  loadMatchProfileData() {
     if (this.profileWasOpened === 0) {
       this.profileWasOpened = 1;
     } else {
@@ -149,12 +157,18 @@ export class ChatComponent implements OnInit {
         if (result.success) {
           this.userInfos = result.user;
           this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
-          console.log(this.userInfos[0].birthdate);
         } else {
-            console.log(result.message);
+          console.log(result.message);
         }
       });
-      // add pictures
+    this.getUserPhotosService.getUserPhotos(this.userMatchedId)
+      .subscribe((result: GetUserPhotosReturn) => {
+        if (result.success) {
+          this.userMatchedPhotos = result.photos;
+        } else {
+          console.log(result.message);
+        }
+      });
   }
 
   getAge(dateString) {
@@ -270,6 +284,7 @@ export class ChatComponent implements OnInit {
     setTimeout(function() {
       const div = document.getElementById('contentArea');
       div.scrollTop = div.scrollHeight - div.clientHeight;
+      div.style.opacity = '1';
      }, 25);
   }
 
