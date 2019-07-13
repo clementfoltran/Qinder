@@ -4,7 +4,7 @@
       <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
         <div class="img-wrap d-inline-block position-relative">
           <img height="150px" width="150px"
-               class="rounded m-2" src="data:image/png;base64,{{ photo.photo }}">
+               class="rounded m-2" src="{{ photo.photo }}">
           <button type="button" class="close pull-right" aria-label="Close" (click)="deletePhoto(photo.id_photo, photo.id_user, i)">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -44,7 +44,7 @@
               <div class="col-sm-12">
                 <div *ngFor="let tag of tags; let i = index">
                   <div *ngIf="isSelectedTag(tag.id_tag); else notSelected">
-                    <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(tag.id_tag, i)">
+                    <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(tag.id_tag)">
                       <h5 class="card-title">{{ tag.tag }}</h5>
                       <p class="card-text">{{ tag.label }}</p>
                     </div>
@@ -63,28 +63,32 @@
       </div>
     </div>
   </div>
-  <div class="form-group mb-4">
-    <label>I'm a</label>
-    <select class="custom-select" formControlName="gender" (change)="updatePref()">
-      <option selected>Male</option>
-      <option>Female</option>
-    </select>
+  <div class="row">
+    <div class="form-group mb-4 col-md-6">
+      <label>I'm a</label>
+      <select class="custom-select" formControlName="gender" (change)="updatePref()">
+        <option selected>Male</option>
+        <option>Female</option>
+      </select>
+    </div>
+    <div class="form-group mb-4 col-md-6">
+      <label>I'm interested by</label>
+      <select class="custom-select" formControlName="interest" (change)="updatePref()">
+        <option selected>Male</option>
+        <option>Female</option>
+        <option>Both</option>
+      </select>
+    </div>
   </div>
-  <div class="form-group mb-4">
-    <label>I'm interested by</label>
-    <select class="custom-select" formControlName="interest" (change)="updatePref()">
-      <option selected>Male</option>
-      <option>Female</option>
-      <option>Both</option>
-    </select>
-  </div>
-  <div class="form-group mb-4">
-    <label>Distance {{ distance }} kms</label>
-    <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
-  </div>
-  <div class="form-group mb-4">
-    <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
-    <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" (mouseup)="updatePref()"></p-slider>
+  <div class="row">
+    <div class="form-group mb-4 col-md-6">
+      <label>Distance {{ distance }} kms</label>
+      <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+    </div>
+    <div class="form-group mb-4 col-md-6">
+      <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
+      <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" (mouseup)="updatePref()"></p-slider>
+    </div>
   </div>
   <div class="form-group mb-4">
    <!-- <button [routerLink]="['/settings']" [queryParams]="{id: '1'}" type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button> -->

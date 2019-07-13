@@ -77,15 +77,19 @@ exports.getUserToSwipe = (req, res) => {
           console.log(err);
           res.json({ success: false, message: 'User not found' });
         } else {
-          res.json({
-            success: true,
-            message: '',
-            id: response[0].id_user,
-            firstname: response[0].firstname,
-            bio: response[0].bio,
-            position: JSON.parse(response[0].position),
-            year: response[0].year
-          });
+          if (response[0]) {
+            res.json({
+              success: true,
+              message: '',
+              id: response[0].id_user,
+              firstname: response[0].firstname,
+              bio: response[0].bio,
+              position: JSON.parse(response[0].position),
+              year: response[0].year
+            });
+          } else {
+            res.json({ success: false, message: 'There is no more Qinders, try to change your parameters' });
+          }
         }
       });
     } else {

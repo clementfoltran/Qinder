@@ -2,7 +2,7 @@
   <div class="match-zone col-md-12 text-center">
     <img class="logo" src="../../assets/img/logo.svg" height="100" alt="">
     <div class="swipe-zone mt-4">
-      <div class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
+      <div *ngIf="userToSwipeName; else noUserToSwipe"  class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
         <div class="card">
           <carousel>
             <div *ngFor="let photo of userToSwipePhotos">
@@ -13,6 +13,7 @@
           </carousel>
           <div class="card-body">
             <h2>{{ userToSwipeName | titlecase }} {{ userToSwipeAge }}</h2>
+            <h5>{{ userToSwipeDistance }} kms</h5>
             <div *ngIf="userToSwipeBio; else noBio">
               <p class="card-text">{{ userToSwipeBio }}</p>
             </div>
@@ -23,26 +24,35 @@
         </div>
       </div>
       <div class="row">
-        <div class="swipe-buttons m-auto align-items-center">
+        <div *ngIf="userToSwipeName" class="swipe-buttons m-auto align-items-center">
           <button (click)="swipe(false)" style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
           <button (click)="swipe(true)" style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
         </div>
       </div>
+      <ng-template #noUserToSwipe>
+        <div style="position: absolute; width: 100%; height: 100%; padding: 0">
+          <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);">
+            <img class="loader" src="assets/img/loader.svg" height="100" alt="">
+            <h2>you have eaten all the Qinders</h2>
+            <button type="button" data-toggle="modal" data-target="#modSignIn" class="btn btn-primary m-2">Preferences</button>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
   <div class="container">
-      <div class="slider1 opened">
-        <app-chat></app-chat>
-      </div>
+    <div class="slider1 opened">
+      <app-chat></app-chat>
     </div>
-    <div class="container3">
-      <div class="slider3 opened">
-        <app-notifications 
-          [resolveData]="resolveData"
-        >
-        </app-notifications>
-      </div>
+  </div>
+  <div class="container3">
+    <div class="slider3 opened">
+      <app-notifications 
+        [resolveData]="resolveData"
+      >
+      </app-notifications>
     </div>
+  </div>
 </div>
 <!-- Profile modal -->
 <div class="modal fade" id="modSignIn" tabindex="-1" role="dialog" aria-labelledby="modSignIn" aria-hidden="true">
@@ -73,7 +83,7 @@
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modSignIn">
           <div *ngIf="userPicture; else noPicBar">
-            <img class="rounded-circle" src="data:image/png;base64,{{ userPicture }}" height="40" alt="">
+            <img class="rounded-circle" src="{{ userPicture }}" height="40" alt="">
           </div>
           <ng-template #noPicBar>
             <i class="fas fa-user"></i>

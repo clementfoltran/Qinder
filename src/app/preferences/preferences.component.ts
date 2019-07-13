@@ -184,31 +184,40 @@ export class PreferencesComponent implements OnInit {
       photo: this.selectedFile,
       active: false,
     };
-    this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
-      .subscribe((result: UploadPhotoReturn) => {
-        if (result.success) {
-          this.userPhotos.push({
-            id_photo: result.id,
-            id_user: this.userId,
-            photo: this.selectedFile,
-            active: false,
-            ts: 10,
-          });
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Update',
-            detail: result.message,
-            life: 6000,
-          });
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000,
-          });
-        }
+    if (this.selectedFile) {
+      this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
+        .subscribe((result: UploadPhotoReturn) => {
+          if (result.success) {
+            this.userPhotos.push({
+              id_photo: result.id,
+              id_user: this.userId,
+              photo: this.selectedFile,
+              active: false,
+              ts: 10,
+            });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Update',
+              detail: result.message,
+              life: 6000,
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Network',
+              detail: 'Check your connection',
+              life: 6000,
+            });
+          }
+        });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Upload picture',
+        detail: 'You cannot import empty pictures',
+        life: 6000,
       });
+    }
   }
 
   onFileChanged(e) {
@@ -217,7 +226,8 @@ export class PreferencesComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      self.selectedFile = reader.result.toString().split(',')[1];
+      console.log(reader.result.toString());
+      self.selectedFile = reader.result.toString();
     };
   }
 

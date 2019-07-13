@@ -16,6 +16,7 @@ const activate = require('./activate.js');
 const preference = require('./preference.js');
 const chat = require('./chat.js');
 const notification = require('./notification.js');
+const generator = require('./generator.js')
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -80,7 +81,7 @@ app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
 app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
 
-app.get('/randomUser', urlencodedParser, user.randomUser);
+app.get('/randomUser', urlencodedParser, generator.randomUser);
 
 // app.listen(port, () => {
 //   console.log(`Server is running on port ${port}`);

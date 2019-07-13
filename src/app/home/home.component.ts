@@ -164,12 +164,12 @@ export class HomeComponent implements OnInit {
         this.userToSwipeDistance = Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
           this.userCurrentPosition,
           userToSwipePos
-        ));
+        )) / 1000;
       } else {
         this.messageService.add({
           severity: 'error',
           summary: 'Network',
-          detail: 'Check your connection',
+          detail: result.message,
           life: 6000
         });
       }
@@ -223,6 +223,6 @@ export class HomeComponent implements OnInit {
     });
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
-    this.getUserToSwipe();    
+    this.getUserToSwipe();
   }
 }

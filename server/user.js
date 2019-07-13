@@ -3,63 +3,6 @@ const passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
 const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
 const nodemailer = require('nodemailer');
-const request = require('request');
-
-exports.randomUser = (req, res) => { 
-  if (!req.body) {
-    res.sendStatus(500);
-  } else {
-    
-    request('https://randomuser.me/api/', { json: true }, (err, response) => {
-      if (err) { 
-        res.json({ success: false, message: 'Failed to retrieve randomuser' });
-      } else {
-        if (res) {
-          let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-          let index = response.body.results[0];
-          const position = {
-            latitude: index.location.coordinates.latitude,
-            longitude: index.location.coordinates.longitude
-          }
-          let query = db.format(sql, [
-            index.name.first,
-            index.name.last,
-            index.email,
-            index.login.sha1,
-            index.gender.charAt(0).toUpperCase() + index.gender.slice(1),
-            index.dob.date,
-            (index.gender === 'male') ? 'Female' : 'Male',
-            null, null, null, null, null, 1, null,
-            JSON.stringify(position),
-          ]);
-          db.query(query, (err, response) => {
-            if (err) {
-              res.json({ success: false, message: 'Failed to add randomuser' });
-            } else {
-              const idUser = response.insertId;
-              sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())'
-              query = db.format(sql, [ 
-                idUser,
-                index.picture.large
-              ]);
-              db.query(query, (err, response) => {
-                console.log(response);
-                if (err) {
-                  res.json({ success: false, message: 'Failed to add randomuser' });
-                } else {
-                  res.json({ success: true, message: '' });
-                }
-              });
-            }            
-          });
-        } else {
-          res.sendStatus(401);
-        }
-      }
-    });
-  }
-
-};
 
 exports.removeUserTag = (req, res) => {
   if (!req.body) {
