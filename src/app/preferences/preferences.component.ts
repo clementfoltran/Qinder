@@ -17,7 +17,7 @@ import {GetTagsService} from './services/get-tags/get-tags.service';
 import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
 import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
 import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
-import {ActivatedRoute, NavigationExtras} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import { GetUserTagsService } from './services/get-user-tags/get-user-tags.service';
 import { GetUserTagsReturn, UserTag } from './services/get-user-tags/get-user-tags.return';
 import { RemoveUserTagService } from './services/remove-user-tag/remove-user-tag.service';
@@ -276,7 +276,12 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  constructor(public messageService: MessageService,
+  navigateToSettings() {
+    this.router.navigate(['/settings/' + this.userId ] );
+  }
+
+  constructor(public router: Router,
+              public messageService: MessageService,
               public activatedRoute: ActivatedRoute,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,

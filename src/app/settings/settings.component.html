@@ -122,21 +122,18 @@
       </div>
     </div>
   </div>
-
-
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <div class="logo m-auto">
           <p style="font-size: 40px;">Settings</p>
         </div>
-        <a href="http://localhost:4200/home">
+        <a [routerLink]="['/home']">
           <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </a>
       </div>
-
       <div class="modal-body text-center">
         <div class="form-group mb-4">
           <button class="btn btn-light col-sm-2"  data-toggle="modal" data-target="#usernameModal"> Username </button>
@@ -148,7 +145,6 @@
           <button class="btn btn-light col-sm-2" data-toggle="modal" data-target="#passwordModal"> Password </button>
           </div>
       </div>
-
     </div>
   </div>
 

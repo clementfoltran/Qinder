@@ -93,7 +93,8 @@ export class HomeComponent implements OnInit {
    * 
    * Notification list
    */
-  public notificationList: Notification[];
+  public notificationList: Notification[];4
+  public userToSwipe: boolean;
 
   getUserPosition() {
     if (navigator.geolocation) {
@@ -142,6 +143,7 @@ export class HomeComponent implements OnInit {
   }
 
   getUserToSwipe() {
+    this.userToSwipe = false;
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
@@ -153,6 +155,7 @@ export class HomeComponent implements OnInit {
     this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
       if (result.success) {
+        this.userToSwipe = true;
         this.getUserPhotos(result.id);
         this.userToSwipeName = result.firstname;
         this.userToSwipeBio = result.bio;

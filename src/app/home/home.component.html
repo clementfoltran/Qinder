@@ -2,7 +2,7 @@
   <div class="match-zone col-md-12 text-center">
     <img class="logo" src="../../assets/img/logo.svg" height="100" alt="">
     <div class="swipe-zone mt-4">
-      <div *ngIf="userToSwipeName; else noUserToSwipe"  class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
+      <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
         <div class="card">
           <carousel>
             <div *ngFor="let photo of userToSwipePhotos">
@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="row">
-        <div *ngIf="userToSwipeName" class="swipe-buttons m-auto align-items-center">
+        <div *ngIf="userToSwipe" class="swipe-buttons m-auto align-items-center">
           <button (click)="swipe(false)" style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
           <button (click)="swipe(true)" style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
         </div>
@@ -91,9 +91,9 @@
         </a>
       </li>
       <li class="nav-item col-md-4">
-          <a class="nav-link" (click)="showNotifs($event)"><i class="fas fa-bell"></i></a> 
-          <!-- <i class="fas fa-bell-exclamation"></i> for new notification! -->
-        </li>
+        <a class="nav-link" (click)="showNotifs($event)"><i class="fas fa-bell"></i></a> 
+        <!-- <i class="fas fa-bell-exclamation"></i> for new notification! -->
+      </li>
     </ul>
   </div>
 </nav>
