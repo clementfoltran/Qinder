@@ -89,8 +89,18 @@ label {
     margin-top: 5px;
     font-size: 17px;
 }
+.sadMessage {
+    height: 40px;
+    width: 100%;
+    position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  	
+	margin: auto;
+}
 h5 {
-    font-weight: 500;
     font-size: 17px;
 }
 .userLabel1 {

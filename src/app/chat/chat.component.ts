@@ -113,6 +113,11 @@ export class ChatComponent implements OnInit {
     div.style.opacity = '1';
     div.style.transition = 'opacity 2s';
   }
+  hideIt() {
+    const div = document.getElementById('contentArea');
+    div.style.opacity = '0';
+    console.log('hide it');
+  }
 
   loadMatchInfos(userMatchedId) {
     this.transition();

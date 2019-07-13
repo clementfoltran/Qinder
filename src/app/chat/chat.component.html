@@ -2,7 +2,7 @@
 
   <div class="top" style="text-align: center; font-size: 30px;">
     <!-- <a href=""><button class="close">x</button></a> -->
-    <div *ngIf="matchesObject; else elseBlock5">
+    <div *ngIf="!matchesObject; else elseBlock5">
       <div class="matchesList">
         <div class="matchPicDiv" *ngFor="let match of matchesObjects">
           <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
@@ -11,7 +11,7 @@
       <hr>
       <div class="matchInfos">
         <!-- selected conversation pic & match name -->
-        <div *ngIf="!userMatchedName; else elseBlock"><label>Click on a match to open a conversation :)</label></div>
+        <div *ngIf="!userMatchedName; else elseBlock"><h5>Click on a match to open a conversation 😊</h5></div>
         <ng-template #elseBlock>
             <a (click)="loadMatchProfileData()" style="cursor: pointer;"><img class="conversationPicture" src="data:image/png;base64,{{ userMatchedPicture }}" alt=""></a>
             <label class="user"><strong>{{userMatchedName}}</strong></label>
@@ -19,7 +19,9 @@
       </div>
     </div>
     <ng-template #elseBlock5>
-      <h5>No matches yet! Time to make some swipes :)</h5>
+      <div class="sadMessage">
+        <h5>No matches yet 😢 Time to make some swipes!</h5>
+      </div>
     </ng-template>
   </div>
 <!-- if select is profile, display profile, if not display contentArea -->
@@ -50,7 +52,7 @@
         </div>
       </div>
       <ng-template #elseBlock2>
-        <label>Don't be shy, make the first step!</label>
+        <h5>Don't be shy, make the first step! 🙃</h5>
       </ng-template>
     </div>
   </div>
