@@ -36,6 +36,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-user-to-swipe.service';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { GetNotificationsService } from './notifications/services/get-notifications/get-notifications.service';
+import { PopulateComponent } from './populate/populate.component';
+import { PopulateService } from './populate/services/populate.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,7 @@ import { GetNotificationsService } from './notifications/services/get-notificati
     PreferencesComponent,
     ChatComponent,
     NotificationsComponent,
+    PopulateComponent,
   ],
   imports: [
     CommonModule,
@@ -83,6 +86,7 @@ import { GetNotificationsService } from './notifications/services/get-notificati
     EnterViewHomeService,
     GetUserToSwipeService,
     GetNotificationsService,
+    PopulateService,
   ],
   bootstrap: [AppComponent]
 })

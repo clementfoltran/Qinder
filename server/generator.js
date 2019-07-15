@@ -17,8 +17,8 @@ async function randomTags(idUser) {
       randTag,
       idUser
     ]);
-    await db.query(query, (err, response) => {
-
+    await db.query(query, (err) => {
+      if (err) throw err;
     });
   }
 }
@@ -45,7 +45,7 @@ exports.randomUser = async (req, res) => {
               index.email,
               index.login.sha1,
               index.gender.charAt(0).toUpperCase() + index.gender.slice(1),
-              index.dob.date,
+              new Date(index.dob.date),
               (index.gender === 'male') ? 'Female' : 'Male',
               null, null, null, null, null, 1, null,
               JSON.stringify(position),
@@ -65,7 +65,7 @@ exports.randomUser = async (req, res) => {
                     res.json({ success: false, message: 'Failed to add randomuser' });
                   } else {
                     randomTags(idUser);
-                    res.json({ success: true, message: '' });
+                    res.json({ success: true, message: '', data: index });
                   }
                 });
               }
