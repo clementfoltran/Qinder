@@ -11,9 +11,10 @@ import { ChatComponent } from '../chat/chat.component';
 import { SwipeParameter } from './services/swipe/swipe-parameter';
 import { SwipeService } from './services/swipe/swipe.service';
 import { SwipeReturn } from './services/swipe/swipe-return';
-import * as io from 'socket.io-client';
 import {} from 'googlemaps';
 import { NotificationsService } from '../notifications/services/notifications.service';
+import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
+import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,7 @@ export class HomeComponent implements OnInit {
   constructor(public activatedRoute: ActivatedRoute,
               public getUserPhotosService: GetUserPhotosService,
               public getUserToSwipeService: GetUserToSwipeService,
+              public getUserTagsService: GetUserTagsService,
               public notificationsService: NotificationsService,
               public swipeService: SwipeService,
               public messageService: MessageService) {
@@ -93,7 +95,12 @@ export class HomeComponent implements OnInit {
    * 
    * Notification list
    */
-  public notificationList: Notification[];4
+  public notificationList: Notification[];
+  /**
+   * 
+   * User to swipe tags
+   */
+  public userToSwipeTags: UserTag[] = [];
   public userToSwipe: boolean;
 
   getUserPosition() {
@@ -142,6 +149,16 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  getUserToSwipeTags(id: number) {
+    this.getUserTagsService.getUserTags(id)
+      .subscribe((result: GetUserTagsReturn) => {
+        if (result.success) {
+          this.userToSwipeTags = result.userTags;
+          console.log(this.userToSwipeTags);
+        }
+      });
+  }
+
   getUserToSwipe() {
     this.userToSwipe = false;
     const APIParameter: GetUserToSwipeParameter = {
@@ -168,6 +185,7 @@ export class HomeComponent implements OnInit {
           this.userCurrentPosition,
           userToSwipePos
         )) / 1000;
+        this.getUserToSwipeTags(result.id);
       } else {
         this.messageService.add({
           severity: 'error',
@@ -222,8 +240,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
-      this.getUserPosition();
     });
+    this.getUserPosition();
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.getUserToSwipe();

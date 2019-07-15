@@ -19,6 +19,9 @@ import { splitAtColon } from '@angular/compiler/src/util';
 import { GeolocationService } from './services/geolocation/geolocation.service';
 import { GeolocationReturn } from './services/geolocation/geolocation.return';
 import { GeolocationParameter } from './services/geolocation/geolocation.parameter';
+import * as $ from 'jquery';
+
+declare var $: any;
 
 @Component({
   selector: 'app-landing-page',
@@ -87,6 +90,8 @@ export class LandingPageComponent implements OnInit {
             localStorage.setItem('token', result.token);
             localStorage.setItem('userId', result.user_id.toString());
             this.sendGeolocation(result.user_id);
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
             this.router.navigate(['/home']);
           } else {
             this.messageService.add({

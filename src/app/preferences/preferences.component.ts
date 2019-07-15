@@ -22,7 +22,9 @@ import { GetUserTagsService } from './services/get-user-tags/get-user-tags.servi
 import { GetUserTagsReturn, UserTag } from './services/get-user-tags/get-user-tags.return';
 import { RemoveUserTagService } from './services/remove-user-tag/remove-user-tag.service';
 import { RemoveUserTagReturn } from './services/remove-user-tag/remove-user-tag.return';
-import { nextTick } from 'q';
+import * as $ from 'jquery';
+
+declare var $: any;
 
 @Component({
   selector: 'app-preferences',
@@ -142,6 +144,8 @@ export class PreferencesComponent implements OnInit {
   }
 
   logOut() {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
     this.loginService.logOut();
   }
 
@@ -277,7 +281,10 @@ export class PreferencesComponent implements OnInit {
   }
 
   navigateToSettings() {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
     this.router.navigate(['/settings/' + this.userId ] );
+    
   }
 
   constructor(public router: Router,
