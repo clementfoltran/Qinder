@@ -14,6 +14,7 @@ import { SwipeReturn } from './services/swipe/swipe-return';
 import {} from 'googlemaps';
 import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
 import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
+import { timeInterval, timeout } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -182,6 +183,12 @@ export class HomeComponent implements OnInit {
           this.userCurrentPosition,
           userToSwipePos
         )) / 1000);
+        if (this.userToSwipeDistance > this.distance) {
+          this.userToSwipe = false;
+          setTimeout(() => {
+            this.getUserToSwipe();
+          }, 3000);
+        }
         this.getUserToSwipeTags(result.id);
       } else {
         this.messageService.add({
@@ -239,6 +246,7 @@ export class HomeComponent implements OnInit {
     });
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
+    this.distance = this.resolveData.distance;
     this.getUserPosition();
     this.getUserToSwipe();
   }

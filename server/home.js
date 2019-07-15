@@ -111,7 +111,6 @@ exports.swipe = async (req, res) => {
         } else if (req.body.like) {
           sql = 'SELECT id_user FROM swipe WHERE id_user = ? AND id_user_matched = ? AND swipe.like = 1';
           query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
-          console.log(query);
           db.query(query, (err, response) => {
             if (err) throw err;
             else if (response[0]) {
@@ -129,10 +128,10 @@ exports.swipe = async (req, res) => {
                   });
                 }
               });
-            } else {
-              res.json({ success: true, message: '', match: false });
             }
           });
+        } else {
+          res.json({ success: true, message: '', match: false });
         }
       });
     } else {
