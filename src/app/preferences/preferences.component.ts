@@ -181,7 +181,6 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  // TODO check the empty images
   uploadPhoto() {
     this.APIParameterPhoto = {
       id: this.userId,
@@ -230,7 +229,6 @@ export class PreferencesComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      console.log(reader.result.toString());
       self.selectedFile = reader.result.toString();
     };
   }
@@ -284,7 +282,6 @@ export class PreferencesComponent implements OnInit {
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
     this.router.navigate(['/settings/' + this.userId ] );
-    
   }
 
   constructor(public router: Router,

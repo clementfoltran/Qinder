@@ -79,7 +79,7 @@ app.get('/removeUserTag/:id', urlencodedParser, user.removeUserTag);
 
 app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
-app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
+// app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
 
 app.get('/randomUser', urlencodedParser, generator.randomUser);
 
