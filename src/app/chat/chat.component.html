@@ -30,14 +30,16 @@
         <div class="userPicsDiv" *ngFor="let pic of userMatchedPhotos">
           <a style="cursor: pointer;"><img class="userPicture" src="data:image/png;base64,{{ pic.photo }}" alt=""></a>
         </div>
-        <label>AGE :</label>
-        <label>{{ userInfos[0].birthdate }} ans</label>
-        <br>
-        <label>DISTANCE :</label>
-        <label>{{ userInfos[0].distance }} km</label>
-        <br>
-        <label>BIO :</label>
-        <label>{{ userInfos[0].bio }}</label>
+        <div *ngIf="userInfos[0]">
+          <label>AGE :</label>
+          <label>{{ userInfos[0].birthdate }} ans</label>
+          <br>
+          <label>DISTANCE :</label>
+          <label>{{ userInfos[0].distance }} km</label>
+          <br>
+          <label>BIO :</label>
+          <label>{{ userInfos[0].bio }}</label>
+        </div>
     </div>
 </div>
 <ng-template #elseBlock3>
