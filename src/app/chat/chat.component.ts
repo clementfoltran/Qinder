@@ -179,7 +179,6 @@ export class ChatComponent implements OnInit {
   // LOAD MESSAGES
   // ----------------------------------------------------------------------------------------
   loadMessages(matchId) {
-    console.log('LOADING');
     if (matchId) {
       this.joinRoom(matchId);
       this.currentMatchId = matchId;

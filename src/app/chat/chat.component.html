@@ -31,13 +31,8 @@
           <a style="cursor: pointer;"><img class="userPicture" src="data:image/png;base64,{{ pic.photo }}" alt=""></a>
         </div>
         <div *ngIf="userInfos[0]">
-          <label>AGE :</label>
-          <label>{{ userInfos[0].birthdate }} ans</label>
+          <label>{{ userInfos[0].birthdate }} yo, {{ userInfos[0].distance }} km away</label>
           <br>
-          <label>DISTANCE :</label>
-          <label>{{ userInfos[0].distance }} km</label>
-          <br>
-          <label>BIO :</label>
           <label>{{ userInfos[0].bio }}</label>
         </div>
     </div>
