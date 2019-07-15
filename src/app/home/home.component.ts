@@ -14,7 +14,9 @@ import { SwipeReturn } from './services/swipe/swipe-return';
 import {} from 'googlemaps';
 import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
 import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
-import { timeInterval, timeout } from 'rxjs/operators';
+import * as $ from 'jquery';
+
+declare var $: any;
 
 @Component({
   selector: 'app-home',
@@ -211,6 +213,12 @@ export class HomeComponent implements OnInit {
       .subscribe((result: SwipeReturn) => {
         if (result.success) {
           this.getUserToSwipe();
+          if (result.match) {
+            $('.match').show();
+            setTimeout(() => {
+                $('.match').hide();
+            }, 3000);
+          }
         }
       });
   }
