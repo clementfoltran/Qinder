@@ -8,19 +8,21 @@ import {DeletePhotoParameter} from '../home/services/delete-photo/delete-photo-p
 import {UpdatePreferencesReturn} from '../home/services/update-preferences/update-preferences-return';
 import {UploadPhotoReturn} from '../home/services/upload-photo/upload-photo-return';
 import {DeletePhotoReturn} from '../home/services/delete-photo/delete-photo-return';
-import {EnterViewHomeService} from '../home/services/enter-view-home/enter-view-home.service';
 import {MessageService} from 'primeng/api';
-import {GetUserPhotosService} from '../home/services/get-user-photos/get-user-photos.service';
 import {UploadPhotoService} from '../home/services/upload-photo/upload-photo.service';
 import {DeletePhotoService} from '../home/services/delete-photo/delete-photo.service';
 import {UpdatePreferencesService} from '../home/services/update-preferences/update-preferences.service';
 import {LoginService} from '../landing-page/services/login/login.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {GetTagsService} from './services/get-tags/get-tags.service';
 import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
 import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
 import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
-import {ActivatedRoute, NavigationExtras} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
+import { GetUserTagsService } from './services/get-user-tags/get-user-tags.service';
+import { GetUserTagsReturn, UserTag } from './services/get-user-tags/get-user-tags.return';
+import { RemoveUserTagService } from './services/remove-user-tag/remove-user-tag.service';
+import { RemoveUserTagReturn } from './services/remove-user-tag/remove-user-tag.return';
+import { nextTick } from 'q';
 
 @Component({
   selector: 'app-preferences',
@@ -82,34 +84,43 @@ export class PreferencesComponent implements OnInit {
    * User selected tags
    *
    */
-  public userTags: Tag[] = [];
+  public userTags: UserTag[] = [];
   /**
    * User id
    *
    */
   public userId: number = null;
 
-  drop(event: CdkDragDrop<Tag[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+  isSelectedTag(idTag: number) {
+    let find = false;
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        find = true;
+      }
     }
+    return (find) ? true : false;
   }
 
-  addUserTag(idTag: number) {
-    this.addUserTagService.addUserTag({id_tag: idTag, id_user: 1})
+  addUserTag(tag: Tag) {
+    this.addUserTagService.addUserTag({id_tag: tag.id_tag, id_user: this.userId})
       .subscribe((result: AddUserTagReturn) => {
-        if (!result.success) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
+        if (result.success) {
+          this.userTags.push({
+            id_utag: result.id_utag,
+            id_tag: tag.id_tag,
+            id_user: this.userId,
+            label: tag.label,
+            tag: tag.tag
           });
+        }
+      });
+  }
+
+  removeUserTag(idTag: number) {
+    this.removeUserTagService.removeUserTag(this.getUserTagId(idTag))
+      .subscribe((result: RemoveUserTagReturn) => {
+        if (result.success) {
+          this.userTags.splice(this.getUserTagIndex(idTag), 1);
         }
       });
   }
@@ -173,31 +184,40 @@ export class PreferencesComponent implements OnInit {
       photo: this.selectedFile,
       active: false,
     };
-    this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
-      .subscribe((result: UploadPhotoReturn) => {
-        if (result.success) {
-          this.userPhotos.push({
-            id_photo: result.id,
-            id_user: this.userId,
-            photo: this.selectedFile,
-            active: false,
-            ts: 10,
-          });
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Update',
-            detail: result.message,
-            life: 6000,
-          });
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000,
-          });
-        }
+    if (this.selectedFile) {
+      this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
+        .subscribe((result: UploadPhotoReturn) => {
+          if (result.success) {
+            this.userPhotos.push({
+              id_photo: result.id,
+              id_user: this.userId,
+              photo: this.selectedFile,
+              active: false,
+              ts: 10,
+            });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Update',
+              detail: result.message,
+              life: 6000,
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Network',
+              detail: 'Check your connection',
+              life: 6000,
+            });
+          }
+        });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Upload picture',
+        detail: 'You cannot import empty pictures',
+        life: 6000,
       });
+    }
   }
 
   onFileChanged(e) {
@@ -206,7 +226,8 @@ export class PreferencesComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      self.selectedFile = reader.result.toString().split(',')[1];
+      console.log(reader.result.toString());
+      self.selectedFile = reader.result.toString();
     };
   }
 
@@ -230,12 +251,44 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  constructor(public messageService: MessageService,
+  getUserTags() {
+    this.getUserTagsService.getUserTags(this.userId)
+      .subscribe((result: GetUserTagsReturn) => {
+        if (result.success) {
+          this.userTags = result.userTags;
+        }
+      });
+  }
+
+  getUserTagId(idTag: number): number {
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        return (this.userTags[i].id_utag)
+      }
+    }
+  }
+
+  getUserTagIndex(idTag: number): number {
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        return (i);
+      }
+    }
+  }
+
+  navigateToSettings() {
+    this.router.navigate(['/settings/' + this.userId ] );
+  }
+
+  constructor(public router: Router,
+              public messageService: MessageService,
               public activatedRoute: ActivatedRoute,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
               public addUserTagService: AddUserTagService,
               public getTagsService: GetTagsService,
+              public removeUserTagService: RemoveUserTagService,
+              public getUserTagsService: GetUserTagsService,
               public updatePreferencesService: UpdatePreferencesService,
               public fb: FormBuilder,
               public loginService: LoginService) {
@@ -265,5 +318,6 @@ export class PreferencesComponent implements OnInit {
       this.resolveData = data.viewData;
     });
     this.initVariables();
+    this.getUserTags();
   }
 }

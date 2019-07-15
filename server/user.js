@@ -2,7 +2,67 @@ const db = require('./database.js');
 const passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
 const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
+
+exports.removeUserTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'DELETE FROM userTag WHERE id_utag = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.addUserTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO usertag VALUES(id_utag, ?, ?)';
+      const query = db.format(sql, [ req.body.id_tag, req.body.id_user ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Tag not found' });
+        } else {
+          res.json({ success: true, message: '', id_utag: response.insertId });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.getUserTags  = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT usertag.*, tag.label, tag.tag FROM usertag INNER JOIN tag ON usertag.id_tag = tag.id_tag WHERE id_user = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '', userTags: response });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
 
 exports.updateGeolocation = (req, res) => {
   if (!req.body) {

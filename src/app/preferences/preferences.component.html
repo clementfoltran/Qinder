@@ -4,7 +4,7 @@
       <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
         <div class="img-wrap d-inline-block position-relative">
           <img height="150px" width="150px"
-               class="rounded m-2" src="data:image/png;base64,{{ photo.photo }}">
+               class="rounded m-2" src="{{ photo.photo }}">
           <button type="button" class="close pull-right" aria-label="Close" (click)="deletePhoto(photo.id_photo, photo.id_user, i)">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -29,64 +29,72 @@
     <button type="submit" class="btn btn-primary m-2">Update</button>
   </div>
   <div class="form-group mb-4">
-    <a class="btn btn-light btn-block" data-toggle="collapse" href="#tags" role="button" aria-expanded="false"
-       aria-controls="tags" (click)="displayTags()">
-      Tags
-    </a>
-    <div class="row collapse" id="tags">
-      <div
-        cdkDropList
-        #todoList="cdkDropList"
-        [cdkDropListData]="tags"
-        [cdkDropListConnectedTo]="[doneList]"
-        class="col-md-6"
-        (cdkDropListDropped)="drop($event)">
-        <h3 class="m-2">Tags</h3>
-        <div class="card p-2" *ngFor="let item of tags" cdkDrag>
-          <h5>{{ item.tag }}</h5>
-          <p>{{ item.label }}</p>
+    <div id="accordion">
+      <div class="card">
+        <div class="card-header" id="tagsHeading">
+          <h5 class="mb-0">
+            <button type="button" class="btn btn-link collapsed" data-toggle="collapse" data-target="#tagsCollapse" aria-expanded="false" aria-controls="tagsCollapse">
+              Choose your favorite tags
+            </button>
+          </h5>
         </div>
-      </div>
-      <div
-        cdkDropList
-        #doneList="cdkDropList"
-        [cdkDropListData]="userTags"
-        [cdkDropListConnectedTo]="[todoList]"
-        class="col-md-6"
-        (cdkDropListDropped)="drop($event)">
-        <h3 class="m-2"> Your tags</h3>
-        <div class="card p-2" *ngFor="let item of userTags" cdkDrag>
-          <h5>{{ item.tag }}</h5>
-          <p>{{ item.label }}</p>
+        <div id="tagsCollapse" class="collapse" aria-labelledby="tagsHeading" data-parent="#accordion">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <div *ngFor="let tag of tags; let i = index">
+                  <div *ngIf="isSelectedTag(tag.id_tag); else notSelected">
+                    <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(tag.id_tag)">
+                      <h5 class="card-title">{{ tag.tag }}</h5>
+                      <p class="card-text">{{ tag.label }}</p>
+                    </div>
+                  </div>
+                  <ng-template #notSelected>
+                    <div class="card m-1" div="selected-tag" style="cursor: pointer;" (click)="addUserTag(tag)">
+                      <h5 class="card-title">{{ tag.tag }}</h5>
+                      <p class="card-text">{{ tag.label }}</p>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="form-group mb-4">
-    <label>I'm a</label>
-    <select class="custom-select" formControlName="gender" (change)="updatePref()">
-      <option selected>Male</option>
-      <option>Female</option>
-    </select>
+  <div class="row">
+    <div class="form-group mb-4 col-md-6">
+      <label>I'm a</label>
+      <select class="custom-select" formControlName="gender" (change)="updatePref()">
+        <option selected>Male</option>
+        <option>Female</option>
+      </select>
+    </div>
+    <div class="form-group mb-4 col-md-6">
+      <label>I'm interested by</label>
+      <select class="custom-select" formControlName="interest" (change)="updatePref()">
+        <option selected>Male</option>
+        <option>Female</option>
+        <option>Both</option>
+      </select>
+    </div>
   </div>
-  <div class="form-group mb-4">
-    <label>I'm interested by</label>
-    <select class="custom-select" formControlName="interest" (change)="updatePref()">
-      <option selected>Male</option>
-      <option>Female</option>
-      <option>Both</option>
-    </select>
-  </div>
-  <div class="form-group mb-4">
-    <label>Distance {{ distance }} kms</label>
-    <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
-  </div>
-  <div class="form-group mb-4">
-    <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
-    <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" (mouseup)="updatePref()"></p-slider>
+  <div class="row">
+    <div class="form-group mb-4 col-md-6">
+      <label>Distance {{ distance }} kms</label>
+      <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+    </div>
+    <div class="form-group mb-4 col-md-6">
+      <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
+      <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" (mouseup)="updatePref()"></p-slider>
+    </div>
   </div>
   <div class="form-group mb-4">
    <!-- <button [routerLink]="['/settings']" [queryParams]="{id: '1'}" type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button> -->
+  </div>
+  <div class="form-group mb-4">
+    <button type="button" class="btn btn-primary btn-lg btn-block" (click)="navigateToSettings()">SETTINGS</button>
   </div>
   <div class="form-group mb-4">
     <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>

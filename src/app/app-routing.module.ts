@@ -34,7 +34,7 @@ const routes: Routes = [
     canActivate: [IsLoggedInGuard],
   },
   {
-    path: 'settings',
+    path: 'settings/:id',
     component: SettingsComponent,
     canActivate: [IsLoggedInGuard],
     resolve: {viewData: EnterViewSettingsResolve}

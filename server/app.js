@@ -16,6 +16,7 @@ const activate = require('./activate.js');
 const preference = require('./preference.js');
 const chat = require('./chat.js');
 const notification = require('./notification.js');
+const generator = require('./generator.js')
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -52,7 +53,7 @@ app.post('/updateName', urlencodedParser, setting.updateName);
 app.post('/updateEmail', urlencodedParser, setting.updateEmail);
 app.post('/updatePassword', urlencodedParser, setting.updatePassword);
 
-app.post('/addUserTag', urlencodedParser, preference.addUserTag);
+app.post('/addUserTag', urlencodedParser, user.addUserTag);
 app.post('/updatePreferences', urlencodedParser, preference.updatePreferences);
 app.post('/uploadPhoto', urlencodedParser, preference.uploadPhoto);
 app.post('/deletePhoto', urlencodedParser, preference.deletePhoto);
@@ -73,10 +74,14 @@ app.get('/chat/:id', urlencodedParser, chat.loadMatches);
 app.get('/loadConversation/:id', urlencodedParser, chat.loadConversation);
 
 app.get('/getTags', urlencodedParser, preference.getTags);
+app.get('/getUserTags/:id', urlencodedParser, user.getUserTags);
+app.get('/removeUserTag/:id', urlencodedParser, user.removeUserTag);
 
 app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
 app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
+
+app.get('/randomUser', urlencodedParser, generator.randomUser);
 
 // app.listen(port, () => {
 //   console.log(`Server is running on port ${port}`);
