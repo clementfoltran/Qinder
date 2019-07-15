@@ -33,7 +33,13 @@
         <div *ngIf="userInfos[0]">
           <label>{{ userInfos[0].birthdate }} yo, {{ userInfos[0].distance }} km away</label>
           <br>
-          <label>{{ userInfos[0].bio }}</label>
+          <div *ngIf="userInfos[0].bio;">
+            <label>" {{ userInfos[0].bio }} "</label>
+            <br>
+          </div>
+          <label>Last connected : 25 minutes ago</label>
+          <br>
+          <label>Delete match / Block</label>
         </div>
     </div>
 </div>
