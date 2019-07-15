@@ -108,19 +108,8 @@ export class ChatComponent implements OnInit {
 
   // LOAD USER_MATCHED INFOS
   // ----------------------------------------------------------------------------------------
-  transition() {
-    const div = document.getElementById('contentArea');
-    div.style.opacity = '1';
-    div.style.transition = 'opacity 2s';
-  }
-  hideIt() {
-    const div = document.getElementById('contentArea');
-    div.style.opacity = '0';
-    console.log('hide it');
-  }
-
   loadMatchInfos(userMatchedId) {
-    this.transition();
+    // this.transition();
     this.aConversationWasOpened = 1;
     this.profileWasOpened = 0;
     this.scrollMessages();
@@ -190,6 +179,7 @@ export class ChatComponent implements OnInit {
   // LOAD MESSAGES
   // ----------------------------------------------------------------------------------------
   loadMessages(matchId) {
+    console.log('LOADING');
     if (matchId) {
       this.joinRoom(matchId);
       this.currentMatchId = matchId;
@@ -285,11 +275,22 @@ export class ChatComponent implements OnInit {
     this.scrollMessages();
   }
 
+  transition() {
+    const div = document.getElementById('contentArea');
+    div.style.opacity = '1';
+    div.style.transition = 'opacity 2s';
+  }
+  hideIt() {
+    const div = document.getElementById('contentArea');
+    div.style.opacity = '0';
+    console.log('hide it');
+  }
   scrollMessages() {
     setTimeout(function() {
       const div = document.getElementById('contentArea');
       div.scrollTop = div.scrollHeight - div.clientHeight;
       div.style.opacity = '1';
+      div.style.transition = 'opacity 2s';
      }, 25);
   }
 
