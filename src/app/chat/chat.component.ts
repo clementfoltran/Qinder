@@ -274,6 +274,8 @@ export class ChatComponent implements OnInit {
     this.scrollMessages();
   }
 
+  // ANIMATIONS
+  // ----------------------------------------------------------------------------------------
   transition() {
     const div = document.getElementById('contentArea');
     div.style.opacity = '1';
@@ -282,7 +284,6 @@ export class ChatComponent implements OnInit {
   hideIt() {
     const div = document.getElementById('contentArea');
     div.style.opacity = '0';
-    console.log('hide it');
   }
   scrollMessages() {
     setTimeout(function() {
@@ -293,7 +294,9 @@ export class ChatComponent implements OnInit {
      }, 25);
   }
 
- ngOnInit() {
+  // NgOnInit
+  // ----------------------------------------------------------------------------------------
+  ngOnInit() {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     try {
       this.socket = io.connect('http://localhost:3000');

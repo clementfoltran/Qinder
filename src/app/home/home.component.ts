@@ -15,6 +15,7 @@ import {} from 'googlemaps';
 import { NotificationsService } from '../notifications/services/notifications.service';
 import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
 import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
+import { DATE } from 'ngx-bootstrap/chronos/units/constants';
 
 @Component({
   selector: 'app-home',
@@ -92,12 +93,12 @@ export class HomeComponent implements OnInit {
    */
   public userCurrentPosition: any;
   /**
-   * 
+   *
    * Notification list
    */
   public notificationList: Notification[];
   /**
-   * 
+   *
    * User to swipe tags
    */
   public userToSwipeTags: UserTag[] = [];
@@ -245,5 +246,18 @@ export class HomeComponent implements OnInit {
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.getUserToSwipe();
+
+    const online = 1;
+    // save online
+
+    window.addEventListener('beforeunload', (event) => {
+      // Cancel the event as stated by the standard.
+      event.preventDefault();
+      // Chrome requires returnValue to be set.
+      event.returnValue = '';
+      const date = new Date();
+      console.log(date);
+      // saveLastConnection();
+    });
   }
 }
