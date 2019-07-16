@@ -301,9 +301,9 @@ export class HomeComponent implements OnInit {
     this.getUserOnline(1);
 
     // when the user leaves
-    window.addEventListener('beforeunload', (event) => {
+    window.addEventListener('unload', (event) => {
       // required by some browsers:
-      event.returnValue = '';
+      // event.returnValue = '';
       // user goes offline
       const date = new Date();
       this.getUserOnline(0);
