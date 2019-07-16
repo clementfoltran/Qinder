@@ -1,5 +1,5 @@
 const db = require('./database.js');
-const notification = require('./notification.js')
+const notification = require('./notification.js');
 
 exports.enterViewHome = (req, res) => {
   if (!req.body) {
@@ -98,81 +98,48 @@ exports.getUserToSwipe = (req, res) => {
   }
 };
 
-exports.swipe = (req, res) => {
+exports.swipe = async (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'INSERT INTO swipe VALUES(id_swipe, ?, ?, ?, NULL)';
-      const query = db.format(sql, [
-        req.body.id_user,
-        req.body.id_user_,
-        req.body.like
-      ]);
-      db.query(query, (err) => {
+      let sql = 'INSERT INTO swipe VALUES(id_swipe, ?, ?, ?, NULL)';
+      let query = db.format(sql, [ req.body.id_user, req.body.id_user_, req.body.like ]);
+      await db.query(query, (err) => {
+        console.log(req.body.like);
         if (err) {
-          res.json({
-            success: false,
-            message: 'User not found',
+          throw err
+        } else if (req.body.like) {
+          sql = 'SELECT id_user FROM swipe WHERE id_user = ? AND id_user_matched = ? AND swipe.like = 1';
+          query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
+          db.query(query, (err, response) => {
+            if (err) throw err;
+            else if (response[0]) {
+              console.log(response[0].id_user);
+              const insertMatch = 'INSERT INTO `match` VALUES(id_match, NOW())';
+              query = db.format(insertMatch);
+              db.query(query, (err, response) => {
+                if (err) throw err
+                else {
+                  const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user IN (?, ?)';
+                  query = db.format(updateSwipe, [ response.insertId, req.body.id_user, req.body.id_user_ ]);
+                  db.query(query, (err) => {
+                    if (err) throw err;
+                    else
+                      res.json({ success: true, message: '', match: true });
+                  });
+                }
+              });
+            } else {
+              res.json({ success: true, message: '', match: false });
+            }
           });
         } else {
-          if (callAndLog(checkMatch(req.body.id_user, req.body.id_user_))) {
-            res.json({ success: true, message: '', match: true });
-          } else {
-            res.json({ success: false, message: '', match: false });
-          }
+          res.json({ success: true, message: '', match: false });
         }
       });
     } else {
       res.sendStatus(401);
     }
   }
-};
-
-const match = (id_user, id_user_matched) => {
-  const insertMatch = 'INSERT INTO `match` VALUES(id_match, NOW())';
-  let query = db.format(insertMatch);
-  db.query(query, (err, response) => {
-    if (err) {
-      console.log(err);
-      return (false);
-    } else {
-      const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user IN (?, ?)';
-      query = db.format(updateSwipe, [ response.insertId, id_user, id_user_matched ]);
-      db.query(query, (err) => {
-        if (err || !callAndLog(notification.newNotification(id_user, id_user_matched, 3))) {
-          console.log(err);
-          return (false);
-        } else {
-          return (true);
-        }
-      });
-    }
-  });
-}
-
-const checkMatch = (id_user, id_user_) => {
-  const sql = 'SELECT id_user FROM swipe WHERE id_user = ? AND id_user_matched = ? AND swipe.like = 1';
-  const query = db.format(sql, [
-    id_user,
-    id_user_
-  ]);
-  db.query(query, (err, response) => {
-    if (err) {
-      console.log(err);
-      return (false);
-    } else if (response[0].id_user) {
-      callAndLog(match(id_user, id_user_));
-      return (true);
-    } else {
-      return (false);
-    }
-  });  
-};
-
-var callAndLog = (func) => {
-  return ((...args) => {
-    var res = func.apply(undefined, args);
-    return res;
-  })
 };

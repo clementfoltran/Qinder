@@ -3,7 +3,7 @@ const request = require('request');
 
 async function randomTags(idUser) {
   const sql = 'INSERT INTO usertag VALUES(id_utag, ?, ?)';
-  let rand = Math.floor(Math.random() * (+7 - +3 + +3));
+  let rand = Math.floor(Math.random() * (+7 - +1) + +1);
   let userTags = [];
   for (let i = 0; i < rand; i++) {
     randTag = Math.floor(Math.random() * (+7 - +1) + +1);
@@ -17,18 +17,18 @@ async function randomTags(idUser) {
       randTag,
       idUser
     ]);
-    await db.query(query, (err, response) => {
-
+    await db.query(query, (err) => {
+      if (err) throw err;
     });
   }
 }
 
-exports.randomUser = (req, res) => {
+exports.randomUser = async (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
   } else {
     // for (let index; index < 1000; index++) {
-      request('https://randomuser.me/api/', { json: true }, (err, response) => {
+      await request('https://randomuser.me/api/', { json: true }, (err, response) => {
         if (err) {
           res.json({ success: false, message: 'Failed to retrieve randomuser' });
         } else {
@@ -36,8 +36,8 @@ exports.randomUser = (req, res) => {
             let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
             let index = response.body.results[0];
             const position = {
-              latitude: index.location.coordinates.latitude,
-              longitude: index.location.coordinates.longitude
+              latitude: Math.random() * (+50 - +48) + +48,
+              longitude: Math.random() * (+4 - +1) + +1,
             }
             let query = db.format(sql, [
               index.name.first,
@@ -45,7 +45,7 @@ exports.randomUser = (req, res) => {
               index.email,
               index.login.sha1,
               index.gender.charAt(0).toUpperCase() + index.gender.slice(1),
-              index.dob.date,
+              new Date(index.dob.date),
               (index.gender === 'male') ? 'Female' : 'Male',
               null, null, null, null, null, 1, null,
               JSON.stringify(position),
@@ -61,12 +61,11 @@ exports.randomUser = (req, res) => {
                   index.picture.large
                 ]);
                 db.query(query, (err, response) => {
-                  console.log(response);
                   if (err) {
                     res.json({ success: false, message: 'Failed to add randomuser' });
                   } else {
                     randomTags(idUser);
-                    res.json({ success: true, message: '' });
+                    res.json({ success: true, message: '', data: index });
                   }
                 });
               }

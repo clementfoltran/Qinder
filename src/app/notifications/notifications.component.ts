@@ -22,20 +22,9 @@ export class NotificationsComponent implements OnInit {
   public userId: number;
   /**
    *
-   * Socket for notifications
-   */
-  public socket;
-  /**
-   *
    * Notification list
    */
   public notificationList: Notification[];
-
-  receive = (obj) => {
-    if (obj) {
-      this.notificationList.push(obj);
-    }
-  }
 
   getNotifications() {
     this.getNotificationService.getNotifications(this.userId)
@@ -51,13 +40,6 @@ export class NotificationsComponent implements OnInit {
     ) { }
 
   ngOnInit() {
-    // this.userId = this.resolveData.id;
-    // try {
-    //   this.socket = io.connect('http://localhost:3001');
-    //   this.socket.on('chat message', this.receive);
-    // } catch (e) {
-    //     console.log('Could not connect socket.io');
-    // }
   }
 
 }

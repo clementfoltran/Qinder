@@ -12,10 +12,15 @@ import { SwipeParameter } from './services/swipe/swipe-parameter';
 import { SwipeService } from './services/swipe/swipe.service';
 import { SwipeReturn } from './services/swipe/swipe-return';
 import {} from 'googlemaps';
-import { NotificationsService } from '../notifications/services/notifications.service';
 import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
 import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
+<<<<<<< HEAD
 import { DATE } from 'ngx-bootstrap/chronos/units/constants';
+=======
+import * as $ from 'jquery';
+
+declare var $: any;
+>>>>>>> clfoltra
 
 @Component({
   selector: 'app-home',
@@ -28,7 +33,6 @@ export class HomeComponent implements OnInit {
               public getUserPhotosService: GetUserPhotosService,
               public getUserToSwipeService: GetUserToSwipeService,
               public getUserTagsService: GetUserTagsService,
-              public notificationsService: NotificationsService,
               public swipeService: SwipeService,
               public messageService: MessageService) {
 }
@@ -104,9 +108,9 @@ export class HomeComponent implements OnInit {
   public userToSwipeTags: UserTag[] = [];
   public userToSwipe: boolean;
 
-  getUserPosition() {
+  async getUserPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
+      await navigator.geolocation.getCurrentPosition(position => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
@@ -155,12 +159,11 @@ export class HomeComponent implements OnInit {
       .subscribe((result: GetUserTagsReturn) => {
         if (result.success) {
           this.userToSwipeTags = result.userTags;
-          console.log(this.userToSwipeTags);
         }
       });
   }
 
-  getUserToSwipe() {
+  async getUserToSwipe() {
     this.userToSwipe = false;
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
@@ -170,7 +173,7 @@ export class HomeComponent implements OnInit {
       maxage: this.resolveData.maxage,
       distance: this.resolveData.distance
     };
-    this.getUserToSwipeService.getUserToSwipe(APIParameter)
+    await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
       if (result.success) {
         this.userToSwipe = true;
@@ -182,10 +185,16 @@ export class HomeComponent implements OnInit {
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
         const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
-        this.userToSwipeDistance = Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
+        this.userToSwipeDistance = Math.floor(Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
           this.userCurrentPosition,
           userToSwipePos
-        )) / 1000;
+        )) / 1000);
+        if (this.userToSwipeDistance > this.distance) {
+          this.userToSwipe = false;
+          setTimeout(() => {
+            this.getUserToSwipe();
+          }, 3000);
+        }
         this.getUserToSwipeTags(result.id);
       } else {
         this.messageService.add({
@@ -206,9 +215,14 @@ export class HomeComponent implements OnInit {
     };
     this.swipeService.swipe(APIParameter)
       .subscribe((result: SwipeReturn) => {
-        console.log(result);
         if (result.success) {
           this.getUserToSwipe();
+          if (result.match) {
+            $('.match').show();
+            setTimeout(() => {
+                $('.match').hide();
+            }, 3000);
+          }
         }
       });
   }
@@ -242,9 +256,10 @@ export class HomeComponent implements OnInit {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
-    this.getUserPosition();
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
+    this.distance = this.resolveData.distance;
+    this.getUserPosition();
     this.getUserToSwipe();
 
     const online = 1;

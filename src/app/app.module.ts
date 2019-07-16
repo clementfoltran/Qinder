@@ -36,10 +36,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-user-to-swipe.service';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { GetNotificationsService } from './notifications/services/get-notifications/get-notifications.service';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-
-
-const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
+import { PopulateComponent } from './populate/populate.component';
+import { PopulateService } from './populate/services/populate.service';
 
 @NgModule({
   declarations: [
@@ -50,6 +48,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
     PreferencesComponent,
     ChatComponent,
     NotificationsComponent,
+    PopulateComponent,
   ],
   imports: [
     CommonModule,
@@ -68,7 +67,6 @@ const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
     BsDatepickerModule,
     BsDatepickerModule.forRoot(),
     CarouselModule.forRoot(),
-    SocketIoModule.forRoot(config),
   ],
   providers: [
     MessageService,
@@ -88,6 +86,7 @@ const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
     EnterViewHomeService,
     GetUserToSwipeService,
     GetNotificationsService,
+    PopulateService,
   ],
   bootstrap: [AppComponent]
 })
