@@ -63,6 +63,9 @@ app.post('/swipe/', urlencodedParser, home.swipe);
 
 app.post('/saveMessage', urlencodedParser, chat.saveMessage);
 
+app.post('/getUserOnline', urlencodedParser, home.getUserOnline);
+app.post('/saveLastConnection', urlencodedParser, home.saveUserLastConnection);
+
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);

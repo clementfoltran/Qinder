@@ -14,13 +14,16 @@ import { SwipeReturn } from './services/swipe/swipe-return';
 import {} from 'googlemaps';
 import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
 import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
-<<<<<<< HEAD
 import { DATE } from 'ngx-bootstrap/chronos/units/constants';
-=======
 import * as $ from 'jquery';
+import { GetUserOnlineService } from './services/get-user-online/get-user-online.service';
+import { GetUserOnlineParameter } from './services/get-user-online/get-user-online-parameter';
+import { GetUserOnlineReturn } from './services/get-user-online/get-user-online-return';
+import { SaveUserLastConnectionParameter } from './services/save-last-connection/save-last-connection-parameter';
+import { SaveUserLastConnectionService } from './services/save-last-connection/save-last-connection.service';
+import { SaveUserLastConnectionReturn } from './services/save-last-connection/save-last-connection-return';
 
 declare var $: any;
->>>>>>> clfoltra
 
 @Component({
   selector: 'app-home',
@@ -34,7 +37,9 @@ export class HomeComponent implements OnInit {
               public getUserToSwipeService: GetUserToSwipeService,
               public getUserTagsService: GetUserTagsService,
               public swipeService: SwipeService,
-              public messageService: MessageService) {
+              public messageService: MessageService,
+              public getUserOnlineService: GetUserOnlineService,
+              public saveUserLastConnectionService: SaveUserLastConnectionService) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
   @ViewChild(ChatComponent, {static: false}) chatComponent: ChatComponent;
@@ -107,6 +112,9 @@ export class HomeComponent implements OnInit {
    */
   public userToSwipeTags: UserTag[] = [];
   public userToSwipe: boolean;
+
+  public APIParameterGetUserOnline: GetUserOnlineParameter;
+  public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
 
   async getUserPosition() {
     if (navigator.geolocation) {
@@ -252,6 +260,35 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  getUserOnline(online) {
+    this.APIParameterGetUserOnline = {
+      userId: +localStorage.getItem('userId'),
+      online
+    };
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
+      .subscribe((result: GetUserOnlineReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+  saveUserLastConnection(date) {
+    this.APIParameterSaveUserLastConnection = {
+      userId: +localStorage.getItem('userId'),
+      date
+    };
+    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
+      .subscribe((result: SaveUserLastConnectionReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+
   ngOnInit() {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
@@ -261,18 +298,16 @@ export class HomeComponent implements OnInit {
     this.distance = this.resolveData.distance;
     this.getUserPosition();
     this.getUserToSwipe();
+    this.getUserOnline(1);
 
-    const online = 1;
-    // save online
-
+    // when the user leaves
     window.addEventListener('beforeunload', (event) => {
-      // Cancel the event as stated by the standard.
-      event.preventDefault();
-      // Chrome requires returnValue to be set.
+      // required by some browsers:
       event.returnValue = '';
+      // user goes offline
       const date = new Date();
-      console.log(date);
-      // saveLastConnection();
+      this.getUserOnline(0);
+      this.saveUserLastConnection(date);
     });
   }
 }

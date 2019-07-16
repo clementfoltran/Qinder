@@ -11,7 +11,7 @@ declare var $: any;
   styleUrls: ['./populate.component.scss']
 })
 export class PopulateComponent implements OnInit {
-  public progress: boolean = false;
+  public progress = false;
   public nbUser: number;
   public resolvePopulate: PopulateReturn;
 
@@ -22,8 +22,8 @@ export class PopulateComponent implements OnInit {
         .subscribe((result: PopulateReturn) => {
           if (result.success) {
             this.resolvePopulate = result;
-            $('.progress-bar').css({ 
-              'width': Math.floor((index / this.nbUser) * 100) + '%'
+            $('.progress-bar').css({
+              width: Math.floor((index / this.nbUser) * 100) + '%'
             });
             setTimeout(() => {
               index++;

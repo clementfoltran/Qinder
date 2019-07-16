@@ -143,3 +143,55 @@ exports.swipe = async (req, res) => {
     }
   }
 };
+
+exports.getUserOnline = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'UPDATE user SET online = ? WHERE id_user = ?';
+      const query = db.format(sql, [req.body.online, req.body.userId]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Could not update "online"',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: 'Successfully updated online'
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.saveUserLastConnection = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'UPDATE user SET last_connected = ? WHERE id_user = ?';
+      const query = db.format(sql, [req.body.date, req.body.userId]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Could not not save last connection',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: 'Successfully saved last connection'
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};

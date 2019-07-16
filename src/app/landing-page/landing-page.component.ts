@@ -20,6 +20,9 @@ import { GeolocationService } from './services/geolocation/geolocation.service';
 import { GeolocationReturn } from './services/geolocation/geolocation.return';
 import { GeolocationParameter } from './services/geolocation/geolocation.parameter';
 import * as $ from 'jquery';
+import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
+import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
+import { GetUserOnlineReturn } from '../home/services/get-user-online/get-user-online-return';
 
 declare var $: any;
 
@@ -58,6 +61,7 @@ export class LandingPageComponent implements OnInit {
   public resolvedData: EnterViewActivateReturn;
   public bsValue: Date = new Date();
   public datePickerConfig: Partial<DatepickerConfig>;
+  public APIParameterGetUserOnline: GetUserOnlineParameter;
 
   getLocation() {
     if (navigator.geolocation) {
@@ -89,6 +93,7 @@ export class LandingPageComponent implements OnInit {
             // Connect successfully let's store the token
             localStorage.setItem('token', result.token);
             localStorage.setItem('userId', result.user_id.toString());
+            this.getUserOnline(1);
             this.sendGeolocation(result.user_id);
             $('body').removeClass('modal-open');
             $('.modal-backdrop').remove();
@@ -103,6 +108,21 @@ export class LandingPageComponent implements OnInit {
           }
         });
     }
+  }
+
+  getUserOnline(online) {
+    this.APIParameterGetUserOnline = {
+      userId: +localStorage.getItem('userId'),
+      online
+    };
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
+      .subscribe((result: GetUserOnlineReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
   }
 
   dec2hex(dec) {
@@ -203,7 +223,8 @@ export class LandingPageComponent implements OnInit {
                 private mailService: MailService,
                 public activatedRoute: ActivatedRoute,
                 public geolocationService: GeolocationService,
-                public activateService: ActivateService) {
+                public activateService: ActivateService,
+                public getUserOnlineService: GetUserOnlineService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
