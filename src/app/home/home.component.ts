@@ -22,13 +22,15 @@ import { GetUserOnlineReturn } from './services/get-user-online/get-user-online-
 import { SaveUserLastConnectionParameter } from './services/save-last-connection/save-last-connection-parameter';
 import { SaveUserLastConnectionService } from './services/save-last-connection/save-last-connection.service';
 import { SaveUserLastConnectionReturn } from './services/save-last-connection/save-last-connection-return';
+import { LastConnectedTimeFormatPipe } from '../pipes/last-connection.pipe';
 
 declare var $: any;
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers: [ LastConnectedTimeFormatPipe ]
 })
 export class HomeComponent implements OnInit {
 
@@ -39,7 +41,8 @@ export class HomeComponent implements OnInit {
               public swipeService: SwipeService,
               public messageService: MessageService,
               public getUserOnlineService: GetUserOnlineService,
-              public saveUserLastConnectionService: SaveUserLastConnectionService) {
+              public saveUserLastConnectionService: SaveUserLastConnectionService,
+              private lastConnection: LastConnectedTimeFormatPipe) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
   @ViewChild(ChatComponent, {static: false}) chatComponent: ChatComponent;

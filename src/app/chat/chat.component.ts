@@ -21,11 +21,13 @@ import { JoinRoomReturn } from './services/join-room/join-room-return';
 import { EnterViewSettingsService } from '../settings/services/enter-view-settings.service';
 import { EnterViewSettingsParameter } from '../settings/services/enter-view-settings-parameter';
 import { EnterViewSettingsReturn } from '../settings/services/enter-view-settings-return';
+import { LastConnectedTimeFormatPipe } from '../pipes/last-connection.pipe';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.scss']
+  styleUrls: ['./chat.component.scss'],
+  providers: [ LastConnectedTimeFormatPipe ]
 })
 export class ChatComponent implements OnInit {
 
@@ -36,7 +38,8 @@ export class ChatComponent implements OnInit {
               public getUserMatchedInfos: EnterViewHomeService,
               public joinRoomService: JoinRoomService,
               public getUserInfosService: EnterViewSettingsService,
-              public fb: FormBuilder) {
+              public fb: FormBuilder,
+              public lastConnection: LastConnectedTimeFormatPipe) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
                 });
@@ -109,7 +112,6 @@ export class ChatComponent implements OnInit {
   // LOAD USER_MATCHED INFOS
   // ----------------------------------------------------------------------------------------
   loadMatchInfos(userMatchedId) {
-    // this.transition();
     this.aConversationWasOpened = 1;
     this.profileWasOpened = 0;
     this.scrollMessages();
@@ -150,6 +152,7 @@ export class ChatComponent implements OnInit {
       .subscribe((result: EnterViewSettingsReturn) => {
         if (result.success) {
           this.userInfos = result.user;
+          console.log('user = ', result.user);
           this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
         } else {
           console.log(result.message);

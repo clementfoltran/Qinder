@@ -15,4 +15,6 @@ export interface EnterViewHomeReturn {
     longitude: number
   };
   confirm: boolean;
+  online: number;
+  lastConnection: Date;
 }

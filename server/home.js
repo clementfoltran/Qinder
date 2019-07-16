@@ -29,6 +29,8 @@ exports.enterViewHome = (req, res) => {
             gender: response[0].gender,
             position: JSON.parse(response[0].position),
             confirm: response[0].confirm,
+            online: response[0].online,
+            lastConnection: response[0].last_connected
           });
         }
       });

@@ -38,6 +38,7 @@ import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { GetNotificationsService } from './notifications/services/get-notifications/get-notifications.service';
 import { PopulateComponent } from './populate/populate.component';
 import { PopulateService } from './populate/services/populate.service';
+import { LastConnectedTimeFormatPipe } from './pipes/last-connection.pipe';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PopulateService } from './populate/services/populate.service';
     ChatComponent,
     NotificationsComponent,
     PopulateComponent,
+    LastConnectedTimeFormatPipe,
   ],
   imports: [
     CommonModule,

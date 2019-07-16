@@ -13,4 +13,6 @@ export interface User {
     birthdate: Date;
     distance: number;
     bio: string;
+    online: number;
+    lastConnected: Date;
 }
