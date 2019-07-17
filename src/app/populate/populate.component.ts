@@ -27,7 +27,7 @@ export class PopulateComponent implements OnInit {
             });
             setTimeout(() => {
               index++;
-            }, 500);
+            }, 100);
           }
         });
     }

@@ -104,12 +104,19 @@ export class HomeComponent implements OnInit {
   public userToSwipeTags: UserTag[] = [];
   public userToSwipe: boolean;
 
-  async getUserPosition() {
+  getUserPosition() {
     if (navigator.geolocation) {
-      await navigator.geolocation.getCurrentPosition(position => {
+      navigator.geolocation.getCurrentPosition(position => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
+      });
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Localisation',
+        detail: 'Geolocation error',
+        life: 6000
       });
     }
   }
@@ -187,7 +194,9 @@ export class HomeComponent implements OnInit {
         )) / 1000);
         if (this.userToSwipeDistance > this.distance) {
           this.userToSwipe = false;
+          this.swipe(false);
           setTimeout(() => {
+            console.log("get user to swipe");
             this.getUserToSwipe();
           }, 3000);
         }
