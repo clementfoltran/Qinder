@@ -12,12 +12,6 @@ export class IsLoggedOutGuard implements CanActivate {
   canActivate() {
     if (localStorage.getItem('token')) {
       this.router.navigate(['/home']);
-      this.messageService.add({
-        severity: 'warn',
-        summary: 'Landing-page',
-        detail: 'You need to been logged out to access to this page',
-        life: 6000
-      });
       return false;
     } else {
       return true;
