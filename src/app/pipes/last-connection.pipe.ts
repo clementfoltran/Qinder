@@ -4,17 +4,17 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 export class LastConnectedTimeFormatPipe implements PipeTransform {
     transform(connectedTime: Date, ...args): string {
-        let elapsed = new Date(new Date().getTime() - connectedTime.getTime()).getTime() / 60000;
+        let elapsed = new Date(new Date().getTime() - new Date(connectedTime).getTime()).getTime() / 60000;
 
         let time = '';
 
         if (elapsed < 60) {
-            time = 'minutes ago';
+            time = ' minutes ago';
         } else if ((elapsed /= 60) < 24) {
-            time = 'hours ago';
+            time = ' hours ago';
         } else if ((elapsed /= 24) < 30) {
-            time = 'days ago';
-        } else { return 'no connect'; }
+            time = ' days ago';
+        } else { return 'A long time ago..'; }
 
         return Math.round(elapsed) + time;
     }

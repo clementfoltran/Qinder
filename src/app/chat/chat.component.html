@@ -37,7 +37,7 @@
             <label>" {{ userInfos[0].bio }} "</label>
             <br>
           </div>
-          <label>Last connected : {{ userInfos[0].lastConnected }}</label>
+          <label>Last connected : {{ userInfos[0].last_connected | lastConnectedFormat }}</label>
           <br>
           <label>Delete match / Block</label>
         </div>
