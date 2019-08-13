@@ -55,18 +55,20 @@ exports.randomUser = async (req, res) => {
                 res.json({ success: false, message: 'Failed to add randomuser' });
               } else {
                 const idUser = response.insertId;
-                sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())'
-                query = db.format(sql, [
-                  idUser,
-                  index.picture.large
-                ]);
-                db.query(query, (err, response) => {
-                  if (err) {
-                    res.json({ success: false, message: 'Failed to add randomuser' });
-                  } else {
-                    randomTags(idUser);
-                    res.json({ success: true, message: '', data: index });
-                  }
+                request(`https://source.unsplash.com/random/?$${ index.gender }`, { json: true }, (err, response) => {
+                  sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())'
+                  query = db.format(sql, [
+                    idUser,
+                    response.request.uri.href
+                  ]);
+                  db.query(query, (err, response) => {
+                    if (err) {
+                      res.json({ success: false, message: 'Failed to add randomuser' });
+                    } else {
+                      randomTags(idUser);
+                      res.json({ success: true, message: '', data: index });
+                    }
+                  });
                 });
               }
             });
