@@ -5,7 +5,7 @@
     <div *ngIf="!matchesObject; else elseBlock5">
       <div class="matchesList">
         <div class="matchPicDiv" *ngFor="let match of matchesObjects">
-          <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;"><img class="matchPicture" src="data:image/png;base64,{{ match.picture }}" alt=""></a>
+          <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;"><img class="matchPicture" src="{{ match.picture }}" alt=""></a>
         </div>
       </div>
       <hr>
@@ -13,7 +13,7 @@
         <!-- selected conversation pic & match name -->
         <div *ngIf="!userMatchedName; else elseBlock"><h5>Click on a match to open a conversation 😊</h5></div>
         <ng-template #elseBlock>
-            <a (click)="loadMatchProfileData()" style="cursor: pointer;"><img class="conversationPicture" src="data:image/png;base64,{{ userMatchedPicture }}" alt=""></a>
+            <a (click)="loadMatchProfileData()" style="cursor: pointer;"><img class="conversationPicture" src="{{ userMatchedPicture }}" alt=""></a>
             <label class="user"><strong>{{userMatchedName}}</strong></label>
         </ng-template>
       </div>
@@ -28,7 +28,7 @@
 <div *ngIf="profileWasOpened === 1; else elseBlock3">
     <div class="profileArea" id="profileArea">
         <div class="userPicsDiv" *ngFor="let pic of userMatchedPhotos">
-          <a style="cursor: pointer;"><img class="userPicture" src="data:image/png;base64,{{ pic.photo }}" alt=""></a>
+          <a style="cursor: pointer;"><img class="userPicture" src="{{ pic.photo }}" alt=""></a>
         </div>
         <div *ngIf="userInfos[0]">
           <label>{{ userInfos[0].birthdate }} yo, {{ userInfos[0].distance }} km away</label>
