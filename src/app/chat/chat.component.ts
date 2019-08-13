@@ -114,7 +114,6 @@ export class ChatComponent implements OnInit {
   loadMatchInfos(userMatchedId) {
     this.aConversationWasOpened = 1;
     this.profileWasOpened = 0;
-    this.scrollMessages();
     this.userMatchedId = userMatchedId;
     this.getUserPhotosService.getUserPhotos(userMatchedId)
       .subscribe((result: GetUserPhotosReturn) => {
@@ -146,13 +145,11 @@ export class ChatComponent implements OnInit {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
-      this.scrollMessages();
     }
     this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
         if (result.success) {
           this.userInfos = result.user;
-          console.log('user = ', result.user);
           this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
         } else {
           console.log(result.message);
@@ -197,7 +194,6 @@ export class ChatComponent implements OnInit {
             console.log(result.message);
           }
         });
-      this.scrollMessages();
     }
   }
   fillMessagesArray(messageArray) {
@@ -267,14 +263,14 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
-    this.scrollMessages();
+    
   }
 
   receive = (obj) => {
     if (obj) {
       this.messageList.push(obj);
     }
-    this.scrollMessages();
+    
   }
 
   // ANIMATIONS
@@ -284,23 +280,23 @@ export class ChatComponent implements OnInit {
     div.style.opacity = '1';
     div.style.transition = 'opacity 2s';
   }
+
   hideIt() {
     const div = document.getElementById('contentArea');
     div.style.opacity = '0';
   }
-  scrollMessages() {
-    setTimeout(function() {
-      const div = document.getElementById('contentArea');
-      div.scrollTop = div.scrollHeight - div.clientHeight;
-      div.style.opacity = '1';
-      div.style.transition = 'opacity 2s';
-     }, 25);
+
+
+  removeUser(idUserMatched: number) {
+    console.log("bite" + idUserMatched);
+    console.log(this.matchesObjects);
   }
 
   // NgOnInit
   // ----------------------------------------------------------------------------------------
   ngOnInit() {
     this.id = parseInt(localStorage.getItem('userId'), 10);
+    this.loadMatches();
     try {
       this.socket = io.connect('http://localhost:3000');
       this.socket.on('receive message', this.receive);

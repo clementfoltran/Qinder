@@ -4,6 +4,34 @@ const jwt = require('jsonwebtoken');
 const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
 const nodemailer = require('nodemailer');
 
+exports.removeMatch = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      let sql = 'DELETE FROM swipe WHERE id_swipe = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          sql = 'DELETE FROM match WHERE id_match = ?';
+          query = db.format(sql, [req.params.id]);
+          db.query(query, (err, response) => {
+            if (err) {
+              res.json({ success: false, message: 'Network error' });
+            } else {
+              res.json({ success: true, message: '' });
+            }
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.removeUserTag = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);

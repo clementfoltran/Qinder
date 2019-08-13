@@ -86,11 +86,30 @@
     </div>
   </div>
 </div>
+<!-- Chat modal -->
+<div class="modal fade" id="modChat" tabindex="-1" role="dialog" aria-labelledby="modChat" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <h2 class="m-auto p-2">Messages</h2>
+      <div class="modal-body text-center">
+        <app-chat></app-chat>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Menu -->
 <nav class="navbar navbar-expand-lg fixed-bottom">
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav col-md-12 p-0">
       <li class="nav-item col-md-4">
-        <a class="nav-link" (click)="showChat()"><i class="fas fa-comments"></i></a>
+        <a class="nav-link" data-toggle="modal" data-target="#modChat">
+          <i class="fas fa-comments"></i>
+        </a>
       </li>
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modSignIn">

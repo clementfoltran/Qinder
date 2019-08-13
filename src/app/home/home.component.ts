@@ -247,20 +247,6 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  showChat($event: any) {
-    const slider = document.querySelector('.slider1');
-
-    if (slider.classList.contains('opened')) {
-      slider.classList.remove('opened');
-      slider.classList.add('closed');
-      // load data
-      this.chatComponent.loadMatches();
-    } else {
-        slider.classList.remove('closed');
-        slider.classList.add('opened');
-    }
-  }
-
   showNotifs() {
     const slider = document.querySelector('.slider3');
     if (slider.classList.contains('opened')) {
