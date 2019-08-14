@@ -3,7 +3,6 @@
     <h1 class="scale-in-center">It's a match !</h1>
   </div>
 </div>
-
 <div class="match-zone col-md-12 text-center">
   <img class="logo" src="../../assets/img/logo.svg" height="100" alt="">
   <br>
@@ -51,19 +50,13 @@
             <p class="card-text">{{ userToSwipeBio }}</p>
           </div>
         </div>
-        <div *ngIf="userToSwipeBio; else noBio">
-          <p class="card-text">{{ userToSwipeBio }}</p>
-        </div>
-        <ng-template #noBio>
-          <p class="card-text">{{ userToSwipeName | titlecase}} did nothing in his life 😥</p>
-        </ng-template>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div *ngIf="userToSwipe" class="swipe-buttons m-auto align-items-center">
-      <button (click)="swipe(false)" style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
-      <button (click)="swipe(true)" style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
+    <div class="row">
+      <div *ngIf="userToSwipe" class="swipe-buttons m-auto align-items-center">
+        <button (click)="swipe(false)" style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
+        <button (click)="swipe(true)" style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
+      </div>
     </div>
   </div>
   <ng-template #noUserToSwipe>
