@@ -46,6 +46,7 @@ app.post('/login', urlencodedParser, user.login);
 app.post('/updateGeolocation', urlencodedParser, user.updateGeolocation);
 app.post('/register', urlencodedParser, user.register);
 app.post('/sendmail', urlencodedParser, user.sendMail);
+app.post('/reportUser', urlencodedParser, user.reportUser);
 
 app.get('/test/:id', urlencodedParser, user.test);
 

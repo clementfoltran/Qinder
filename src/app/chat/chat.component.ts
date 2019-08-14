@@ -22,6 +22,11 @@ import { EnterViewSettingsService } from '../settings/services/enter-view-settin
 import { EnterViewSettingsParameter } from '../settings/services/enter-view-settings-parameter';
 import { EnterViewSettingsReturn } from '../settings/services/enter-view-settings-return';
 import { LastConnectedTimeFormatPipe } from '../pipes/last-connection.pipe';
+import { RemoveMatchService } from './services/remove-match/remove-match.service';
+import { RemoveMatchReturn } from './services/remove-match/remove-match.return';
+import { ReportUserParameter } from './services/report-user/report-user.parameter';
+import { ReportUserService } from './services/report-user/report-user.service';
+import { ReportUserReturn } from './services/report-user/report-user.return';
 
 @Component({
   selector: 'app-chat',
@@ -39,6 +44,8 @@ export class ChatComponent implements OnInit {
               public joinRoomService: JoinRoomService,
               public getUserInfosService: EnterViewSettingsService,
               public fb: FormBuilder,
+              public removeMatchService: RemoveMatchService,
+              public reportUserService: ReportUserService,
               public lastConnection: LastConnectedTimeFormatPipe) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -286,10 +293,38 @@ export class ChatComponent implements OnInit {
     div.style.opacity = '0';
   }
 
+  reportUser(idUserMatched) {
+    let idMatch = 0;
+    this.matchesObjects.forEach((v) => {
+      if (v.id.id_user_matched === idUserMatched) {
+        idMatch = v.id.id_match;
+      }
+    });
+    console.log(idMatch);
+    const APIParameter: ReportUserParameter = {
+      id_match: idMatch,
+      id_user: this.id,
+      id_user_: idUserMatched,
+    }
+    this.reportUserService.reportUser(APIParameter)
+      .subscribe((result: ReportUserReturn) => {
+        if (result.success) {
+          alert('user blocked');
+        }
+      }); 
+  }
 
   removeUser(idUserMatched: number) {
-    console.log("bite" + idUserMatched);
-    console.log(this.matchesObjects);
+    this.matchesObjects.forEach((v) => {
+      if (v.id.id_user_matched === idUserMatched) {
+        this.removeMatchService.removeMatch(v.id.id_match)
+          .subscribe((result: RemoveMatchReturn) => {
+            if (result.success) {
+              alert('user removed');
+            }
+          });
+      }
+    });
   }
 
   // NgOnInit

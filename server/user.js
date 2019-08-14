@@ -9,19 +9,57 @@ exports.removeMatch = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'DELETE FROM swipe WHERE id_swipe = ?';
+      let sql = 'DELETE FROM swipe WHERE id_match = ?';
       let query = db.format(sql, [ req.params.id ]);
-      db.query(query, (err, response) => {
+      db.query(query, (err) => {
         if (err) {
           res.json({ success: false, message: 'Network error' });
         } else {
-          sql = 'DELETE FROM match WHERE id_match = ?';
+          sql = 'DELETE FROM `match` WHERE id_match = ?';
           query = db.format(sql, [req.params.id]);
-          db.query(query, (err, response) => {
+          db.query(query, (err) => {
             if (err) {
               res.json({ success: false, message: 'Network error' });
             } else {
               res.json({ success: true, message: '' });
+            }
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.reportUser = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      let sql = 'DELETE FROM swipe WHERE id_match = ?';
+      let query = db.format(sql, [ req.body.id_match ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          sql = 'DELETE FROM `match` WHERE id_match = ?';
+          query = db.format(sql, [req.body.id_match]);
+          db.query(query, (err) => {
+            if (err) {
+              res.json({ success: false, message: 'Network error' });
+            } else {
+              sql = 'INSERT INTO report VALUES(id_report, ?, ?)';
+              query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
+              db.query(query, (err) => {
+                if (err) {
+                  console.log(req.body.id_user_, req.body.id_user);
+                  console.log(err);
+                  res.json({ success: false, message: 'Network error' });
+                } else {
+                  res.json({ success: true, message: '' });
+                }
+              });
             }
           });
         }

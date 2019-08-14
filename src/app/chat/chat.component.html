@@ -43,10 +43,10 @@
   </div>
   <div class="row m-2">
     <div class="form-group col-md-6">
-      <button type="button" class="btn btn-primary btn-block">BLOCK</button>
+      <button type="button" class="btn btn-primary btn-block" (click)="reportUser(userInfos[0].id_user)">BLOCK</button>
     </div>
     <div class="form-group col-md-6">
-      <button type="button" class="btn btn-primary btn-block" (click)="removeUser(userInfos[0].id)">REMOVE</button>
+      <button type="button" class="btn btn-primary btn-block" (click)="removeUser(userInfos[0].id_user)">REMOVE</button>
     </div>
   </div>
 </div>

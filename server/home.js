@@ -123,8 +123,10 @@ exports.swipe = async (req, res) => {
               db.query(query, (err, response) => {
                 if (err) throw err
                 else {
-                  const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user IN (?, ?)';
-                  query = db.format(updateSwipe, [ response.insertId, req.body.id_user, req.body.id_user_ ]);
+                  const updateSwipe = 'UPDATE swipe SET id_match = ? WHERE id_user = ? AND id_user_matched = ?; \
+                                       UPDATE swipe SET id_match = ? WHERE id_user = ? AND id_user_matched = ?;';
+                  query = db.format(updateSwipe, [ response.insertId, req.body.id_user, req.body.id_user_,
+                                                   response.insertId, req.body.id_user_, req.body.id_user, ]);
                   db.query(query, (err) => {
                     if (err) throw err;
                     else

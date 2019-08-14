@@ -13,14 +13,14 @@ export class RemoveMatchService {
   public serviceURL = Globals.baseURL + 'removeMatch/';
   constructor(public http: HttpClient) { }
 
-  removeUser(id_match): Observable<RemoveMatchReturn> {
+  removeMatch(id_match): Observable<RemoveMatchReturn> {
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
     };
 
-    return this.http.get<RemoveMatchReturn>(this.serviceURL, option).pipe(
+    return this.http.get<RemoveMatchReturn>(this.serviceURL + id_match, option).pipe(
       catchError((err) => {
         console.log(err);
         return throwError('error');
