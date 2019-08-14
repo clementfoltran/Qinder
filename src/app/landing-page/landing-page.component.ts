@@ -23,6 +23,7 @@ import * as $ from 'jquery';
 import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
 import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
 import { GetUserOnlineReturn } from '../home/services/get-user-online/get-user-online-return';
+import { ResetPasswordParameter } from './services/reset-password/reset-password.parameter';
 
 declare var $: any;
 
@@ -62,6 +63,10 @@ export class LandingPageComponent implements OnInit {
   public bsValue: Date = new Date();
   public datePickerConfig: Partial<DatepickerConfig>;
   public APIParameterGetUserOnline: GetUserOnlineParameter;
+
+  public forgotModeVar = 0;
+  public forgotPasswordForm: FormGroup;
+  public ResetPasswordAPIParameter: ResetPasswordParameter;
 
   getLocation() {
     if (navigator.geolocation) {
@@ -199,6 +204,31 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
+  forgotMode() {
+    if (this.forgotModeVar === 0) {
+      this.forgotModeVar = 1;
+    } else {
+      this.forgotModeVar = 0;
+    }
+  }
+
+  resetPassword() {
+    if (this.forgotPasswordForm.valid) {
+      this.ResetPasswordAPIParameter = {
+        email: this.forgotPasswordForm.get('email').value,
+      };
+      console.log(this.ResetPasswordAPIParameter);
+      // this.resetPasswordService.auth(this.ResetPasswordAPIParameter)
+      //   .subscribe((result: ResetPasswordReturn) => {
+      //     if (result.success) {
+
+      //     } else {
+
+      //     }
+      //   });
+    }
+  }
+
   verifyAccount(email) {
       this.activateService.activateAccount(email)
         .subscribe((result: ActivateReturn) => {
@@ -239,6 +269,10 @@ export class LandingPageComponent implements OnInit {
     email: ['', Validators.required],
     password: ['', Validators.required],
     });
+
+    this.forgotPasswordForm = fb.group({
+      email: ['', Validators.required],
+      });
 
     this.datePickerConfig = Object.assign({
       containerClass: 'theme-orange',
