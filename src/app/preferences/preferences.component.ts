@@ -182,6 +182,7 @@ export class PreferencesComponent implements OnInit {
   }
 
   uploadPhoto() {
+    console.log(this.selectedFile);
     this.APIParameterPhoto = {
       id: this.userId,
       photo: this.selectedFile,

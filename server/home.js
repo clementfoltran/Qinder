@@ -166,6 +166,36 @@ exports.getTheHeavens = (req, res) => {
   }
 };
 
+function updateRatio(idUser) {
+  let sql = 'SELECT COUNT(id_swipe) AS nswipe FROM swipe WHERE id_user = ? AND swipe.like = 1';
+  let query = db.format(sql, [ idUser ]);
+  db.query(query, (err, response) => {
+    if (err) throw err;
+    else {
+      const nSwipePos = response[0].nswipe;
+      sql = 'SELECT COUNT(`match`.id_match) AS nmatch FROM `match` INNER JOIN swipe ON `match`.id_match = swipe.id_match WHERE id_user = ?';
+      let query = db.format(sql, [ idUser ]);
+      db.query(query, (err, response) => {
+        if (err) throw err
+        else {
+          const nMatch = response[0].nmatch;
+          console.log(nMatch, nSwipePos);
+          // Ration calcul
+          const ratio = (nMatch / nSwipePos) * 100;
+          sql = 'UPDATE user SET popularity = ? WHERE id_user = ?';
+          let query = db.format(sql, [ ratio, idUser ]);
+          db.query(query, (err) => {
+            if (err) throw err;
+            else {
+              console.log('New ratio : ' + ratio);
+            }
+          });
+        }
+      });
+    }
+  });
+}
+
 exports.swipe = async (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
@@ -178,6 +208,9 @@ exports.swipe = async (req, res) => {
         if (err) {
           throw err
         } else if (req.body.like) {
+          if (req.body.like === true) {
+            updateRatio(req.body.id_user);
+          }
           sql = 'SELECT id_user FROM swipe WHERE id_user = ? AND id_user_matched = ? AND swipe.like = 1';
           query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
           db.query(query, (err, response) => {
