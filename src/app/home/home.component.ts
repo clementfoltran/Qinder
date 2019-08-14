@@ -23,6 +23,10 @@ import { SaveUserLastConnectionParameter } from './services/save-last-connection
 import { SaveUserLastConnectionService } from './services/save-last-connection/save-last-connection.service';
 import { SaveUserLastConnectionReturn } from './services/save-last-connection/save-last-connection-return';
 import { LastConnectedTimeFormatPipe } from '../pipes/last-connection.pipe';
+import anime from 'animejs/lib/anime.es.js';
+import { GetTheHeavensParameter } from './services/get-the-heavens/get-the-heavens-parameter';
+import { GetTheHeavensService } from './services/get-the-heavens/get-the-heavens.service';
+import { GetTheHeavensReturn } from './services/get-the-heavens/get-the-heavens-return';
 
 declare var $: any;
 
@@ -42,6 +46,7 @@ export class HomeComponent implements OnInit {
               public messageService: MessageService,
               public getUserOnlineService: GetUserOnlineService,
               public saveUserLastConnectionService: SaveUserLastConnectionService,
+              public getTheHeavensService: GetTheHeavensService,
               private lastConnection: LastConnectedTimeFormatPipe) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
@@ -116,6 +121,9 @@ export class HomeComponent implements OnInit {
   public userToSwipeTags: UserTag[] = [];
   public userToSwipe: boolean;
 
+  public peopleInHeavens: any;
+  public progressBarValue = 100;
+
   public APIParameterGetUserOnline: GetUserOnlineParameter;
   public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
 
@@ -160,7 +168,7 @@ export class HomeComponent implements OnInit {
     this.getUserPhotosService.getUserPhotos(userId)
     .subscribe((result: GetUserPhotosReturn) => {
       if (result.success) {
-        this.userToSwipePhotos = result.photos;
+        this.fillUserToSwipePhotos(result.photos);
       } else {
         this.messageService.add({
           severity: 'error',
@@ -170,6 +178,9 @@ export class HomeComponent implements OnInit {
         });
       }
     });
+  }
+  fillUserToSwipePhotos(photo) {
+    this.userToSwipePhotos = photo;
   }
 
   getUserToSwipeTags(id: number) {
@@ -211,7 +222,7 @@ export class HomeComponent implements OnInit {
           this.userToSwipe = false;
           this.swipe(false);
           setTimeout(() => {
-            console.log("get user to swipe");
+            console.log('get user to swipe');
             this.getUserToSwipe();
           }, 3000);
         }
@@ -245,9 +256,74 @@ export class HomeComponent implements OnInit {
           }
         }
       });
+    if (like === true) {
+      this.progressToTheHeavens();
+    }
   }
 
-  showNotifs() {
+  async getTheHeavens() {
+    const APIParameter: GetTheHeavensParameter = {
+      id: this.resolveData.id,
+      interest: this.resolveData.interest,
+      gender: this.resolveData.gender,
+      minage: this.resolveData.minage,
+      maxage: this.resolveData.maxage,
+      distance: this.resolveData.distance
+    };
+    await this.getTheHeavensService.getTheHeavens(APIParameter)
+    .subscribe((result: GetTheHeavensReturn) => {
+      if (result.success) {
+        this.peopleInHeavens = result.people_list;
+        this.displayTheHeavens();
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Network',
+          detail: result.message,
+          life: 6000
+        });
+      }
+    });
+  }
+
+displayTheHeavens() {
+  setTimeout(function() {
+    anime({
+      targets: '.heaven',
+      opacity: 1,
+      duration: 30000
+    });
+  }, 3000);
+}
+
+progressToTheHeavens() {
+  this.progressBarValue = this.progressBarValue + 12;
+}
+
+showMeTheHeavens() {
+  anime({
+    targets: '.swipe-zone',
+    opacity: 0,
+    duration: 10000
+  });
+  this.getTheHeavens();
+}
+
+showChat($event: any) {
+    const slider = document.querySelector('.slider1');
+
+    if (slider.classList.contains('opened')) {
+      slider.classList.remove('opened');
+      slider.classList.add('closed');
+      // load data
+      this.chatComponent.loadMatches();
+    } else {
+        slider.classList.remove('closed');
+        slider.classList.add('opened');
+    }
+  }
+
+showNotifs() {
     const slider = document.querySelector('.slider3');
     if (slider.classList.contains('opened')) {
       slider.classList.remove('opened');
@@ -258,7 +334,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getUserOnline(online) {
+getUserOnline(online) {
     this.APIParameterGetUserOnline = {
       userId: +localStorage.getItem('userId'),
       online
@@ -272,7 +348,7 @@ export class HomeComponent implements OnInit {
         }
       });
   }
-  saveUserLastConnection(date) {
+saveUserLastConnection(date) {
     this.APIParameterSaveUserLastConnection = {
       userId: +localStorage.getItem('userId'),
       date
@@ -287,7 +363,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
+ngOnInit() {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
