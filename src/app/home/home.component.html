@@ -4,12 +4,33 @@
   </div>
 </div>
 <div class="fullView">
+
   <div class="match-zone col-md-12 text-center">
     <img class="logo" src="../../assets/img/logo.svg" height="100" alt="">
     <br>
-    <label>✨Show me the heavens!✨</label>
+    <div *ngIf="progressBarValue < 100; else showHeavens"  class="heavens">
+      <label><strong>✨ Keep swiping to take a look at the heavens.. ✨</strong></label>
+      <br>
+      <div class="progress">
+        <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="{ width: progressBarValue + '%' }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    </div>
+    <ng-template #showHeavens>
+      <button (click)="showMeTheHeavens()" type="button" class="btn btn-danger">✨ Show me the heavens! ✨</button>
+    </ng-template>
+    <div *ngIf="peopleInHeavens">
+      <div class="card-group">
+        <div class="p-5" *ngFor="let people of peopleInHeavens; let i = index">
+          <div class="card">
+            <img class="card-img-top" src="{{ people.photo }}" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title"> {{ people.firstname }}</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     <div class="swipe-zone mt-4">
-      
       <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
         <div class="card">
           <carousel>

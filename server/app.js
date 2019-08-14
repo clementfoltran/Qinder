@@ -59,6 +59,7 @@ app.post('/uploadPhoto', urlencodedParser, preference.uploadPhoto);
 app.post('/deletePhoto', urlencodedParser, preference.deletePhoto);
 
 app.post('/getUserToSwipe/', urlencodedParser, home.getUserToSwipe);
+app.post('/getTheHeavens/', urlencodedParser, home.getTheHeavens);
 app.post('/swipe/', urlencodedParser, home.swipe);
 
 app.post('/saveMessage', urlencodedParser, chat.saveMessage);

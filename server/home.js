@@ -100,6 +100,72 @@ exports.getUserToSwipe = (req, res) => {
   }
 };
 
+exports.getTheHeavens = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      // To calculate birthdate of users
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const minAge = currentYear - req.body.minage;
+      const maxAge = currentYear - req.body.maxage;
+      let sql = '';
+      let query;
+      if (req.body.interest === 'Both') {
+        // ADD DISTANCE CHECK
+    
+
+        // sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
+        // WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        // AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? ORDER BY RAND() LIMIT 20';
+
+        sql = 'SELECT user.id_user, firstname, photo FROM user INNER JOIN photo ON user.id_user = photo.id_user \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched)  \
+        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? ORDER BY RAND() LIMIT 20';
+        query = db.format(sql, [
+          req.body.id,
+          maxAge,
+          minAge
+        ]);
+      } else {
+        // sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
+        // WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        // AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
+        // AND user.gender = ? ORDER BY RAND() LIMIT 20';
+
+        sql = 'SELECT user.id_user, firstname, photo FROM user INNER JOIN photo ON user.id_user = photo.id_user \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched)  \
+        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND user.gender = ? ORDER BY RAND() LIMIT 20';
+        query = db.format(sql, [
+          req.body.id,
+          maxAge,
+          minAge,
+          req.body.interest,
+        ]);
+      }
+      db.query(query, (err, response) => {
+        if (err) {
+          console.log(err);
+          res.json({ success: false, message: 'User not found' });
+        } else {
+          if (response[0]) {
+            res.json({
+              success: true,
+              message: '',
+              people_list: response,
+            });
+          } else {
+            res.json({ success: false, message: 'There is no more Qinders, try to change your parameters' });
+          }
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.swipe = async (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
