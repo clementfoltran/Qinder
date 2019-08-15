@@ -30,7 +30,8 @@ exports.enterViewHome = (req, res) => {
             position: JSON.parse(response[0].position),
             confirm: response[0].confirm,
             online: response[0].online,
-            lastConnection: response[0].last_connected
+            lastConnection: response[0].last_connected,
+            pop: response[0].pop
           });
         }
       });
@@ -180,7 +181,7 @@ function updateRatio(idUser) {
         else {
           const nMatch = response[0].nmatch;
           console.log(nMatch, nSwipePos);
-          // Ration calcul
+          // Ratio calcul
           const ratio = (nMatch / nSwipePos) * 100;
           sql = 'UPDATE user SET popularity = ? WHERE id_user = ?';
           let query = db.format(sql, [ ratio, idUser ]);

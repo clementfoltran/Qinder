@@ -17,4 +17,5 @@ export interface EnterViewHomeReturn {
   confirm: boolean;
   online: number;
   lastConnection: Date;
+  pop: number;
 }

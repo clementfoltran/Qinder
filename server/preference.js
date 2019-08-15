@@ -31,7 +31,7 @@ exports.updatePreferences = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'UPDATE user SET bio = ?, gender = ?, interest = ?, distance = ?, minage = ?, maxage = ? WHERE id_user = ?';
+      const sql = 'UPDATE user SET bio = ?, gender = ?, interest = ?, distance = ?, minage = ?, maxage = ?, pop = ? WHERE id_user = ?';
       let query = db.format(sql, [
         req.body.bio,
         req.body.gender,
@@ -39,7 +39,9 @@ exports.updatePreferences = (req, res) => {
         req.body.distance,
         req.body.minage,
         req.body.maxage,
+        req.body.pop,
         req.body.id
+  
       ]);
       db.query(query, (err, response) => {
         console.log(response);
