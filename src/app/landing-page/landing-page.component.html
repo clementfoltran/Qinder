@@ -33,7 +33,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <h2 class="m-auto p-2">LET'S START</h2>
+      <h2 class="m-auto p-2">HELLO</h2>
       <div class="modal-body text-center">
         <div *ngIf="forgotModeVar === 0; else forgotForm" >
           <form [formGroup]="loginForm" (ngSubmit)="login()">
@@ -52,18 +52,51 @@
           </form>
         </div>
         <ng-template #forgotForm>
-          <form [formGroup]="forgotPasswordForm" (ngSubmit)="resetPassword()">
+          <form [formGroup]="forgotPasswordForm" (ngSubmit)="askForPasswordReset()">
               <div class="form-group">
                 <label>Email address</label>
                 <input type="email" formControlName="email" class="form-control" placeholder="Enter email">
               </div>
               <div class="modal-footer">
-                <button type="submit" class="btn btn-primary m-auto">RESET PASSWORD</button>
+                <button type="submit" class="btn btn-primary m-auto">SEND</button>
               </div>
               <button type="button" (click)="forgotMode()" class="btn btn-link">Changed my mind!</button>
             </form>
         </ng-template>
        
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Reset password modal -->
+<div *ngIf="readyToResetPassword === 1">
+  <div class="modal fade" id="modResetPwd" tabindex="-1" role="dialog" aria-labelledby="modResetPwd" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="logo m-auto">
+            <img src="../../assets/img/logo-min.svg" height="100px" alt="">
+          </div>
+          <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <h2 class="m-auto p-2">RESET YOUR PASSWORD</h2>
+        <div class="modal-body text-center">
+          <form [formGroup]="resetPasswordForm" (ngSubmit)="reset()">
+            <div class="form-group">
+              <label>New password</label>
+              <input type="password" formControlName="newPassword" class="form-control" placeholder="New password">
+            </div>
+            <div class="form-group">
+              <label>Confirm password</label>
+              <input type="password" formControlName="newPasswordConfirmation" class="form-control" placeholder="Confirm new password">
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary m-auto">RESET PASSWORD</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

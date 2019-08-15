@@ -314,7 +314,7 @@ exports.register = (req, res) => {
 exports.sendMail = (req, res) => {
   if (res)
   {
-    nodeMailerCall(req.body.firstname, req.body.email, req.body.key, info => {
+    nodeMailerRegisterCall(req.body.firstname, req.body.email, req.body.key, info => {
       // res.send(info);
     });
     // res.json({
@@ -323,8 +323,35 @@ exports.sendMail = (req, res) => {
     // });
   }
 }
+exports.resetPassword = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      let sql = 'UPDATE user SET validation_key = ? WHERE email = ?';
+      let query = db.format(sql,
+        [
+          req.body.key,
+          req.body.email,
+        ]);
+      db.query(query, (err, response) => {
+        console.log(err);
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: 'Successfully prepared to send password reset email' });
+          nodeMailerResetPasswordCall(req.body.email, req.body.key, info => {
+            // res.send(info);
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
 
-async function nodeMailerCall(userName, email, key, callback) {
+async function nodeMailerRegisterCall(email, key, callback) {
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
@@ -340,6 +367,30 @@ async function nodeMailerCall(userName, email, key, callback) {
     to: email,
     subject: "Validate your MATCHA account :)",
     text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:4200/activate/${email}/${key}`,
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+  callback(info);
+}
+
+async function nodeMailerResetPasswordCall(email, key, callback) {
+
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'percival.weimann@ethereal.email',
+        pass: 'u8WQJRnehmNvx9dqAA'
+    }
+  });
+
+  let info = await transporter.sendMail({ 
+    from: '"Martin @ MATCHA" <martin@matcha.io>',
+    to: email,
+    subject: "Reset your MATCHA password",
+    text: `Please click this link to reset your Matcha password: http://localhost:4200/resetPassword/${email}/${key}`,
   });
 
   console.log("Message sent: %s", info.messageId);

@@ -17,6 +17,7 @@ const preference = require('./preference.js');
 const chat = require('./chat.js');
 const notification = require('./notification.js');
 const generator = require('./generator.js')
+const resetPassword = require('./resetPassword.js')
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -47,6 +48,8 @@ app.post('/updateGeolocation', urlencodedParser, user.updateGeolocation);
 app.post('/register', urlencodedParser, user.register);
 app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/reportUser', urlencodedParser, user.reportUser);
+app.post('/resetPassword', urlencodedParser, user.resetPassword);
+app.post('/checkKey/:email', urlencodedParser, resetPassword.checkKey);
 
 app.get('/test/:id', urlencodedParser, user.test);
 
