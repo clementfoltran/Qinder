@@ -230,8 +230,8 @@ export class LandingPageComponent implements OnInit {
       this.ResetPasswordAPIParameter = {
         email: this.forgotPasswordForm.get('email').value,
         key,
+        function: 'sendMail',
       };
-      console.log(this.ResetPasswordAPIParameter);
       this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
         .subscribe((result: ResetPasswordReturn) => {
           if (result.success) {
@@ -257,6 +257,13 @@ export class LandingPageComponent implements OnInit {
             if (result.key === key) {
               this.readyToResetPassword = 1;
               $('#modResetPwd').modal('show');
+            } else {
+              this.messageService.add({
+                severity: 'warn',
+                summary: 'Oops :/',
+                detail: 'The link you followed is obsolete, please ask for another password reset link',
+                life: 6000
+              });
             }
           } else {
             console.log(result.message);
@@ -281,11 +288,29 @@ export class LandingPageComponent implements OnInit {
               life: 6000
             });
             $('#modResetPwd').modal('hide');
+            this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
           } else {
             console.log(result.message);
           }
         });
     }
+  }
+
+  destroyKey(email) {
+    const key = this.generateId(80);
+    this.ResetPasswordAPIParameter = {
+        email,
+        key,
+        function: 'none',
+      };
+    this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
+      .subscribe((result: ResetPasswordReturn) => {
+        if (result.success) {
+          console.log('Succesfully replaced the auth key');
+        } else {
+          console.log(result.message);
+        }
+      });
   }
 
   verifyAccount(email) {

@@ -340,9 +340,11 @@ exports.resetPassword = (req, res) => {
           res.json({ success: false, message: 'Network error' });
         } else {
           res.json({ success: true, message: 'Successfully prepared to send password reset email' });
-          nodeMailerResetPasswordCall(req.body.email, req.body.key, info => {
-            // res.send(info);
-          });
+          if (req.body.function === 'sendMail') {
+            nodeMailerResetPasswordCall(req.body.email, req.body.key, info => {
+              // res.send(info);
+            });
+          }
         }
       });
     } else {
