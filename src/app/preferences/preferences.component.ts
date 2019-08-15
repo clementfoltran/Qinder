@@ -93,10 +93,15 @@ export class PreferencesComponent implements OnInit {
    */
   public userId: number = null;
   /**
-   * 
+   *
    * Popularity preference
    */
   public popularity: number = null;
+  /**
+   *
+   * Tags in common
+   */
+  public tagsInCommon: number = null;
 
   isSelectedTag(idTag: number) {
     let find = false;
@@ -164,7 +169,8 @@ export class PreferencesComponent implements OnInit {
         distance: this.distance,
         minage: this.ageRange[0],
         maxage: this.ageRange[1],
-        pop: this.popularity
+        pop: this.popularity,
+        tagsInCommon: this.tagsInCommon
       };
       this.updatePreferencesService.updatePreferences(this.APIParameterPref)
         .subscribe((result: UpdatePreferencesReturn) => {
@@ -272,7 +278,7 @@ export class PreferencesComponent implements OnInit {
   getUserTagId(idTag: number): number {
     for (let i = 0; i < this.userTags.length; i++) {
       if (this.userTags[i].id_tag === idTag) {
-        return (this.userTags[i].id_utag)
+        return (this.userTags[i].id_utag);
       }
     }
   }
