@@ -15,4 +15,5 @@ export interface User {
     bio: string;
     online: number;
     lastConnected: Date;
+    pop: number;
 }

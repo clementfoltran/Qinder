@@ -17,7 +17,7 @@ export class UploadPhotoService {
   uploadPhoto(APIParameter: UploadPhotoParameter): Observable<UploadPhotoReturn> {
     const option = {
       headers: new HttpHeaders({
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'application/json'
       }),
     };
 

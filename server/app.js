@@ -20,7 +20,7 @@ const generator = require('./generator.js')
 
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10mb', extended: true}));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

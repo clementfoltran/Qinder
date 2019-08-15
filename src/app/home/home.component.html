@@ -28,13 +28,13 @@
         </div>
       </div>
     </div>
-  <div class="swipe-zone mt-4">
-    <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10">
+  <div class="swipe-zone mt-4" style="height: 500px;">
+    <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10 h-80">
       <div class="card">
         <carousel>
           <div *ngFor="let photo of userToSwipePhotos">
             <slide>
-              <img src="{{ photo.photo }}" style="display: block; width: 100%;">
+              <img src="{{ photo.photo }}" class="w-100">
             </slide>
           </div>
         </carousel>

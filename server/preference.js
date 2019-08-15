@@ -68,19 +68,20 @@ exports.uploadPhoto = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, ?, ts)';
+      const sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, ?, NOW())';
+      console.log(req.body)
       let query = db.format(sql, [
         req.body.id,
         req.body.photo,
         req.body.active,
       ]);
-      db.query(query, (err, response) => {
+      db.query(query, (err) => {
         if (err) {
           res.json({
             success: false,
             message: err,
           });
-          console.log(err);
+          throw err;
         } else {
           res.json({
             success: true,
