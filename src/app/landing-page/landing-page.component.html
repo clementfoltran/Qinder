@@ -69,7 +69,7 @@
   </div>
 </div>
 <!-- Reset password modal -->
-<div *ngIf="readyToResetPassword === 1">
+<!-- <div *ngIf="readyToResetPassword === 1"> -->
   <div class="modal fade" id="modResetPwd" tabindex="-1" role="dialog" aria-labelledby="modResetPwd" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -83,7 +83,7 @@
         </div>
         <h2 class="m-auto p-2">RESET YOUR PASSWORD</h2>
         <div class="modal-body text-center">
-          <form [formGroup]="resetPasswordForm" (ngSubmit)="reset()">
+          <form [formGroup]="resetPasswordForm" (ngSubmit)="saveNewPassword()">
             <div class="form-group">
               <label>New password</label>
               <input type="password" formControlName="newPassword" class="form-control" placeholder="New password">
@@ -100,7 +100,7 @@
       </div>
     </div>
   </div>
-</div>
+<!-- </div> -->
 <!-- Register modal -->
 <div class="modal modal-profile fade" id="modRegister" tabindex="-1" role="dialog" aria-labelledby="modRegister" aria-hidden="true">
     <div class="modal-dialog" role="document">

@@ -28,6 +28,9 @@ import { ResetPasswordReturn } from './services/reset-password/reset-password.re
 import { ResetPasswordService } from './services/reset-password/reset-password.service';
 import { CheckKeyService } from './services/check-key/check-key.service';
 import { CheckKeyReturn } from './services/check-key/check-key.return';
+import { SaveNewPasswordParameter } from './services/save-new-password/save-new-password.parameter';
+import { SaveNewPasswordReturn } from './services/save-new-password/save-new-password.return';
+import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
 
 declare var $: any;
 
@@ -73,6 +76,7 @@ export class LandingPageComponent implements OnInit {
   public forgotPasswordForm: FormGroup;
   public resetPasswordForm: FormGroup;
   public ResetPasswordAPIParameter: ResetPasswordParameter;
+  public SaveNewPasswordAPIParameter: SaveNewPasswordParameter;
   public paramEmail: string;
   public paramKey: string;
 
@@ -252,11 +256,36 @@ export class LandingPageComponent implements OnInit {
           if (result.success) {
             if (result.key === key) {
               this.readyToResetPassword = 1;
+              $('#modResetPwd').modal('show');
             }
           } else {
             console.log(result.message);
           }
         });
+  }
+
+  saveNewPassword() {
+    if (this.resetPasswordForm.valid &&
+       (this.resetPasswordForm.get('newPassword').value === this.resetPasswordForm.get('newPasswordConfirmation').value)) {
+      this.SaveNewPasswordAPIParameter = {
+        email: this.activatedRoute.snapshot.paramMap.get('email'),
+        newPassword: this.resetPasswordForm.get('newPassword').value,
+      };
+      this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
+        .subscribe((result: SaveNewPasswordReturn) => {
+          if (result.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Welcome',
+              detail: 'Password updated! You can now login :)',
+              life: 6000
+            });
+            $('#modResetPwd').modal('hide');
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
   }
 
   verifyAccount(email) {
@@ -287,7 +316,8 @@ export class LandingPageComponent implements OnInit {
                 public activateService: ActivateService,
                 public getUserOnlineService: GetUserOnlineService,
                 public resetPasswordService: ResetPasswordService,
-                public checkKeyService: CheckKeyService) {
+                public checkKeyService: CheckKeyService,
+                public saveNewPasswordService: SaveNewPasswordService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],

@@ -50,6 +50,7 @@ app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/reportUser', urlencodedParser, user.reportUser);
 app.post('/resetPassword', urlencodedParser, user.resetPassword);
 app.post('/checkKey/:email', urlencodedParser, resetPassword.checkKey);
+app.post('/saveNewPassword', urlencodedParser, resetPassword.saveNewPassword);
 
 app.get('/test/:id', urlencodedParser, user.test);
 
