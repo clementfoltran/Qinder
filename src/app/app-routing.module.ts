@@ -47,6 +47,11 @@ const routes: Routes = [
     resolve: {viewData: EnterViewActivateResolve}
   },
   {
+    path: 'resetPassword/:email/:key',
+    component: LandingPageComponent,
+    canActivate: [IsLoggedOutGuard],
+  },
+  {
     path: 'populate',
     component: PopulateComponent,
     canActivate: [IsLoggedInGuard],

@@ -23,6 +23,14 @@ import * as $ from 'jquery';
 import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
 import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
 import { GetUserOnlineReturn } from '../home/services/get-user-online/get-user-online-return';
+import { ResetPasswordParameter } from './services/reset-password/reset-password.parameter';
+import { ResetPasswordReturn } from './services/reset-password/reset-password.return';
+import { ResetPasswordService } from './services/reset-password/reset-password.service';
+import { CheckKeyService } from './services/check-key/check-key.service';
+import { CheckKeyReturn } from './services/check-key/check-key.return';
+import { SaveNewPasswordParameter } from './services/save-new-password/save-new-password.parameter';
+import { SaveNewPasswordReturn } from './services/save-new-password/save-new-password.return';
+import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
 
 declare var $: any;
 
@@ -62,6 +70,15 @@ export class LandingPageComponent implements OnInit {
   public bsValue: Date = new Date();
   public datePickerConfig: Partial<DatepickerConfig>;
   public APIParameterGetUserOnline: GetUserOnlineParameter;
+
+  public forgotModeVar = 0;
+  public readyToResetPassword = 0;
+  public forgotPasswordForm: FormGroup;
+  public resetPasswordForm: FormGroup;
+  public ResetPasswordAPIParameter: ResetPasswordParameter;
+  public SaveNewPasswordAPIParameter: SaveNewPasswordParameter;
+  public paramEmail: string;
+  public paramKey: string;
 
   getLocation() {
     if (navigator.geolocation) {
@@ -199,6 +216,103 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
+  forgotMode() {
+    if (this.forgotModeVar === 0) {
+      this.forgotModeVar = 1;
+    } else {
+      this.forgotModeVar = 0;
+    }
+  }
+
+  askForPasswordReset() {
+    if (this.forgotPasswordForm.valid) {
+      const key = this.generateId(80);
+      this.ResetPasswordAPIParameter = {
+        email: this.forgotPasswordForm.get('email').value,
+        key,
+        function: 'sendMail',
+      };
+      this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
+        .subscribe((result: ResetPasswordReturn) => {
+          if (result.success) {
+            console.log(result.message);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'See you again soon',
+              detail: 'Check your mail to reset your password :)',
+              life: 6000
+            });
+            this.forgotModeVar = 0;
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
+  }
+
+  resetPassword(email, key) {
+    this.checkKeyService.checkKey(email)
+        .subscribe((result: CheckKeyReturn) => {
+          if (result.success) {
+            if (result.key === key) {
+              this.readyToResetPassword = 1;
+              $('#modResetPwd').modal('show');
+            } else {
+              this.messageService.add({
+                severity: 'warn',
+                summary: 'Oops :/',
+                detail: 'The link you followed is obsolete, please ask for another password reset link',
+                life: 6000
+              });
+            }
+          } else {
+            console.log(result.message);
+          }
+        });
+  }
+
+  saveNewPassword() {
+    if (this.resetPasswordForm.valid &&
+       (this.resetPasswordForm.get('newPassword').value === this.resetPasswordForm.get('newPasswordConfirmation').value)) {
+      this.SaveNewPasswordAPIParameter = {
+        email: this.activatedRoute.snapshot.paramMap.get('email'),
+        newPassword: this.resetPasswordForm.get('newPassword').value,
+      };
+      this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
+        .subscribe((result: SaveNewPasswordReturn) => {
+          if (result.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Welcome',
+              detail: 'Password updated! You can now login :)',
+              life: 6000
+            });
+            $('#modResetPwd').modal('hide');
+            this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
+  }
+
+  destroyKey(email) {
+    const key = this.generateId(80);
+    this.ResetPasswordAPIParameter = {
+        email,
+        key,
+        function: 'none',
+      };
+    this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
+      .subscribe((result: ResetPasswordReturn) => {
+        if (result.success) {
+          console.log('Succesfully replaced the auth key');
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+
   verifyAccount(email) {
       this.activateService.activateAccount(email)
         .subscribe((result: ActivateReturn) => {
@@ -215,7 +329,8 @@ export class LandingPageComponent implements OnInit {
         });
     }
 
-    constructor(public fb: FormBuilder,
+    constructor(private route: ActivatedRoute,
+                public fb: FormBuilder,
                 public router: Router,
                 public registerService: RegisterService,
                 public loginService: LoginService,
@@ -224,7 +339,10 @@ export class LandingPageComponent implements OnInit {
                 public activatedRoute: ActivatedRoute,
                 public geolocationService: GeolocationService,
                 public activateService: ActivateService,
-                public getUserOnlineService: GetUserOnlineService) {
+                public getUserOnlineService: GetUserOnlineService,
+                public resetPasswordService: ResetPasswordService,
+                public checkKeyService: CheckKeyService,
+                public saveNewPasswordService: SaveNewPasswordService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -240,21 +358,40 @@ export class LandingPageComponent implements OnInit {
     password: ['', Validators.required],
     });
 
+    this.forgotPasswordForm = fb.group({
+      email: ['', Validators.required],
+      });
+
+    this.resetPasswordForm = fb.group({
+      newPassword: ['', Validators.required],
+      newPasswordConfirmation: ['', Validators.required],
+      });
+
     this.datePickerConfig = Object.assign({
       containerClass: 'theme-orange',
       showWeekNumbers: false,
       maxDate: new Date(),
     });
+    this.route.queryParams.subscribe(params => {
+      this.paramEmail = params.email;
+      this.paramKey = params.key;
+    });
   }
 
   ngOnInit() {
-    if (this.activatedRoute.snapshot.paramMap.get('email') &&
+    if (this.router.url.split('/')[1] === 'activate' &&
+        this.activatedRoute.snapshot.paramMap.get('email') &&
         this.activatedRoute.snapshot.paramMap.get('key')) {
-      this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
+        this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
         this.resolvedData = data.viewData;
       });
-      this.checkAccount(this.resolvedData);
+        this.checkAccount(this.resolvedData);
     }
+    if (this.router.url.split('/')[1] === 'resetPassword' &&
+        this.activatedRoute.snapshot.paramMap.get('email') &&
+        this.activatedRoute.snapshot.paramMap.get('key')) {
+          this.resetPassword(this.activatedRoute.snapshot.paramMap.get('email'), this.activatedRoute.snapshot.paramMap.get('key'));
+        }
     this.registerForm.get('gender').setValue('Female');
     this.getLocation();
   }
