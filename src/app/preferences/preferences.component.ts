@@ -92,6 +92,11 @@ export class PreferencesComponent implements OnInit {
    *
    */
   public userId: number = null;
+  /**
+   * 
+   * Popularity preference
+   */
+  public popularity: number = null;
 
   isSelectedTag(idTag: number) {
     let find = false;
@@ -158,7 +163,8 @@ export class PreferencesComponent implements OnInit {
         interest: this.prefForm.get('interest').value,
         distance: this.distance,
         minage: this.ageRange[0],
-        maxage: this.ageRange[1]
+        maxage: this.ageRange[1],
+        pop: this.popularity
       };
       this.updatePreferencesService.updatePreferences(this.APIParameterPref)
         .subscribe((result: UpdatePreferencesReturn) => {
@@ -182,6 +188,7 @@ export class PreferencesComponent implements OnInit {
   }
 
   uploadPhoto() {
+    console.log(this.selectedFile);
     this.APIParameterPhoto = {
       id: this.userId,
       photo: this.selectedFile,
@@ -307,6 +314,7 @@ export class PreferencesComponent implements OnInit {
   initVariables() {
     this.ageRange[0] = this.resolveData.minage;
     this.ageRange[1] = this.resolveData.maxage;
+    this.popularity = this.resolveData.pop;
     this.distance = this.resolveData.distance;
     this.userId = this.resolveData.id;
     if (this.resolveData.bio) {

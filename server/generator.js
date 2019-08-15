@@ -33,7 +33,7 @@ exports.randomUser = async (req, res) => {
           res.json({ success: false, message: 'Failed to retrieve randomuser' });
         } else {
           if (res) {
-            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
             let index = response.body.results[0];
             const position = {
               latitude: Math.random() * (+50 - +48) + +48,
@@ -47,12 +47,15 @@ exports.randomUser = async (req, res) => {
               index.gender.charAt(0).toUpperCase() + index.gender.slice(1),
               new Date(index.dob.date),
               (index.gender === 'male') ? 'Female' : 'Male',
-              null, null, null, null, null, 1, null,
+              null, null, null, null, null, 1,
+              Math.random() * (+100 - +1) + +1,
               JSON.stringify(position),
+              100,
             ]);
             db.query(query, (err, response) => {
               if (err) {
                 res.json({ success: false, message: 'Failed to add randomuser' });
+                throw err;
               } else {
                 const idUser = response.insertId;
                 request(`https://source.unsplash.com/random/?$${ index.gender }`, { json: true }, (err, response) => {
@@ -61,9 +64,10 @@ exports.randomUser = async (req, res) => {
                     idUser,
                     response.request.uri.href
                   ]);
-                  db.query(query, (err, response) => {
+                  db.query(query, (err) => {
                     if (err) {
                       res.json({ success: false, message: 'Failed to add randomuser' });
+                      throw err;
                     } else {
                       randomTags(idUser);
                       res.json({ success: true, message: '', data: index });

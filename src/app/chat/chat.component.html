@@ -23,18 +23,22 @@
   <carousel class="p-2">
     <div *ngFor="let pic of userMatchedPhotos">
       <slide>
-        <img src="{{ pic.photo }}" style="display: block; width: 100%;">
+        <img class="mx-auto" src="{{ pic.photo }}" style="display: block; height: 400px;">
       </slide>
     </div>
   </carousel>
   <div class="row m-2" style="color: rgba(240, 67, 33, 0.8)">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <i class="fas fa-birthday-cake proficon"></i>
       <h5>{{ userInfos[0].birthdate }} yo</h5>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <i class="fas fa-map-pin proficon"></i>
       <h5>{{ userInfos[0].distance }} km</h5>
+    </div>
+    <div class="col-md-4">
+      <i class="fas fa-heart proficon"></i>
+      <h5>{{ userInfos[0].popularity }} %</h5>
     </div>
   </div>
   <div *ngIf="userInfos[0].bio">
