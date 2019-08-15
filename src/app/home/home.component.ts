@@ -200,7 +200,9 @@ export class HomeComponent implements OnInit {
       gender: this.resolveData.gender,
       minage: this.resolveData.minage,
       maxage: this.resolveData.maxage,
-      distance: this.resolveData.distance
+      distance: this.resolveData.distance,
+      popularity: this.resolveData.pop,
+      tagsInCommon: this.resolveData.tagsInCommon
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {

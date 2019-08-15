@@ -321,6 +321,7 @@ export class PreferencesComponent implements OnInit {
     this.ageRange[0] = this.resolveData.minage;
     this.ageRange[1] = this.resolveData.maxage;
     this.popularity = this.resolveData.pop;
+    this.tagsInCommon = this.resolveData.tagsInCommon;
     this.distance = this.resolveData.distance;
     this.userId = this.resolveData.id;
     if (this.resolveData.bio) {

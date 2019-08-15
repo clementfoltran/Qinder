@@ -5,4 +5,6 @@ export interface GetUserToSwipeParameter {
     minage: number;
     maxage: number;
     distance: number;
+    popularity: number;
+    tagsInCommon: number;
 }
