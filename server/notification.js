@@ -45,7 +45,7 @@ exports.getNotifications = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT * FROM notification WHERE id_user = ?';
+      const sql = 'SELECT notification.* FROM notification WHERE id_user = ?';
       console.log(req.body)
       let query = db.format(sql, [ req.params.id ]);
       db.query(query, (err, response) => {

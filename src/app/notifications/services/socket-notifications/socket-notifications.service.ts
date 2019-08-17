@@ -40,7 +40,7 @@ export class SocketNotificationsService {
         this.messageService.add({
           severity: 'warn',
           summary: 'New notification',
-          detail: 'Somebody remove you',
+          detail: 'someone deleted you',
           life: 6000,
         });
       }

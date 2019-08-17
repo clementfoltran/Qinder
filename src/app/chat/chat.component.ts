@@ -322,7 +322,7 @@ export class ChatComponent implements OnInit {
         this.removeMatchService.removeMatch(v.id.id_match)
           .subscribe((result: RemoveMatchReturn) => {
             if (result.success) {
-              alert('user removed');
+              // this.socketNotificationService.notify(this.id, v.id.id_user_matched, 2);
             }
           });
       }
@@ -340,6 +340,7 @@ export class ChatComponent implements OnInit {
     } catch (e) {
         console.log('Could not connect socket.io');
     }
+    this.socketNotificationService.connect();
   }
 
 }
