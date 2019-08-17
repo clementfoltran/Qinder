@@ -14,7 +14,6 @@ import { SwipeReturn } from './services/swipe/swipe-return';
 import {} from 'googlemaps';
 import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
 import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
-import { DATE } from 'ngx-bootstrap/chronos/units/constants';
 import * as $ from 'jquery';
 import { GetUserOnlineService } from './services/get-user-online/get-user-online.service';
 import { GetUserOnlineParameter } from './services/get-user-online/get-user-online-parameter';

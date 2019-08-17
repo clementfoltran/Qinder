@@ -4,7 +4,7 @@
   </div>
 </div>
 <div class="match-zone col-md-12 text-center">
-  <img class="logo" src="../../assets/img/logo.svg" height="100" alt="">
+  <img class="logo" src="../../assets/img/logo.svg" height="70" alt="">
   <br>
   <div *ngIf="progressBarValue < 100; else showHeavens"  class="heavens">
     <label><strong>✨ Keep swiping to take a look at the heavens.. ✨</strong></label>
@@ -28,13 +28,13 @@
         </div>
       </div>
     </div>
-  <div class="swipe-zone mt-4" style="height: 500px;">
-    <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-lg-4 col-md-6 col-sm-10 col-xs-10 h-80">
-      <div class="card">
+  <div class="swipe-zone mt-4">
+    <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-xl-2 col-sm-10 col-xs-10 h-80">
+      <div class="card mx-auto">
         <carousel>
           <div *ngFor="let photo of userToSwipePhotos">
             <slide>
-              <img src="{{ photo.photo }}" class="w-100">
+              <img src="{{ photo.photo }}" style="width: 100%; height: 400px;">
             </slide>
           </div>
         </carousel>
