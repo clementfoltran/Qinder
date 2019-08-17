@@ -7,11 +7,13 @@ import { AddNotificationParameter } from '../add-notification/add-notification.p
 import { AddNotificationReturn } from '../add-notification/add-notification.return';
 import { GetNotificationsService } from '../get-notifications/get-notifications.service';
 import { GetNotificationsReturn } from '../get-notifications/get-notifications.return';
+import { HomeComponent } from 'src/app/home/home.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketNotificationsService {
+  public nbNotif: number;
   public notifications = [];
   public socket;
 
@@ -30,20 +32,25 @@ export class SocketNotificationsService {
       this.notifications.push(obj);
       if (obj.notif === 1) {
         this.messageService.add({
-          severity: 'info',
-          summary: 'New notification',
-          detail: 'Somebody saw your profile',
-          life: 6000,
+          severity: 'info', summary: 'New notification', detail: 'Somebody saw your profile', life: 6000,
         });
       }
       if (obj.notif === 2) {
         this.messageService.add({
-          severity: 'warn',
-          summary: 'New notification',
-          detail: 'someone deleted you',
-          life: 6000,
+          severity: 'warn',summary: 'New notification', detail: 'someone deleted you', life: 6000
         });
       }
+      if (obj.notif === 3) {
+        this.messageService.add({
+          severity: 'warn', summary: 'New notification', detail: 'someone reported you', life: 6000
+        });
+      }
+      if (obj.notif === 4) {
+        this.messageService.add({
+          severity: 'info', summary: 'New notification', detail: 'Someone like you', life: 6000
+        });
+      }
+      this.nbNotif++;
       const APIParameter: AddNotificationParameter = {
         id_user: obj.to,
         id_user_: obj.from,
@@ -52,7 +59,7 @@ export class SocketNotificationsService {
       this.addNotificationService.addNotification(APIParameter)
         .subscribe((result: AddNotificationReturn) => {
           if (result.success) {
-            console.log('addNotification');
+            // cool
           }
         });
     }
@@ -85,6 +92,7 @@ export class SocketNotificationsService {
       .subscribe((result: GetNotificationsReturn) => {
         if (result.success) {
           this.notifications = result.notifications;
+          this.nbNotif = result.notifications.length;
         }
       });
   }

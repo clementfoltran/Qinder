@@ -9,7 +9,6 @@ http3.listen(5000, function() {
 
 io.sockets.on('connection', function(socket) {
     socket.on('notification', (obj) => {
-        console.log(obj);
         socket.broadcast.emit('receive notifications', obj);
     });
 });
@@ -20,7 +19,6 @@ exports.addNotification = (req, res) => {
   } else {
     if (res) {
       const sql = 'INSERT INTO notification VALUES(id_notif, ?, ?, NOW(), ?)';
-      console.log(req.body)
       let query = db.format(sql, [
         req.body.id_user_,
         req.body.notif,
@@ -45,8 +43,8 @@ exports.getNotifications = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'SELECT notification.* FROM notification WHERE id_user = ?';
-      console.log(req.body)
+      const sql = 'SELECT notification.*, firstname, lastname FROM notification INNER JOIN user \
+                   ON notification.id_user_ = user.id_user WHERE notification.id_user = ?';
       let query = db.format(sql, [ req.params.id ]);
       db.query(query, (err, response) => {
         if (err) {
@@ -68,7 +66,6 @@ exports.deleteNotification = (req, res) => {
   } else {
     if (res) {
       const sql = 'DELETE FROM notification WHERE id_notif = ?';
-      console.log(req.body)
       let query = db.format(sql, [ req.params.id ]);
       db.query(query, (err) => {
         if (err) {

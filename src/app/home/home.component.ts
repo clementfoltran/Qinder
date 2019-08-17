@@ -256,6 +256,10 @@ export class HomeComponent implements OnInit {
     this.swipeService.swipe(APIParameter)
       .subscribe((result: SwipeReturn) => {
         if (result.success) {
+          // if you like the person, we send a notification to this one
+          if (like) {
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 4);
+          }
           this.getUserToSwipe();
           if (result.match) {
             $('.match').show();
@@ -390,6 +394,6 @@ ngOnInit() {
       this.getUserOnline(0);
       this.saveUserLastConnection(date);
     });
-    this.nbNotif = this.socketNotificationService.notifications.length;
+    this.nbNotif = this.socketNotificationService.nbNotif;
   }
 }
