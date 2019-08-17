@@ -27,6 +27,7 @@ import { RemoveMatchReturn } from './services/remove-match/remove-match.return';
 import { ReportUserParameter } from './services/report-user/report-user.parameter';
 import { ReportUserService } from './services/report-user/report-user.service';
 import { ReportUserReturn } from './services/report-user/report-user.return';
+import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 
 @Component({
   selector: 'app-chat',
@@ -46,6 +47,7 @@ export class ChatComponent implements OnInit {
               public fb: FormBuilder,
               public removeMatchService: RemoveMatchService,
               public reportUserService: ReportUserService,
+              public socketNotificationService: SocketNotificationsService,
               public lastConnection: LastConnectedTimeFormatPipe) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]

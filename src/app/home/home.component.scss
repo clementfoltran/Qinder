@@ -95,63 +95,6 @@ body .ui-slider .ui-slider-range {
   }
 }
 
-//----------------------------------------------------------------------------------
-.container, .container3 {
-  overflow: hidden;
-  position: relative;
-  height: 710px; 
-  width: 530px;
-  margin-top: 460px;
-}
-
-.container {
-  float: left;
-}
-.container3 {
-  float: right;
-}
-
-.slider1, .slider3 {
-  overflow-y: scroll;
-  /* complete liquid height based on the parent's height!! */
-  height: 100%;
-  width: 100%;
-
-  /* only transition on transform properties which are hardware accelerated = way better performances */
-  -webkit-transition: -webkit-transform .3s ease;
-     -moz-transition:    -moz-transform .3s ease;
-      -ms-transition:     -ms-transform .3s ease;
-          transition:         transform .3s ease;
-}
-
-.slider1.opened, .slider3.opened { 
-  /* visible */
-  -webkit-transform: translate(0, 100%);
-     -moz-transform: translate(0, 100%);
-      -ms-transform: translate(0, 100%);
-          transform: translate(0, 100%);
-}
-.slider1.closed, .slider3.closed { 
-  /* completely offscreen */
-  -webkit-transform: translate(0, 0%);
-     -moz-transform: translate(0, 0%);
-      -ms-transform: translate(0, 0%);
-          transform: translate(0, 0%);
-}
-
-
-
-/* -------- not interesting styles ----------- */
-
-.slider1, .slider3 {
-  -webkit-box-sizing:border-box;
-     -moz-box-sizing:border-box;
-      -ms-box-sizing:border-box;
-          box-sizing:border-box;
-
-  // background: rgba(255, 192, 203, 0.562);
-}
-
 .match {
   display: none;
   background-color: rgba(0, 0, 0, 0.5);

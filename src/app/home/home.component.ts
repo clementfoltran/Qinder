@@ -27,6 +27,7 @@ import anime from 'animejs/lib/anime.es.js';
 import { GetTheHeavensParameter } from './services/get-the-heavens/get-the-heavens-parameter';
 import { GetTheHeavensService } from './services/get-the-heavens/get-the-heavens.service';
 import { GetTheHeavensReturn } from './services/get-the-heavens/get-the-heavens-return';
+import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 
 declare var $: any;
 
@@ -47,6 +48,7 @@ export class HomeComponent implements OnInit {
               public getUserOnlineService: GetUserOnlineService,
               public saveUserLastConnectionService: SaveUserLastConnectionService,
               public getTheHeavensService: GetTheHeavensService,
+              public socketNotificationService: SocketNotificationsService,
               private lastConnection: LastConnectedTimeFormatPipe) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
@@ -119,6 +121,11 @@ export class HomeComponent implements OnInit {
    * User to swipe tags
    */
   public userToSwipeTags: UserTag[] = [];
+  /**
+   * 
+   * Notification toast number
+   */
+  public nbNotif: number = null;
   public userToSwipe: boolean;
 
   public peopleInHeavens: any;
@@ -235,6 +242,8 @@ export class HomeComponent implements OnInit {
           life: 6000
         });
       }
+      // Notify userToSwipe
+       this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
     });
   }
 
@@ -364,6 +373,7 @@ saveUserLastConnection(date) {
   }
 
 ngOnInit() {
+  this.socketNotificationService.connect();
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
@@ -380,5 +390,6 @@ ngOnInit() {
       this.getUserOnline(0);
       this.saveUserLastConnection(date);
     });
+    this.nbNotif = this.socketNotificationService.notifications.length;
   }
 }

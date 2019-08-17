@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { NotificationParmeter } from './notification.parameter';
 import { MessageService } from 'primeng/api';
+import { AddNotificationService } from '../add-notification/add-notification.service';
+import { AddNotificationParameter } from '../add-notification/add-notification.parameter';
+import { AddNotificationReturn } from '../add-notification/add-notification.return';
+import { GetNotificationsService } from '../get-notifications/get-notifications.service';
+import { GetNotificationsReturn } from '../get-notifications/get-notifications.return';
 
 @Injectable({
   providedIn: 'root'
@@ -10,21 +15,55 @@ export class SocketNotificationsService {
   public notifications = [];
   public socket;
 
-  constructor(public messageService: MessageService) { }
+  constructor(public messageService: MessageService,
+              public getNotificationService: GetNotificationsService,
+              public addNotificationService: AddNotificationService) { }
 
+  /**
+   * RECEIVE NOTIFICATIONS
+   * 
+   * @param obj.notif
+   * 1: View profile notification
+   */
   receive = (obj) => {
-    if (obj) {
+    if (obj && obj.to === +localStorage.getItem('userId')) {
       this.notifications.push(obj);
-      console.log('somebody have seen yout profile');
+      if (obj.notif === 1) {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'New notification',
+          detail: 'Somebody saw your profile',
+          life: 6000,
+        });
+      }
+      if (obj.notif === 2) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'New notification',
+          detail: 'Somebody remove you',
+          life: 6000,
+        });
+      }
+      const APIParameter: AddNotificationParameter = {
+        id_user: obj.to,
+        id_user_: obj.from,
+        notif: obj.notif,
+      };
+      this.addNotificationService.addNotification(APIParameter)
+        .subscribe((result: AddNotificationReturn) => {
+          if (result.success) {
+            console.log('addNotification');
+          }
+        });
     }
   }
 
   // TODO id to send the good notification
-  notify(id_user, id_user_) {
+  notify(id_user: number, id_user_: number, notif: number) {
     const notification: NotificationParmeter = {
       to: id_user_,
       from: id_user,
-      notif: 'coucou',
+      notif,
       ts: 1
     };
     this.socket.emit('notification', notification);
@@ -40,4 +79,13 @@ export class SocketNotificationsService {
     }
   }
 
+
+  getNotifications() {
+    this.getNotificationService.getNotifications(+localStorage.getItem('userId'))
+      .subscribe((result: GetNotificationsReturn) => {
+        if (result.success) {
+          this.notifications = result.notifications;
+        }
+      });
+  }
 }

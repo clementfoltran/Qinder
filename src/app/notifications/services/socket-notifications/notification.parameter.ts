@@ -1,6 +1,6 @@
 export interface NotificationParmeter {
     to: number;
     from: number;
-    notif: string;
+    notif: number;
     ts: number;
 }
