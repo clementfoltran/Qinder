@@ -19,5 +19,8 @@
     <div class="toast-body" *ngIf="notification.notif === 4">
       Someone liked you
     </div>
+    <div class="toast-body" *ngIf="notification.notif === 5">
+      New match with {{ notification.firstname }} {{ notification.lastname }}
+    </div>
   </div>
 </div>

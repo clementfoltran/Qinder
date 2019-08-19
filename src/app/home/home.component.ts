@@ -63,7 +63,8 @@ export class HomeComponent implements OnInit {
    */
   public distance: number;
   /**
-   * UserPhotos tab
+
+  * UserPhotos tab
    *
    */
   public userPhotos: Photo[];
@@ -112,19 +113,14 @@ export class HomeComponent implements OnInit {
   public userCurrentPosition: any;
   /**
    *
-   * Notification list
-   */
-  public notificationList: Notification[];
-  /**
-   *
    * User to swipe tags
    */
   public userToSwipeTags: UserTag[] = [];
   /**
    * 
-   * Notification toast number
+   * Notification list
    */
-  public nbNotif: number = null;
+  public notifications: Notification[];
   public userToSwipe: boolean;
 
   public peopleInHeavens: any;
@@ -256,8 +252,10 @@ export class HomeComponent implements OnInit {
       .subscribe((result: SwipeReturn) => {
         if (result.success) {
           // if you like the person, we send a notification to this one
-          if (like) {
+          if (like && !result.match) {
             this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 4);
+          } else {
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 5);
           }
           this.getUserToSwipe();
           if (result.match) {
@@ -393,6 +391,6 @@ ngOnInit() {
       this.getUserOnline(0);
       this.saveUserLastConnection(date);
     });
-    this.nbNotif = this.socketNotificationService.nbNotif;
+    this.notifications = this.socketNotificationService.notifications;
   }
 }

@@ -29,7 +29,7 @@
       </div>
     </div>
   <div class="swipe-zone mt-4">
-    <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-xl-2 col-sm-10 col-xs-10 h-80">
+    <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-sm-6 col-md-6 col-lg-4 col-xl-3 h-80">
       <div class="card mx-auto">
         <carousel>
           <div *ngFor="let photo of userToSwipePhotos">
@@ -128,6 +128,7 @@
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modChat">
           <i class="fas fa-comments"></i>
+          <span class="badge badge-light" style="font-size: 12px"></span>
         </a>
       </li>
       <li class="nav-item col-md-4">
@@ -138,7 +139,7 @@
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modNotif">
           <i class="fas fa-bell"></i>
-          <span class="badge badge-light" style="font-size: 12px">{{ nbNotif }}</span>
+          <span class="badge badge-light" style="font-size: 12px">{{ notifications.length }}</span>
         </a>
       </li>
     </ul>

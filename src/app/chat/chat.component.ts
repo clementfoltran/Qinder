@@ -251,7 +251,8 @@ export class ChatComponent implements OnInit {
           this.socket.emit('send message', me);
           this.messageForm.reset();
           this.saveMessage(this.id, msg, ts);
-
+          // Send a notification to the recipient
+          this.socketNotificationService.notify(+localStorage.getItem('userId'), me.id, 6);
         }
       }
     }

@@ -15,6 +15,7 @@ import { HomeComponent } from 'src/app/home/home.component';
 export class SocketNotificationsService {
   public nbNotif: number;
   public notifications = [];
+  public messagesNotif = [];
   public socket;
 
   constructor(public messageService: MessageService,
@@ -48,6 +49,16 @@ export class SocketNotificationsService {
       if (obj.notif === 4) {
         this.messageService.add({
           severity: 'info', summary: 'New notification', detail: 'Someone like you', life: 6000
+        });
+      }
+      if (obj.notif === 5) {
+        this.messageService.add({
+          severity: 'info', summary: 'New notification', detail: 'You\'ve got a match', life: 6000
+        });
+      }
+      if (obj.notif === 6) {
+        this.messageService.add({
+          severity: 'info', summary: 'New message', detail: 'You\'ve got a message' , life: 6000
         });
       }
       this.nbNotif++;
