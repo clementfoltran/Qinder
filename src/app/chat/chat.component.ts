@@ -270,14 +270,14 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
-    
+
   }
 
   receive = (obj) => {
     if (obj) {
       this.messageList.push(obj);
     }
-    
+
   }
 
   // ANIMATIONS
@@ -305,13 +305,13 @@ export class ChatComponent implements OnInit {
       id_match: idMatch,
       id_user: this.id,
       id_user_: idUserMatched,
-    }
+    };
     this.reportUserService.reportUser(APIParameter)
       .subscribe((result: ReportUserReturn) => {
         if (result.success) {
           alert('user blocked');
         }
-      }); 
+      });
   }
 
   removeUser(idUserMatched: number) {
