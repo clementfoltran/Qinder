@@ -255,7 +255,7 @@ export class ChatComponent implements OnInit {
           this.matchesObjects.forEach((v) => {
             console.log(v);
             if (v.id.id_match === this.currentMatchId) {
-              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 6);             
+              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 6);
             }
           });
         }

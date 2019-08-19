@@ -23,6 +23,7 @@ exports.enterViewHome = (req, res) => {
             firstname: response[0].firstname,
             lastname: response[0].lastname,
             bio: response[0].bio,
+            hash: response[0].hash,
             distance: response[0].distance,
             minage: response[0].minage,
             maxage: response[0].maxage,

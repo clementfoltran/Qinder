@@ -71,7 +71,17 @@
         <div class="modal-body text-center">
           <form [formGroup]="changePasswordForm" (ngSubmit)="updatePassword()">
             <div class="form-group">
-              <label>New password</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                name="currentPassword" 
+                id="currentPassword"
+                #currentPassword
+                formControlName="currentPassword"
+                placeholder="Current password"
+              >
+            </div>
+            <div class="form-group">
               <input 
                 type="password" 
                 class="form-control" 
@@ -79,14 +89,9 @@
                 id="newPassword"
                 #newPassword
                 formControlName="newPassword"
-                placeholder="New password"
+                placeholder="New password, 8 characters minimum"
               >
             </div>
-            <p id="password_len_message" class="password_len_message"></p>
-            <p id="password_up_message" class="password_up_message"></p>
-            <p id="password_num_message" class="password_num_message"></p>
-            <p id="password_spe_message" class="password_spe_message"></p>
-            <label>Confirm new password</label>
             <div class="form-group">
               <input 
                 type="password" 
