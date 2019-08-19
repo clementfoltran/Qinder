@@ -396,6 +396,5 @@ ngOnInit() {
       this.saveUserLastConnection(date);
     });
   this.notifications = this.socketNotificationService.notifications;
-
   }
 }

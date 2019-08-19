@@ -70,7 +70,6 @@ exports.uploadPhoto = (req, res) => {
   } else {
     if (res) {
       const sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, ?, NOW())';
-      console.log(req.body)
       let query = db.format(sql, [
         req.body.id,
         req.body.photo,

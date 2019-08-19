@@ -98,7 +98,7 @@ export class SocketNotificationsService {
   }
 
 
-  getNotifications() {
+  async getNotifications() {
     this.getNotificationService.getNotifications(+localStorage.getItem('userId'))
       .subscribe((result: GetNotificationsReturn) => {
         if (result.success) {

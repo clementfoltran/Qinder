@@ -31,6 +31,8 @@ import { CheckKeyReturn } from './services/check-key/check-key.return';
 import { SaveNewPasswordParameter } from './services/save-new-password/save-new-password.parameter';
 import { SaveNewPasswordReturn } from './services/save-new-password/save-new-password.return';
 import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
+import { IpLocationService } from './services/ip-location/ip-location.service';
+import { IpLocationReturn } from './services/ip-location/ip-location.return';
 
 declare var $: any;
 
@@ -85,6 +87,13 @@ export class LandingPageComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(position => {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
+      }, error => {
+        this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
+          if (result.lat) {
+            this.latitude = result.lat;
+            this.longitude = result.lon;
+          }
+        });
       });
     }
   }
@@ -342,6 +351,7 @@ export class LandingPageComponent implements OnInit {
                 public getUserOnlineService: GetUserOnlineService,
                 public resetPasswordService: ResetPasswordService,
                 public checkKeyService: CheckKeyService,
+                public ipLocationService: IpLocationService,
                 public saveNewPasswordService: SaveNewPasswordService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
