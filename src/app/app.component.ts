@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { SocketNotificationsService } from './notifications/services/socket-notifications/socket-notifications.service';
+import { IsLoggedInGuard } from './guards/is-logged-in-guard';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,12 @@ import { SocketNotificationsService } from './notifications/services/socket-noti
 })
 export class AppComponent {
 
-  constructor(public socketNotificationService: SocketNotificationsService) { }
+  constructor(public socketNotificationsService: SocketNotificationsService,
+              public isLoggedInGuard: IsLoggedInGuard) { }
 
   ngOnInit() {
-    this.socketNotificationService.getNotifications();
+    if (this.isLoggedInGuard.canActivate()) {
+      this.socketNotificationsService.getNotifications();
+    }
   }
 }
