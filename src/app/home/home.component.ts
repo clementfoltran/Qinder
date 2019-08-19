@@ -27,6 +27,7 @@ import { GetTheHeavensParameter } from './services/get-the-heavens/get-the-heave
 import { GetTheHeavensService } from './services/get-the-heavens/get-the-heavens.service';
 import { GetTheHeavensReturn } from './services/get-the-heavens/get-the-heavens-return';
 import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
+import { Notification } from '../notifications/services/get-notifications/get-notifications.return';
 
 declare var $: any;
 
@@ -122,6 +123,7 @@ export class HomeComponent implements OnInit {
    */
   public notifications: Notification[];
   public userToSwipe: boolean;
+  public nbMessages: number = 0;
 
   public peopleInHeavens: any;
   public progressBarValue = 100;
@@ -392,5 +394,6 @@ ngOnInit() {
       this.saveUserLastConnection(date);
     });
     this.notifications = this.socketNotificationService.notifications;
+    
   }
 }

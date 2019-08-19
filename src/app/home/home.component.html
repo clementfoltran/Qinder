@@ -128,7 +128,9 @@
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modChat">
           <i class="fas fa-comments"></i>
-          <span class="badge badge-light" style="font-size: 12px"></span>
+          <span *ngIf="nbMessages > 0" class="badge badge-light" style="font-size: 12px">
+            {{ nbMessages }}
+          </span>
         </a>
       </li>
       <li class="nav-item col-md-4">
@@ -139,7 +141,9 @@
       <li class="nav-item col-md-4">
         <a class="nav-link" data-toggle="modal" data-target="#modNotif">
           <i class="fas fa-bell"></i>
-          <span class="badge badge-light" style="font-size: 12px">{{ notifications.length }}</span>
+          <span *ngIf="notifications.length > 0" class="badge badge-light" style="font-size: 12px">
+            {{ notifications.length }}
+          </span>
         </a>
       </li>
     </ul>

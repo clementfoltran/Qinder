@@ -2,6 +2,8 @@ import {CanActivate, Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
 import {LoginService} from '../landing-page/services/login/login.service';
 import {Injectable} from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class IsLoggedInGuard implements CanActivate {
