@@ -304,30 +304,15 @@ export class ChatComponent implements OnInit {
           id_match: idMatch,
           id_user: this.id,
           id_user_: idUserMatched,
-        }
+        };
         this.reportUserService.reportUser(APIParameter)
           .subscribe((result: ReportUserReturn) => {
             if (result.success) {
               this.socketNotificationService.notify(this.id, v.id.id_user_matched, 3);
             }
-        }); 
+        });
       }
     });
-<<<<<<< HEAD
-    console.log(idMatch);
-    const APIParameter: ReportUserParameter = {
-      id_match: idMatch,
-      id_user: this.id,
-      id_user_: idUserMatched,
-    };
-    this.reportUserService.reportUser(APIParameter)
-      .subscribe((result: ReportUserReturn) => {
-        if (result.success) {
-          alert('user blocked');
-        }
-      });
-=======
->>>>>>> clfoltra
   }
 
   removeUser(idUserMatched: number) {
