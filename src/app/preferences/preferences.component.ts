@@ -291,12 +291,6 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  navigateToSettings() {
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
-    this.router.navigate(['/settings/' + this.userId ] );
-  }
-
   constructor(public router: Router,
               public messageService: MessageService,
               public activatedRoute: ActivatedRoute,

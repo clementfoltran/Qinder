@@ -117,7 +117,7 @@ export class HomeComponent implements OnInit {
    */
   public userToSwipeTags: UserTag[] = [];
   /**
-   * 
+   *
    * Notification list
    */
   public notifications: Notification[];
@@ -240,7 +240,7 @@ export class HomeComponent implements OnInit {
         });
       }
       // Notify userToSwipe
-       this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
+      this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
     });
   }
 
@@ -377,22 +377,22 @@ saveUserLastConnection(date) {
 
 ngOnInit() {
   this.socketNotificationService.connect();
-    this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
+  this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
-    this.initUserPic();
-    this.firstName = this.resolveData.firstname;
-    this.distance = this.resolveData.distance;
-    this.getUserPosition();
-    this.getUserToSwipe();
-    this.getUserOnline(1);
+  this.initUserPic();
+  this.firstName = this.resolveData.firstname;
+  this.distance = this.resolveData.distance;
+  this.getUserPosition();
+  this.getUserToSwipe();
+  this.getUserOnline(1);
 
     // when the user leaves
-    window.addEventListener('unload', (event) => {
+  window.addEventListener('unload', (event) => {
       const date = new Date();
       this.getUserOnline(0);
       this.saveUserLastConnection(date);
     });
-    this.notifications = this.socketNotificationService.notifications;
+  this.notifications = this.socketNotificationService.notifications;
   }
 }
