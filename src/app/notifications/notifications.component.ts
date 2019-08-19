@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import * as io from 'socket.io-client';
 import { GetNotificationsService } from './services/get-notifications/get-notifications.service';
 import { EnterViewHomeReturn } from '../home/services/enter-view-home/enter-view-home-return';
 import { GetNotificationsReturn, Notification } from './services/get-notifications/get-notifications.return';
+import { DeleteNotificationService } from './services/delete-notification/delete-notification.service';
+import { DeleteNotificationReturn } from './services/delete-notification/delete-notification.return';
+import { SocketNotificationsService } from './services/socket-notifications/socket-notifications.service';
 
 @Component({
   selector: 'app-notifications',
@@ -16,30 +18,26 @@ export class NotificationsComponent implements OnInit {
    */
   @Input() resolveData: EnterViewHomeReturn = null;
   /**
-   *  The userId
-   *
-   */
-  public userId: number;
-  /**
    *
    * Notification list
    */
-  public notificationList: Notification[];
+  public notifications: Notification[];
 
-  getNotifications() {
-    this.getNotificationService.getNotifications(this.userId)
-      .subscribe((result: GetNotificationsReturn) => {
+  deleteNotification(index: number) {
+    this.deleteNotificationService.deleteNotification(this.notifications[index].id_notif)
+      .subscribe((result: DeleteNotificationReturn) => {
         if (result.success) {
-          this.notificationList = result.notifications;
-          console.log(this.notificationList);
+          this.notifications.splice(index, 1);
         }
       });
   }
 
   constructor(public getNotificationService: GetNotificationsService,
-    ) { }
+              public deleteNotificationService: DeleteNotificationService,
+              public socketNotificationsService: SocketNotificationsService) { }
 
   ngOnInit() {
+    this.notifications = this.socketNotificationsService.notifications;
   }
 
 }

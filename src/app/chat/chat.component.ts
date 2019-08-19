@@ -27,6 +27,7 @@ import { RemoveMatchReturn } from './services/remove-match/remove-match.return';
 import { ReportUserParameter } from './services/report-user/report-user.parameter';
 import { ReportUserService } from './services/report-user/report-user.service';
 import { ReportUserReturn } from './services/report-user/report-user.return';
+import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 
 @Component({
   selector: 'app-chat',
@@ -46,6 +47,7 @@ export class ChatComponent implements OnInit {
               public fb: FormBuilder,
               public removeMatchService: RemoveMatchService,
               public reportUserService: ReportUserService,
+              public socketNotificationService: SocketNotificationsService,
               public lastConnection: LastConnectedTimeFormatPipe) {
                 this.messageForm = fb.group({
                   message: ['', Validators.required]
@@ -249,7 +251,8 @@ export class ChatComponent implements OnInit {
           this.socket.emit('send message', me);
           this.messageForm.reset();
           this.saveMessage(this.id, msg, ts);
-
+          // Send a notification to the recipient
+          this.socketNotificationService.notify(+localStorage.getItem('userId'), me.id, 6);
         }
       }
     }
@@ -294,12 +297,23 @@ export class ChatComponent implements OnInit {
   }
 
   reportUser(idUserMatched) {
-    let idMatch = 0;
     this.matchesObjects.forEach((v) => {
       if (v.id.id_user_matched === idUserMatched) {
-        idMatch = v.id.id_match;
+        const idMatch = v.id.id_match;
+        const APIParameter: ReportUserParameter = {
+          id_match: idMatch,
+          id_user: this.id,
+          id_user_: idUserMatched,
+        }
+        this.reportUserService.reportUser(APIParameter)
+          .subscribe((result: ReportUserReturn) => {
+            if (result.success) {
+              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 3);
+            }
+        }); 
       }
     });
+<<<<<<< HEAD
     console.log(idMatch);
     const APIParameter: ReportUserParameter = {
       id_match: idMatch,
@@ -312,6 +326,8 @@ export class ChatComponent implements OnInit {
           alert('user blocked');
         }
       });
+=======
+>>>>>>> clfoltra
   }
 
   removeUser(idUserMatched: number) {
@@ -320,7 +336,7 @@ export class ChatComponent implements OnInit {
         this.removeMatchService.removeMatch(v.id.id_match)
           .subscribe((result: RemoveMatchReturn) => {
             if (result.success) {
-              alert('user removed');
+              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 2);
             }
           });
       }

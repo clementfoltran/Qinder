@@ -14,7 +14,6 @@ import { SwipeReturn } from './services/swipe/swipe-return';
 import {} from 'googlemaps';
 import { GetUserTagsReturn, UserTag } from '../preferences/services/get-user-tags/get-user-tags.return';
 import { GetUserTagsService } from '../preferences/services/get-user-tags/get-user-tags.service';
-import { DATE } from 'ngx-bootstrap/chronos/units/constants';
 import * as $ from 'jquery';
 import { GetUserOnlineService } from './services/get-user-online/get-user-online.service';
 import { GetUserOnlineParameter } from './services/get-user-online/get-user-online-parameter';
@@ -27,6 +26,7 @@ import anime from 'animejs/lib/anime.es.js';
 import { GetTheHeavensParameter } from './services/get-the-heavens/get-the-heavens-parameter';
 import { GetTheHeavensService } from './services/get-the-heavens/get-the-heavens.service';
 import { GetTheHeavensReturn } from './services/get-the-heavens/get-the-heavens-return';
+import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 
 declare var $: any;
 
@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit {
               public getUserOnlineService: GetUserOnlineService,
               public saveUserLastConnectionService: SaveUserLastConnectionService,
               public getTheHeavensService: GetTheHeavensService,
+              public socketNotificationService: SocketNotificationsService,
               private lastConnection: LastConnectedTimeFormatPipe) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
@@ -62,7 +63,8 @@ export class HomeComponent implements OnInit {
    */
   public distance: number;
   /**
-   * UserPhotos tab
+
+  * UserPhotos tab
    *
    */
   public userPhotos: Photo[];
@@ -111,14 +113,14 @@ export class HomeComponent implements OnInit {
   public userCurrentPosition: any;
   /**
    *
-   * Notification list
-   */
-  public notificationList: Notification[];
-  /**
-   *
    * User to swipe tags
    */
   public userToSwipeTags: UserTag[] = [];
+  /**
+   * 
+   * Notification list
+   */
+  public notifications: Notification[];
   public userToSwipe: boolean;
 
   public peopleInHeavens: any;
@@ -237,6 +239,8 @@ export class HomeComponent implements OnInit {
           life: 6000
         });
       }
+      // Notify userToSwipe
+       this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
     });
   }
 
@@ -249,6 +253,12 @@ export class HomeComponent implements OnInit {
     this.swipeService.swipe(APIParameter)
       .subscribe((result: SwipeReturn) => {
         if (result.success) {
+          // if you like the person, we send a notification to this one
+          if (like && !result.match) {
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 4);
+          } else {
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 5);
+          }
           this.getUserToSwipe();
           if (result.match) {
             $('.match').show();
@@ -366,6 +376,7 @@ saveUserLastConnection(date) {
   }
 
 ngOnInit() {
+  this.socketNotificationService.connect();
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
@@ -382,5 +393,6 @@ ngOnInit() {
       this.getUserOnline(0);
       this.saveUserLastConnection(date);
     });
+    this.notifications = this.socketNotificationService.notifications;
   }
 }

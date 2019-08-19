@@ -72,6 +72,8 @@ app.post('/saveMessage', urlencodedParser, chat.saveMessage);
 app.post('/getUserOnline', urlencodedParser, home.getUserOnline);
 app.post('/saveLastConnection', urlencodedParser, home.saveUserLastConnection);
 
+app.post('/addNotification', urlencodedParser, notification.addNotification);
+
 // GET routes
 app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
 app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
@@ -89,9 +91,10 @@ app.get('/removeUserTag/:id', urlencodedParser, user.removeUserTag);
 
 app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
 
-// app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
-
 app.get('/randomUser', urlencodedParser, generator.randomUser);
+
+app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
+app.get('/deleteNotifications/:id', urlencodedParser, notification.deleteNotification);
 
 // app.listen(port, () => {
 //   console.log(`Server is running on port ${port}`);
