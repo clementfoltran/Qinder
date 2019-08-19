@@ -28,6 +28,7 @@ import { GetTheHeavensService } from './services/get-the-heavens/get-the-heavens
 import { GetTheHeavensReturn } from './services/get-the-heavens/get-the-heavens-return';
 import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 import { Notification } from '../notifications/services/get-notifications/get-notifications.return';
+import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
 
 declare var $: any;
 
@@ -35,7 +36,7 @@ declare var $: any;
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [ LastConnectedTimeFormatPipe ]
+  providers: [ LastConnectedTimeFormatPipe ],
 })
 export class HomeComponent implements OnInit {
 
@@ -125,8 +126,9 @@ export class HomeComponent implements OnInit {
   public userToSwipe: boolean;
   public nbMessages = 0;
 
-  public peopleInHeavens: any;
-  public progressBarValue = 100;
+  public peopleInHeavens = [];
+  public progressBarValue = 0; // to put at 0
+  public heavensClicked = 0;
 
   public APIParameterGetUserOnline: GetUserOnlineParameter;
   public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
@@ -287,8 +289,19 @@ export class HomeComponent implements OnInit {
     await this.getTheHeavensService.getTheHeavens(APIParameter)
     .subscribe((result: GetTheHeavensReturn) => {
       if (result.success) {
-        this.peopleInHeavens = result.people_list;
-        this.displayTheHeavens();
+        // this.peopleInHeavens = result.people_list;
+        // console.log('length = ', result.people_list[0]);
+
+        let index = 0;
+        setInterval(() => {
+          if (index === result.people_list.length) {
+            this.hideThem();
+            return;
+          }
+          this.peopleInHeavens.push(result.people_list[index]);
+          this.displayTheHeavens();
+          index++;
+        }, 500);
       } else {
         this.messageService.add({
           severity: 'error',
@@ -300,7 +313,34 @@ export class HomeComponent implements OnInit {
     });
   }
 
+hideThem() {
+  let index = 0;
+  setInterval(() => {
+    if (index === this.peopleInHeavens.length) {
+      this.heavensClicked = 0;
+      this.peopleInHeavens = [];
+      this.progressBarValue = 0;
+      return;
+    }
+    this.peopleInHeavens.splice(index, 1, '');
+    index++;
+  }, 500);
+}
+
 displayTheHeavens() {
+    anime({
+      targets: '.card',
+      opacity: 1,
+      duration: 10000
+    });
+}
+
+progressToTheHeavens() {
+  this.progressBarValue = this.progressBarValue + 44; // 12 is good
+}
+
+showMeTheHeavens() {
+
   setTimeout(function() {
     anime({
       targets: '.heaven',
@@ -308,19 +348,14 @@ displayTheHeavens() {
       duration: 30000
     });
   }, 3000);
-}
-
-progressToTheHeavens() {
-  this.progressBarValue = this.progressBarValue + 12;
-}
-
-showMeTheHeavens() {
   anime({
     targets: '.swipe-zone',
     opacity: 0,
     duration: 10000
   });
+
   this.getTheHeavens();
+  this.heavensClicked = 1;
 }
 
 showChat($event: any) {
@@ -389,7 +424,7 @@ ngOnInit() {
   this.getUserToSwipe();
   this.getUserOnline(1);
 
-    // when the user leaves
+  // when the user leaves
   window.addEventListener('unload', (event) => {
       const date = new Date();
       this.getUserOnline(0);

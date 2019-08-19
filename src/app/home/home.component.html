@@ -14,20 +14,29 @@
     </div>
   </div>
   <ng-template #showHeavens>
-    <button (click)="showMeTheHeavens()" type="button" class="btn btn-danger">✨ Show me the heavens! ✨</button>
+    <div *ngIf="heavensClicked === 0">
+      <button (click)="showMeTheHeavens()" type="button" class="btn btn-danger">✨ Show me the heavens! ✨</button>
+    </div>
   </ng-template>
-  <div *ngIf="peopleInHeavens">
-    <div class="card-group">
-      <div class="p-5" *ngFor="let people of peopleInHeavens; let i = index">
-        <div class="card">
-          <img class="card-img-top" src="{{ people.photo }}" alt="Card image cap">
-            <div class="card-body">
-              <h5 class="card-title"> {{ people.firstname }}</h5>
+  <br>
+
+  <!-- THE HEAVENS -->
+  <div *ngIf="peopleInHeavens.length > 0">
+    <label><strong>✨ Here are the people you can match with ✨</strong></label>
+
+      <div class="row card-group">
+          <div class="mb-4 col-sm-2" *ngFor="let people of peopleInHeavens; let i = index;">
+            <div class="card" style="opacity: 0">
+              <img class="card-img-top" src="{{ people.photo }}" alt="Card image cap">
+              <div class="card-body">
+                <h5 class="card-title"> {{ people.firstname }}</h5>
+              </div>
             </div>
           </div>
-        </div>
       </div>
-    </div>
+
+  </div>
+
   <div class="swipe-zone mt-4">
     <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-sm-6 col-md-6 col-lg-4 col-xl-3 h-80">
       <div class="card mx-auto">
