@@ -19,6 +19,7 @@ export class ResetPasswordService {
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
+        'Authorization': 'JWT ' + localStorage.getItem('token')
       }),
     };
 

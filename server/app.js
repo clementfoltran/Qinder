@@ -18,83 +18,85 @@ const chat = require('./chat.js');
 const notification = require('./notification.js');
 const generator = require('./generator.js')
 const resetPassword = require('./resetPassword.js')
+const jwt = require('jsonwebtoken');
 
+const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(bodyParser.json({limit: '10mb', extended: true}));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, authorization');
   next();
 });
 
 // Check the request
-// const checkUserToken = (req, res, next) => {
-//   if (!req.header('Authorization')) {
-//     return res.status(401).json({
-//       success: false,
-//       message: 'Missing authentication header'
-//     });
-//   }
-//   const token = req.header('authorization').split(' ')[1];
-//   jwt.verify(token, secret);
-//   next();
-// };
+const checkUserToken = (req, res, next) => {
+  if (!req.header('authorization')) {
+    return res.status(401).json({
+      success: false,
+      message: 'Missing authentication header'
+    });
+  }
+  const token = req.header('authorization').split(' ')[1];
+  jwt.verify(token, secret);
+  next();
+};
 
 // POST routes
 app.post('/login', urlencodedParser, user.login);
-app.post('/updateGeolocation', urlencodedParser, user.updateGeolocation);
+app.post('/updateGeolocation', urlencodedParser, checkUserToken, user.updateGeolocation);
 app.post('/register', urlencodedParser, user.register);
-app.post('/sendmail', urlencodedParser, user.sendMail);
-app.post('/reportUser', urlencodedParser, user.reportUser);
-app.post('/resetPassword', urlencodedParser, user.resetPassword);
-app.post('/checkKey/:email', urlencodedParser, resetPassword.checkKey);
-app.post('/saveNewPassword', urlencodedParser, resetPassword.saveNewPassword);
+app.post('/sendmail', urlencodedParser, checkUserToken, user.sendMail);
+app.post('/reportUser', urlencodedParser, checkUserToken, user.reportUser);
+app.post('/resetPassword', urlencodedParser, checkUserToken, user.resetPassword);
+app.post('/checkKey/:email', urlencodedParser, checkUserToken, resetPassword.checkKey);
+app.post('/saveNewPassword', urlencodedParser, checkUserToken, resetPassword.saveNewPassword);
 
-app.get('/test/:id', urlencodedParser, user.test);
+app.get('/test/:id', urlencodedParser, checkUserToken, user.test);
 
-app.post('/updateName', urlencodedParser, setting.updateName);
-app.post('/updateEmail', urlencodedParser, setting.updateEmail);
-app.post('/updatePassword', urlencodedParser, setting.updatePassword);
+app.post('/updateName', urlencodedParser, checkUserToken, setting.updateName);
+app.post('/updateEmail', urlencodedParser, checkUserToken, setting.updateEmail);
+app.post('/updatePassword', urlencodedParser, checkUserToken, setting.updatePassword);
 
-app.post('/addUserTag', urlencodedParser, user.addUserTag);
-app.post('/updatePreferences', urlencodedParser, preference.updatePreferences);
-app.post('/uploadPhoto', urlencodedParser, preference.uploadPhoto);
-app.post('/deletePhoto', urlencodedParser, preference.deletePhoto);
+app.post('/addUserTag', urlencodedParser, checkUserToken, user.addUserTag);
+app.post('/updatePreferences', urlencodedParser, checkUserToken, preference.updatePreferences);
+app.post('/uploadPhoto', urlencodedParser, checkUserToken, preference.uploadPhoto);
+app.post('/deletePhoto', urlencodedParser, checkUserToken, preference.deletePhoto);
 
-app.post('/getUserToSwipe/', urlencodedParser, home.getUserToSwipe);
-app.post('/getTheHeavens/', urlencodedParser, home.getTheHeavens);
-app.post('/swipe/', urlencodedParser, home.swipe);
+app.post('/getUserToSwipe/', urlencodedParser, checkUserToken, home.getUserToSwipe);
+app.post('/getTheHeavens/', urlencodedParser, checkUserToken, home.getTheHeavens);
+app.post('/swipe/', urlencodedParser, checkUserToken, home.swipe);
 
-app.post('/saveMessage', urlencodedParser, chat.saveMessage);
+app.post('/saveMessage', urlencodedParser, checkUserToken, chat.saveMessage);
 
-app.post('/getUserOnline', urlencodedParser, home.getUserOnline);
-app.post('/saveLastConnection', urlencodedParser, home.saveUserLastConnection);
+app.post('/getUserOnline', urlencodedParser, checkUserToken, home.getUserOnline);
+app.post('/saveLastConnection', urlencodedParser, checkUserToken, home.saveUserLastConnection);
 
-app.post('/addNotification', urlencodedParser, notification.addNotification);
+app.post('/addNotification', urlencodedParser, checkUserToken, notification.addNotification);
 
 // GET routes
-app.get('/setting/:id', urlencodedParser, setting.enterViewSetting);
-app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
-app.get('/activateAccount/:email', urlencodedParser, activate.activateAccount);
-app.get('/home/:id', urlencodedParser, home.enterViewHome);
-app.get('/getUserPhotos/:id', urlencodedParser, user.getUserPhotos);
+app.get('/setting/:id', urlencodedParser, checkUserToken, setting.enterViewSetting);
+app.get('/activate/:email', urlencodedParser, checkUserToken, activate.enterViewActivate);
+app.get('/activateAccount/:email', urlencodedParser, checkUserToken, activate.activateAccount);
+app.get('/home/:id', urlencodedParser, checkUserToken, home.enterViewHome);
+app.get('/getUserPhotos/:id', urlencodedParser, checkUserToken, user.getUserPhotos);
 
-app.get('/chat/:id', urlencodedParser, chat.loadMatches);
-app.get('/loadConversation/:id', urlencodedParser, chat.loadConversation);
+app.get('/chat/:id', urlencodedParser, checkUserToken, chat.loadMatches);
+app.get('/loadConversation/:id', urlencodedParser, checkUserToken, chat.loadConversation);
 
-app.get('/getTags', urlencodedParser, preference.getTags);
-app.get('/getUserTags/:id', urlencodedParser, user.getUserTags);
-app.get('/removeMatch/:id', urlencodedParser, user.removeMatch);
-app.get('/removeUserTag/:id', urlencodedParser, user.removeUserTag);
+app.get('/getTags', urlencodedParser, checkUserToken, preference.getTags);
+app.get('/getUserTags/:id', urlencodedParser, checkUserToken, user.getUserTags);
+app.get('/removeMatch/:id', urlencodedParser, checkUserToken, user.removeMatch);
+app.get('/removeUserTag/:id', urlencodedParser, checkUserToken, user.removeUserTag);
 
-app.get('/getProfilePhoto/:id', urlencodedParser, user.getProfilePhoto);
+app.get('/getProfilePhoto/:id', urlencodedParser, checkUserToken, user.getProfilePhoto);
 
-app.get('/randomUser', urlencodedParser, generator.randomUser);
+app.get('/randomUser', urlencodedParser, checkUserToken, generator.randomUser);
 
-app.get('/getNotifications/:id', urlencodedParser, notification.getNotifications);
-app.get('/deleteNotifications/:id', urlencodedParser, notification.deleteNotification);
+app.get('/getNotifications/:id', urlencodedParser, checkUserToken, notification.getNotifications);
+app.get('/deleteNotifications/:id', urlencodedParser, checkUserToken, notification.deleteNotification);
 
 // app.listen(port, () => {
 //   console.log(`Server is running on port ${port}`);
