@@ -2,6 +2,7 @@ export interface EnterViewHomeReturn {
   success: true;
   message: '';
   id: number;
+  email: string;
   firstname: string;
   lastname: string;
   bio: string;

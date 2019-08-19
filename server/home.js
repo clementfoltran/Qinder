@@ -19,6 +19,7 @@ exports.enterViewHome = (req, res) => {
             success: true,
             message: '',
             id: response[0].id_user,
+            email: response[0].email,
             firstname: response[0].firstname,
             lastname: response[0].lastname,
             bio: response[0].bio,

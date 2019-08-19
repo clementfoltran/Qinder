@@ -11,7 +11,7 @@ export class EnterViewSettingsResolve implements Resolve<EnterViewSettingsReturn
 
     resolve(route: ActivatedRouteSnapshot) {
 
-        const id = +route.params['id'];
+        const id = +route.params.id;
 
         return this.enterViewSettingsService.enterView(id).pipe(
         map(response => {
