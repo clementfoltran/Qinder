@@ -1,4 +1,4 @@
-<form [formGroup]="prefForm" (ngSubmit)="updatePref()">
+<form [formGroup]="prefForm">
   <div class="form-group mb-4">
     <div *ngIf="userPhotos">
       <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
