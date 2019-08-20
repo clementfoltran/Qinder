@@ -2,6 +2,7 @@ export interface PopulateReturn {
     success: boolean;
     message: string;
     data: Result;
+    photoUrl: string;
 }
 
 export interface Name {

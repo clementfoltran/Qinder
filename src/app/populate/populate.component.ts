@@ -14,20 +14,23 @@ export class PopulateComponent implements OnInit {
   public progress = false;
   public nbUser: number;
   public resolvePopulate: PopulateReturn;
+  public photoUrl: string;
 
   async populate() {
     this.progress = true;
-    for (let index = 0; index < this.nbUser; index++) {
+    for (let index = 1; index <= this.nbUser; index++) {
       await this.populateService.populate()
         .subscribe((result: PopulateReturn) => {
           if (result.success) {
             this.resolvePopulate = result;
+            this.photoUrl = result.photoUrl;
+            console.log(index);
             $('.progress-bar').css({
               width: Math.floor((index / this.nbUser) * 100) + '%'
             });
             setTimeout(() => {
               index++;
-            }, 100);
+            }, 10);
           }
         });
     }

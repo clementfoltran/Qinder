@@ -58,7 +58,7 @@ exports.getUserToSwipe = (req, res) => {
       let query;
       if (req.body.interest === 'Both') {
         // ADD DISTANCE CHECK
-        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
+        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
         AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
@@ -70,7 +70,7 @@ exports.getUserToSwipe = (req, res) => {
           req.body.tagsInCommon
         ]);
       } else {
-        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
+        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
         AND user.gender = ? AND popularity BETWEEN 0 AND ? AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
@@ -96,7 +96,8 @@ exports.getUserToSwipe = (req, res) => {
               firstname: response[0].firstname,
               bio: response[0].bio,
               position: JSON.parse(response[0].position),
-              year: response[0].year
+              year: response[0].year,
+              popularity: response[0].popularity
             });
           } else {
             res.json({ success: false, message: 'There is no more Qinders, try to change your parameters' });

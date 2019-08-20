@@ -125,6 +125,7 @@ export class HomeComponent implements OnInit {
    * Notification list
    */
   public notifications: Notification[];
+  public userToSwipePopularity: number; 
   public userToSwipe: boolean;
   public nbMessages = 0;
 
@@ -225,6 +226,7 @@ export class HomeComponent implements OnInit {
         this.userToSwipeName = result.firstname;
         this.userToSwipeBio = result.bio;
         this.userToSwipeId = result.id;
+        this.userToSwipePopularity = result.popularity;
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;

@@ -33,7 +33,7 @@ exports.randomUser = async (req, res) => {
           res.json({ success: false, message: 'Failed to retrieve randomuser' });
         } else {
           if (res) {
-            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)';
+            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)';
             let index = response.body.results[0];
             const position = {
               latitude: Math.random() * (+50 - +48) + +48,
@@ -50,7 +50,7 @@ exports.randomUser = async (req, res) => {
               null, null, null, null, null, 1,
               Math.random() * (+100 - +1) + +1,
               JSON.stringify(position),
-              0, 100,
+              0, 100, 6
             ]);
             db.query(query, (err, response) => {
               if (err) {
@@ -59,10 +59,11 @@ exports.randomUser = async (req, res) => {
               } else {
                 const idUser = response.insertId;
                 request(`https://source.unsplash.com/random/?$${ index.gender }`, { json: true }, (err, response) => {
-                  sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())'
+                  sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())';
+                  const photoUrl = response.request.uri.href;
                   query = db.format(sql, [
                     idUser,
-                    response.request.uri.href
+                    photoUrl
                   ]);
                   db.query(query, (err) => {
                     if (err) {
@@ -70,7 +71,7 @@ exports.randomUser = async (req, res) => {
                       throw err;
                     } else {
                       randomTags(idUser);
-                      res.json({ success: true, message: '', data: index });
+                      res.json({ success: true, message: '', data: index, photoUrl: photoUrl });
                     }
                   });
                 });
