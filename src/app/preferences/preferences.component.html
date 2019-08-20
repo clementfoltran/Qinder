@@ -3,8 +3,7 @@
     <div *ngIf="userPhotos">
       <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
         <div class="img-wrap d-inline-block position-relative">
-          <img height="150px" width="150px"
-               class="rounded m-2" src="{{ photo.photo }}">
+          <img height="80px" width="80px" class="rounded m-2" src="{{ photo.photo }}">
           <button type="button" class="close pull-right" aria-label="Close" (click)="deletePhoto(photo.id_photo, photo.id_user, i)">
             <span aria-hidden="true">&times;</span>
           </button>
