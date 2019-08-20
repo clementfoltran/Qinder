@@ -127,7 +127,7 @@ export class HomeComponent implements OnInit {
   public nbMessages = 0;
 
   public peopleInHeavens = [];
-  public progressBarValue = 0; // to put at 0
+  public progressBarValue = 100; // to put at 0
   public heavensClicked = 0;
 
   public APIParameterGetUserOnline: GetUserOnlineParameter;
@@ -314,17 +314,22 @@ export class HomeComponent implements OnInit {
   }
 
 hideThem() {
-  let index = 0;
   setInterval(() => {
-    if (index === this.peopleInHeavens.length) {
-      this.heavensClicked = 0;
-      this.peopleInHeavens = [];
-      this.progressBarValue = 0;
-      return;
-    }
-    this.peopleInHeavens.splice(index, 1, '');
-    index++;
-  }, 500);
+    anime({
+      targets: '.card',
+      opacity: 0,
+      duration: 3000
+    });
+  }, 2000);
+  setInterval(() => {
+    this.heavensClicked = 0;
+    this.progressBarValue = 0;
+    anime({
+      targets: '.swipe-zone',
+      opacity: 1,
+      duration: 2000
+    });
+  }, 4000);
 }
 
 displayTheHeavens() {
