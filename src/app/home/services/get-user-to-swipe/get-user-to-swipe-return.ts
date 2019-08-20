@@ -9,4 +9,5 @@ export interface GetUserToSwipeReturn {
         longitude: number;
     };
     year: number;
+    popularity: number; 
 }

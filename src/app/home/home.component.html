@@ -36,7 +36,6 @@
       </div>
 
   </div>
-
   <div class="swipe-zone mt-4">
     <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-sm-6 col-md-6 col-lg-4 col-xl-3 h-80">
       <div class="card mx-auto">
@@ -50,6 +49,7 @@
         <div class="card-body">
           <h2>{{ userToSwipeName | titlecase }} {{ userToSwipeAge }}</h2>
           <h5>{{ userToSwipeDistance }} kms</h5>
+          <h6>{{ userToSwipePopularity }}% trendy</h6>
           <div class="row">
             <div *ngFor="let tag of userToSwipeTags" class="mb-2">
               <div class="tag p-2 m-2 rounded">{{ tag.tag }}</div>

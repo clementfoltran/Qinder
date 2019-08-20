@@ -14,7 +14,7 @@ export class AppComponent {
               public isLoggedInGuard: IsLoggedInGuard) { }
 
   ngOnInit() {
-    if (this.isLoggedInGuard.canActivate()) {
+    if (localStorage.getItem('token')) {
       this.socketNotificationsService.getNotifications();
     }
   }
