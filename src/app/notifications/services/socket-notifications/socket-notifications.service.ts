@@ -24,7 +24,7 @@ export class SocketNotificationsService {
 
   /**
    * RECEIVE NOTIFICATIONS
-   * 
+   *
    * @param obj.notif
    * 1: View profile notification
    */
@@ -38,7 +38,7 @@ export class SocketNotificationsService {
       }
       if (obj.notif === 2) {
         this.messageService.add({
-          severity: 'warn',summary: 'New notification', detail: 'someone deleted you', life: 6000
+          severity: 'warn', summary: 'New notification', detail: 'someone deleted you', life: 6000
         });
       }
       if (obj.notif === 3) {

@@ -31,7 +31,7 @@ exports.updatePreferences = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'UPDATE user SET bio = ?, gender = ?, interest = ?, distance = ?, minage = ?, maxage = ?, pop = ? WHERE id_user = ?';
+      const sql = 'UPDATE user SET bio = ?, gender = ?, interest = ?, distance = ?, minage = ?, maxage = ?, pop = ?, tagsInCommon = ? WHERE id_user = ?';
       let query = db.format(sql, [
         req.body.bio,
         req.body.gender,
@@ -40,16 +40,16 @@ exports.updatePreferences = (req, res) => {
         req.body.minage,
         req.body.maxage,
         req.body.pop,
+        req.body.tagsInCommon,
         req.body.id
-  
       ]);
-      db.query(query, (err, response) => {
-        console.log(response);
+      db.query(query, (err) => {
         if (err) {
           res.json({
             success: false,
             message: 'Network error',
           });
+          throw err;
         } else {
           res.json({
             success: true,

@@ -360,8 +360,8 @@ export class LandingPageComponent implements OnInit {
       lastname: ['', Validators.required],
       email: ['', Validators.required],
       birthdate: ['', Validators.required],
-      password: ['', Validators.required],
-      passwordConfirmation: ['', Validators.required],
+      password: ['', Validators.minLength(8)],
+      passwordConfirmation: ['', Validators.minLength(8)],
       gender: ['', Validators.required],
     });
 
@@ -375,8 +375,8 @@ export class LandingPageComponent implements OnInit {
       });
 
     this.resetPasswordForm = fb.group({
-      newPassword: ['', Validators.required],
-      newPasswordConfirmation: ['', Validators.required],
+      newPassword: ['', Validators.minLength(8)],
+      newPasswordConfirmation: ['', Validators.minLength(8)],
       });
 
     this.datePickerConfig = Object.assign({

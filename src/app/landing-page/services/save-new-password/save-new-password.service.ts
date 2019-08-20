@@ -19,7 +19,6 @@ export class SaveNewPasswordService {
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + localStorage.getItem('token')
       }),
     };
 

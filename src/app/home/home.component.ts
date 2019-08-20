@@ -37,7 +37,7 @@ declare var $: any;
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [ LastConnectedTimeFormatPipe ]
+  providers: [ LastConnectedTimeFormatPipe ],
 })
 export class HomeComponent implements OnInit {
 
@@ -121,15 +121,17 @@ export class HomeComponent implements OnInit {
    */
   public userToSwipeTags: UserTag[] = [];
   /**
-   * 
+   *
    * Notification list
    */
   public notifications: Notification[];
   public userToSwipe: boolean;
-  public nbMessages: number = 0;
+  public nbMessages = 0;
 
-  public peopleInHeavens: any;
-  public progressBarValue = 100;
+  public peopleInHeavens = [];
+  public progressBarValue = 100; // to put at 0
+  public heavensClicked = 0;
+  public interval: any;
 
   public APIParameterGetUserOnline: GetUserOnlineParameter;
   public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
@@ -212,7 +214,8 @@ export class HomeComponent implements OnInit {
       minage: this.resolveData.minage,
       maxage: this.resolveData.maxage,
       distance: this.resolveData.distance,
-      pop: this.resolveData.pop, 
+      popularity: this.resolveData.pop,
+      tagsInCommon: this.resolveData.tagsInCommon
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
@@ -248,7 +251,7 @@ export class HomeComponent implements OnInit {
         });
       }
       // Notify userToSwipe
-       this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
+      this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
     });
   }
 
@@ -293,8 +296,16 @@ export class HomeComponent implements OnInit {
     await this.getTheHeavensService.getTheHeavens(APIParameter)
     .subscribe((result: GetTheHeavensReturn) => {
       if (result.success) {
-        this.peopleInHeavens = result.people_list;
-        this.displayTheHeavens();
+        let index = 0;
+        this.interval = setInterval(() => {
+          if (index === result.people_list.length) {
+            this.hideThem();
+            return;
+          }
+          this.peopleInHeavens.push(result.people_list[index]);
+          this.displayTheHeavens();
+          index++;
+        }, 500);
       } else {
         this.messageService.add({
           severity: 'error',
@@ -306,27 +317,64 @@ export class HomeComponent implements OnInit {
     });
   }
 
-displayTheHeavens() {
-  setTimeout(function() {
+hideThem() {
+  clearInterval(this.interval);
+  setTimeout(() => {
     anime({
-      targets: '.heaven',
-      opacity: 1,
-      duration: 30000
+      targets: '.card',
+      opacity: 0,
+      duration: 3000
     });
   }, 3000);
+  setTimeout(() => {
+    this.heavensClicked = 0;
+    this.progressBarValue = 0;
+    this.peopleInHeavens = [];
+    this.showCard();
+    anime({
+      targets: '.swipe-zone',
+      opacity: 1,
+      duration: 2000
+    });
+  }, 4000);
+}
+
+showCard() {
+  anime({
+    targets: '.card',
+    opacity: 1,
+    duration: 3000
+  });
+}
+
+displayTheHeavens() {
+    anime({
+      targets: '.card',
+      opacity: 1,
+      duration: 5000
+    });
 }
 
 progressToTheHeavens() {
-  this.progressBarValue = this.progressBarValue + 12;
+  this.progressBarValue = this.progressBarValue + 44; // 12 is good
 }
 
 showMeTheHeavens() {
+
+  setTimeout(() => {
+    this.getTheHeavens();
+    this.heavensClicked = 1;
+    anime({
+      targets: '.heaven',
+      opacity: 1,
+      duration: 5000
+    });
+  }, 1000);
   anime({
-    targets: '.swipe-zone',
+    targets: '.swipe-zone, .showMTH',
     opacity: 0,
-    duration: 10000
+    duration: 5000
   });
-  this.getTheHeavens();
 }
 
 showChat($event: any) {
@@ -385,22 +433,22 @@ saveUserLastConnection(date) {
 
 ngOnInit() {
   this.socketNotificationService.connect();
-    this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
+  this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
-    this.initUserPic();
-    this.firstName = this.resolveData.firstname;
-    this.distance = this.resolveData.distance;
-    this.getUserPosition();
-    this.getUserToSwipe();
-    this.getUserOnline(1);
+  this.initUserPic();
+  this.firstName = this.resolveData.firstname;
+  this.distance = this.resolveData.distance;
+  this.getUserPosition();
+  this.getUserToSwipe();
+  this.getUserOnline(1);
 
-    // when the user leaves
-    window.addEventListener('unload', (event) => {
+  // when the user leaves
+  window.addEventListener('unload', (event) => {
       const date = new Date();
       this.getUserOnline(0);
       this.saveUserLastConnection(date);
     });
-    this.notifications = this.socketNotificationService.notifications;
+  this.notifications = this.socketNotificationService.notifications;
   }
 }

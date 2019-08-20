@@ -12,6 +12,14 @@
       </div>
     </div>
   </div>
+  <h5 class="p-2">About you</h5>
+  <div class="form-group">
+    <label>I'm a</label>
+    <select class="custom-select" formControlName="gender" (change)="updatePref()">
+      <option selected>Male</option>
+      <option>Female</option>
+    </select>
+  </div>
   <div class="form-group mb-4">
     <div class="input-group mb-3">
       <div class="custom-file">
@@ -63,22 +71,14 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="form-group mb-4 col-md-6">
-      <label>I'm a</label>
-      <select class="custom-select" formControlName="gender" (change)="updatePref()">
-        <option selected>Male</option>
-        <option>Female</option>
-      </select>
-    </div>
-    <div class="form-group mb-4 col-md-6">
-      <label>I'm interested by</label>
-      <select class="custom-select" formControlName="interest" (change)="updatePref()">
-        <option selected>Male</option>
-        <option>Female</option>
-        <option>Both</option>
-      </select>
-    </div>
+  <h5 class="p-2">What you are looking for</h5>
+  <div class="form-group">
+    <label>I'm interested by</label>
+    <select class="custom-select" formControlName="interest" (change)="updatePref()">
+      <option selected>Male</option>
+      <option>Female</option>
+      <option>Both</option>
+    </select>
   </div>
   <div class="row">
     <div class="form-group mb-4 col-md-6">
@@ -95,17 +95,21 @@
       <label>Popularity preference {{ popularity }}</label>
       <p-slider [(ngModel)]="popularity" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
     </div>
+    <div class="form-group mb-4 col-md-6">
+      <label>Tags in common {{ tagsInCommon }}</label>
+      <p-slider [(ngModel)]="tagsInCommon" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="6" (mouseup)="updatePref()"></p-slider>
+    </div>
   </div>
   <div class="form-group mb-4">
    <!-- <button [routerLink]="['/settings']" [queryParams]="{id: '1'}" type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button> -->
   </div>
-  <div class="row">
-    <div class="form-group mb-4 col-md-6">
-      <button type="button" class="btn btn-primary btn-lg btn-block" (click)="navigateToSettings()">SETTINGS</button>
-    </div>
-    <div class="form-group mb-4 col-md-6">
-      <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>
-    </div>
-  </div>
 </form>
+<h5 class="p-2">Personal information</h5>
+<div class="container">
+  <app-settings></app-settings>
+</div>
+<br>
+<div class="form-group">
+  <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>
+</div>
 

@@ -50,9 +50,9 @@ app.post('/updateGeolocation', urlencodedParser, checkUserToken, user.updateGeol
 app.post('/register', urlencodedParser, user.register);
 app.post('/sendmail', urlencodedParser, checkUserToken, user.sendMail);
 app.post('/reportUser', urlencodedParser, checkUserToken, user.reportUser);
-app.post('/resetPassword', urlencodedParser, checkUserToken, user.resetPassword);
-app.post('/checkKey/:email', urlencodedParser, checkUserToken, resetPassword.checkKey);
-app.post('/saveNewPassword', urlencodedParser, checkUserToken, resetPassword.saveNewPassword);
+app.post('/resetPassword', urlencodedParser, user.resetPassword);
+app.post('/checkKey/:email', urlencodedParser, resetPassword.checkKey);
+app.post('/saveNewPassword', urlencodedParser, resetPassword.saveNewPassword);
 
 app.get('/test/:id', urlencodedParser, checkUserToken, user.test);
 

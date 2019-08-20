@@ -63,7 +63,6 @@
               <button type="button" (click)="forgotMode()" class="btn btn-link">Changed my mind!</button>
             </form>
         </ng-template>
-       
       </div>
     </div>
   </div>
@@ -85,7 +84,7 @@
         <div class="modal-body text-center">
           <form [formGroup]="resetPasswordForm" (ngSubmit)="saveNewPassword()">
             <div class="form-group">
-              <label>New password</label>
+              <label>New password, 8 characters minimum</label>
               <input type="password" formControlName="newPassword" class="form-control" placeholder="New password">
             </div>
             <div class="form-group">
@@ -179,14 +178,9 @@
               id="password"
               #password
               formControlName="password"
-              placeholder="Password"
+              placeholder="Password, 8 characters minimum"
               >
             </div>
-            <p id="password_len_message" class="password_len_message"></p>
-            <p id="password_up_message" class="password_up_message"></p>
-            <p id="password_num_message" class="password_num_message"></p>
-            <p id="password_spe_message" class="password_spe_message"></p>
-            <label>Confirm password</label>
             <div class="form-group">
               <input 
               type="password" 

@@ -19,9 +19,11 @@ exports.enterViewHome = (req, res) => {
             success: true,
             message: '',
             id: response[0].id_user,
+            email: response[0].email,
             firstname: response[0].firstname,
             lastname: response[0].lastname,
             bio: response[0].bio,
+            hash: response[0].hash,
             distance: response[0].distance,
             minage: response[0].minage,
             maxage: response[0].maxage,
@@ -31,7 +33,8 @@ exports.enterViewHome = (req, res) => {
             confirm: response[0].confirm,
             online: response[0].online,
             lastConnection: response[0].last_connected,
-            pop: response[0].pop
+            pop: response[0].pop,
+            tagsInCommon: response[0].tagsInCommon
           });
         }
       });
@@ -57,19 +60,27 @@ exports.getUserToSwipe = (req, res) => {
         // ADD DISTANCE CHECK
         sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
-        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND popularity <= ? LIMIT 1';
-        query = db.format(sql, [ req.body.id, maxAge, minAge, req.body.pop ]);
+        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
+        AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
+        query = db.format(sql, [
+          req.body.id,
+          maxAge,
+          minAge,
+          req.body.popularity,
+          req.body.tagsInCommon
+        ]);
       } else {
         sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        AND user.gender = ? AND popularity <= ? LIMIT 1';
+        AND user.gender = ? AND popularity BETWEEN 0 AND ? AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           maxAge,
           minAge,
           req.body.interest,
-          req.body.pop
+          req.body.popularity,
+          req.body.tagsInCommon
         ]);
       }
       db.query(query, (err, response) => {

@@ -93,10 +93,15 @@ export class PreferencesComponent implements OnInit {
    */
   public userId: number = null;
   /**
-   * 
+   *
    * Popularity preference
    */
   public popularity: number = null;
+  /**
+   *
+   * Tags in common
+   */
+  public tagsInCommon: number = null;
 
   isSelectedTag(idTag: number) {
     let find = false;
@@ -164,7 +169,8 @@ export class PreferencesComponent implements OnInit {
         distance: this.distance,
         minage: this.ageRange[0],
         maxage: this.ageRange[1],
-        pop: this.popularity
+        pop: this.popularity,
+        tagsInCommon: this.tagsInCommon
       };
       this.updatePreferencesService.updatePreferences(this.APIParameterPref)
         .subscribe((result: UpdatePreferencesReturn) => {
@@ -272,7 +278,7 @@ export class PreferencesComponent implements OnInit {
   getUserTagId(idTag: number): number {
     for (let i = 0; i < this.userTags.length; i++) {
       if (this.userTags[i].id_tag === idTag) {
-        return (this.userTags[i].id_utag)
+        return (this.userTags[i].id_utag);
       }
     }
   }
@@ -283,12 +289,6 @@ export class PreferencesComponent implements OnInit {
         return (i);
       }
     }
-  }
-
-  navigateToSettings() {
-    $('body').removeClass('modal-open');
-    $('.modal-backdrop').remove();
-    this.router.navigate(['/settings/' + this.userId ] );
   }
 
   constructor(public router: Router,
@@ -315,6 +315,7 @@ export class PreferencesComponent implements OnInit {
     this.ageRange[0] = this.resolveData.minage;
     this.ageRange[1] = this.resolveData.maxage;
     this.popularity = this.resolveData.pop;
+    this.tagsInCommon = this.resolveData.tagsInCommon;
     this.distance = this.resolveData.distance;
     this.userId = this.resolveData.id;
     if (this.resolveData.bio) {

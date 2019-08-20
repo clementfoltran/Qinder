@@ -7,4 +7,5 @@ export interface UpdatePreferencesParameter {
   minage: number;
   maxage: number;
   pop: number;
+  tagsInCommon: number;
 }
