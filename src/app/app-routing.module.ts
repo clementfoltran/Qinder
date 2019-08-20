@@ -52,6 +52,11 @@ const routes: Routes = [
     canActivate: [IsLoggedOutGuard],
   },
   {
+    path: 'test',
+    component: LandingPageComponent,
+    canActivate: [IsLoggedOutGuard],
+  },
+  {
     path: 'populate',
     component: PopulateComponent,
     canActivate: [IsLoggedInGuard],

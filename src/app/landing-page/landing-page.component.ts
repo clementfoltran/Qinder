@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {Router, ActivatedRoute, NavigationExtras} from '@angular/router';
+import {Router, ActivatedRoute, NavigationExtras, ParamMap} from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { LoginParameter } from './services/login/login.parameter';
 import { LoginReturn } from './services/login/login.return';
