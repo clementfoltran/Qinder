@@ -29,6 +29,7 @@ import { GetTheHeavensReturn } from './services/get-the-heavens/get-the-heavens-
 import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 import { Notification } from '../notifications/services/get-notifications/get-notifications.return';
 import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
+import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
 
 declare var $: any;
 
@@ -129,6 +130,7 @@ export class HomeComponent implements OnInit {
   public peopleInHeavens = [];
   public progressBarValue = 100; // to put at 0
   public heavensClicked = 0;
+  public interval: any;
 
   public APIParameterGetUserOnline: GetUserOnlineParameter;
   public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
@@ -289,11 +291,8 @@ export class HomeComponent implements OnInit {
     await this.getTheHeavensService.getTheHeavens(APIParameter)
     .subscribe((result: GetTheHeavensReturn) => {
       if (result.success) {
-        // this.peopleInHeavens = result.people_list;
-        // console.log('length = ', result.people_list[0]);
-
         let index = 0;
-        setInterval(() => {
+        this.interval = setInterval(() => {
           if (index === result.people_list.length) {
             this.hideThem();
             return;
@@ -314,22 +313,32 @@ export class HomeComponent implements OnInit {
   }
 
 hideThem() {
-  setInterval(() => {
+  clearInterval(this.interval);
+  setTimeout(() => {
     anime({
       targets: '.card',
       opacity: 0,
       duration: 3000
     });
   }, 2000);
-  setInterval(() => {
+  setTimeout(() => {
     this.heavensClicked = 0;
     this.progressBarValue = 0;
+    this.showCard();
     anime({
       targets: '.swipe-zone',
       opacity: 1,
       duration: 2000
     });
   }, 4000);
+}
+
+showCard() {
+  anime({
+    targets: '.card',
+    opacity: 1,
+    duration: 3000
+  });
 }
 
 displayTheHeavens() {
