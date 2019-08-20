@@ -14,8 +14,8 @@ export class AppComponent {
               public isLoggedInGuard: IsLoggedInGuard) { }
 
   ngOnInit() {
-    if (this.isLoggedInGuard.canActivate()) {
-      this.socketNotificationsService.getNotifications();
-    }
+    // if (this.isLoggedInGuard.canActivate()) {
+    //   this.socketNotificationsService.getNotifications();
+    // }
   }
 }
