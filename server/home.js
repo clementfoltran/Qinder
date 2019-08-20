@@ -88,7 +88,6 @@ exports.getUserToSwipe = (req, res) => {
           console.log(err);
           res.json({ success: false, message: 'User not found' });
         } else {
-          console.log(response);
           if (response[0]) {
             res.json({
               success: true,
