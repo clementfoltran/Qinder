@@ -48,7 +48,7 @@ const checkUserToken = (req, res, next) => {
 app.post('/login', urlencodedParser, user.login);
 app.post('/updateGeolocation', urlencodedParser, checkUserToken, user.updateGeolocation);
 app.post('/register', urlencodedParser, user.register);
-app.post('/sendmail', urlencodedParser, checkUserToken, user.sendMail);
+app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/reportUser', urlencodedParser, checkUserToken, user.reportUser);
 app.post('/resetPassword', urlencodedParser, user.resetPassword);
 app.post('/checkKey/:email', urlencodedParser, resetPassword.checkKey);
@@ -78,8 +78,8 @@ app.post('/addNotification', urlencodedParser, checkUserToken, notification.addN
 
 // GET routes
 app.get('/setting/:id', urlencodedParser, checkUserToken, setting.enterViewSetting);
-app.get('/activate/:email', urlencodedParser, checkUserToken, activate.enterViewActivate);
-app.get('/activateAccount/:email', urlencodedParser, checkUserToken, activate.activateAccount);
+app.get('/activate/:email', urlencodedParser, activate.enterViewActivate);
+app.get('/activateAccount/:email', urlencodedParser, activate.activateAccount);
 app.get('/home/:id', urlencodedParser, checkUserToken, home.enterViewHome);
 app.get('/getUserPhotos/:id', urlencodedParser, checkUserToken, user.getUserPhotos);
 
