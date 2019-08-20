@@ -67,6 +67,7 @@ const routes: Routes = [
     HomeComponent,
     SettingsComponent,
     EnterViewSettingsResolve,
+    EnterViewActivateResolve
   ],
   exports: [RouterModule],
 })

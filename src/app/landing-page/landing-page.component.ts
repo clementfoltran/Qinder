@@ -187,6 +187,7 @@ export class LandingPageComponent implements OnInit {
               detail: result.message,
               life: 6000
             });
+            $('#modRegisternodemo').modal('hide');
           } else {
             console.log(result.message);
           }
@@ -210,6 +211,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   checkAccount(data) {
+    console.log('CHECK ACCOUNT');
     const email = this.activatedRoute.snapshot.paramMap.get('email');
     const key = this.activatedRoute.snapshot.paramMap.get('key');
 
@@ -323,7 +325,8 @@ export class LandingPageComponent implements OnInit {
   }
 
   verifyAccount(email) {
-      this.activateService.activateAccount(email)
+    console.log('VERIFY ACCOUNT CALLED');
+    this.activateService.activateAccount(email)
         .subscribe((result: ActivateReturn) => {
           if (result.success) {
             this.messageService.add({
@@ -389,11 +392,13 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('ROUTER = ', this.router.url.split('/')[1]);
     if (this.router.url.split('/')[1] === 'activate' &&
         this.activatedRoute.snapshot.paramMap.get('email') &&
         this.activatedRoute.snapshot.paramMap.get('key')) {
         this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
-        this.resolvedData = data.viewData;
+          console.log('EnterViewActivateReturn called');
+          this.resolvedData = data.viewData;
       });
         this.checkAccount(this.resolvedData);
     }

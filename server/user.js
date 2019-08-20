@@ -272,7 +272,7 @@ exports.register = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql,
@@ -292,6 +292,10 @@ exports.register = (req, res) => {
         false,
         null,
         null,
+        0,
+        0,
+        100,
+        0
       ]);
       db.query(query, (err, response) => {
         if (err) {
@@ -353,7 +357,7 @@ exports.resetPassword = (req, res) => {
   }
 };
 
-async function nodeMailerRegisterCall(email, key, callback) {
+async function nodeMailerRegisterCall(userName, email, key, callback) {
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
