@@ -1,7 +1,9 @@
 <div *ngFor="let notification of notifications; let i = index;">
-  <div class="toast show mx-auto">
-    <div class="toast-header">
-      <strong class="mr-auto">Notification</strong>
+  <div class="toast show mx-auto m-2"
+       style="border-radius: 15px">
+    <div class="toast-header"
+          [ngClass]="notification.notif === 6 || notification.notif === 5 ? 'popcool' : 'popother'">
+      <strong class="mr-auto"></strong>
       <small>{{ notification.ts }}</small>
       <button type="button" class="ml-2 mb-1 close" (click)="deleteNotification(i)">
         <span aria-hidden="true">&times;</span>
