@@ -394,12 +394,10 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('ROUTER = ', this.router.url);
     if (this.router.url.split('/')[1] === 'activate' &&
         this.activatedRoute.snapshot.paramMap.get('email') &&
         this.activatedRoute.snapshot.paramMap.get('key')) {
         this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
-          console.log('EnterViewActivateReturn called');
           this.resolvedData = data.viewData;
       });
         this.checkAccount(this.resolvedData);

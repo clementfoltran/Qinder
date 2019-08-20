@@ -417,11 +417,11 @@ getUserOnline(online) {
       });
   }
 saveUserLastConnection(date) {
-    this.APIParameterSaveUserLastConnection = {
+  this.APIParameterSaveUserLastConnection = {
       userId: +localStorage.getItem('userId'),
       date
     };
-    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
+  this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
       .subscribe((result: SaveUserLastConnectionReturn) => {
         if (result.success) {
           console.log(result.message);
