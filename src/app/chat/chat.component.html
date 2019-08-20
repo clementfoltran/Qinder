@@ -27,6 +27,12 @@
       </slide>
     </div>
   </carousel>
+  <div *ngIf="userInfos[0].online != 1; else online">
+    <p>Last connected {{ userInfos[0].last_connected | lastConnectedFormat }}</p>
+  </div>
+  <ng-template #online>
+    <p [ngStyle]="{'color' : 'green'}">Online</p>
+  </ng-template>
   <div class="row m-2" style="color: rgba(240, 67, 33, 0.8)">
     <div class="col-md-4">
       <i class="fas fa-birthday-cake proficon"></i>

@@ -290,7 +290,7 @@ exports.register = (req, res) => {
         25,
         req.body.key,
         false,
-        null,
+        100,
         null,
         0,
         0,

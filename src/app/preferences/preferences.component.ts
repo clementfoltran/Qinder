@@ -23,6 +23,12 @@ import { GetUserTagsReturn, UserTag } from './services/get-user-tags/get-user-ta
 import { RemoveUserTagService } from './services/remove-user-tag/remove-user-tag.service';
 import { RemoveUserTagReturn } from './services/remove-user-tag/remove-user-tag.return';
 import * as $ from 'jquery';
+import { GetUserOnlineReturn } from '../home/services/get-user-online/get-user-online-return';
+import { SaveUserLastConnectionReturn } from '../home/services/save-last-connection/save-last-connection-return';
+import { SaveUserLastConnectionParameter } from '../home/services/save-last-connection/save-last-connection-parameter';
+import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
+import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
+import { SaveUserLastConnectionService } from '../home/services/save-last-connection/save-last-connection.service';
 
 declare var $: any;
 
@@ -103,6 +109,9 @@ export class PreferencesComponent implements OnInit {
    */
   public tagsInCommon: number = null;
 
+  public APIParameterGetUserOnline: GetUserOnlineParameter;
+  public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
+
   isSelectedTag(idTag: number) {
     let find = false;
     for (let i = 0; i < this.userTags.length; i++) {
@@ -153,9 +162,41 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
+  getUserOnline(online) {
+    this.APIParameterGetUserOnline = {
+      userId: +localStorage.getItem('userId'),
+      online
+    };
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
+      .subscribe((result: GetUserOnlineReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+saveUserLastConnection(date) {
+  this.APIParameterSaveUserLastConnection = {
+      userId: +localStorage.getItem('userId'),
+      date
+    };
+  this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
+      .subscribe((result: SaveUserLastConnectionReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+
   logOut() {
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
+    const date = new Date();
+    this.saveUserLastConnection(date);
+    this.getUserOnline(0);
     this.loginService.logOut();
   }
 
@@ -301,6 +342,8 @@ export class PreferencesComponent implements OnInit {
               public removeUserTagService: RemoveUserTagService,
               public getUserTagsService: GetUserTagsService,
               public updatePreferencesService: UpdatePreferencesService,
+              public getUserOnlineService: GetUserOnlineService,
+              public saveUserLastConnectionService: SaveUserLastConnectionService,
               public fb: FormBuilder,
               public loginService: LoginService) {
 

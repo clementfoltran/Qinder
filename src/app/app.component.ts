@@ -14,8 +14,14 @@ export class AppComponent {
               public isLoggedInGuard: IsLoggedInGuard) { }
 
   ngOnInit() {
+<<<<<<< HEAD
     if (localStorage.getItem('token')) {
       this.socketNotificationsService.getNotifications();
     }
+=======
+    // if (this.isLoggedInGuard.canActivate()) {
+    //   this.socketNotificationsService.getNotifications();
+    // }
+>>>>>>> mascagli
   }
 }

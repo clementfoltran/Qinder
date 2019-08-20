@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {Router, ActivatedRoute, NavigationExtras} from '@angular/router';
+import {Router, ActivatedRoute, NavigationExtras, ParamMap} from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { LoginParameter } from './services/login/login.parameter';
 import { LoginReturn } from './services/login/login.return';
@@ -394,12 +394,10 @@ export class LandingPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('ROUTER = ', this.router.url.split('/')[1]);
     if (this.router.url.split('/')[1] === 'activate' &&
         this.activatedRoute.snapshot.paramMap.get('email') &&
         this.activatedRoute.snapshot.paramMap.get('key')) {
         this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
-          console.log('EnterViewActivateReturn called');
           this.resolvedData = data.viewData;
       });
         this.checkAccount(this.resolvedData);
