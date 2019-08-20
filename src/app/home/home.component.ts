@@ -320,10 +320,11 @@ hideThem() {
       opacity: 0,
       duration: 3000
     });
-  }, 2000);
+  }, 3000);
   setTimeout(() => {
     this.heavensClicked = 0;
     this.progressBarValue = 0;
+    this.peopleInHeavens = [];
     this.showCard();
     anime({
       targets: '.swipe-zone',
@@ -345,7 +346,7 @@ displayTheHeavens() {
     anime({
       targets: '.card',
       opacity: 1,
-      duration: 10000
+      duration: 5000
     });
 }
 
@@ -355,21 +356,20 @@ progressToTheHeavens() {
 
 showMeTheHeavens() {
 
-  setTimeout(function() {
+  setTimeout(() => {
+    this.getTheHeavens();
+    this.heavensClicked = 1;
     anime({
       targets: '.heaven',
       opacity: 1,
-      duration: 30000
+      duration: 5000
     });
-  }, 3000);
+  }, 1000);
   anime({
-    targets: '.swipe-zone',
+    targets: '.swipe-zone, .showMTH',
     opacity: 0,
-    duration: 10000
+    duration: 5000
   });
-
-  this.getTheHeavens();
-  this.heavensClicked = 1;
 }
 
 showChat($event: any) {
