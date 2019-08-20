@@ -5,4 +5,5 @@ export interface GetUserToSwipeParameter {
     minage: number;
     maxage: number;
     distance: number;
+    pop: number;
 }

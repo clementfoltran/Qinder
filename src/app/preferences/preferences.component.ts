@@ -194,7 +194,7 @@ export class PreferencesComponent implements OnInit {
       photo: this.selectedFile,
       active: false,
     };
-    if (this.selectedFile) {
+    if (this.selectedFile && this.userPhotos.length < 5) {
       this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
         .subscribe((result: UploadPhotoReturn) => {
           if (result.success) {
@@ -211,20 +211,20 @@ export class PreferencesComponent implements OnInit {
               detail: result.message,
               life: 6000,
             });
-          } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Network',
-              detail: 'Check your connection',
-              life: 6000,
-            });
           }
         });
-    } else {
+    } else if (!this.selectedFile) {
       this.messageService.add({
         severity: 'error',
         summary: 'Upload picture',
         detail: 'You cannot import empty pictures',
+        life: 6000,
+      });
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Upload',
+        detail: 'You can upload only 5 pictures, choose the bests',
         life: 6000,
       });
     }
