@@ -42,15 +42,14 @@ exports.updatePreferences = (req, res) => {
         req.body.pop,
         req.body.tagsInCommon,
         req.body.id
-  
       ]);
-      db.query(query, (err, response) => {
-        console.log(err);
+      db.query(query, (err) => {
         if (err) {
           res.json({
             success: false,
             message: 'Network error',
           });
+          throw err;
         } else {
           res.json({
             success: true,

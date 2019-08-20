@@ -88,12 +88,14 @@ export class LandingPageComponent implements OnInit {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
       }, error => {
-        this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
-          if (result.lat) {
-            this.latitude = result.lat;
-            this.longitude = result.lon;
-          }
-        });
+        if (error) {
+          this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
+            if (result.lat) {
+              this.latitude = result.lat;
+              this.longitude = result.lon;
+            }
+          });
+        }
       });
     }
   }

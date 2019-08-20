@@ -28,8 +28,8 @@ import { GetTheHeavensService } from './services/get-the-heavens/get-the-heavens
 import { GetTheHeavensReturn } from './services/get-the-heavens/get-the-heavens-return';
 import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 import { Notification } from '../notifications/services/get-notifications/get-notifications.return';
-import { trigger, transition, style, animate, state, query, stagger } from '@angular/animations';
-import { NULL_EXPR } from '@angular/compiler/src/output/output_ast';
+import { IpLocationReturn } from '../landing-page/services/ip-location/ip-location.return';
+import { IpLocationService } from '../landing-page/services/ip-location/ip-location.service';
 
 declare var $: any;
 
@@ -51,6 +51,7 @@ export class HomeComponent implements OnInit {
               public saveUserLastConnectionService: SaveUserLastConnectionService,
               public getTheHeavensService: GetTheHeavensService,
               public socketNotificationService: SocketNotificationsService,
+              public ipLocationService: IpLocationService,
               private lastConnection: LastConnectedTimeFormatPipe) {
 }
   @ViewChild(HomeComponent, {static: false}) homeComponent: HomeComponent;
@@ -141,13 +142,16 @@ export class HomeComponent implements OnInit {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
-      });
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Localisation',
-        detail: 'Geolocation error',
-        life: 6000
+      }, error => {
+        if (error) {
+          this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
+            if (result.lat) {
+              const latitude = result.lat;
+              const longitude = result.lon;
+              this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
+            }
+          });
+        }
       });
     }
   }
@@ -187,6 +191,7 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
   fillUserToSwipePhotos(photo) {
     this.userToSwipePhotos = photo;
   }

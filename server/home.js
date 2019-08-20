@@ -73,7 +73,7 @@ exports.getUserToSwipe = (req, res) => {
         sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        AND user.gender = ? AND pop BETWEEN 0 AND ? AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
+        AND user.gender = ? AND popularity BETWEEN 0 AND ? AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           maxAge,
