@@ -412,10 +412,10 @@ async function nodeMailerResetPasswordCall(email, key, callback) {
   });
 
   let info = await transporter.sendMail({ 
-    from: '"Martin @ MATCHA" <martin@matcha.io>',
+    from: '"Clément @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Reset your MATCHA password",
-    text: `Please click this link to reset your Matcha password: http://localhost:4200/resetPassword/${email}/${key}`,
+    text: `Hello, I am Clément from the Qinder team. Martin has let me know you forgot your password? Please click this link to reset your Matcha password: http://localhost:4200/resetPassword/${email}/${key}`,
   });
 
   console.log("Message sent: %s", info.messageId);
