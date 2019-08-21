@@ -14,14 +14,32 @@ exports.removeMatch = (req, res) => {
       db.query(query, (err) => {
         if (err) {
           res.json({ success: false, message: 'Network error' });
+          throw err;
         } else {
-          sql = 'DELETE FROM `match` WHERE id_match = ?';
-          query = db.format(sql, [req.params.id]);
+          sql = 'DELETE FROM message WHERE id_match = ?';
+          query = db.format(sql, [req.body.id_match]);
           db.query(query, (err) => {
             if (err) {
               res.json({ success: false, message: 'Network error' });
+              throw err;
             } else {
-              res.json({ success: true, message: '' });
+              sql = 'DELETE FROM `match` WHERE id_match = ?';
+              query = db.format(sql, [req.params.id]);
+              db.query(query, (err) => {
+                if (err) {
+                  res.json({ success: false, message: 'Network error' });
+                  throw err;
+                } else {
+                  sql = 'DELETE FROM message WHERE id_match = ?';
+                  query = db.format(sql, [req.params.id]);
+                  if (err) {
+                    res.json({ success: false, message: 'Network error' });
+                    throw err;
+                  } else {
+                    res.json({ success: true, message: '' });
+                  }
+                }
+              });
             }
           });
         }
@@ -63,22 +81,33 @@ exports.reportUser = (req, res) => {
       db.query(query, (err) => {
         if (err) {
           res.json({ success: false, message: 'Network error' });
+          throw err;
         } else {
-          sql = 'DELETE FROM `match` WHERE id_match = ?';
+          sql = 'DELETE FROM message WHERE id_match = ?';
           query = db.format(sql, [req.body.id_match]);
           db.query(query, (err) => {
             if (err) {
               res.json({ success: false, message: 'Network error' });
+              throw err;
             } else {
-              sql = 'INSERT INTO report VALUES(id_report, ?, ?)';
-              query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
+              sql = 'DELETE FROM `match` WHERE id_match = ?';
+              query = db.format(sql, [req.body.id_match]);
               db.query(query, (err) => {
                 if (err) {
-                  console.log(req.body.id_user_, req.body.id_user);
-                  console.log(err);
                   res.json({ success: false, message: 'Network error' });
+                  throw err;            
                 } else {
-                  res.json({ success: true, message: '' });
+                  sql = 'INSERT INTO report VALUES(id_report, ?, ?)';
+                  query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
+                  db.query(query, (err) => {
+                    if (err) {
+                      console.log(req.body.id_user_, req.body.id_user);
+                      console.log(err);
+                      res.json({ success: false, message: 'Network error' });
+                    } else {
+                      res.json({ success: true, message: '' });
+                    }
+                  });
                 }
               });
             }
