@@ -32,6 +32,27 @@ exports.removeMatch = (req, res) => {
   }
 };
 
+exports.reportUserNotMatched = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {  
+      sql = 'INSERT INTO report VALUES(id_report, ?, ?)';
+      query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
+      db.query(query, (err) => {
+        if (err) {
+          console.log(err);
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.reportUser = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);

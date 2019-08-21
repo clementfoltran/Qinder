@@ -9,7 +9,7 @@
   <!-- selected conversation pic & match name -->
   <hr>  
   <div class="p-2" *ngIf="!userMatchedName; else elseBlock">
-    <h5>Click on a match to open a conversation 😊</h5>
+    <h6>Click on a match to open a conversation 😊</h6>
   </div>
   <ng-template class="p-2" #elseBlock>
     <a (click)="loadMatchProfileData()" style="cursor: pointer;">
@@ -51,17 +51,17 @@
     <h5>BIOGRAPHIE</h5>
     <p>{{ userInfos[0].bio }}</p>
   </div>
-  <div class="row m-2">
-    <div class="form-group col-md-6">
-      <button type="button" class="btn btn-primary btn-block" (click)="reportUser(userInfos[0].id_user)">BLOCK</button>
-    </div>
-    <div class="form-group col-md-6">
-      <button type="button" class="btn btn-primary btn-block" (click)="removeUser(userInfos[0].id_user)">REMOVE</button>
-    </div>
+  <div class="row col-md-12 text-center">
+    <button type="button" class="btn btn-primary col-md-5 mx-auto" data-toggle="modal" data-target="#removeMod">
+      Remove
+    </button>
+    <button type="button" class="btn btn-primary col-md-5 mx-auto" data-toggle="modal" data-target="#reportMod">
+      Block
+    </button>
   </div>
 </div>
 <ng-template #elseBlock5>
-  <h5>No matches yet 😢 Time to make some swipes!</h5>
+  <h6>No matches yet 😢 Time to make some swipes!</h6>
 </ng-template>
 <ng-template #elseBlock3>
   <div *ngIf="aConversationWasOpened === 1">
@@ -79,7 +79,7 @@
       </div>
     </div>
     <ng-template #elseBlock2>
-      <h5>Don't be shy, make the first step! 🙃</h5>
+      <h6>Don't be shy, make the first step! 🙃</h6>
     </ng-template>
   </div>
   <div *ngIf="aConversationWasOpened === 1">
@@ -93,4 +93,37 @@
     </form>
   </div>
 </ng-template>
+<!-- Remove modal -->
+<div class="modal fade" id="removeMod" tabindex="-1" role="dialog" aria-labelledby="removeModLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeModLabel">Are you sure ?</h5>
+      </div>
+      <div class="modal-body">
+        Are you sure to remove this user ? This one can appear in your suggestions
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-primary" (click)="removeUser(userInfos[0].id_user)">confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Report modal -->
+<div class="modal fade" id="reportMod" tabindex="-1" role="dialog" aria-labelledby="reportModLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModLabel">Are you sure ?</h5>
+      </div>
+      <div class="modal-body">
+        That person will no longer be shown to you
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-primary" (click)="reportUser(userInfos[0].id_user)">BLOCK</button>    
+      </div>
+    </div>
+</div>

@@ -13,9 +13,14 @@ import { HomeComponent } from 'src/app/home/home.component';
   providedIn: 'root'
 })
 export class SocketNotificationsService {
-  public nbNotif: number;
+  /**
+   * The notification list
+   */
   public notifications = [];
-  public messagesNotif = [];
+  /**
+   * Number of messages notifications
+   */
+  public nbMessages: number = 0;
   public socket;
 
   constructor(public messageService: MessageService,
@@ -57,11 +62,12 @@ export class SocketNotificationsService {
         });
       }
       if (obj.notif === 6) {
+        this.nbMessages++;
+        console.log(this.nbMessages);
         this.messageService.add({
           severity: 'info', summary: 'New message', detail: 'You\'ve got a message' , life: 6000
         });
       }
-      this.nbNotif++;
       const APIParameter: AddNotificationParameter = {
         id_user: obj.to,
         id_user_: obj.from,
@@ -97,13 +103,17 @@ export class SocketNotificationsService {
     }
   }
 
-
   async getNotifications() {
     this.getNotificationService.getNotifications(+localStorage.getItem('userId'))
       .subscribe((result: GetNotificationsReturn) => {
         if (result.success) {
           this.notifications = result.notifications;
-          this.nbNotif = result.notifications.length;
+          // Set nbMessages
+          this.notifications.forEach((v) => {
+            if (v.notif === 6) {
+              this.nbMessages++;
+            }
+          });
         }
       });
   }
