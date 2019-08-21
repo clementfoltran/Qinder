@@ -1,5 +1,5 @@
 <form [formGroup]="prefForm" (ngSubmit)="updatePref()">
-  <div class="form-group mb-4">
+  <div class="form-group mb-2">
     <div *ngIf="userPhotos">
       <div class="row custom-control-inline" *ngFor="let photo of userPhotos; let i = index">
         <div class="img-wrap d-inline-block position-relative">
@@ -12,7 +12,7 @@
     </div>
   </div>
   <!-- ABOUT YOU -->
-  <div class="form-group mb-4">
+  <div class="form-group mb-1">
     <div id="accordionAbout">
       <div class="card">
         <div class="card-header" id="aboutHeading">
@@ -89,7 +89,7 @@
     </div>
   </div>
   <!-- PREFERENCES -->
-  <div class="form-group mb-4">
+  <div class="form-group mb-1">
     <div id="accordionPref">
       <div class="card">
         <div class="card-header" id="prefHeading">
@@ -136,7 +136,7 @@
   </div>
 </form>
 <!-- Personal Information -->
-<div class="form-group mb-4">
+<div class="form-group mb-3">
   <div id="accordionPerso">
     <div class="card">
       <div class="card-header" id="persoHeading">
