@@ -100,7 +100,7 @@ exports.getUserToSwipe = (req, res) => {
               popularity: response[0].popularity
             });
           } else {
-            res.json({ success: false, message: 'There is no more Qinders, try to change your parameters' });
+            res.json({ success: false, message: 'There are no more users to match with, try to change your parameters or come back later' });
           }
         }
       });

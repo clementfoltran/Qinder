@@ -189,7 +189,7 @@ export class LandingPageComponent implements OnInit {
               detail: result.message,
               life: 6000
             });
-            $('#modRegisternodemo').modal('hide');
+            $('#modRegister').modal('hide');
           } else {
             console.log(result.message);
           }
@@ -206,7 +206,7 @@ export class LandingPageComponent implements OnInit {
       this.messageService.add({
         severity: 'warn',
         summary: 'Empty fields',
-        detail: 'Fill all inputs',
+        detail: 'Please fill all the inputs :)',
         life: 6000
       });
     }

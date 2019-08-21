@@ -130,7 +130,7 @@ export class HomeComponent implements OnInit {
   public nbMessages = 0;
 
   public peopleInHeavens = [];
-  public progressBarValue = 100; // to put at 0
+  public progressBarValue = 0; // to put at 0
   public heavensClicked = 0;
   public interval: any;
 
@@ -247,7 +247,7 @@ export class HomeComponent implements OnInit {
       } else {
         this.messageService.add({
           severity: 'error',
-          summary: 'Network',
+          summary: 'Well..',
           detail: result.message,
           life: 6000
         });
