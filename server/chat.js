@@ -81,13 +81,12 @@ exports.saveMessage = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'INSERT INTO message VALUES(?,?,?,?,?)';
+      const sql = 'INSERT INTO message VALUES(?, ?, ?, NOW(), ?)';
       let query = db.format(sql,
         [
           null,
           req.body.idUser,
           req.body.message,
-          req.body.ts,
           req.body.idMatch
         ]);
         db.query(query, (err, response) => {

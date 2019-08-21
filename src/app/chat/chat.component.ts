@@ -240,17 +240,16 @@ export class ChatComponent implements OnInit {
   sendMessage() {
     if (this.currentMatchId > 0) {
       if (this.messageForm.valid) { // add that match exists
-        const ts = new Date().toISOString().slice(0, 19).replace('T', ' ');
         const msg = this.messageForm.get('message').value;
         if (msg && msg.length > 0) {
           const obj = {};
           const me = Object.create(obj);
           me.id = this.id;
           me.msg = msg;
-          me.ts = ts;
+          me.ts = 1; // dummy value replaced by NOW() in the backend
           this.socket.emit('send message', me);
           this.messageForm.reset();
-          this.saveMessage(this.id, msg, ts);
+          this.saveMessage(this.id, msg, 1);
           // Send a notification to the recipient
           this.matchesObjects.forEach((v) => {
             console.log(v);

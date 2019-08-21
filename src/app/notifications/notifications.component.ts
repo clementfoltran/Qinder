@@ -5,11 +5,13 @@ import { GetNotificationsReturn, Notification } from './services/get-notificatio
 import { DeleteNotificationService } from './services/delete-notification/delete-notification.service';
 import { DeleteNotificationReturn } from './services/delete-notification/delete-notification.return';
 import { SocketNotificationsService } from './services/socket-notifications/socket-notifications.service';
+import { LastConnectedTimeFormatPipe } from '../pipes/last-connection.pipe';
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.scss']
+  styleUrls: ['./notifications.component.scss'],
+  providers: [ LastConnectedTimeFormatPipe ]
 })
 export class NotificationsComponent implements OnInit {
   /**
@@ -34,7 +36,8 @@ export class NotificationsComponent implements OnInit {
 
   constructor(public getNotificationService: GetNotificationsService,
               public deleteNotificationService: DeleteNotificationService,
-              public socketNotificationsService: SocketNotificationsService) { }
+              public socketNotificationsService: SocketNotificationsService,
+              public lastConnection: LastConnectedTimeFormatPipe) { }
 
   ngOnInit() {
     this.notifications = this.socketNotificationsService.notifications;
