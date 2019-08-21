@@ -381,11 +381,10 @@ exports.resetPassword = (req, res) => {
 async function nodeMailerRegisterCall(userName, email, key, callback) {
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    service:'gmail',
     auth: {
-        user: 'percival.weimann@ethereal.email',
-        pass: 'u8WQJRnehmNvx9dqAA'
+        user: 'qindersurprise@gmail.com',
+        pass: 'Qinder123456!'
     }
   });
 
@@ -405,11 +404,10 @@ async function nodeMailerRegisterCall(userName, email, key, callback) {
 async function nodeMailerResetPasswordCall(email, key, callback) {
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    service:'gmail',
     auth: {
-        user: 'percival.weimann@ethereal.email',
-        pass: 'u8WQJRnehmNvx9dqAA'
+        user: 'qindersurprise@gmail.com',
+        pass: 'Qinder123456!'
     }
   });
 
