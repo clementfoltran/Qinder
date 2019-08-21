@@ -11,57 +11,75 @@
       </div>
     </div>
   </div>
-  <h5 class="p-2">About you</h5>
-  <div class="form-group">
-    <label>I'm a</label>
-    <select class="custom-select" formControlName="gender" (change)="updatePref()">
-      <option selected>Male</option>
-      <option>Female</option>
-    </select>
-  </div>
+  <!-- ABOUT YOU -->
   <div class="form-group mb-4">
-    <div class="input-group mb-3">
-      <div class="custom-file">
-        <input type="file" class="custom-file-input" id="inputGroupFile02" (change)="onFileChanged($event)">
-        <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
-      </div>
-      <div class="input-group-append">
-        <span class="input-group-text" id="inputGroupFileAddon02" (click)="uploadPhoto()">Upload</span>
-      </div>
-    </div>
-  </div>
-  <div class="form-group mb-4">
-    <label>Biography</label>
-    <textarea formControlName="bio" class="form-control" rows="3" placeholder="Write something about yourself.."></textarea>
-    <button type="submit" class="btn btn-primary m-2">Update</button>
-  </div>
-  <div class="form-group mb-4">
-    <div id="accordion">
+    <div id="accordionAbout">
       <div class="card">
-        <div class="card-header" id="tagsHeading">
+        <div class="card-header" id="aboutHeading">
           <h5 class="mb-0">
-            <button type="button" class="btn btn-link collapsed" data-toggle="collapse" data-target="#tagsCollapse" aria-expanded="false" aria-controls="tagsCollapse">
-              Choose your favorite tags
+            <button type="button" class="btn btn-light collapsed" data-toggle="collapse" data-target="#aboutCollapse" aria-expanded="false" aria-controls="aboutCollapse">
+              <h5 class="p-2">About you</h5>
             </button>
           </h5>
         </div>
-        <div id="tagsCollapse" class="collapse" aria-labelledby="tagsHeading" data-parent="#accordion">
+        <div id="aboutCollapse" class="collapse" aria-labelledby="aboutHeading" data-parent="#accordionAbout">
           <div class="card-body">
-            <div class="row">
-              <div class="col-sm-12">
-                <div *ngFor="let tag of tags; let i = index">
-                  <div *ngIf="isSelectedTag(tag.id_tag); else notSelected">
-                    <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(tag.id_tag)">
-                      <h5 class="card-title">{{ tag.tag }}</h5>
-                      <p class="card-text">{{ tag.label }}</p>
+            <div class="form-group">
+              <label><strong>I'm a</strong></label>
+              <select class="custom-select" formControlName="gender" (change)="updatePref()">
+                <option selected>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
+            <div class="form-group mb-4">
+                <label><strong>Add a picture</strong></label>
+              <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="inputGroupFile02" (change)="onFileChanged($event)">
+                  <label class="custom-file-label" for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                  <span class="input-group-text" id="inputGroupFileAddon02" (click)="uploadPhoto()">Upload</span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-4">
+              <label><strong>Biography</strong></label>
+              <textarea formControlName="bio" class="form-control" rows="3" placeholder="Write something about yourself.."></textarea>
+              <button type="submit" class="btn btn-primary m-2">Update</button>
+            </div>
+            <div class="form-group mb-4">
+              <div id="accordionTags">
+                <div class="card">
+                  <div class="card-header" id="tagsHeading">
+                    <h5 class="mb-0">
+                      <button type="button" class="btn btn-link collapsed" data-toggle="collapse" data-target="#tagsCollapse" aria-expanded="false" aria-controls="tagsCollapse">
+                        Choose your favorite tags
+                      </button>
+                    </h5>
+                  </div>
+                  <div id="tagsCollapse" class="collapse" aria-labelledby="tagsHeading" data-parent="#accordionTags">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <div *ngFor="let tag of tags; let i = index">
+                            <div *ngIf="isSelectedTag(tag.id_tag); else notSelected">
+                              <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(tag.id_tag)">
+                                <h5 class="card-title">{{ tag.tag }}</h5>
+                                <p class="card-text">{{ tag.label }}</p>
+                              </div>
+                            </div>
+                            <ng-template #notSelected>
+                              <div class="card m-1" div="selected-tag" style="cursor: pointer;" (click)="addUserTag(tag)">
+                                <h5 class="card-title">{{ tag.tag }}</h5>
+                                <p class="card-text">{{ tag.label }}</p>
+                              </div>
+                            </ng-template>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <ng-template #notSelected>
-                    <div class="card m-1" div="selected-tag" style="cursor: pointer;" (click)="addUserTag(tag)">
-                      <h5 class="card-title">{{ tag.tag }}</h5>
-                      <p class="card-text">{{ tag.label }}</p>
-                    </div>
-                  </ng-template>
                 </div>
               </div>
             </div>
@@ -70,44 +88,74 @@
       </div>
     </div>
   </div>
-  <h5 class="p-2">What you are looking for</h5>
-  <div class="form-group">
-    <label>I'm interested by</label>
-    <select class="custom-select" formControlName="interest" (change)="updatePref()">
-      <option selected>Male</option>
-      <option>Female</option>
-      <option>Both</option>
-    </select>
-  </div>
-  <div class="row">
-    <div class="form-group mb-4 col-md-6">
-      <label>Distance {{ distance }} kms</label>
-      <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
-    </div>
-    <div class="form-group mb-4 col-md-6">
-      <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
-      <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" [min]="18" [max]="100" (mouseup)="updatePref()"></p-slider>
-    </div>
-  </div>
-  <div class="row">
-    <div class="form-group mb-4 col-md-6">
-      <label>Popularity preference {{ popularity }}</label>
-      <p-slider [(ngModel)]="popularity" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
-    </div>
-    <div class="form-group mb-4 col-md-6">
-      <label>Tags in common {{ tagsInCommon }}</label>
-      <p-slider [(ngModel)]="tagsInCommon" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="6" (mouseup)="updatePref()"></p-slider>
-    </div>
-  </div>
+  <!-- PREFERENCES -->
   <div class="form-group mb-4">
-   <!-- <button [routerLink]="['/settings']" [queryParams]="{id: '1'}" type="button" class="btn btn-primary btn-lg btn-block">SETTINGS</button> -->
+    <div id="accordionPref">
+      <div class="card">
+        <div class="card-header" id="prefHeading">
+          <h5 class="mb-0">
+            <button type="button" class="btn btn-light collapsed" data-toggle="collapse" data-target="#prefCollapse" aria-expanded="false" aria-controls="prefCollapse">
+              <h5 class="p-2">What you are looking for</h5>
+            </button>
+          </h5>
+        </div>
+        <div id="prefCollapse" class="collapse" aria-labelledby="prefHeading" data-parent="#accordionPref">
+          <div class="card-body">
+            <div class="form-group">
+              <label><strong>I'm interested by</strong></label>
+              <select class="custom-select" formControlName="interest" (change)="updatePref()">
+                <option selected>Male</option>
+                <option>Female</option>
+                <option>Both</option>
+              </select>
+            </div>
+            <div class="row">
+              <div class="form-group mb-4 col-md-6">
+                <label>Distance {{ distance }} kms</label>
+                <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+              </div>
+              <div class="form-group mb-4 col-md-6">
+                <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
+                <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" [min]="18" [max]="100" (mouseup)="updatePref()"></p-slider>
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-group mb-4 col-md-6">
+                <label>Popularity preference {{ popularity }}</label>
+                <p-slider [(ngModel)]="popularity" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+              </div>
+              <div class="form-group mb-4 col-md-6">
+                <label>Tags in common {{ tagsInCommon }}</label>
+                <p-slider [(ngModel)]="tagsInCommon" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="6" (mouseup)="updatePref()"></p-slider>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </form>
-<h5 class="p-2">Personal information</h5>
-<div class="container">
-  <app-settings></app-settings>
+<!-- Personal Information -->
+<div class="form-group mb-4">
+  <div id="accordionPerso">
+    <div class="card">
+      <div class="card-header" id="persoHeading">
+        <h5 class="mb-0">
+          <button type="button" class="btn btn-light collapsed" data-toggle="collapse" data-target="#persoCollapse" aria-expanded="false" aria-controls="persoCollapse">
+            <h5 class="p-2">Personal Information</h5>
+          </button>
+        </h5>
+      </div>
+      <div id="persoCollapse" class="collapse" aria-labelledby="persoHeading" data-parent="#accordionPerso">
+        <div class="card-body">
+          <div class="form-group">
+            <app-settings></app-settings>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<br>
 <div class="form-group">
   <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>
 </div>

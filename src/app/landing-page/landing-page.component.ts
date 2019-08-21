@@ -331,6 +331,7 @@ export class LandingPageComponent implements OnInit {
     this.activateService.activateAccount(email)
         .subscribe((result: ActivateReturn) => {
           if (result.success) {
+            $('#modSignIn').modal('show');
             this.messageService.add({
               severity: 'success',
               summary: 'Welcome',

@@ -68,10 +68,10 @@
     <div *ngIf="messageList.length > 0; else elseBlock2">
       <div *ngFor="let message of messageList">
         <div style="border-radius: 10px" class="toast show w-100 m-2" [ngClass]="message.id === id ? 'message2' : 'message1'">
-          <div class="toast-header">
+          <!-- <div class="toast-header">
             <strong class="mr-auto"></strong>
             <small>{{ message.ts }}</small>
-          </div>
+          </div> -->
           <div class="toast-body p-1">
             {{ message.msg }}
           </div>
