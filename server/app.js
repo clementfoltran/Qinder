@@ -50,6 +50,7 @@ app.post('/updateGeolocation', urlencodedParser, checkUserToken, user.updateGeol
 app.post('/register', urlencodedParser, user.register);
 app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/reportUser', urlencodedParser, checkUserToken, user.reportUser);
+app.post('/reportUserNotMatched', urlencodedParser, checkUserToken, user.reportUserNotMatched);
 app.post('/resetPassword', urlencodedParser, user.resetPassword);
 app.post('/checkKey/:email', urlencodedParser, resetPassword.checkKey);
 app.post('/saveNewPassword', urlencodedParser, resetPassword.saveNewPassword);

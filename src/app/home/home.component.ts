@@ -30,6 +30,10 @@ import { SocketNotificationsService } from '../notifications/services/socket-not
 import { Notification } from '../notifications/services/get-notifications/get-notifications.return';
 import { IpLocationReturn } from '../landing-page/services/ip-location/ip-location.return';
 import { IpLocationService } from '../landing-page/services/ip-location/ip-location.service';
+import { ReportUserService } from '../chat/services/report-user/report-user.service';
+import { ReportUserNotMatchedParameter } from './services/report-user-not-matched/report-user-not-matched.parameter';
+import { ReportUserNotMatchedService } from './services/report-user-not-matched/report-user-not-matched.service';
+import { ReportUserNotMatchedReturn } from './services/report-user-not-matched/report-user-not-matched.return';
 
 declare var $: any;
 
@@ -51,6 +55,7 @@ export class HomeComponent implements OnInit {
               public saveUserLastConnectionService: SaveUserLastConnectionService,
               public getTheHeavensService: GetTheHeavensService,
               public socketNotificationService: SocketNotificationsService,
+              public reportUserNotMatchedService: ReportUserNotMatchedService,
               public ipLocationService: IpLocationService,
               private lastConnection: LastConnectedTimeFormatPipe) {
 }
@@ -319,67 +324,66 @@ export class HomeComponent implements OnInit {
     });
   }
 
-hideThem() {
-  clearInterval(this.interval);
-  setTimeout(() => {
+  hideThem() {
+    clearInterval(this.interval);
+    setTimeout(() => {
+      anime({
+        targets: '.card',
+        opacity: 0,
+        duration: 3000
+      });
+    }, 3000);
+    setTimeout(() => {
+      this.heavensClicked = 0;
+      this.progressBarValue = 0;
+      this.peopleInHeavens = [];
+      this.showCard();
+      anime({
+        targets: '.swipe-zone',
+        opacity: 1,
+        duration: 2000
+      });
+    }, 4000);
+  }
+
+  showCard() {
     anime({
       targets: '.card',
-      opacity: 0,
+      opacity: 1,
       duration: 3000
     });
-  }, 3000);
-  setTimeout(() => {
-    this.heavensClicked = 0;
-    this.progressBarValue = 0;
-    this.peopleInHeavens = [];
-    this.showCard();
-    anime({
-      targets: '.swipe-zone',
-      opacity: 1,
-      duration: 2000
-    });
-  }, 4000);
-}
+  }
 
-showCard() {
-  anime({
-    targets: '.card',
-    opacity: 1,
-    duration: 3000
-  });
-}
+  displayTheHeavens() {
+      anime({
+        targets: '.card',
+        opacity: 1,
+        duration: 5000
+      });
+  }
 
-displayTheHeavens() {
+  progressToTheHeavens() {
+    this.progressBarValue = this.progressBarValue + 44; // 12 is good
+  }
+
+  showMeTheHeavens() {
+    setTimeout(() => {
+      this.getTheHeavens();
+      this.heavensClicked = 1;
+      anime({
+        targets: '.heaven',
+        opacity: 1,
+        duration: 5000
+      });
+    }, 1000);
     anime({
-      targets: '.card',
-      opacity: 1,
+      targets: '.swipe-zone, .showMTH',
+      opacity: 0,
       duration: 5000
     });
-}
+  }
 
-progressToTheHeavens() {
-  this.progressBarValue = this.progressBarValue + 44; // 12 is good
-}
-
-showMeTheHeavens() {
-
-  setTimeout(() => {
-    this.getTheHeavens();
-    this.heavensClicked = 1;
-    anime({
-      targets: '.heaven',
-      opacity: 1,
-      duration: 5000
-    });
-  }, 1000);
-  anime({
-    targets: '.swipe-zone, .showMTH',
-    opacity: 0,
-    duration: 5000
-  });
-}
-
-showChat($event: any) {
+  showChat($event: any) {
     const slider = document.querySelector('.slider1');
 
     if (slider.classList.contains('opened')) {
@@ -393,7 +397,7 @@ showChat($event: any) {
     }
   }
 
-showNotifs() {
+  showNotifs() {
     const slider = document.querySelector('.slider3');
     if (slider.classList.contains('opened')) {
       slider.classList.remove('opened');
@@ -404,7 +408,7 @@ showNotifs() {
     }
   }
 
-getUserOnline(online) {
+  getUserOnline(online) {
     this.APIParameterGetUserOnline = {
       userId: +localStorage.getItem('userId'),
       online
@@ -418,12 +422,13 @@ getUserOnline(online) {
         }
       });
   }
-saveUserLastConnection(date) {
-  this.APIParameterSaveUserLastConnection = {
-      userId: +localStorage.getItem('userId'),
-      date
-    };
-  this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
+
+  saveUserLastConnection(date) {
+    this.APIParameterSaveUserLastConnection = {
+        userId: +localStorage.getItem('userId'),
+        date
+      };
+    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
       .subscribe((result: SaveUserLastConnectionReturn) => {
         if (result.success) {
           console.log(result.message);
@@ -433,24 +438,44 @@ saveUserLastConnection(date) {
       });
   }
 
-ngOnInit() {
-  this.socketNotificationService.connect();
-  this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
+  reportUser() {
+    const APIParameter: ReportUserNotMatchedParameter = {
+      id_user: +localStorage.getItem('userId'),
+      id_user_: this.userToSwipeId
+    }
+    this.reportUserNotMatchedService.reportUserNotMatched(APIParameter)
+      .subscribe((result: ReportUserNotMatchedReturn) => {
+        if (result.success) {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Report',
+            detail: 'User successfully reported',
+            life: 6000
+          });
+          this.getUserToSwipe();
+        }
+      });
+  }
+
+  ngOnInit() {
+    this.socketNotificationService.connect();
+    this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
-  this.initUserPic();
-  this.firstName = this.resolveData.firstname;
-  this.distance = this.resolveData.distance;
-  this.getUserPosition();
-  this.getUserToSwipe();
-  this.getUserOnline(1);
+    this.initUserPic();
+    this.firstName = this.resolveData.firstname;
+    this.distance = this.resolveData.distance;
+    this.getUserPosition();
+    this.getUserToSwipe();
+    this.getUserOnline(1);
 
-  // when the user leaves
-  window.addEventListener('unload', (event) => {
+    // when the user leaves
+    window.addEventListener('unload', (event) => {
       const date = new Date();
       this.getUserOnline(0);
       this.saveUserLastConnection(date);
     });
-  this.notifications = this.socketNotificationService.notifications;
+    this.notifications = this.socketNotificationService.notifications;
+    // this.nbMessages = this.socketNotificationService.nbMessages;
   }
 }
