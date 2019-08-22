@@ -123,7 +123,6 @@ export class ChatComponent implements OnInit {
   loadMatchInfos(userMatchedId) {
     this.aConversationWasOpened = 1;
     this.profileWasOpened = 0;
-    this.scrollMessages();
     this.userMatchedId = userMatchedId;
     this.getUserPhotosService.getUserPhotos(userMatchedId)
       .subscribe((result: GetUserPhotosReturn) => {
@@ -155,7 +154,6 @@ export class ChatComponent implements OnInit {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
-      this.scrollMessages();
     }
     this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
@@ -279,7 +277,6 @@ export class ChatComponent implements OnInit {
           console.log(result.message);
         }
       });
-    this.scrollMessages();
   }
 
   receive = (obj) => {
@@ -332,13 +329,6 @@ export class ChatComponent implements OnInit {
           });
       }
     });
-  }
-
-  scrollMessages() {
-    setTimeout(function() {
-      const div = document.getElementById('contentArea');
-      div.scrollTop = div.scrollHeight - div.clientHeight;
-     }, 25);
   }
 
   // NgOnInit

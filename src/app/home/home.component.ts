@@ -130,7 +130,7 @@ export class HomeComponent implements OnInit {
    * Notification list
    */
   public notifications: Notification[];
-  public userToSwipePopularity: number; 
+  public userToSwipePopularity: number;
   public userToSwipe: boolean;
   public nbMessages = 0;
 
@@ -442,7 +442,7 @@ export class HomeComponent implements OnInit {
     const APIParameter: ReportUserNotMatchedParameter = {
       id_user: +localStorage.getItem('userId'),
       id_user_: this.userToSwipeId
-    }
+    };
     this.reportUserNotMatchedService.reportUserNotMatched(APIParameter)
       .subscribe((result: ReportUserNotMatchedReturn) => {
         if (result.success) {

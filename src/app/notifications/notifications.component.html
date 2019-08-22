@@ -1,4 +1,4 @@
-<div class="card lg scroll" id="contentArea" style="background-color: white;">
+<div class="card lg scroll" #scrollMe [scrollTop]="scrollMe.scrollHeight" style="background-color: white;">
   <div *ngFor="let notification of notifications; let i = index;">
     <div class="toast show mx-auto m-2"
         style="border-radius: 15px">
