@@ -28,6 +28,7 @@ import { ReportUserParameter } from './services/report-user/report-user.paramete
 import { ReportUserService } from './services/report-user/report-user.service';
 import { ReportUserReturn } from './services/report-user/report-user.return';
 import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-chat',
@@ -198,6 +199,7 @@ export class ChatComponent implements OnInit {
       this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
         .subscribe((result: LoadConversationReturn) => {
           if (result.success) {
+            console.log('result.messageArray = ', result.messageArray);
             this.fillMessagesArray(result.messageArray);
           } else {
             console.log(result.message);
@@ -334,7 +336,6 @@ export class ChatComponent implements OnInit {
   // NgOnInit
   // ----------------------------------------------------------------------------------------
   ngOnInit() {
-    console.log('INIT CHAT COMPONENT');
     this.id = parseInt(localStorage.getItem('userId'), 10);
     this.loadMatches();
     try {

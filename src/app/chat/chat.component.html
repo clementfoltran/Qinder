@@ -66,7 +66,7 @@
 <ng-template #elseBlock3>
   <div *ngIf="aConversationWasOpened === 1">
     <div *ngIf="messageList.length > 0; else elseBlock2">
-      <div class="card lg scroll" #scrollMe [scrollTop]="scrollMe.scrollHeight" style="background-color: white;">
+      <div class="card lg scroll" #scrollMe [scrollTop]="scrollMe.scrollHeight" style="background-color: rgb(248, 248, 248);">
         <div *ngFor="let message of messageList">
           <div style="border-radius: 10px" class="toast show w-75 m-2" [ngClass]="message.id === id ? 'message2' : 'message1'">
             <div class="toast-header">
@@ -103,7 +103,7 @@
         <h5 class="modal-title" id="removeModLabel">Are you sure ?</h5>
       </div>
       <div class="modal-body">
-        Are you sure to remove this user ? This one can appear in your suggestions
+        Do you want to remove this user ?
       </div>
       <div class="modal-footer">
         <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
