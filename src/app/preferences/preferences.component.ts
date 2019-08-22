@@ -8,19 +8,35 @@ import {DeletePhotoParameter} from '../home/services/delete-photo/delete-photo-p
 import {UpdatePreferencesReturn} from '../home/services/update-preferences/update-preferences-return';
 import {UploadPhotoReturn} from '../home/services/upload-photo/upload-photo-return';
 import {DeletePhotoReturn} from '../home/services/delete-photo/delete-photo-return';
-import {EnterViewHomeService} from '../home/services/enter-view-home/enter-view-home.service';
 import {MessageService} from 'primeng/api';
-import {GetUserPhotosService} from '../home/services/get-user-photos/get-user-photos.service';
 import {UploadPhotoService} from '../home/services/upload-photo/upload-photo.service';
 import {DeletePhotoService} from '../home/services/delete-photo/delete-photo.service';
 import {UpdatePreferencesService} from '../home/services/update-preferences/update-preferences.service';
 import {LoginService} from '../landing-page/services/login/login.service';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {GetTagsService} from './services/get-tags/get-tags.service';
 import {GetTagsReturn, Tag} from './services/get-tags/get-tags-return';
 import {AddUserTagService} from './services/add-user-tag/add-user-tag.service';
 import {AddUserTagReturn} from './services/add-user-tag/add-user-tag-return';
-import {ActivatedRoute, NavigationExtras} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
+import { GetUserTagsService } from './services/get-user-tags/get-user-tags.service';
+import { GetUserTagsReturn, UserTag } from './services/get-user-tags/get-user-tags.return';
+import { RemoveUserTagService } from './services/remove-user-tag/remove-user-tag.service';
+import { RemoveUserTagReturn } from './services/remove-user-tag/remove-user-tag.return';
+import * as $ from 'jquery';
+import { GetUserOnlineReturn } from '../home/services/get-user-online/get-user-online-return';
+import { SaveUserLastConnectionReturn } from '../home/services/save-last-connection/save-last-connection-return';
+import { SaveUserLastConnectionParameter } from '../home/services/save-last-connection/save-last-connection-parameter';
+import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
+import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
+import { SaveUserLastConnectionService } from '../home/services/save-last-connection/save-last-connection.service';
+import { GetPreferenceTagsService } from './services/get-preference-tags/get-preference-tags.service';
+import { GetPreferenceTagsReturn, PrefTag } from './services/get-preference-tags/get-preference-tags.return';
+import { AddPrefTagService } from './services/add-pref-tag/add-pref-tag.service';
+import { AddPrefTagReturn } from './services/add-pref-tag/add-pref-tag.return';
+import { RemovePrefTagService } from './services/remove-pref-tag/remove-pref-tag.service';
+import { RemovePrefTagReturn } from './services/remove-pref-tag/remove-pref-tag.return';
+
+declare var $: any;
 
 @Component({
   selector: 'app-preferences',
@@ -82,34 +98,107 @@ export class PreferencesComponent implements OnInit {
    * User selected tags
    *
    */
-  public userTags: Tag[] = [];
+  public userTags: UserTag[] = [];
+  /**
+   * User selected tags
+   *
+   */
+  public prefTags: PrefTag[] = [];
   /**
    * User id
    *
    */
   public userId: number = null;
+  /**
+   *
+   * Popularity preference
+   */
+  public popularity: number = null;
+  /**
+   *
+   * Tags in common
+   */
+  public tagsInCommon: number = null;
 
-  drop(event: CdkDragDrop<Tag[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex);
+  public APIParameterGetUserOnline: GetUserOnlineParameter;
+  public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
+
+  isSelectedTag(idTag: number) {
+    let find = false;
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        find = true;
+      }
     }
+    return (find) ? true : false;
   }
 
-  addUserTag(idTag: number) {
-    this.addUserTagService.addUserTag({id_tag: idTag, id_user: 1})
+  isSelectedPrefTag(idTag: number) {
+    let find = false;
+    for (let i = 0; i < this.prefTags.length; i++) {
+      if (this.prefTags[i].id_tag === idTag) {
+        find = true;
+      }
+    }
+    return (find) ? true : false;
+  }
+
+  addUserTag(tag: Tag) {
+    this.addUserTagService.addUserTag({id_tag: tag.id_tag, id_user: this.userId})
       .subscribe((result: AddUserTagReturn) => {
-        if (!result.success) {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000
+        if (result.success) {
+          this.userTags.push({
+            id_utag: result.id_utag,
+            id_tag: tag.id_tag,
+            id_user: this.userId,
+            label: tag.label,
+            tag: tag.tag
           });
+        }
+      });
+  }
+
+  addPrefTag(tag: Tag) {
+    this.addPrefTagService.addPrefTag({id_tag: tag.id_tag, id_user: this.userId})
+      .subscribe((result: AddPrefTagReturn) => {
+        if (result.success) {
+          this.prefTags.push({
+            id_tpref: result.id_tpref,
+            id_tag: tag.id_tag,
+            id_user: this.userId,
+            tag: tag.tag
+          });
+        }
+      });
+  }
+
+  removeUserTag(idTag: number) {
+    this.removeUserTagService.removeUserTag(this.getUserTagId(idTag))
+      .subscribe((result: RemoveUserTagReturn) => {
+        if (result.success) {
+          this.userTags.splice(this.getUserTagIndex(idTag), 1);
+        }
+      });
+  }
+
+  removePrefTag(idTag: number, index: number) {
+    let prefTagId: number;
+    let prefTagIndex: number;
+    
+    this.prefTags.forEach((v) => {
+      if (v.id_tag === idTag) {
+        prefTagId = v.id_tpref;
+      }
+    });
+    this.prefTags.forEach((v, i) => {
+      if (v.id_tag === idTag) {
+        prefTagIndex = i;
+      }
+    });
+    this.removePrefTagService.removePrefTag(prefTagId)
+      .subscribe((result: RemovePrefTagReturn) => {
+        if (result.success) {
+          this.prefTags.splice(prefTagIndex, 1);
         }
       });
   }
@@ -130,7 +219,41 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
+  getUserOnline(online) {
+    this.APIParameterGetUserOnline = {
+      userId: +localStorage.getItem('userId'),
+      online
+    };
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
+      .subscribe((result: GetUserOnlineReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+saveUserLastConnection(date) {
+  this.APIParameterSaveUserLastConnection = {
+      userId: +localStorage.getItem('userId'),
+      date
+    };
+  this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
+      .subscribe((result: SaveUserLastConnectionReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+
   logOut() {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+    const date = new Date();
+    this.saveUserLastConnection(date);
+    this.getUserOnline(0);
     this.loginService.logOut();
   }
 
@@ -143,7 +266,9 @@ export class PreferencesComponent implements OnInit {
         interest: this.prefForm.get('interest').value,
         distance: this.distance,
         minage: this.ageRange[0],
-        maxage: this.ageRange[1]
+        maxage: this.ageRange[1],
+        pop: this.popularity,
+        tagsInCommon: this.tagsInCommon
       };
       this.updatePreferencesService.updatePreferences(this.APIParameterPref)
         .subscribe((result: UpdatePreferencesReturn) => {
@@ -166,40 +291,47 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  // TODO check the empty images
   uploadPhoto() {
+    console.log(this.selectedFile);
     this.APIParameterPhoto = {
       id: this.userId,
       photo: this.selectedFile,
       active: false,
-      ts: Date.now(),
     };
-    this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
-      .subscribe((result: UploadPhotoReturn) => {
-        if (result.success) {
-          this.userPhotos.push({
-            id_photo: result.id,
-            // TODO id n'importe quoi
-            id_user: 1,
-            photo: this.selectedFile,
-            active: false,
-            ts: 10,
-          });
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Update',
-            detail: result.message,
-            life: 6000,
-          });
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Network',
-            detail: 'Check your connection',
-            life: 6000,
-          });
-        }
+    if (this.selectedFile && this.userPhotos.length < 5) {
+      this.uploadPhotoService.uploadPhoto(this.APIParameterPhoto)
+        .subscribe((result: UploadPhotoReturn) => {
+          if (result.success) {
+            this.userPhotos.push({
+              id_photo: result.id,
+              id_user: this.userId,
+              photo: this.selectedFile,
+              active: false,
+              ts: 10,
+            });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Update',
+              detail: result.message,
+              life: 6000,
+            });
+          }
+        });
+    } else if (!this.selectedFile) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Upload picture',
+        detail: 'You cannot import empty pictures',
+        life: 6000,
       });
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Upload',
+        detail: 'You can upload only 5 pictures, choose the bests',
+        life: 6000,
+      });
+    }
   }
 
   onFileChanged(e) {
@@ -208,7 +340,7 @@ export class PreferencesComponent implements OnInit {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-      self.selectedFile = reader.result.toString().split(',')[1];
+      self.selectedFile = reader.result.toString();
     };
   }
 
@@ -232,13 +364,55 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  constructor(public messageService: MessageService,
+  getUserTags() {
+    this.getUserTagsService.getUserTags(this.userId)
+      .subscribe((result: GetUserTagsReturn) => {
+        if (result.success) {
+          this.userTags = result.userTags;
+        }
+      });
+  }
+
+  getUserTagsPref() {
+    this.getPreferenceTagsService.getPreferenceTags(this.userId)
+      .subscribe((result: GetPreferenceTagsReturn) => {
+        if (result.success) {
+          this.prefTags = result.prefTags;
+        }
+      });
+  }
+
+  getUserTagId(idTag: number): number {
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        return (this.userTags[i].id_utag);
+      }
+    }
+  }
+
+  getUserTagIndex(idTag: number): number {
+    for (let i = 0; i < this.userTags.length; i++) {
+      if (this.userTags[i].id_tag === idTag) {
+        return (i);
+      }
+    }
+  }
+
+  constructor(public router: Router,
+              public messageService: MessageService,
               public activatedRoute: ActivatedRoute,
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
               public addUserTagService: AddUserTagService,
+              public addPrefTagService: AddPrefTagService,
               public getTagsService: GetTagsService,
+              public getPreferenceTagsService: GetPreferenceTagsService,
+              public removeUserTagService: RemoveUserTagService,
+              public getUserTagsService: GetUserTagsService,
               public updatePreferencesService: UpdatePreferencesService,
+              public getUserOnlineService: GetUserOnlineService,
+              public removePrefTagService: RemovePrefTagService,
+              public saveUserLastConnectionService: SaveUserLastConnectionService,
               public fb: FormBuilder,
               public loginService: LoginService) {
 
@@ -252,6 +426,8 @@ export class PreferencesComponent implements OnInit {
   initVariables() {
     this.ageRange[0] = this.resolveData.minage;
     this.ageRange[1] = this.resolveData.maxage;
+    this.popularity = this.resolveData.pop;
+    this.tagsInCommon = this.resolveData.tagsInCommon;
     this.distance = this.resolveData.distance;
     this.userId = this.resolveData.id;
     if (this.resolveData.bio) {
@@ -267,5 +443,7 @@ export class PreferencesComponent implements OnInit {
       this.resolveData = data.viewData;
     });
     this.initVariables();
+    this.getUserTagsPref();
+    this.getUserTags();
   }
 }

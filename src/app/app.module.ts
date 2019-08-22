@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MenuComponent } from './menu/menu.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { HomeComponent } from './home/home.component';
 import {HttpClientModule} from '@angular/common/http';
@@ -32,20 +31,29 @@ import { EnterViewActivateService } from './landing-page/services/enter-view-act
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
 import { ChatComponent } from './chat/chat.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-
+import { CommonModule } from '@angular/common';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { GetUserToSwipeService } from './home/services/get-user-to-swipe/get-user-to-swipe.service';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { GetNotificationsService } from './notifications/services/get-notifications/get-notifications.service';
+import { PopulateComponent } from './populate/populate.component';
+import { PopulateService } from './populate/services/populate.service';
+import { LastConnectedTimeFormatPipe } from './pipes/last-connection.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent,
     LandingPageComponent,
     HomeComponent,
     SettingsComponent,
     PreferencesComponent,
     ChatComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    PopulateComponent,
+    LastConnectedTimeFormatPipe,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -58,6 +66,9 @@ import { NotificationsComponent } from './notifications/notifications.component'
     MenuModule,
     MultiSelectModule,
     DragDropModule,
+    BsDatepickerModule,
+    BsDatepickerModule.forRoot(),
+    CarouselModule.forRoot(),
   ],
   providers: [
     MessageService,
@@ -75,6 +86,9 @@ import { NotificationsComponent } from './notifications/notifications.component'
     EnterViewActivateResolve,
     EnterViewHomeResolve,
     EnterViewHomeService,
+    GetUserToSwipeService,
+    GetNotificationsService,
+    PopulateService,
   ],
   bootstrap: [AppComponent]
 })

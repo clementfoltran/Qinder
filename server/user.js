@@ -2,7 +2,291 @@ const db = require('./database.js');
 const passwordHash = require('password-hash');
 const jwt = require('jsonwebtoken');
 const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
+
+exports.removeMatch = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      let sql = 'DELETE FROM swipe WHERE id_match = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+          throw err;
+        } else {
+          sql = 'DELETE FROM message WHERE id_match = ?';
+          query = db.format(sql, [req.body.id_match]);
+          db.query(query, (err) => {
+            if (err) {
+              res.json({ success: false, message: 'Network error' });
+              throw err;
+            } else {
+              sql = 'DELETE FROM `match` WHERE id_match = ?';
+              query = db.format(sql, [req.params.id]);
+              db.query(query, (err) => {
+                if (err) {
+                  res.json({ success: false, message: 'Network error' });
+                  throw err;
+                } else {
+                  sql = 'DELETE FROM message WHERE id_match = ?';
+                  query = db.format(sql, [req.params.id]);
+                  if (err) {
+                    res.json({ success: false, message: 'Network error' });
+                    throw err;
+                  } else {
+                    res.json({ success: true, message: '' });
+                  }
+                }
+              });
+            }
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.reportUserNotMatched = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {  
+      sql = 'INSERT INTO report VALUES(id_report, ?, ?)';
+      query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
+      db.query(query, (err) => {
+        if (err) {
+          console.log(err);
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.reportUser = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      let sql = 'DELETE FROM swipe WHERE id_match = ?';
+      let query = db.format(sql, [ req.body.id_match ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+          throw err;
+        } else {
+          sql = 'DELETE FROM message WHERE id_match = ?';
+          query = db.format(sql, [req.body.id_match]);
+          db.query(query, (err) => {
+            if (err) {
+              res.json({ success: false, message: 'Network error' });
+              throw err;
+            } else {
+              sql = 'DELETE FROM `match` WHERE id_match = ?';
+              query = db.format(sql, [req.body.id_match]);
+              db.query(query, (err) => {
+                if (err) {
+                  res.json({ success: false, message: 'Network error' });
+                  throw err;            
+                } else {
+                  sql = 'INSERT INTO report VALUES(id_report, ?, ?)';
+                  query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
+                  db.query(query, (err) => {
+                    if (err) {
+                      console.log(req.body.id_user_, req.body.id_user);
+                      console.log(err);
+                      res.json({ success: false, message: 'Network error' });
+                    } else {
+                      res.json({ success: true, message: '' });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.removeUserTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'DELETE FROM userTag WHERE id_utag = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.removePrefTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'DELETE FROM tagpref WHERE id_tpref = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.addUserTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO usertag VALUES(id_utag, ?, ?)';
+      const query = db.format(sql, [ req.body.id_tag, req.body.id_user ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Tag not found' });
+        } else {
+          res.json({ success: true, message: '', id_utag: response.insertId });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.addPrefTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO tagpref VALUES(id_tpref, ?, ?)';
+      const query = db.format(sql, [ req.body.id_tag, req.body.id_user ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Tag not found' });
+        } else {
+          res.json({ success: true, message: '', id_tpref: response.insertId });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.getUserTags  = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT usertag.*, tag.label, tag.tag FROM usertag INNER JOIN tag ON usertag.id_tag = tag.id_tag WHERE id_user = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '', userTags: response });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.getPreferenceTags  = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT tagpref.*, tag.label FROM tagpref INNER JOIN tag ON tagpref.id_tag = tag.id_tag WHERE id_user = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '', prefTags: response });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.updateGeolocation = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'UPDATE user SET position = ? WHERE id_user = ?';
+      const position = {
+        latitude: req.body.latitude,
+        longitude: req.body.longitude
+      };
+      let query = db.format(sql, [
+        JSON.stringify(position),
+        req.body.id_user
+      ]);
+      db.query(query, (err, response) => {
+        console.log(response);
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.test = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT position FROM user WHERE id_user = ?';
+      let query = db.format(sql, [req.params.id]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '', response: response });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
 
 exports.getProfilePhoto = (req, res) => {
   if (!req.body) {
@@ -31,18 +315,47 @@ exports.getProfilePhoto = (req, res) => {
   }
 };
 
+exports.getUserPhotos = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT * FROM photo WHERE id_user = ?';
+      let query = db.format(sql, [req.params.id]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({
+            success: false,
+            message: 'Network error',
+          });
+        } else {
+          res.json({
+            success: true,
+            message: '',
+            photos: response,
+          });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.login = (req, res) => {
   if (req.body) {
     const password = req.body.password;
     const sql = "SELECT hash, id_user, confirm FROM user WHERE email LIKE ?";
     const query = db.format(sql, [req.body.email]);
     db.query(query, (err, response) => {
+      const hash = response[0].hash;
+      const confirm = response[0].confirm;
       if (err) {
         res.json({
           message: 'Cannot find user with this email address',
           success: false,
         });
-      } else if (passwordHash.verify(password, response[0].hash) && response[0].confirm === 1) {
+      } else if (passwordHash.verify(password, hash) && confirm === 1) {
         const myToken = jwt.sign({
           iss: 'https://qinder.com',
           user: 'Clément',
@@ -69,7 +382,7 @@ exports.register = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql,
@@ -79,7 +392,7 @@ exports.register = (req, res) => {
         req.body.email,
         hash,
         req.body.gender,
-        new Date().toISOString().slice(0, 19).replace('T', ' '),
+        req.body.birthdate,
         'Both',
         null,
         10,
@@ -87,8 +400,12 @@ exports.register = (req, res) => {
         25,
         req.body.key,
         false,
+        100,
         null,
-        null,
+        0,
+        0,
+        100,
+        0
       ]);
       db.query(query, (err, response) => {
         if (err) {
@@ -111,7 +428,7 @@ exports.register = (req, res) => {
 exports.sendMail = (req, res) => {
   if (res)
   {
-    nodeMailerCall(req.body.firstname, req.body.email, req.body.key, info => {
+    nodeMailerRegisterCall(req.body.firstname, req.body.email, req.body.key, info => {
       // res.send(info);
     });
     // res.json({
@@ -120,15 +437,43 @@ exports.sendMail = (req, res) => {
     // });
   }
 }
+exports.resetPassword = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      let sql = 'UPDATE user SET validation_key = ? WHERE email = ?';
+      let query = db.format(sql,
+        [
+          req.body.key,
+          req.body.email,
+        ]);
+      db.query(query, (err, response) => {
+        console.log(err);
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: 'Successfully prepared to send password reset email' });
+          if (req.body.function === 'sendMail') {
+            nodeMailerResetPasswordCall(req.body.email, req.body.key, info => {
+              // res.send(info);
+            });
+          }
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
 
-async function nodeMailerCall(userName, email, key, callback) {
+async function nodeMailerRegisterCall(userName, email, key, callback) {
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    service:'gmail',
     auth: {
-        user: 'percival.weimann@ethereal.email',
-        pass: 'u8WQJRnehmNvx9dqAA'
+        user: 'qindersurprise@gmail.com',
+        pass: 'Qinder123456!'
     }
   });
 
@@ -145,41 +490,25 @@ async function nodeMailerCall(userName, email, key, callback) {
   callback(info);
 }
 
-// CHECK FIELDS
-//---------------------------------------------------
-function checkRegisterData(firstname, lastname, email, password, passwordConfirmation)
-{
-  if (firstname.length > 1 && lastname.length > 1)
-  {
-    if (/^[a-z0-9\_\.\-]{2,20}\@[a-z0-9\_\-]{2,20}\.[a-z]{2,9}$/.test(email))
-    {
-      if(password === passwordConfirmation)
-      {
-        var anUpperCase = /[A-Z]/;
-        var aLowerCase = /[a-z]/; 
-        var aNumber = /[0-9]/;
-        var aSpecial = /[!|@|#|$|%|^|&|*|(|)|=|+|-|_]/;
+async function nodeMailerResetPasswordCall(email, key, callback) {
 
-        if (password.length >= 8)
-        {
-          var numUpper = 0;
-          var numNums = 0;
-          var numSpecials = 0;
-          for (var i = 0; i < password.length; i++){
-              if (anUpperCase.test(password[i]))
-                  numUpper++;
-              else if (aNumber.test(password[i]))
-                  numNums++;
-              else if (aSpecial.test(password[i]))
-                  numSpecials++;
-          }
-          
-          if (numUpper > 0 && numNums > 0 && numSpecials > 0)
-          {
-              return (1);
-          }
-        }
-      }
+  const transporter = nodemailer.createTransport({
+    service:'gmail',
+    auth: {
+        user: 'qindersurprise@gmail.com',
+        pass: 'Qinder123456!'
     }
-  }
+  });
+
+  let info = await transporter.sendMail({ 
+    from: '"Clément @ MATCHA" <martin@matcha.io>',
+    to: email,
+    subject: "Reset your MATCHA password",
+    text: `Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: http://localhost:4200/resetPassword/${email}/${key}`,
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+  callback(info);
 }

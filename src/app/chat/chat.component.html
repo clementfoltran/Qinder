@@ -1,48 +1,131 @@
-<div class="chatView">
-
-  <div class="top" style="text-align: center; font-size: 30px;">
-    <a href="http://localhost:4200/home"><button class="close">x</button></a>
-    <div class="matchesList">
-      <div class="matchPicture"></div>
-      <div class="matchPicture"></div>
-      <div class="matchPicture"></div>
-      <div class="matchPicture"></div>
-      <div class="matchPicture"></div>
-    </div>
-    <hr>
-    <div class="matchInfos">
-      <div class="matchPicture"></div>
-      <label class="user"><strong>Justine</strong></label>
+<div *ngIf="!matchesObject;">
+  <div class="row">
+    <div *ngFor="let match of matchesObjects">
+      <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;">
+        <img class="rounded-circle m-1" src="{{ match.picture }}" height="80px" width="80px">
+      </a>
     </div>
   </div>
-
-  <div class="contentArea">
-
-    <div class="fullMessage1">
-      <div class="infos">
-        <label class="userLabel1"><strong>Justine</strong></label>
-      </div>
-      <div class="messages">
-          <label>J'adore les kinder surprise :p</label>
+  <!-- selected conversation pic & match name -->
+  <hr>  
+  <div class="p-2" *ngIf="!userMatchedName; else elseBlock">
+    <h6>Click on a match to open a conversation 😊</h6>
+  </div>
+  <ng-template class="p-2" #elseBlock>
+    <a (click)="loadMatchProfileData()" style="cursor: pointer;">
+      <img class="rounded-circle" height="80px" width="80px" src="{{ userMatchedPicture }}" alt="">
+    </a>
+    <h2 class="m-auto p-2">{{ userMatchedName | titlecase }}</h2>
+  </ng-template>
+</div>
+<!-- if select is profile, display profile, if not display contentArea -->
+<div *ngIf="profileWasOpened === 1; else elseBlock3">
+  <carousel class="p-2">
+    <div *ngFor="let pic of userMatchedPhotos">
+      <slide>
+        <img class="mx-auto" src="{{ pic.photo }}" style="display: block; height: 400px;">
+      </slide>
+    </div>
+  </carousel>
+  <div *ngIf="userInfos[0].online != 1; else online">
+    <p>Last connected {{ userInfos[0].last_connected | lastConnectedFormat }}</p>
+  </div>
+  <ng-template #online>
+    <p [ngStyle]="{'color' : 'green'}">Online</p>
+  </ng-template>
+  <div class="row m-2" style="color: rgba(240, 67, 33, 0.8)">
+    <div class="col-md-4">
+      <i class="fas fa-birthday-cake proficon"></i>
+      <h5>{{ userInfos[0].birthdate }} yo</h5>
+    </div>
+    <div class="col-md-4">
+      <i class="fas fa-map-pin proficon"></i>
+      <h5>{{ userInfos[0].distance }} km</h5>
+    </div>
+    <div class="col-md-4">
+      <i class="fas fa-heart proficon"></i>
+      <h5>{{ userInfos[0].popularity }} %</h5>
+    </div>
+  </div>
+  <div *ngIf="userInfos[0].bio">
+    <h5>BIOGRAPHIE</h5>
+    <p>{{ userInfos[0].bio }}</p>
+  </div>
+  <div class="row col-md-12 text-center">
+    <button type="button" class="btn btn-primary col-md-5 mx-auto" data-toggle="modal" data-target="#removeMod">
+      Remove
+    </button>
+    <button type="button" class="btn btn-primary col-md-5 mx-auto" data-toggle="modal" data-target="#reportMod">
+      Block
+    </button>
+  </div>
+</div>
+<ng-template #elseBlock5>
+  <h6>No matches yet 😢 Time to make some swipes!</h6>
+</ng-template>
+<ng-template #elseBlock3>
+  <div *ngIf="aConversationWasOpened === 1">
+    <div *ngIf="messageList.length > 0; else elseBlock2">
+      <div class="card lg scroll" id="contentArea" style="background-color: white;">
+        <div *ngFor="let message of messageList">
+          <div style="border-radius: 10px" class="toast show w-100 m-2" [ngClass]="message.id === id ? 'message2' : 'message1'">
+            <div class="toast-header">
+              <strong class="mr-auto"></strong>
+              <small>{{ message.ts | lastConnectedFormat }}</small>
+            </div>
+            <div class="toast-body p-1">
+              {{ message.msg }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <label class="infosLabel1">le 12/02/2019 à 21h30</label>
-
-    <div class="fullMessage2">
-      <div class="infos">
-        <label class="userLabel2"><strong>Vous</strong></label>
+    <ng-template #elseBlock2>
+      <h6>Don't be shy, make the first step! 🙃</h6>
+    </ng-template>
+  </div>
+  <div *ngIf="aConversationWasOpened === 1">
+    <form action="" [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+      <div class="input-group mb-3">
+        <input type="text" formControlName="message" #message class="form-control" rows="3" aria-describedby="button-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Send</button>
+        </div>
       </div>
-      <div class="messages">
-        <label>Moi aussi hihi</label>
+    </form>
+  </div>
+</ng-template>
+<!-- Remove modal -->
+<div class="modal fade" id="removeMod" tabindex="-1" role="dialog" aria-labelledby="removeModLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="removeModLabel">Are you sure ?</h5>
+      </div>
+      <div class="modal-body">
+        Are you sure to remove this user ? This one can appear in your suggestions
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-primary" (click)="removeUser(userInfos[0].id_user)">confirm</button>
       </div>
     </div>
-    <label class="infosLabel2">le 12/02/2019 à 21h37</label>
-
   </div>
+</div>
 
-  <div class="bottom">
-      <input class="messageInput">
-      <button type="button" class="btn btn-primary btn-lg btn-block">SEND</button>
-  </div>
-
+<!-- Report modal -->
+<div class="modal fade" id="reportMod" tabindex="-1" role="dialog" aria-labelledby="reportModLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModLabel">Are you sure ?</h5>
+      </div>
+      <div class="modal-body">
+        That person will no longer be shown to you
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-primary" (click)="reportUser(userInfos[0].id_user)">BLOCK</button>    
+      </div>
+    </div>
 </div>

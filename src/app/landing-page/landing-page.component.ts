@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {Router, ActivatedRoute, NavigationExtras} from '@angular/router';
+import {Router, ActivatedRoute, NavigationExtras, ParamMap} from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { LoginParameter } from './services/login/login.parameter';
 import { LoginReturn } from './services/login/login.return';
@@ -14,6 +14,27 @@ import { RegisterReturn } from './services/register/register.return';
 import { ActivateService } from './services/activate/activate.service';
 import { EnterViewActivateReturn } from './services/enter-view-activate/enter-view-activate-return';
 import { ActivateReturn } from './services/activate/activate.service-return';
+import { DatepickerConfig } from 'ngx-bootstrap/datepicker/public_api';
+import { splitAtColon } from '@angular/compiler/src/util';
+import { GeolocationService } from './services/geolocation/geolocation.service';
+import { GeolocationReturn } from './services/geolocation/geolocation.return';
+import { GeolocationParameter } from './services/geolocation/geolocation.parameter';
+import * as $ from 'jquery';
+import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
+import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
+import { GetUserOnlineReturn } from '../home/services/get-user-online/get-user-online-return';
+import { ResetPasswordParameter } from './services/reset-password/reset-password.parameter';
+import { ResetPasswordReturn } from './services/reset-password/reset-password.return';
+import { ResetPasswordService } from './services/reset-password/reset-password.service';
+import { CheckKeyService } from './services/check-key/check-key.service';
+import { CheckKeyReturn } from './services/check-key/check-key.return';
+import { SaveNewPasswordParameter } from './services/save-new-password/save-new-password.parameter';
+import { SaveNewPasswordReturn } from './services/save-new-password/save-new-password.return';
+import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
+import { IpLocationService } from './services/ip-location/ip-location.service';
+import { IpLocationReturn } from './services/ip-location/ip-location.return';
+
+declare var $: any;
 
 @Component({
   selector: 'app-landing-page',
@@ -41,40 +62,51 @@ export class LandingPageComponent implements OnInit {
    *
    */
   public LoginAPIParameter: LoginParameter;
+  /**
+   * User geolocation
+   */
+  public latitude: number;
+  public longitude: number;
   public MailAPIParameter: MailParameter;
   public resolvedData: EnterViewActivateReturn;
+  public bsValue: Date = new Date();
+  public datePickerConfig: Partial<DatepickerConfig>;
+  public APIParameterGetUserOnline: GetUserOnlineParameter;
 
-  constructor(public fb: FormBuilder,
-              public router: Router,
-              public registerService: RegisterService,
-              public loginService: LoginService,
-              private messageService: MessageService,
-              private mailService: MailService,
-              public activatedRoute: ActivatedRoute,
-              public activateService: ActivateService) {
-    this.registerForm = fb.group({
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-      passwordConfirmation: ['', Validators.required],
-      gender: ['', Validators.required],
-    });
+  public forgotModeVar = 0;
+  public readyToResetPassword = 0;
+  public forgotPasswordForm: FormGroup;
+  public resetPasswordForm: FormGroup;
+  public ResetPasswordAPIParameter: ResetPasswordParameter;
+  public SaveNewPasswordAPIParameter: SaveNewPasswordParameter;
+  public paramEmail: string;
+  public paramKey: string;
 
-    this.loginForm = fb.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required],
-    });
-}
-
-  ngOnInit() {
-    if (this.activatedRoute.snapshot.paramMap.get('email') &&
-        this.activatedRoute.snapshot.paramMap.get('key')) {
-      this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
-        this.resolvedData = data.viewData;
+  getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+      }, error => {
+        if (error) {
+          this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
+            if (result.lat) {
+              this.latitude = result.lat;
+              this.longitude = result.lon;
+            }
+          });
+        }
       });
-      this.checkAccount(this.resolvedData);
     }
+  }
+
+  sendGeolocation(id_user: number) {
+    const APIParameter: GeolocationParameter = {
+      id_user,
+      latitude: this.latitude,
+      longitude: this.longitude
+    };
+    this.geolocationService.sendPosition(APIParameter).subscribe();
   }
 
   login() {
@@ -87,9 +119,12 @@ export class LandingPageComponent implements OnInit {
         .subscribe((result: LoginReturn) => {
           if (result.success) {
             // Connect successfully let's store the token
-            console.log(result.message);
             localStorage.setItem('token', result.token);
             localStorage.setItem('userId', result.user_id.toString());
+            this.getUserOnline(1);
+            this.sendGeolocation(result.user_id);
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
             this.router.navigate(['/home']);
           } else {
             this.messageService.add({
@@ -103,6 +138,21 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
+  getUserOnline(online) {
+    this.APIParameterGetUserOnline = {
+      userId: +localStorage.getItem('userId'),
+      online
+    };
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
+      .subscribe((result: GetUserOnlineReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+
   dec2hex(dec) {
     return ('0' + dec.toString(16)).substr(-2);
   }
@@ -114,13 +164,12 @@ export class LandingPageComponent implements OnInit {
 
   register() {
     if (this.registerForm.valid) {
-
       const key = this.generateId(80);
-
       this.RegisterAPIParameter = {
         firstname: this.registerForm.get('firstname').value,
         lastname: this.registerForm.get('lastname').value,
         email: this.registerForm.get('email').value,
+        birthdate: this.registerForm.get('birthdate').value.toISOString().slice(0, 10),
         password: this.registerForm.get('password').value,
         passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
         gender: this.registerForm.get('gender').value,
@@ -140,6 +189,7 @@ export class LandingPageComponent implements OnInit {
               detail: result.message,
               life: 6000
             });
+            $('#modRegister').modal('hide');
           } else {
             console.log(result.message);
           }
@@ -152,10 +202,18 @@ export class LandingPageComponent implements OnInit {
           console.log('fail: ', result);
         }
       });
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Empty fields',
+        detail: 'Please fill all the inputs :)',
+        life: 6000
+      });
     }
   }
 
   checkAccount(data) {
+    console.log('CHECK ACCOUNT');
     const email = this.activatedRoute.snapshot.paramMap.get('email');
     const key = this.activatedRoute.snapshot.paramMap.get('key');
 
@@ -171,10 +229,109 @@ export class LandingPageComponent implements OnInit {
     }
   }
 
+  forgotMode() {
+    if (this.forgotModeVar === 0) {
+      this.forgotModeVar = 1;
+    } else {
+      this.forgotModeVar = 0;
+    }
+  }
+
+  askForPasswordReset() {
+    if (this.forgotPasswordForm.valid) {
+      const key = this.generateId(80);
+      this.ResetPasswordAPIParameter = {
+        email: this.forgotPasswordForm.get('email').value,
+        key,
+        function: 'sendMail',
+      };
+      this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
+        .subscribe((result: ResetPasswordReturn) => {
+          if (result.success) {
+            console.log(result.message);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'See you again soon',
+              detail: 'Check your mail to reset your password :)',
+              life: 6000
+            });
+            this.forgotModeVar = 0;
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
+  }
+
+  resetPassword(email, key) {
+    this.checkKeyService.checkKey(email)
+        .subscribe((result: CheckKeyReturn) => {
+          if (result.success) {
+            if (result.key === key) {
+              this.readyToResetPassword = 1;
+              $('#modResetPwd').modal('show');
+            } else {
+              this.messageService.add({
+                severity: 'warn',
+                summary: 'Oops :/',
+                detail: 'The link you followed is obsolete, please ask for another password reset link',
+                life: 6000
+              });
+            }
+          } else {
+            console.log(result.message);
+          }
+        });
+  }
+
+  saveNewPassword() {
+    if (this.resetPasswordForm.valid &&
+       (this.resetPasswordForm.get('newPassword').value === this.resetPasswordForm.get('newPasswordConfirmation').value)) {
+      this.SaveNewPasswordAPIParameter = {
+        email: this.activatedRoute.snapshot.paramMap.get('email'),
+        newPassword: this.resetPasswordForm.get('newPassword').value,
+      };
+      this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
+        .subscribe((result: SaveNewPasswordReturn) => {
+          if (result.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Welcome',
+              detail: 'Password updated! You can now login :)',
+              life: 6000
+            });
+            $('#modResetPwd').modal('hide');
+            this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
+          } else {
+            console.log(result.message);
+          }
+        });
+    }
+  }
+
+  destroyKey(email) {
+    const key = this.generateId(80);
+    this.ResetPasswordAPIParameter = {
+        email,
+        key,
+        function: 'none',
+      };
+    this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
+      .subscribe((result: ResetPasswordReturn) => {
+        if (result.success) {
+          console.log('Succesfully replaced the auth key');
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
+
   verifyAccount(email) {
-      this.activateService.activateAccount(email)
+    console.log('VERIFY ACCOUNT CALLED');
+    this.activateService.activateAccount(email)
         .subscribe((result: ActivateReturn) => {
           if (result.success) {
+            $('#modSignIn').modal('show');
             this.messageService.add({
               severity: 'success',
               summary: 'Welcome',
@@ -186,4 +343,72 @@ export class LandingPageComponent implements OnInit {
           }
         });
     }
+
+    constructor(private route: ActivatedRoute,
+                public fb: FormBuilder,
+                public router: Router,
+                public registerService: RegisterService,
+                public loginService: LoginService,
+                private messageService: MessageService,
+                private mailService: MailService,
+                public activatedRoute: ActivatedRoute,
+                public geolocationService: GeolocationService,
+                public activateService: ActivateService,
+                public getUserOnlineService: GetUserOnlineService,
+                public resetPasswordService: ResetPasswordService,
+                public checkKeyService: CheckKeyService,
+                public ipLocationService: IpLocationService,
+                public saveNewPasswordService: SaveNewPasswordService) {
+    this.registerForm = fb.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', Validators.required],
+      birthdate: ['', Validators.required],
+      password: ['', Validators.minLength(8)],
+      passwordConfirmation: ['', Validators.minLength(8)],
+      gender: ['', Validators.required],
+    });
+
+    this.loginForm = fb.group({
+    email: ['', Validators.required],
+    password: ['', Validators.required],
+    });
+
+    this.forgotPasswordForm = fb.group({
+      email: ['', Validators.required],
+      });
+
+    this.resetPasswordForm = fb.group({
+      newPassword: ['', Validators.minLength(8)],
+      newPasswordConfirmation: ['', Validators.minLength(8)],
+      });
+
+    this.datePickerConfig = Object.assign({
+      containerClass: 'theme-orange',
+      showWeekNumbers: false,
+      maxDate: new Date(),
+    });
+    this.route.queryParams.subscribe(params => {
+      this.paramEmail = params.email;
+      this.paramKey = params.key;
+    });
+  }
+
+  ngOnInit() {
+    if (this.router.url.split('/')[1] === 'activate' &&
+        this.activatedRoute.snapshot.paramMap.get('email') &&
+        this.activatedRoute.snapshot.paramMap.get('key')) {
+        this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
+          this.resolvedData = data.viewData;
+      });
+        this.checkAccount(this.resolvedData);
+    }
+    if (this.router.url.split('/')[1] === 'resetPassword' &&
+        this.activatedRoute.snapshot.paramMap.get('email') &&
+        this.activatedRoute.snapshot.paramMap.get('key')) {
+          this.resetPassword(this.activatedRoute.snapshot.paramMap.get('email'), this.activatedRoute.snapshot.paramMap.get('key'));
+        }
+    this.registerForm.get('gender').setValue('Female');
+    this.getLocation();
+  }
 }

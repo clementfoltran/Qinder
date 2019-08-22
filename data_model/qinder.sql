@@ -2,10 +2,10 @@
 -- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost:3307
--- Généré le :  mer. 12 juin 2019 à 07:55
--- Version du serveur :  5.7.25
--- Version de PHP :  7.1.27
+-- Host: localhost:3306
+-- Generation Time: Aug 15, 2019 at 06:51 AM
+-- Server version: 5.6.43
+-- PHP Version: 5.6.40
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,26 +19,24 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `qinder`
+-- Database: `qinder`
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `match`
+-- Table structure for table `match`
 --
 
 CREATE TABLE `match` (
   `id_match` int(11) NOT NULL,
-  `id_user` int(11) DEFAULT NULL,
-  `id_user_` int(11) DEFAULT NULL,
   `started` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `message`
+-- Table structure for table `message`
 --
 
 CREATE TABLE `message` (
@@ -46,13 +44,27 @@ CREATE TABLE `message` (
   `id_user` int(11) DEFAULT NULL,
   `message` tinytext,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `id_conv` int(11) DEFAULT NULL
+  `id_match` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `photo`
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `id_notif` int(11) NOT NULL,
+  `id_user_` int(11) DEFAULT NULL,
+  `notif` int(11) DEFAULT NULL,
+  `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `id_user` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `photo`
 --
 
 CREATE TABLE `photo` (
@@ -66,20 +78,58 @@ CREATE TABLE `photo` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `swipe`
+-- Table structure for table `report`
 --
 
-CREATE TABLE `swipe` (
-  `id_swipe` int(11) NOT NULL,
-  `id_user` int(11) DEFAULT NULL,
-  `id_user_` int(11) DEFAULT NULL,
-  `like` tinyint(1) DEFAULT NULL
+CREATE TABLE `report` (
+  `id_report` int(11) NOT NULL,
+  `id_user_blocked` int(11) DEFAULT NULL,
+  `id_user` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `tag`
+-- Table structure for table `swipe`
+--
+
+CREATE TABLE `swipe` (
+  `id_swipe` int(11) NOT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `id_user_matched` int(11) DEFAULT NULL,
+  `like` tinyint(1) DEFAULT NULL,
+  `id_match` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `swipe`
+--
+
+INSERT INTO `swipe` (`id_swipe`, `id_user`, `id_user_matched`, `like`, `id_match`) VALUES
+(159, 2, 250, 0, NULL),
+(160, 2, 251, 1, NULL),
+(161, 2, 252, 0, NULL),
+(162, 2, 253, 0, NULL),
+(163, 2, 254, 0, NULL),
+(164, 2, 255, 1, NULL),
+(165, 2, 256, 0, NULL),
+(166, 2, 257, 0, NULL),
+(167, 2, 258, 0, NULL),
+(168, 2, 259, 0, NULL),
+(169, 2, 260, 0, NULL),
+(170, 2, 261, 0, NULL),
+(171, 2, 262, 0, NULL),
+(172, 2, 263, 0, NULL),
+(173, 2, 264, 1, NULL),
+(174, 2, 265, 0, NULL),
+(175, 2, 266, 0, NULL),
+(176, 2, 267, 0, NULL),
+(177, 2, 268, 0, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tag`
 --
 
 CREATE TABLE `tag` (
@@ -90,7 +140,7 @@ CREATE TABLE `tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `tag`
+-- Dumping data for table `tag`
 --
 
 INSERT INTO `tag` (`id_tag`, `label`, `logo`, `tag`) VALUES
@@ -105,7 +155,7 @@ INSERT INTO `tag` (`id_tag`, `label`, `logo`, `tag`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -124,21 +174,23 @@ CREATE TABLE `user` (
   `validation_key` varchar(255) DEFAULT NULL,
   `confirm` tinyint(1) DEFAULT NULL,
   `popularity` float DEFAULT NULL,
-  `position` varchar(255) DEFAULT NULL
+  `position` varchar(255) DEFAULT NULL,
+  `online` tinyint(1) NOT NULL,
+  `last_connected` date NOT NULL,
+  `pop` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Déchargement des données de la table `user`
+-- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id_user`, `firstname`, `lastname`, `email`, `hash`, `gender`, `birthdate`, `interest`, `bio`, `distance`, `minage`, `maxage`, `validation_key`, `confirm`, `popularity`, `position`) VALUES
-(1, 'Gabriel', 'Drai', 'gdrai@student.42.fr', 'sha1$3454bdef$1$4ee1e2cec9f9b42ff3ca7fc63a6d9b2a8b8fdd78', 'Female', '2019-06-12', 'Male', 'TOP\n', 70, 18, 25, '232b10255d2189b73a8dc75c0048293155e2c398dbb241b0bda3d588c91d7bc2e354812036c85e6d', 1, NULL, NULL),
-(2, 'clement', 'foltran', 'clfoltra@student.42.fr', 'sha1$b102e18a$1$e43c2bfe71dbff22f342a32dde27783541d83fd4', 'Male', '2019-06-12', 'Both', NULL, 10, 18, 25, '742c24baeefac817c055b7e971894d1925bed69c5839920a2de9f5472c2b089d5a14a12bb9ea1e84', 0, NULL, NULL);
+INSERT INTO `user` (`id_user`, `firstname`, `lastname`, `email`, `hash`, `gender`, `birthdate`, `interest`, `bio`, `distance`, `minage`, `maxage`, `validation_key`, `confirm`, `popularity`, `position`, `online`, `last_connected`, `pop`) VALUES
+(2, 'Clement', 'foltran', 'clfoltra@student.42.fr', 'sha1$b102e18a$1$e43c2bfe71dbff22f342a32dde27783541d83fd4', 'Male', '2000-02-14', 'Both', 'J\'aime la paëlla et oui', 45, 18, 89, '496a5a9320546aa6d022a7bc55d6fc6460e9f1d9b77c2ad0c9a15b63371cd3f3f9562bdf9166ed30', 1, 0, '{\"latitude\":48.8966626,\"longitude\":2.3184872999999997}', 1, '2019-08-15', 91);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `usertag`
+-- Table structure for table `usertag`
 --
 
 CREATE TABLE `usertag` (
@@ -148,138 +200,171 @@ CREATE TABLE `usertag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Index pour les tables déchargées
+-- Indexes for dumped tables
 --
 
 --
--- Index pour la table `match`
+-- Indexes for table `match`
 --
 ALTER TABLE `match`
-  ADD PRIMARY KEY (`id_match`),
-  ADD KEY `id_user` (`id_user`);
+  ADD PRIMARY KEY (`id_match`);
 
 --
--- Index pour la table `message`
+-- Indexes for table `message`
 --
 ALTER TABLE `message`
   ADD PRIMARY KEY (`id_message`),
-  ADD KEY `id_conv` (`id_conv`);
+  ADD KEY `id_match` (`id_match`);
 
 --
--- Index pour la table `photo`
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id_notif`),
+  ADD KEY `id_user` (`id_user`);
+
+--
+-- Indexes for table `photo`
 --
 ALTER TABLE `photo`
   ADD PRIMARY KEY (`id_photo`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Index pour la table `swipe`
+-- Indexes for table `report`
 --
-ALTER TABLE `swipe`
-  ADD PRIMARY KEY (`id_swipe`),
+ALTER TABLE `report`
+  ADD PRIMARY KEY (`id_report`),
   ADD KEY `id_user` (`id_user`);
 
 --
--- Index pour la table `tag`
+-- Indexes for table `swipe`
+--
+ALTER TABLE `swipe`
+  ADD PRIMARY KEY (`id_swipe`),
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_match` (`id_match`);
+
+--
+-- Indexes for table `tag`
 --
 ALTER TABLE `tag`
   ADD PRIMARY KEY (`id_tag`);
 
 --
--- Index pour la table `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id_user`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Index pour la table `usertag`
+-- Indexes for table `usertag`
 --
 ALTER TABLE `usertag`
   ADD PRIMARY KEY (`id_utag`),
-  ADD KEY `id_tag` (`id_tag`),
-  ADD KEY `id_user` (`id_user`);
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_tag` (`id_tag`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT pour la table `match`
+-- AUTO_INCREMENT for table `match`
 --
 ALTER TABLE `match`
-  MODIFY `id_match` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_match` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `message`
+-- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
   MODIFY `id_message` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pour la table `photo`
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id_notif` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `photo`
 --
 ALTER TABLE `photo`
-  MODIFY `id_photo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_photo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
 
 --
--- AUTO_INCREMENT pour la table `swipe`
+-- AUTO_INCREMENT for table `report`
+--
+ALTER TABLE `report`
+  MODIFY `id_report` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `swipe`
 --
 ALTER TABLE `swipe`
-  MODIFY `id_swipe` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_swipe` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
 
 --
--- AUTO_INCREMENT pour la table `tag`
+-- AUTO_INCREMENT for table `tag`
 --
 ALTER TABLE `tag`
   MODIFY `id_tag` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=269;
 
 --
--- AUTO_INCREMENT pour la table `usertag`
+-- AUTO_INCREMENT for table `usertag`
 --
 ALTER TABLE `usertag`
-  MODIFY `id_utag` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_utag` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=395;
 
 --
--- Contraintes pour les tables déchargées
+-- Constraints for dumped tables
 --
 
 --
--- Contraintes pour la table `match`
---
-ALTER TABLE `match`
-  ADD CONSTRAINT `match_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
-
---
--- Contraintes pour la table `message`
+-- Constraints for table `message`
 --
 ALTER TABLE `message`
-  ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`id_conv`) REFERENCES `match` (`id_match`);
+  ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`id_match`) REFERENCES `match` (`id_match`);
 
 --
--- Contraintes pour la table `photo`
+-- Constraints for table `notification`
+--
+ALTER TABLE `notification`
+  ADD CONSTRAINT `notification_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
+
+--
+-- Constraints for table `photo`
 --
 ALTER TABLE `photo`
   ADD CONSTRAINT `photo_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
--- Contraintes pour la table `swipe`
+-- Constraints for table `report`
 --
-ALTER TABLE `swipe`
-  ADD CONSTRAINT `swipe_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
+ALTER TABLE `report`
+  ADD CONSTRAINT `report_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
--- Contraintes pour la table `usertag`
+-- Constraints for table `swipe`
+--
+ALTER TABLE `swipe`
+  ADD CONSTRAINT `swipe_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`),
+  ADD CONSTRAINT `swipe_ibfk_2` FOREIGN KEY (`id_match`) REFERENCES `match` (`id_match`);
+
+--
+-- Constraints for table `usertag`
 --
 ALTER TABLE `usertag`
-  ADD CONSTRAINT `usertag_ibfk_1` FOREIGN KEY (`id_tag`) REFERENCES `tag` (`id_tag`),
-  ADD CONSTRAINT `usertag_ibfk_2` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
+  ADD CONSTRAINT `usertag_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`),
+  ADD CONSTRAINT `usertag_ibfk_2` FOREIGN KEY (`id_tag`) REFERENCES `tag` (`id_tag`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

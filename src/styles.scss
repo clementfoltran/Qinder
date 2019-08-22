@@ -18,6 +18,10 @@ html {
   background-color: rgba(113, 221, 113, 0.5);
 }
 
+.ui-toast-message-info {
+  background-color: rgba(16, 108, 214, 0.5);
+}
+
 .ui-toast-message-warn {
   background-color: rgba(255,165,0, 0.5);
 }
@@ -51,6 +55,15 @@ html {
 // -------------------------------------- //
 // --------------- BTNS ----------------- //
 // -------------------------------------- //
+
+// REMOVE THE BLUE BORDER ON CLICK
+button:focus {
+  outline: none !important;
+}
+
+input:focus {
+  outline: none !important;
+}
 
 .btn-primary {
   background-color: white;
@@ -95,23 +108,29 @@ textarea {
 }
 
 .modal {
-  // font-family: 'Roboto', sans-serif;
   border-radius: 10px;
+
+  .modal-dialog{
+    overflow-y: initial !important
+  }
 
   .modal-header, .modal-footer {
       border: 0;
   }
 
   .modal-body {
-      width: 80%;
-      margin: auto;
+    overflow-y: auto;
+    width: 80%;
+    margin: auto;
   }
 
   .modal-content {
-      background-color: rgba($color: #FFFFFF, $alpha: 0.8);
+      background-color: rgba($color: #FFFFFF, $alpha: 0.9);
       border-radius: 10px;
-      width: 500px;
       margin-left: auto;
       margin-right: auto;
   }
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -10,6 +10,7 @@ import {EnterViewHomeResolve} from './home/enter-view-home.resolve';
 import { EnterViewActivateResolve } from './landing-page/services/enter-view-activate/enter-view-activate.resolve';
 import { ChatComponent } from './chat/chat.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { PopulateComponent } from './populate/populate.component';
 
 const routes: Routes = [
   {
@@ -34,7 +35,7 @@ const routes: Routes = [
     canActivate: [IsLoggedInGuard],
   },
   {
-    path: 'settings',
+    path: 'settings/:id',
     component: SettingsComponent,
     canActivate: [IsLoggedInGuard],
     resolve: {viewData: EnterViewSettingsResolve}
@@ -44,6 +45,21 @@ const routes: Routes = [
     component: LandingPageComponent,
     canActivate: [IsLoggedOutGuard],
     resolve: {viewData: EnterViewActivateResolve}
+  },
+  {
+    path: 'resetPassword/:email/:key',
+    component: LandingPageComponent,
+    canActivate: [IsLoggedOutGuard],
+  },
+  {
+    path: 'test',
+    component: LandingPageComponent,
+    canActivate: [IsLoggedOutGuard],
+  },
+  {
+    path: 'populate',
+    component: PopulateComponent,
+    canActivate: [IsLoggedInGuard],
   }
 ];
 
@@ -56,6 +72,7 @@ const routes: Routes = [
     HomeComponent,
     SettingsComponent,
     EnterViewSettingsResolve,
+    EnterViewActivateResolve
   ],
   exports: [RouterModule],
 })

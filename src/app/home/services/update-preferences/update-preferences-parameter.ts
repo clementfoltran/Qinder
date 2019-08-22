@@ -6,4 +6,6 @@ export interface UpdatePreferencesParameter {
   distance: number;
   minage: number;
   maxage: number;
+  pop: number;
+  tagsInCommon: number;
 }
