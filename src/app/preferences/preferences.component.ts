@@ -315,6 +315,7 @@ saveUserLastConnection(date) {
               detail: result.message,
               life: 6000,
             });
+            this.selectedFile = null;
           }
         });
     } else if (!this.selectedFile) {
