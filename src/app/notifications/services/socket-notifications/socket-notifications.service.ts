@@ -108,7 +108,6 @@ export class SocketNotificationsService {
       .subscribe((result: GetNotificationsReturn) => {
         if (result.success) {
           this.notifications = result.notifications;
-          console.log('result.notifications = ', result.notifications);
           // Set nbMessages
           this.notifications.forEach((v) => {
             if (v.notif === 6) {
