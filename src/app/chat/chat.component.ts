@@ -334,6 +334,7 @@ export class ChatComponent implements OnInit {
   // NgOnInit
   // ----------------------------------------------------------------------------------------
   ngOnInit() {
+    console.log('INIT CHAT COMPONENT');
     this.id = parseInt(localStorage.getItem('userId'), 10);
     this.loadMatches();
     try {

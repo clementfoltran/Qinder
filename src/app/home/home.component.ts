@@ -284,6 +284,7 @@ export class HomeComponent implements OnInit {
           }
           this.getUserToSwipe();
           if (result.match) {
+            this.chatComponent.loadMatches();
             $('.match').show();
             setTimeout(() => {
                 $('.match').hide();
@@ -296,7 +297,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async getTheHeavens() {
+ async getTheHeavens() {
     const APIParameter: GetTheHeavensParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
