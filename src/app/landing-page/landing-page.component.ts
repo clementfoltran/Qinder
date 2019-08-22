@@ -255,6 +255,7 @@ export class LandingPageComponent implements OnInit {
               detail: 'Check your mail to reset your password :)',
               life: 6000
             });
+            $('#modSignIn').modal('hide');
             this.forgotModeVar = 0;
           } else {
             console.log(result.message);
@@ -302,6 +303,7 @@ export class LandingPageComponent implements OnInit {
             });
             $('#modResetPwd').modal('hide');
             this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
+            $('#modSignIn').modal('show');
           } else {
             console.log(result.message);
           }
