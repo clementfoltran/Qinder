@@ -1,30 +1,35 @@
 <div class="home">
   <div class="match" style="position: absolute; width: 100%; height: 100%; z-index: 100000; padding: 0">
-    <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);">
-      <h1 class="scale-in-center">It's a match !</h1>
+    <div style="position: absolute; top: 30%; left: 75%; width: 100%; transform: translate(-50%, -50%);">
+      <h1 class="scale-in-center">It's a match ! 😍</h1>
     </div>
   </div>
   <div class="match-zone col-md-12 text-center">
-    <img class="logo" src="../../assets/img/logo.svg" height="70" alt="">
-    <br>
-    <div *ngIf="progressBarValue < 100; else showHeavens"  class="heavens">
-      <label><strong>✨ Keep swiping to take a look at the heavens.. ✨</strong></label>
-      <br>
-      <div class="progress">
-        <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="{ width: progressBarValue + '%' }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    <a href=""><img class="logo" src="../../assets/img/logo.svg" height="70" alt=""></a>
+    <div class="card mt-2" style="background-color: rgba(255, 255, 255, 0); border: none;">
+      <div class="card-body">
+        <div *ngIf="progressBarValue < 100; else showHeavens"  class="heavens">
+          <label><strong>✨ Keep swiping to preview the heavens.. ✨</strong></label>
+          <br>
+          <div class="progress">
+            <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="{ width: progressBarValue + '%' }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+        <ng-template #showHeavens>
+          <div *ngIf="heavensClicked === 0">
+            <button class="showMTH" (click)="showMeTheHeavens()" type="button" class="btn btn-light">✨ Show me the heavens! ✨</button>
+          </div>
+        </ng-template>
       </div>
     </div>
-    <ng-template #showHeavens>
-      <div *ngIf="heavensClicked === 0">
-        <!-- <button class="showMTH" (click)="showMeTheHeavens()" type="button" class="btn btn-danger">✨ Show me the heavens! ✨</button> -->
-      </div>
-    </ng-template>
-    <br>
 
     <!-- THE HEAVENS -->
     <div *ngIf="peopleInHeavens.length > 0 && heavensClicked === 1">
-      <label><strong>✨ Here are the people you can match with ✨</strong></label>
-
+        <div class="card mt-1 mb-1" style="background-color: rgba(255, 255, 255, 0); border: none;">
+            <div class="card-body">
+                <label><strong>✨ Here are the people you can match with ✨</strong></label>
+            </div>
+          </div>
         <div class="row card-group">
             <div class="mb-4 col-sm-2" *ngFor="let people of peopleInHeavens; let i = index;">
               <div class="card" style="opacity: 0">
@@ -89,7 +94,7 @@
 
   <!-- Profile modal -->
   <div class="modal fade" id="modSignIn" tabindex="-1" role="dialog" aria-labelledby="modSignIn" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg-8" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
@@ -108,14 +113,14 @@
   </div>
   <!-- Chat modal -->
   <div class="modal fade" id="modChat" tabindex="-1" role="dialog" aria-labelledby="modChat" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg-8" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close m-0 p-0" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <h2 class="m-auto p-2">Messages</h2>
+        <h2 class="m-auto p-2">Your matches</h2>
         <div class="modal-body text-center">
           <app-chat></app-chat>
         </div>

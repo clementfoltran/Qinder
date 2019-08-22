@@ -3,9 +3,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'lastConnectedFormat' })
 
 export class LastConnectedTimeFormatPipe implements PipeTransform {
-    transform(connectedTime: Date, ...args): string {
-        let elapsed = new Date(new Date().getTime() - new Date(connectedTime).getTime()).getTime() / 60000;
-
+    transform(connectedTime: string, ...args): string {
+        console.log('connectedTime = ', connectedTime);
+        let elapsed = (Date.now() - +new Date(connectedTime)) / 60000;
         let time = '';
 
         if (elapsed < 60) {

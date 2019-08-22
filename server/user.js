@@ -410,11 +410,10 @@ exports.resetPassword = (req, res) => {
 async function nodeMailerRegisterCall(userName, email, key, callback) {
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    service:'gmail',
     auth: {
-        user: 'percival.weimann@ethereal.email',
-        pass: 'u8WQJRnehmNvx9dqAA'
+        user: 'qindersurprise@gmail.com',
+        pass: 'Qinder123456!'
     }
   });
 
@@ -434,19 +433,18 @@ async function nodeMailerRegisterCall(userName, email, key, callback) {
 async function nodeMailerResetPasswordCall(email, key, callback) {
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
+    service:'gmail',
     auth: {
-        user: 'percival.weimann@ethereal.email',
-        pass: 'u8WQJRnehmNvx9dqAA'
+        user: 'qindersurprise@gmail.com',
+        pass: 'Qinder123456!'
     }
   });
 
   let info = await transporter.sendMail({ 
-    from: '"Martin @ MATCHA" <martin@matcha.io>',
+    from: '"Clément @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Reset your MATCHA password",
-    text: `Please click this link to reset your Matcha password: http://localhost:4200/resetPassword/${email}/${key}`,
+    text: `Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: http://localhost:4200/resetPassword/${email}/${key}`,
   });
 
   console.log("Message sent: %s", info.messageId);
