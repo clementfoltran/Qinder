@@ -139,6 +139,8 @@ export class HomeComponent implements OnInit {
   public heavensClicked = 0;
   public interval: any;
 
+  public profileComplete = 0;
+
   public APIParameterGetUserOnline: GetUserOnlineParameter;
   public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
 
@@ -170,6 +172,9 @@ export class HomeComponent implements OnInit {
           if (this.userPhotos.length > 0) {
             localStorage.setItem('user-img', this.userPhotos[0].photo);
             this.userPicture = this.userPhotos[0].photo;
+            this.profileComplete = 1;
+          } else {
+            this.profileComplete = 0;
           }
         } else {
           this.messageService.add({
@@ -389,7 +394,7 @@ export class HomeComponent implements OnInit {
     if (slider.classList.contains('opened')) {
       slider.classList.remove('opened');
       slider.classList.add('closed');
-      // load data
+  3;    // load data
       this.chatComponent.loadMatches();
     } else {
         slider.classList.remove('closed');
