@@ -221,7 +221,6 @@ export class HomeComponent implements OnInit {
 
   async getUserToSwipe() {
     this.userToSwipe = false;
-    console.log(this.prefTags);
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
@@ -230,7 +229,6 @@ export class HomeComponent implements OnInit {
       maxage: this.resolveData.maxage,
       distance: this.resolveData.distance,
       popularity: this.resolveData.pop,
-      tagsInCommon: this.resolveData.tagsInCommon,
       prefTags: this.resolveData.prefTags
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
@@ -254,7 +252,6 @@ export class HomeComponent implements OnInit {
           this.userToSwipe = false;
           this.swipe(false);
           setTimeout(() => {
-            console.log('get user to swipe');
             this.getUserToSwipe();
           }, 3000);
         }

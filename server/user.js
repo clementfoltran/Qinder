@@ -382,7 +382,7 @@ exports.register = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql,
@@ -404,8 +404,7 @@ exports.register = (req, res) => {
         null,
         0,
         0,
-        100,
-        0
+        100
       ]);
       db.query(query, (err, response) => {
         if (err) {
