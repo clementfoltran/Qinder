@@ -62,6 +62,7 @@ app.post('/updateEmail', urlencodedParser, checkUserToken, setting.updateEmail);
 app.post('/updatePassword', urlencodedParser, checkUserToken, setting.updatePassword);
 
 app.post('/addUserTag', urlencodedParser, checkUserToken, user.addUserTag);
+app.post('/addPrefTag', urlencodedParser, checkUserToken, user.addPrefTag);
 app.post('/updatePreferences', urlencodedParser, checkUserToken, preference.updatePreferences);
 app.post('/uploadPhoto', urlencodedParser, checkUserToken, preference.uploadPhoto);
 app.post('/deletePhoto', urlencodedParser, checkUserToken, preference.deletePhoto);
@@ -89,8 +90,10 @@ app.get('/loadConversation/:id', urlencodedParser, checkUserToken, chat.loadConv
 
 app.get('/getTags', urlencodedParser, checkUserToken, preference.getTags);
 app.get('/getUserTags/:id', urlencodedParser, checkUserToken, user.getUserTags);
+app.get('/getPreferenceTags/:id', urlencodedParser, checkUserToken, user.getPreferenceTags);
 app.get('/removeMatch/:id', urlencodedParser, checkUserToken, user.removeMatch);
 app.get('/removeUserTag/:id', urlencodedParser, checkUserToken, user.removeUserTag);
+app.get('/removePrefTag/:id', urlencodedParser, checkUserToken, user.removePrefTag);
 
 app.get('/getProfilePhoto/:id', urlencodedParser, checkUserToken, user.getProfilePhoto);
 

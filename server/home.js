@@ -10,31 +10,40 @@ exports.enterViewHome = (req, res) => {
       const query = db.format(sql, [req.params.id]);
       db.query(query, (err, response) => {
         if (err) {
-          res.json({
-            success: false,
-            message: 'User not found',
-          });
+          res.json({ success: false, message: 'User not found' });
+          throw err;
         } else {
-          res.json({
-            success: true,
-            message: '',
-            id: response[0].id_user,
-            email: response[0].email,
-            firstname: response[0].firstname,
-            lastname: response[0].lastname,
-            bio: response[0].bio,
-            hash: response[0].hash,
-            distance: response[0].distance,
-            minage: response[0].minage,
-            maxage: response[0].maxage,
-            interest: response[0].interest,
-            gender: response[0].gender,
-            position: JSON.parse(response[0].position),
-            confirm: response[0].confirm,
-            online: response[0].online,
-            lastConnection: response[0].last_connected,
-            pop: response[0].pop,
-            tagsInCommon: response[0].tagsInCommon
+          const user = response[0];
+          const sql = 'SELECT * FROM tagpref WHERE id_user = ?';
+          const query = db.format(sql, [req.params.id]);
+          db.query(query, (err, response) => {
+            if (err) {
+              res.json({ success: false, message: 'User not found' });
+              throw err;
+            } else {
+              res.json({
+                success: true,
+                message: '',
+                id: user.id_user,
+                email: user.email,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                bio: user.bio,
+                hash: user.hash,
+                distance: user.distance,
+                minage: user.minage,
+                maxage: user.maxage,
+                interest: user.interest,
+                gender: user.gender,
+                position: JSON.parse(user.position),
+                confirm: user.confirm,
+                online: user.online,
+                lastConnection: user.last_connected,
+                pop: user.pop,
+                tagsInCommon: user.tagsInCommon,
+                prefTags: response
+              });
+            }
           });
         }
       });
@@ -56,11 +65,22 @@ exports.getUserToSwipe = (req, res) => {
       const maxAge = currentYear - req.body.maxage;
       let sql = '';
       let query;
+      // Let configure user tags preference
+      console.log(req.body.prefTags);
+      let prefTags = '';
+      for (let i = 0; i < req.body.prefTags.length; i++) {
+        prefTags += 'id_tag = ' + req.body.prefTags[i].id_tag;
+        if (i !== req.body.prefTags.length - 1) {
+          prefTags += ' OR ';
+        }
+      }
+      console.log(prefTags);
       if (req.body.interest === 'Both') {
         // ADD DISTANCE CHECK
         sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
+        AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND id_user = user.id_user ) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
         AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
         query = db.format(sql, [
@@ -74,6 +94,7 @@ exports.getUserToSwipe = (req, res) => {
         sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
+        AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND id_user = user.id_user ) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
         AND user.gender = ? AND popularity BETWEEN 0 AND ? AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
         query = db.format(sql, [

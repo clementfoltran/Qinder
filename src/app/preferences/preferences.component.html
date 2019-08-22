@@ -65,7 +65,7 @@
                           <div *ngFor="let tag of tags; let i = index">
                             <div *ngIf="isSelectedTag(tag.id_tag); else notSelected">
                               <div class="card m-1" id="selected-tag" style="cursor: pointer;" (click)="removeUserTag(tag.id_tag)">
-                                <h5 class="card-title">{{ tag.tag }}</h5>
+                                <h6 class="card-title">{{ tag.tag }}</h6>
                                 <p class="card-text">{{ tag.label }}</p>
                               </div>
                             </div>
@@ -109,24 +109,33 @@
                 <option>Both</option>
               </select>
             </div>
-            <div class="row">
-              <div class="form-group mb-4 col-md-6">
-                <label>Distance {{ distance }} kms</label>
-                <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
-              </div>
-              <div class="form-group mb-4 col-md-6">
-                <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
-                <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" [min]="18" [max]="100" (mouseup)="updatePref()"></p-slider>
-              </div>
+            <div class="form-group mb-4">
+              <label>Distance {{ distance }} kms</label>
+              <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
             </div>
-            <div class="row">
-              <div class="form-group mb-4 col-md-6">
-                <label>Popularity preference {{ popularity }}</label>
-                <p-slider [(ngModel)]="popularity" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
-              </div>
-              <div class="form-group mb-4 col-md-6">
-                <label>Tags in common {{ tagsInCommon }}</label>
-                <p-slider [(ngModel)]="tagsInCommon" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="6" (mouseup)="updatePref()"></p-slider>
+            <div class="form-group mb-4">
+              <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
+              <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" [min]="18" [max]="100" (mouseup)="updatePref()"></p-slider>
+            </div>
+            <div class="form-group mb-4">
+              <label>Popularity preference {{ popularity }}</label>
+              <p-slider [(ngModel)]="popularity" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+            </div>
+            <div class="row mx-auto">
+              <div *ngFor="let tag of tags; let i = index">
+                <div *ngIf="isSelectedPrefTag(tag.id_tag); else notSelectedPref">
+                  <button style="background-image: linear-gradient(rgba(240, 67, 33, 0.8), rgba(240, 92, 33, 0.8)); color: white;"
+                          class="btn btn-primary m-1" type="button"
+                          (click)="removePrefTag(tags[i].id_tag, i)">
+                          {{ tag.tag }}
+                  </button>  
+                </div>
+                <ng-template #notSelectedPref>
+                  <button class="btn btn-primary m-1" type="button"
+                          (click)="addPrefTag(tags[i])">
+                          {{ tag.tag }}
+                  </button>
+                </ng-template>
               </div>
             </div>
           </div>
