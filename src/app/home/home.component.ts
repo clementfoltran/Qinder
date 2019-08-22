@@ -34,6 +34,8 @@ import { ReportUserService } from '../chat/services/report-user/report-user.serv
 import { ReportUserNotMatchedParameter } from './services/report-user-not-matched/report-user-not-matched.parameter';
 import { ReportUserNotMatchedService } from './services/report-user-not-matched/report-user-not-matched.service';
 import { ReportUserNotMatchedReturn } from './services/report-user-not-matched/report-user-not-matched.return';
+import { GetPreferenceTagsService } from '../preferences/services/get-preference-tags/get-preference-tags.service';
+import { PrefTag, GetPreferenceTagsReturn } from '../preferences/services/get-preference-tags/get-preference-tags.return';
 
 declare var $: any;
 
@@ -56,6 +58,7 @@ export class HomeComponent implements OnInit {
               public getTheHeavensService: GetTheHeavensService,
               public socketNotificationService: SocketNotificationsService,
               public reportUserNotMatchedService: ReportUserNotMatchedService,
+              public getPreferenceTagsService: GetPreferenceTagsService,
               public ipLocationService: IpLocationService,
               private lastConnection: LastConnectedTimeFormatPipe) {
 }
@@ -130,6 +133,11 @@ export class HomeComponent implements OnInit {
    * Notification list
    */
   public notifications: Notification[];
+  /**
+   *
+   * Get preference tags of user
+   */
+  public prefTags: PrefTag[] = [];
   public userToSwipePopularity: number;
   public userToSwipe: boolean;
   public nbMessages = 0;
@@ -226,7 +234,7 @@ export class HomeComponent implements OnInit {
       maxage: this.resolveData.maxage,
       distance: this.resolveData.distance,
       popularity: this.resolveData.pop,
-      tagsInCommon: this.resolveData.tagsInCommon
+      prefTags: this.resolveData.prefTags
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
@@ -249,7 +257,6 @@ export class HomeComponent implements OnInit {
           this.userToSwipe = false;
           this.swipe(false);
           setTimeout(() => {
-            console.log('get user to swipe');
             this.getUserToSwipe();
           }, 3000);
         }

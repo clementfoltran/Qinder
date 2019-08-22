@@ -1,3 +1,5 @@
+import { PrefTag } from 'src/app/preferences/services/get-preference-tags/get-preference-tags.return';
+
 export interface GetUserToSwipeParameter {
     id: number;
     interest: string;
@@ -6,5 +8,5 @@ export interface GetUserToSwipeParameter {
     maxage: number;
     distance: number;
     popularity: number;
-    tagsInCommon: number;
+    prefTags: PrefTag[];
 }

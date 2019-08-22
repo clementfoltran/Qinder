@@ -1,3 +1,5 @@
+import { PrefTag } from 'src/app/preferences/services/get-preference-tags/get-preference-tags.return';
+
 export interface EnterViewHomeReturn {
   success: true;
   message: '';
@@ -20,5 +22,5 @@ export interface EnterViewHomeReturn {
   online: number;
   lastConnection: Date;
   pop: number;
-  tagsInCommon: number;
+  prefTags: PrefTag[];
 }

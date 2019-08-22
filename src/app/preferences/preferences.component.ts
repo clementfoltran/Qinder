@@ -29,6 +29,12 @@ import { SaveUserLastConnectionParameter } from '../home/services/save-last-conn
 import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
 import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
 import { SaveUserLastConnectionService } from '../home/services/save-last-connection/save-last-connection.service';
+import { GetPreferenceTagsService } from './services/get-preference-tags/get-preference-tags.service';
+import { GetPreferenceTagsReturn, PrefTag } from './services/get-preference-tags/get-preference-tags.return';
+import { AddPrefTagService } from './services/add-pref-tag/add-pref-tag.service';
+import { AddPrefTagReturn } from './services/add-pref-tag/add-pref-tag.return';
+import { RemovePrefTagService } from './services/remove-pref-tag/remove-pref-tag.service';
+import { RemovePrefTagReturn } from './services/remove-pref-tag/remove-pref-tag.return';
 
 declare var $: any;
 
@@ -94,6 +100,11 @@ export class PreferencesComponent implements OnInit {
    */
   public userTags: UserTag[] = [];
   /**
+   * User selected tags
+   *
+   */
+  public prefTags: PrefTag[] = [];
+  /**
    * User id
    *
    */
@@ -122,6 +133,16 @@ export class PreferencesComponent implements OnInit {
     return (find) ? true : false;
   }
 
+  isSelectedPrefTag(idTag: number) {
+    let find = false;
+    for (let i = 0; i < this.prefTags.length; i++) {
+      if (this.prefTags[i].id_tag === idTag) {
+        find = true;
+      }
+    }
+    return (find) ? true : false;
+  }
+
   addUserTag(tag: Tag) {
     this.addUserTagService.addUserTag({id_tag: tag.id_tag, id_user: this.userId})
       .subscribe((result: AddUserTagReturn) => {
@@ -137,11 +158,47 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
+  addPrefTag(tag: Tag) {
+    this.addPrefTagService.addPrefTag({id_tag: tag.id_tag, id_user: this.userId})
+      .subscribe((result: AddPrefTagReturn) => {
+        if (result.success) {
+          this.prefTags.push({
+            id_tpref: result.id_tpref,
+            id_tag: tag.id_tag,
+            id_user: this.userId,
+            tag: tag.tag
+          });
+        }
+      });
+  }
+
   removeUserTag(idTag: number) {
     this.removeUserTagService.removeUserTag(this.getUserTagId(idTag))
       .subscribe((result: RemoveUserTagReturn) => {
         if (result.success) {
           this.userTags.splice(this.getUserTagIndex(idTag), 1);
+        }
+      });
+  }
+
+  removePrefTag(idTag: number, index: number) {
+    let prefTagId: number;
+    let prefTagIndex: number;
+    
+    this.prefTags.forEach((v) => {
+      if (v.id_tag === idTag) {
+        prefTagId = v.id_tpref;
+      }
+    });
+    this.prefTags.forEach((v, i) => {
+      if (v.id_tag === idTag) {
+        prefTagIndex = i;
+      }
+    });
+    this.removePrefTagService.removePrefTag(prefTagId)
+      .subscribe((result: RemovePrefTagReturn) => {
+        if (result.success) {
+          this.prefTags.splice(prefTagIndex, 1);
         }
       });
   }
@@ -316,6 +373,15 @@ saveUserLastConnection(date) {
       });
   }
 
+  getUserTagsPref() {
+    this.getPreferenceTagsService.getPreferenceTags(this.userId)
+      .subscribe((result: GetPreferenceTagsReturn) => {
+        if (result.success) {
+          this.prefTags = result.prefTags;
+        }
+      });
+  }
+
   getUserTagId(idTag: number): number {
     for (let i = 0; i < this.userTags.length; i++) {
       if (this.userTags[i].id_tag === idTag) {
@@ -338,11 +404,14 @@ saveUserLastConnection(date) {
               public uploadPhotoService: UploadPhotoService,
               public deletePhotoService: DeletePhotoService,
               public addUserTagService: AddUserTagService,
+              public addPrefTagService: AddPrefTagService,
               public getTagsService: GetTagsService,
+              public getPreferenceTagsService: GetPreferenceTagsService,
               public removeUserTagService: RemoveUserTagService,
               public getUserTagsService: GetUserTagsService,
               public updatePreferencesService: UpdatePreferencesService,
               public getUserOnlineService: GetUserOnlineService,
+              public removePrefTagService: RemovePrefTagService,
               public saveUserLastConnectionService: SaveUserLastConnectionService,
               public fb: FormBuilder,
               public loginService: LoginService) {
@@ -358,7 +427,6 @@ saveUserLastConnection(date) {
     this.ageRange[0] = this.resolveData.minage;
     this.ageRange[1] = this.resolveData.maxage;
     this.popularity = this.resolveData.pop;
-    this.tagsInCommon = this.resolveData.tagsInCommon;
     this.distance = this.resolveData.distance;
     this.userId = this.resolveData.id;
     if (this.resolveData.bio) {
@@ -374,6 +442,7 @@ saveUserLastConnection(date) {
       this.resolveData = data.viewData;
     });
     this.initVariables();
+    this.getUserTagsPref();
     this.getUserTags();
   }
 }

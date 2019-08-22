@@ -140,6 +140,26 @@ exports.removeUserTag = (req, res) => {
   }
 };
 
+exports.removePrefTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'DELETE FROM tagpref WHERE id_tpref = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '' });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.addUserTag = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
@@ -160,6 +180,26 @@ exports.addUserTag = (req, res) => {
   }
 };
 
+exports.addPrefTag = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'INSERT INTO tagpref VALUES(id_tpref, ?, ?)';
+      const query = db.format(sql, [ req.body.id_tag, req.body.id_user ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Tag not found' });
+        } else {
+          res.json({ success: true, message: '', id_tpref: response.insertId });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
 exports.getUserTags  = (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
@@ -172,6 +212,26 @@ exports.getUserTags  = (req, res) => {
           res.json({ success: false, message: 'Network error' });
         } else {
           res.json({ success: true, message: '', userTags: response });
+        }
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  }
+};
+
+exports.getPreferenceTags  = (req, res) => {
+  if (!req.body) {
+    res.sendStatus(500);
+  } else {
+    if (res) {
+      const sql = 'SELECT tagpref.*, tag.label FROM tagpref INNER JOIN tag ON tagpref.id_tag = tag.id_tag WHERE id_user = ?';
+      let query = db.format(sql, [ req.params.id ]);
+      db.query(query, (err, response) => {
+        if (err) {
+          res.json({ success: false, message: 'Network error' });
+        } else {
+          res.json({ success: true, message: '', prefTags: response });
         }
       });
     } else {
@@ -331,7 +391,7 @@ exports.register = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql,
@@ -353,8 +413,7 @@ exports.register = (req, res) => {
         null,
         0,
         0,
-        100,
-        0
+        100
       ]);
       db.query(query, (err, response) => {
         if (err) {
