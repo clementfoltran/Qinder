@@ -422,6 +422,7 @@ exports.register = (req, res) => {
           res.json({
             success: true,
             message: 'Check your mailbox to confirm your account',
+            user_id: response.insertId
           });
         }
       });

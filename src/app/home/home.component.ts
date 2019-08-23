@@ -157,7 +157,9 @@ export class HomeComponent implements OnInit {
       navigator.geolocation.getCurrentPosition(position => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
+        if (latitude && longitude) {
+          this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
+        }
       }, error => {
         if (error) {
           this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {

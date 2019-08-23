@@ -183,6 +183,7 @@ export class LandingPageComponent implements OnInit {
       this.registerService.register(this.RegisterAPIParameter)
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
+            this.sendGeolocation(result.user_id);
             this.messageService.add({
               severity: 'success',
               summary: 'Register',
