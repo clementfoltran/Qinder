@@ -139,6 +139,8 @@ export class HomeComponent implements OnInit {
    */
   public prefTags: PrefTag[] = [];
   public userToSwipePopularity: number;
+  public userToSwipeOnline: number;
+  public userToSwipeLastConnected: Date;
   public userToSwipe: boolean;
   public nbMessages = 0;
 
@@ -241,12 +243,15 @@ export class HomeComponent implements OnInit {
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
       if (result.success) {
+        console.log('result = ', result);
         this.userToSwipe = true;
         this.getUserPhotos(result.id);
         this.userToSwipeName = result.firstname;
         this.userToSwipeBio = result.bio;
         this.userToSwipeId = result.id;
         this.userToSwipePopularity = result.popularity;
+        this.userToSwipeOnline = result.online;
+        this.userToSwipeLastConnected = result.lastConnected;
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;

@@ -33,7 +33,7 @@ exports.randomUser = async (req, res) => {
           res.json({ success: false, message: 'Failed to retrieve randomuser' });
         } else {
           if (res) {
-            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)';
+            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)';
             let index = response.body.results[0];
             const position = {
               latitude: Math.random() * (+50 - +48) + +48,
@@ -50,7 +50,7 @@ exports.randomUser = async (req, res) => {
               null, null, null, null, null, 1,
               Math.random() * (+100 - +1) + +1,
               JSON.stringify(position),
-              0, 100, 6
+              0, 100
             ]);
             db.query(query, (err, response) => {
               if (err) {
