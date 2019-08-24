@@ -112,7 +112,7 @@ export class SettingsComponent implements OnInit {
   }
   updatePassword() {
     if (this.changePasswordForm.valid) {
-      if (/^[a-zA-Z0-9]+$/.test(this.changePasswordForm.get('newPassword').value)) {
+      if (/^[a-zA-Z0-9]+$/.test(this.changePasswordForm.get('newPassword').value) && (this.changePasswordForm.get('newPassword').value.length > 8)) { }) {
         this.UpdatePasswordAPIParameter = {
           currentPassword: this.changePasswordForm.get('currentPassword').value,
           newPassword: this.changePasswordForm.get('newPassword').value,
