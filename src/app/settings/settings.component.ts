@@ -58,19 +58,35 @@ export class SettingsComponent implements OnInit {
 
   updateEmail() {
     if (this.changeEmailForm.valid) {
-      this.UpdateEmailAPIParameter = {
-        newEmail: this.changeEmailForm.get('newEmail').value,
-        idUser: this.resolvedData.id
-      };
+      // tslint:disable-next-line: max-line-length
+      const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(this.changeEmailForm.get('newEmail').value)) {
+        this.UpdateEmailAPIParameter = {
+          newEmail: this.changeEmailForm.get('newEmail').value,
+          idUser: this.resolvedData.id
+        };
+        this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
+        .subscribe((result: UpdateEmailReturn) => {
+          if (result.success) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Your email address has been updated :)',
+              life: 6000
+            });
+          } else {
+            console.log(result.message);
+          }
+        });
+      } else {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Incorrect email format',
+          detail: 'Please enter a valid email address',
+          life: 6000
+        });
+      }
     }
-    this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
-      .subscribe((result: UpdateEmailReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
   }
   updateName() {
     if (this.changeNameForm.valid) {
@@ -83,7 +99,12 @@ export class SettingsComponent implements OnInit {
     this.updateNameService.updateName(this.UpdateNameAPIParameter)
         .subscribe((result: UpdateNameReturn) => {
           if (result.success) {
-            console.log(result.message);
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: 'Your name has been changed :)',
+              life: 6000
+            });
           } else {
             console.log(result.message);
           }
@@ -91,36 +112,45 @@ export class SettingsComponent implements OnInit {
   }
   updatePassword() {
     if (this.changePasswordForm.valid) {
-      this.UpdatePasswordAPIParameter = {
-        currentPassword: this.changePasswordForm.get('currentPassword').value,
-        newPassword: this.changePasswordForm.get('newPassword').value,
-        newPasswordConfirmation: this.changePasswordForm.get('newPasswordConfirmation').value,
-        idUser: this.resolvedData.id
-      };
-      if (this.changePasswordForm.get('newPassword').value === this.changePasswordForm.get('newPasswordConfirmation').value) {
-        this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)
-          .subscribe((result: UpdatePasswordReturn) => {
-            if (result.success) {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Security',
-                detail: result.message,
-                life: 6000
-              });
-            } else {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Security',
-                detail: result.message,
-                life: 6000
-              });
-            }
+      if (/^[a-zA-Z0-9]+$/.test(this.changePasswordForm.get('newPassword').value)) {
+        this.UpdatePasswordAPIParameter = {
+          currentPassword: this.changePasswordForm.get('currentPassword').value,
+          newPassword: this.changePasswordForm.get('newPassword').value,
+          newPasswordConfirmation: this.changePasswordForm.get('newPasswordConfirmation').value,
+          idUser: this.resolvedData.id
+        };
+        if (this.changePasswordForm.get('newPassword').value === this.changePasswordForm.get('newPasswordConfirmation').value) {
+          this.updatePasswordService.updatePassword(this.UpdatePasswordAPIParameter)
+            .subscribe((result: UpdatePasswordReturn) => {
+              if (result.success) {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Success',
+                  detail: result.message,
+                  life: 6000
+                });
+              } else {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Oops',
+                  detail: result.message,
+                  life: 6000
+                });
+              }
+            });
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Security',
+            detail: 'Passwords don\'t match',
+            life: 6000
           });
+        }
       } else {
         this.messageService.add({
-          severity: 'error',
-          summary: 'Security',
-          detail: 'Passwords don\'t match',
+          severity: 'warn',
+          summary: 'Incorrect password format',
+          detail: 'Please enter a password containing at least one number and 8 characters',
           life: 6000
         });
       }
