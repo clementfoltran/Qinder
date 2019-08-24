@@ -412,7 +412,7 @@ exports.register = (req, res) => {
         100,
         null,
         0,
-        0,
+        null,
         100
       ]);
       db.query(query, (err, response) => {

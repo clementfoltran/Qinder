@@ -154,15 +154,15 @@ export class HomeComponent implements OnInit {
 
   async getUserPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
+      await navigator.geolocation.getCurrentPosition(position => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         if (latitude && longitude) {
           this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
         }
-      }, error => {
+      }, async error => {
         if (error) {
-          this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
+          await this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
             if (result.lat) {
               const latitude = result.lat;
               const longitude = result.lon;
@@ -250,11 +250,13 @@ export class HomeComponent implements OnInit {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
-        const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
-        this.userToSwipeDistance = Math.floor(Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
-          this.userCurrentPosition,
-          userToSwipePos
-        )) / 1000);
+        if (result.position.latitude && result.position.longitude && this.userCurrentPosition) {
+          const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
+          this.userToSwipeDistance = Math.floor(Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
+            this.userCurrentPosition,
+            userToSwipePos
+          )) / 1000);
+        }
         if (this.userToSwipeDistance > this.distance) {
           this.userToSwipe = false;
           this.swipe(false);

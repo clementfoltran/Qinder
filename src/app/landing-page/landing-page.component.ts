@@ -33,6 +33,7 @@ import { SaveNewPasswordReturn } from './services/save-new-password/save-new-pas
 import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
 import { IpLocationService } from './services/ip-location/ip-location.service';
 import { IpLocationReturn } from './services/ip-location/ip-location.return';
+import { FacebookAuthService } from './services/facebook-auth/facebook-auth.service';
 
 declare var $: any;
 
@@ -347,6 +348,10 @@ export class LandingPageComponent implements OnInit {
         });
     }
 
+    facebookAuth() {
+      this.facebookAuthService.facebookAuth().subscribe();
+    }
+
     constructor(private route: ActivatedRoute,
                 public fb: FormBuilder,
                 public router: Router,
@@ -361,6 +366,7 @@ export class LandingPageComponent implements OnInit {
                 public resetPasswordService: ResetPasswordService,
                 public checkKeyService: CheckKeyService,
                 public ipLocationService: IpLocationService,
+                public facebookAuthService: FacebookAuthService,
                 public saveNewPasswordService: SaveNewPasswordService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],

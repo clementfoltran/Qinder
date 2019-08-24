@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy} from '@angular/core';
 import {EnterViewHomeReturn} from '../home/services/enter-view-home/enter-view-home-return';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UpdatePreferencesParameter} from '../home/services/update-preferences/update-preferences-parameter';
@@ -35,6 +35,7 @@ import { AddPrefTagService } from './services/add-pref-tag/add-pref-tag.service'
 import { AddPrefTagReturn } from './services/add-pref-tag/add-pref-tag.return';
 import { RemovePrefTagService } from './services/remove-pref-tag/remove-pref-tag.service';
 import { RemovePrefTagReturn } from './services/remove-pref-tag/remove-pref-tag.return';
+import { HomeComponent } from '../home/home.component';
 
 declare var $: any;
 
