@@ -243,7 +243,6 @@ export class HomeComponent implements OnInit {
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
       if (result.success) {
-        console.log('result = ', result);
         this.userToSwipe = true;
         this.getUserPhotos(result.id);
         this.userToSwipeName = result.firstname;
