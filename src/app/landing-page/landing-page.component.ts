@@ -175,45 +175,63 @@ export class LandingPageComponent implements OnInit {
   }
   register() {
     if (this.registerForm.valid) {
-      const key = this.generateId(80);
-      this.RegisterAPIParameter = {
-        firstname: this.registerForm.get('firstname').value,
-        lastname: this.registerForm.get('lastname').value,
-        email: this.registerForm.get('email').value,
-        birthdate: this.registerForm.get('birthdate').value.toISOString().slice(0, 10),
-        password: this.registerForm.get('password').value,
-        passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
-        gender: this.registerForm.get('gender').value,
-        key
-      };
-      this.MailAPIParameter = {
-        firstname: this.registerForm.get('firstname').value,
-        email: this.registerForm.get('email').value,
-        key
-      };
-      this.registerService.register(this.RegisterAPIParameter)
-        .subscribe((result: RegisterReturn) => {
-          if (result.success) {
-            this.sendGeolocation(result.user_id);
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Register',
-              detail: result.message,
-              life: 6000
+      if (this.checkPassword(this.registerForm.get('password').value)) {
+        if (this.checkEmail(this.registerForm.get('email').value)) {
+          const key = this.generateId(80);
+          this.RegisterAPIParameter = {
+            firstname: this.registerForm.get('firstname').value,
+            lastname: this.registerForm.get('lastname').value,
+            email: this.registerForm.get('email').value,
+            birthdate: this.registerForm.get('birthdate').value.toISOString().slice(0, 10),
+            password: this.registerForm.get('password').value,
+            passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
+            gender: this.registerForm.get('gender').value,
+            key
+          };
+          this.MailAPIParameter = {
+            firstname: this.registerForm.get('firstname').value,
+            email: this.registerForm.get('email').value,
+            key
+          };
+          this.registerService.register(this.RegisterAPIParameter)
+            .subscribe((result: RegisterReturn) => {
+              if (result.success) {
+                this.sendGeolocation(result.user_id);
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Register',
+                  detail: result.message,
+                  life: 6000
+                });
+                $('#modRegister').modal('hide');
+              } else {
+                console.log(result.message);
+              }
             });
-            $('#modRegister').modal('hide');
-          } else {
-            console.log(result.message);
-          }
-        });
-      this.mailService.sendMail(this.MailAPIParameter)
-      .subscribe((result: MailReturn) => {
-        if (result.success) {
-          console.log('success: ', result);
+          this.mailService.sendMail(this.MailAPIParameter)
+          .subscribe((result: MailReturn) => {
+            if (result.success) {
+              console.log('success: ', result);
+            } else {
+              console.log('fail: ', result);
+            }
+          });
         } else {
-          console.log('fail: ', result);
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Incorrect email format',
+            detail: 'Please enter a valid email address',
+            life: 6000
+          });
         }
-      });
+      } else {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Incorrect password format',
+          detail: 'Please enter a password containing at least one number and 8 characters',
+          life: 6000
+        });
+      }
     } else {
       this.messageService.add({
         severity: 'warn',
