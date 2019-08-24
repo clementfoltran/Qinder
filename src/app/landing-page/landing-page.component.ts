@@ -318,26 +318,35 @@ export class LandingPageComponent implements OnInit {
   saveNewPassword() {
     if (this.resetPasswordForm.valid &&
        (this.resetPasswordForm.get('newPassword').value === this.resetPasswordForm.get('newPasswordConfirmation').value)) {
-      this.SaveNewPasswordAPIParameter = {
-        email: this.activatedRoute.snapshot.paramMap.get('email'),
-        newPassword: this.resetPasswordForm.get('newPassword').value,
-      };
-      this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
-        .subscribe((result: SaveNewPasswordReturn) => {
-          if (result.success) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Welcome',
-              detail: 'Password updated! You can now login :)',
-              life: 6000
+         if (this.checkPassword(this.resetPasswordForm.get('newPassword').value)) {
+          this.SaveNewPasswordAPIParameter = {
+            email: this.activatedRoute.snapshot.paramMap.get('email'),
+            newPassword: this.resetPasswordForm.get('newPassword').value,
+          };
+          this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
+            .subscribe((result: SaveNewPasswordReturn) => {
+              if (result.success) {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Welcome',
+                  detail: 'Password updated! You can now login :)',
+                  life: 6000
+                });
+                $('#modResetPwd').modal('hide');
+                this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
+                $('#modSignIn').modal('show');
+              } else {
+                console.log(result.message);
+              }
             });
-            $('#modResetPwd').modal('hide');
-            this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
-            $('#modSignIn').modal('show');
-          } else {
-            console.log(result.message);
-          }
-        });
+         } else {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Incorrect password format',
+            detail: 'Please enter a password containing at least one number and 8 characters',
+            life: 6000
+          });
+         }
     }
   }
 
