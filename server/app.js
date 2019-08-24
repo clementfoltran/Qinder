@@ -1,6 +1,5 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
-const port = 8000;
 
 // SOCKET.IO
 let http = require('http').Server(app);
@@ -19,17 +18,23 @@ const notification = require('./notification.js');
 const generator = require('./generator.js')
 const resetPassword = require('./resetPassword.js')
 const jwt = require('jsonwebtoken');
+const passport          =     require('passport');
+const FacebookStrategy  =     require('passport-facebook').Strategy;
+const config = require('./oauth.config.js')
+const db = require('./database.js')
 
 const secret = 'qsdjS12ozehdoIJ123DJOZJLDSCqsdeffdg123ER56SDFZedhWXojqshduzaohduihqsDAqsdq';
 let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(bodyParser.json({limit: '10mb', extended: true}));
-
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type, authorization');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   next();
 });
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Check the request
 const checkUserToken = (req, res, next) => {
@@ -43,6 +48,58 @@ const checkUserToken = (req, res, next) => {
   jwt.verify(token, secret);
   next();
 };
+
+// OAuth 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+passport.use(new FacebookStrategy({
+  clientID: config.facebook_api_key,
+  clientSecret: config.facebook_api_secret,
+  callbackURL: config.callback_url,
+  profileFields: config.profileFields
+}, (accessToken, refreshToken, profile, done) => {
+  process.nextTick(() => {
+    let sql = 'SELECT * FROM oauth WHERE id_facebook = ?';
+    let query = db.format(sql, [profile.id ]);
+    db.query(query, (err, response) => {
+      if (err) throw err;
+      if (response && response.length === 0) {
+        let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        let query = db.format(sql, [ 
+          profile._json.first_name, profile._json.last_name, profile._json.email, null, profile._json.gender,
+          profile._json.birthdate, 'Both', null, 20, 18, 60, null, 1, 100, null, 0, null, 0
+        ]);
+        db.query(query, (err, response) => {
+          if (err) throw err;
+          else {
+            const userId = response.insertId;
+            sql = 'INSERT INTO oauth VALUES(id_oauth, ?, ?)'
+            query = db.format(sql, [+profile.id, userId ]);
+            db.query(query, (err) => {
+              if (err) throw err;
+            });
+          }
+        });
+      }
+    });
+    return done(null, profile);
+  });
+}));
+app.get('/auth/facebook', passport.authenticate('facebook'), (req, res) => {
+  console.log(res);
+});
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook'), urlencodedParser, (req, res) => {
+    console.log(res);
+    res.json({success: true});
+  }
+);
 
 // POST routes
 app.post('/login', urlencodedParser, user.login);
