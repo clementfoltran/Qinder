@@ -164,7 +164,7 @@ export class LandingPageComponent implements OnInit {
   }
 
   checkPassword(password) {
-    if (/^[a-zA-Z0-9]+$/.test(this.registerForm.get('password').value) && (this.registerForm.get('password').value.length > 8)) {
+    if (/^[a-z][a-z0-9]+$/.test(this.registerForm.get('password').value) && (this.registerForm.get('password').value.length > 8)) {
       return(1);
     }
   }
