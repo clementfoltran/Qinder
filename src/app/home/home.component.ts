@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
   public distance: number;
   /**
 
-  * UserPhotos tab
+   * UserPhotos tab
    *
    */
   public userPhotos: Photo[];
@@ -384,7 +384,7 @@ export class HomeComponent implements OnInit {
   }
 
   progressToTheHeavens() {
-    this.progressBarValue = this.progressBarValue + 44; // 12 is good
+    this.progressBarValue = this.progressBarValue + 12; // 12 is good
   }
 
   showMeTheHeavens() {
