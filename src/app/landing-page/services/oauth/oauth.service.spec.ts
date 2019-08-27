@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FacebookAuthService } from './facebook-auth.service';
+import { OauthService } from './oauth.service';
 
-describe('FacebookAuthService', () => {
+describe('OauthService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: FacebookAuthService = TestBed.get(FacebookAuthService);
+    const service: OauthService = TestBed.get(OauthService);
     expect(service).toBeTruthy();
   });
 });

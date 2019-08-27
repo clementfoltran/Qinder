@@ -180,21 +180,21 @@
   <!-- Menu -->
   <nav class="fixed-bottom">
     <ul class="p-0 m-0 row text-center w-100">
-      <li class="navitem w-30">
-        <a class="navlink" data-toggle="modal" data-target="#modChat">
+      <li class="navitem" data-toggle="modal" data-target="#modChat">
+        <a class="navlink">
           <i class="fas fa-comments"></i>
           <span *ngIf="nbMessages > 0" class="badge badge-light" style="font-size: 12px">
             {{ nbMessages }}
           </span>
         </a>
       </li>
-      <li class="navitem w-30">
-        <a class="navlink" data-toggle="modal" data-target="#modSignIn">
+      <li class="navitem" data-toggle="modal" data-target="#modSignIn">
+        <a class="navlink">
           <i class="fas fa-user"></i>
         </a>
       </li>
-      <li class="navitem w-30">
-        <a class="navlink" data-toggle="modal" data-target="#modNotif">
+      <li class="navitem" data-toggle="modal" data-target="#modNotif">
+        <a class="navlink">
           <i class="fas fa-bell"></i>
           <span *ngIf="notifications.length > 0" class="badge badge-light" style="font-size: 12px">
             {{ notifications.length }}

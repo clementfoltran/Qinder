@@ -308,7 +308,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
- async getTheHeavens() {
+async getTheHeavens() {
     const APIParameter: GetTheHeavensParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
@@ -479,10 +479,10 @@ export class HomeComponent implements OnInit {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
+    this.getUserPosition();
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.distance = this.resolveData.distance;
-    this.getUserPosition();
     this.getUserToSwipe();
     this.getUserOnline(1);
 
