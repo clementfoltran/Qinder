@@ -39,6 +39,19 @@ import { GetNotificationsService } from './notifications/services/get-notificati
 import { PopulateComponent } from './populate/populate.component';
 import { PopulateService } from './populate/services/populate.service';
 import { LastConnectedTimeFormatPipe } from './pipes/last-connection.pipe';
+import { AuthServiceConfig, AuthService, LoginOpt } from "angularx-social-login";
+import { FacebookLoginProvider } from "angularx-social-login";
+
+let config = new AuthServiceConfig([
+  {
+    id: FacebookLoginProvider.PROVIDER_ID,
+    provider: new FacebookLoginProvider("412626469601871"),
+  }
+]);
+
+export function provideConfig() {
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -89,6 +102,11 @@ import { LastConnectedTimeFormatPipe } from './pipes/last-connection.pipe';
     GetUserToSwipeService,
     GetNotificationsService,
     PopulateService,
+    AuthService,
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
   ],
   bootstrap: [AppComponent]
 })

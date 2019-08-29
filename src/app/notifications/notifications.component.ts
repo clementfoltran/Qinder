@@ -32,15 +32,6 @@ export class NotificationsComponent implements OnInit {
           this.notifications.splice(index, 1);
         }
       });
-    this.scrollMessages();
-
-  }
-
-  scrollMessages() {
-    setTimeout(function() {
-      const div = document.getElementById('contentArea');
-      div.scrollTop = div.scrollHeight - div.clientHeight;
-     }, 25);
   }
 
   constructor(public getNotificationService: GetNotificationsService,
@@ -50,8 +41,6 @@ export class NotificationsComponent implements OnInit {
 
   ngOnInit() {
     this.notifications = this.socketNotificationsService.notifications;
-    this.scrollMessages();
-
   }
 
 }

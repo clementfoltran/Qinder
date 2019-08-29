@@ -22,6 +22,5 @@ export interface EnterViewHomeReturn {
   online: number;
   lastConnection: Date;
   pop: number;
-  tagsInCommon: number;
   prefTags: PrefTag[];
 }

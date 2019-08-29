@@ -3,8 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'lastConnectedFormat' })
 
 export class LastConnectedTimeFormatPipe implements PipeTransform {
-    transform(connectedTime: string, ...args): string {
-        console.log('connectedTime = ', connectedTime);
+    transform(connectedTime: Date, ...args): string {
         let elapsed = (Date.now() - +new Date(connectedTime)) / 60000;
         let time = '';
 

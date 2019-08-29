@@ -74,36 +74,35 @@ exports.getUserToSwipe = (req, res) => {
           prefTags += ' OR ';
         }
       }
-      console.log(prefTags);
       if (req.body.interest === 'Both') {
         // ADD DISTANCE CHECK
         sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
-        AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND id_user = user.id_user ) \
+        AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
+        AND EXISTS(SELECT null FROM PHOTO WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
-        AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
+        LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           maxAge,
           minAge,
           req.body.popularity,
-          req.body.tagsInCommon
         ]);
       } else {
         sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
-        AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND id_user = user.id_user ) \
+        AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
+        AND EXISTS(SELECT null FROM PHOTO WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        AND user.gender = ? AND popularity BETWEEN 0 AND ? AND tagsInCommon BETWEEN 0 AND ? LIMIT 1';
+        AND user.gender = ? AND popularity BETWEEN 0 AND ? LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           maxAge,
           minAge,
           req.body.interest,
           req.body.popularity,
-          req.body.tagsInCommon
         ]);
       }
       db.query(query, (err, response) => {

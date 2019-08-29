@@ -20,7 +20,7 @@ export class SocketNotificationsService {
   /**
    * Number of messages notifications
    */
-  public nbMessages: number = 0;
+  public nbMessages = 0;
   public socket;
 
   constructor(public messageService: MessageService,

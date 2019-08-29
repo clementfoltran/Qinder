@@ -8,6 +8,5 @@ export interface GetUserToSwipeParameter {
     maxage: number;
     distance: number;
     popularity: number;
-    tagsInCommon: number;
     prefTags: PrefTag[];
 }

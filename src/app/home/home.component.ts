@@ -134,11 +134,11 @@ export class HomeComponent implements OnInit {
    */
   public notifications: Notification[];
   /**
-   * 
+   *
    * Get preference tags of user
    */
   public prefTags: PrefTag[] = [];
-  public userToSwipePopularity: number; 
+  public userToSwipePopularity: number;
   public userToSwipe: boolean;
   public nbMessages = 0;
 
@@ -147,18 +147,22 @@ export class HomeComponent implements OnInit {
   public heavensClicked = 0;
   public interval: any;
 
+  public profileComplete = 0;
+
   public APIParameterGetUserOnline: GetUserOnlineParameter;
   public APIParameterSaveUserLastConnection: SaveUserLastConnectionParameter;
 
   async getUserPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
+      await navigator.geolocation.getCurrentPosition(position => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
-      }, error => {
+        if (latitude && longitude) {
+          this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
+        }
+      }, async error => {
         if (error) {
-          this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
+          await this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
             if (result.lat) {
               const latitude = result.lat;
               const longitude = result.lon;
@@ -178,6 +182,9 @@ export class HomeComponent implements OnInit {
           if (this.userPhotos.length > 0) {
             localStorage.setItem('user-img', this.userPhotos[0].photo);
             this.userPicture = this.userPhotos[0].photo;
+            this.profileComplete = 1;
+          } else {
+            this.profileComplete = 0;
           }
         } else {
           this.messageService.add({
@@ -221,7 +228,7 @@ export class HomeComponent implements OnInit {
 
   async getUserToSwipe() {
     this.userToSwipe = false;
-    console.log(this.prefTags);
+    console.log(this.userCurrentPosition);
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
@@ -230,8 +237,8 @@ export class HomeComponent implements OnInit {
       maxage: this.resolveData.maxage,
       distance: this.resolveData.distance,
       popularity: this.resolveData.pop,
-      tagsInCommon: this.resolveData.tagsInCommon,
-      prefTags: this.resolveData.prefTags
+      prefTags: this.resolveData.prefTags,
+      
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe((result: GetUserToSwipeReturn) => {
@@ -245,16 +252,17 @@ export class HomeComponent implements OnInit {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
-        const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
-        this.userToSwipeDistance = Math.floor(Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
-          this.userCurrentPosition,
-          userToSwipePos
-        )) / 1000);
+        if (result.position.latitude && result.position.longitude && this.userCurrentPosition) {
+          const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
+          this.userToSwipeDistance = Math.floor(Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
+            this.userCurrentPosition,
+            userToSwipePos
+          )) / 1000);
+        }
         if (this.userToSwipeDistance > this.distance) {
           this.userToSwipe = false;
           this.swipe(false);
           setTimeout(() => {
-            console.log('get user to swipe');
             this.getUserToSwipe();
           }, 3000);
         }
@@ -289,6 +297,7 @@ export class HomeComponent implements OnInit {
           }
           this.getUserToSwipe();
           if (result.match) {
+            this.chatComponent.loadMatches();
             $('.match').show();
             setTimeout(() => {
                 $('.match').hide();
@@ -301,7 +310,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async getTheHeavens() {
+async getTheHeavens() {
     const APIParameter: GetTheHeavensParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
@@ -399,7 +408,7 @@ export class HomeComponent implements OnInit {
     if (slider.classList.contains('opened')) {
       slider.classList.remove('opened');
       slider.classList.add('closed');
-      // load data
+  3;    // load data
       this.chatComponent.loadMatches();
     } else {
         slider.classList.remove('closed');
@@ -452,7 +461,7 @@ export class HomeComponent implements OnInit {
     const APIParameter: ReportUserNotMatchedParameter = {
       id_user: +localStorage.getItem('userId'),
       id_user_: this.userToSwipeId
-    }
+    };
     this.reportUserNotMatchedService.reportUserNotMatched(APIParameter)
       .subscribe((result: ReportUserNotMatchedReturn) => {
         if (result.success) {
@@ -472,10 +481,10 @@ export class HomeComponent implements OnInit {
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
+    this.getUserPosition();
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.distance = this.resolveData.distance;
-    this.getUserPosition();
     this.getUserToSwipe();
     this.getUserOnline(1);
 

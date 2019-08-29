@@ -345,31 +345,40 @@ exports.getUserPhotos = (req, res) => {
 exports.login = (req, res) => {
   if (req.body) {
     const password = req.body.password;
-    const sql = "SELECT hash, id_user, confirm FROM user WHERE email LIKE ?";
+    const sql = "SELECT hash, id_user, confirm FROM user WHERE email = ?";
     const query = db.format(sql, [req.body.email]);
     db.query(query, (err, response) => {
-      const hash = response[0].hash;
-      const confirm = response[0].confirm;
+      console.log(response);
       if (err) {
         res.json({
           message: 'Cannot find user with this email address',
           success: false,
         });
-      } else if (passwordHash.verify(password, hash) && confirm === 1) {
-        const myToken = jwt.sign({
-          iss: 'https://qinder.com',
-          user: 'Clément',
-          scope: 'user'
-        }, secret);
-        res.json({
-          user_id: response[0].id_user,
-          token: myToken,
-          message: 'Successfully logged user',
-          success: true,
-        });
+      }
+      if (response.length != 0) {
+          const hash = response[0].hash;
+          const confirm = response[0].confirm;
+          if (passwordHash.verify(password, hash) && confirm === 1) {
+            const myToken = jwt.sign({
+              iss: 'https://qinder.com',
+              user: 'Clément',
+              scope: 'user'
+            }, secret);
+            res.json({
+              user_id: response[0].id_user,
+              token: myToken,
+              message: 'Successfully logged user',
+              success: true,
+            });
+          } else {
+            res.json({
+              message: 'Wrong password',
+              success: false,
+            });
+          }
       } else {
         res.json({
-          message: 'Wrong password',
+          message: 'Cannot find user with this email address',
           success: false,
         });
       }
@@ -382,7 +391,7 @@ exports.register = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql,
@@ -403,9 +412,8 @@ exports.register = (req, res) => {
         100,
         null,
         0,
-        0,
-        100,
-        0
+        null,
+        100
       ]);
       db.query(query, (err, response) => {
         if (err) {
@@ -414,6 +422,7 @@ exports.register = (req, res) => {
           res.json({
             success: true,
             message: 'Check your mailbox to confirm your account',
+            user_id: response.insertId
           });
         }
       });

@@ -33,6 +33,9 @@ import { SaveNewPasswordReturn } from './services/save-new-password/save-new-pas
 import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
 import { IpLocationService } from './services/ip-location/ip-location.service';
 import { IpLocationReturn } from './services/ip-location/ip-location.return';
+import { AuthService, FacebookLoginProvider, SocialUser, LoginOpt } from 'angularx-social-login';
+import { OauthService } from './services/oauth/oauth.service';
+import { OauthParameter } from './services/oauth/oauth.parameter';
 
 declare var $: any;
 
@@ -183,6 +186,7 @@ export class LandingPageComponent implements OnInit {
       this.registerService.register(this.RegisterAPIParameter)
         .subscribe((result: RegisterReturn) => {
           if (result.success) {
+            this.sendGeolocation(result.user_id);
             this.messageService.add({
               severity: 'success',
               summary: 'Register',
@@ -255,6 +259,7 @@ export class LandingPageComponent implements OnInit {
               detail: 'Check your mail to reset your password :)',
               life: 6000
             });
+            $('#modSignIn').modal('hide');
             this.forgotModeVar = 0;
           } else {
             console.log(result.message);
@@ -302,6 +307,7 @@ export class LandingPageComponent implements OnInit {
             });
             $('#modResetPwd').modal('hide');
             this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
+            $('#modSignIn').modal('show');
           } else {
             console.log(result.message);
           }
@@ -344,6 +350,8 @@ export class LandingPageComponent implements OnInit {
         });
     }
 
+    
+
     constructor(private route: ActivatedRoute,
                 public fb: FormBuilder,
                 public router: Router,
@@ -358,6 +366,8 @@ export class LandingPageComponent implements OnInit {
                 public resetPasswordService: ResetPasswordService,
                 public checkKeyService: CheckKeyService,
                 public ipLocationService: IpLocationService,
+                private authService: AuthService,
+                public oauthService: OauthService,
                 public saveNewPasswordService: SaveNewPasswordService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
@@ -393,6 +403,44 @@ export class LandingPageComponent implements OnInit {
       this.paramKey = params.key;
     });
   }
+
+  signInWithFB(): void {
+    const fbLoginOptions: LoginOpt = {
+      scope: 'user_birthday',
+      return_scopes: true,
+      enable_profile_selector: true
+    }; 
+    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions)
+    .then((result: SocialUser) => {
+      try {
+        console.log(result);
+        if (result.id) {
+          const APIParameter: OauthParameter = {
+            id_facebook: +result.id,
+            firstname: result.firstName,
+            lastname: result.lastName,
+            email: result.email,
+            gender: 'Female',
+            birthdate: new Date()
+          }
+          this.oauthService.oauth(APIParameter)
+            .subscribe((result) => {
+              if (result.success) {
+                localStorage.setItem('token', result.token);
+                localStorage.setItem('userId', result.id_user.toString());
+                this.getUserOnline(1);
+                this.sendGeolocation(result.id_user);
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
+                this.router.navigate(['/home']);
+              }
+            });
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  } 
 
   ngOnInit() {
     if (this.router.url.split('/')[1] === 'activate' &&
