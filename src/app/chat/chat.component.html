@@ -1,4 +1,4 @@
-<div *ngIf="!matchesObject;">
+<div *ngIf="!matchesObjects;">
   <div class="row">
     <div *ngFor="let match of matchesObjects">
       <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;">
