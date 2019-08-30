@@ -24,7 +24,6 @@ export class PopulateComponent implements OnInit {
           if (result.success) {
             this.resolvePopulate = result;
             this.photoUrl = result.photoUrl;
-            console.log(index);
             $('.progress-bar').css({
               width: Math.floor((index / this.nbUser) * 100) + '%'
             });

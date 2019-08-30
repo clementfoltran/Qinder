@@ -27,6 +27,7 @@ app.use(bodyParser.json({limit: '10mb', extended: true}));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type, authorization');
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
 

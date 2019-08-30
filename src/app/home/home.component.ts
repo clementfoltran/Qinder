@@ -228,7 +228,6 @@ export class HomeComponent implements OnInit {
 
   async getUserToSwipe() {
     this.userToSwipe = false;
-    console.log(this.userCurrentPosition);
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
@@ -432,14 +431,7 @@ async getTheHeavens() {
       userId: +localStorage.getItem('userId'),
       online
     };
-    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
-      .subscribe((result: GetUserOnlineReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline).subscribe();
   }
 
   saveUserLastConnection(date) {
@@ -447,14 +439,7 @@ async getTheHeavens() {
         userId: +localStorage.getItem('userId'),
         date
       };
-    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
-      .subscribe((result: SaveUserLastConnectionReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection).subscribe();
   }
 
   reportUser() {

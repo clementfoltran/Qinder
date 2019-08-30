@@ -63,14 +63,7 @@ export class SettingsComponent implements OnInit {
         idUser: this.resolvedData.id
       };
     }
-    this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter)
-      .subscribe((result: UpdateEmailReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+    this.updateEmailService.updateEmail(this.UpdateEmailAPIParameter).subscribe();
   }
   updateName() {
     if (this.changeNameForm.valid) {
@@ -80,14 +73,7 @@ export class SettingsComponent implements OnInit {
         idUser: this.resolvedData.id
       };
     }
-    this.updateNameService.updateName(this.UpdateNameAPIParameter)
-        .subscribe((result: UpdateNameReturn) => {
-          if (result.success) {
-            console.log(result.message);
-          } else {
-            console.log(result.message);
-          }
-        });
+    this.updateNameService.updateName(this.UpdateNameAPIParameter).subscribe();
   }
   updatePassword() {
     if (this.changePasswordForm.valid) {
