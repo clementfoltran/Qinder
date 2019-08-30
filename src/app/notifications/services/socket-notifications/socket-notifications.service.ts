@@ -95,7 +95,7 @@ export class SocketNotificationsService {
 
   connect() {
     try {
-      this.socket = io.connect('http://localhost:5000');
+    this.socket = io.connect('https://apiqinder.cf/socket-notif');
       this.socket.on('receive notifications', this.receive);
       console.log('soket listening on port 5000');
     } catch (e) {

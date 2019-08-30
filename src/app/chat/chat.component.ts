@@ -339,7 +339,7 @@ export class ChatComponent implements OnInit {
     this.id = parseInt(localStorage.getItem('userId'), 10);
     this.loadMatches();
     try {
-      this.socket = io.connect('http://localhost:3000');
+      this.socket = io.connect('https://apiqinder.cf/socket-chat');
       this.socket.on('receive message', this.receive);
     } catch (e) {
         console.log('Could not connect socket.io');
