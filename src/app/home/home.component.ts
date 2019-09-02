@@ -240,7 +240,7 @@ export class HomeComponent implements OnInit {
       
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
-    .subscribe((result: GetUserToSwipeReturn) => {
+    .subscribe(async (result: GetUserToSwipeReturn) => {
       if (result.success) {
         this.userToSwipe = true;
         this.getUserPhotos(result.id);
@@ -251,9 +251,9 @@ export class HomeComponent implements OnInit {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
-        if (result.position.latitude && result.position.longitude && this.userCurrentPosition) {
+        if (this.userCurrentPosition)   {
           const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
-          this.userToSwipeDistance = Math.floor(Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
+          this.userToSwipeDistance = Math.floor(Math.round(await +google.maps.geometry.spherical.computeDistanceBetween(
             this.userCurrentPosition,
             userToSwipePos
           )) / 1000);
@@ -373,11 +373,11 @@ async getTheHeavens() {
   }
 
   displayTheHeavens() {
-      anime({
-        targets: '.card',
-        opacity: 1,
-        duration: 5000
-      });
+    anime({
+      targets: '.card',
+      opacity: 1,
+      duration: 5000
+    });
   }
 
   progressToTheHeavens() {
@@ -461,18 +461,15 @@ async getTheHeavens() {
       });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.socketNotificationService.connect();
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
-    this.getUserPosition();
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.distance = this.resolveData.distance;
-    this.getUserToSwipe();
     this.getUserOnline(1);
-
     // when the user leaves
     window.addEventListener('unload', (event) => {
       const date = new Date();
@@ -480,6 +477,13 @@ async getTheHeavens() {
       this.saveUserLastConnection(date);
     });
     this.notifications = this.socketNotificationService.notifications;
+    try {
+      await this.getUserPosition();
+    } catch (err) {
+      throw err;
+    } finally {
+      await this.getUserToSwipe();
+    }
     // this.nbMessages = this.socketNotificationService.nbMessages;
   }
 }

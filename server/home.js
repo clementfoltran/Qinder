@@ -1,7 +1,7 @@
 const db = require('./database.js');
 const notification = require('./notification.js');
 
-exports.enterViewHome = (req, res) => {
+exports.enterViewHome = async (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
   } else {
