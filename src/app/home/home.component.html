@@ -122,6 +122,7 @@
         <div class="modal-body text-center">
           <app-preferences [resolveData]="resolveData"
                           [userPhotos]="userPhotos"
+                          (updateEvent)="getUserToSwipe()"
           >
           </app-preferences>
         </div>

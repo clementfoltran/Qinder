@@ -1,3 +1,4 @@
+import { PreferencesComponent } from './../preferences/preferences.component';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {EnterViewHomeReturn} from './services/enter-view-home/enter-view-home-return';
 import {ActivatedRoute} from '@angular/router';
