@@ -348,7 +348,6 @@ exports.login = (req, res) => {
     const sql = "SELECT hash, id_user, confirm FROM user WHERE email = ?";
     const query = db.format(sql, [req.body.email]);
     db.query(query, (err, response) => {
-      console.log(response);
       if (err) {
         res.json({
           message: 'Cannot find user with this email address',

@@ -228,7 +228,6 @@ export class HomeComponent implements OnInit {
 
   async getUserToSwipe() {
     this.userToSwipe = false;
-    console.log(this.userCurrentPosition);
     const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
@@ -241,7 +240,7 @@ export class HomeComponent implements OnInit {
       
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
-    .subscribe((result: GetUserToSwipeReturn) => {
+    .subscribe(async (result: GetUserToSwipeReturn) => {
       if (result.success) {
         this.userToSwipe = true;
         this.getUserPhotos(result.id);
@@ -252,9 +251,9 @@ export class HomeComponent implements OnInit {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
-        if (result.position.latitude && result.position.longitude && this.userCurrentPosition) {
+        if (this.userCurrentPosition)   {
           const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
-          this.userToSwipeDistance = Math.floor(Math.round(+google.maps.geometry.spherical.computeDistanceBetween(
+          this.userToSwipeDistance = Math.floor(Math.round(await +google.maps.geometry.spherical.computeDistanceBetween(
             this.userCurrentPosition,
             userToSwipePos
           )) / 1000);
@@ -374,11 +373,11 @@ async getTheHeavens() {
   }
 
   displayTheHeavens() {
-      anime({
-        targets: '.card',
-        opacity: 1,
-        duration: 5000
-      });
+    anime({
+      targets: '.card',
+      opacity: 1,
+      duration: 5000
+    });
   }
 
   progressToTheHeavens() {
@@ -432,14 +431,7 @@ async getTheHeavens() {
       userId: +localStorage.getItem('userId'),
       online
     };
-    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
-      .subscribe((result: GetUserOnlineReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline).subscribe();
   }
 
   saveUserLastConnection(date) {
@@ -447,14 +439,7 @@ async getTheHeavens() {
         userId: +localStorage.getItem('userId'),
         date
       };
-    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
-      .subscribe((result: SaveUserLastConnectionReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection).subscribe();
   }
 
   reportUser() {
@@ -476,18 +461,15 @@ async getTheHeavens() {
       });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.socketNotificationService.connect();
     this.activatedRoute.data.forEach((data: { viewData: EnterViewHomeReturn}) => {
       this.resolveData = data.viewData;
     });
-    this.getUserPosition();
     this.initUserPic();
     this.firstName = this.resolveData.firstname;
     this.distance = this.resolveData.distance;
-    this.getUserToSwipe();
     this.getUserOnline(1);
-
     // when the user leaves
     window.addEventListener('unload', (event) => {
       const date = new Date();
@@ -495,6 +477,13 @@ async getTheHeavens() {
       this.saveUserLastConnection(date);
     });
     this.notifications = this.socketNotificationService.notifications;
+    try {
+      await this.getUserPosition();
+    } catch (err) {
+      throw err;
+    } finally {
+      await this.getUserToSwipe();
+    }
     // this.nbMessages = this.socketNotificationService.nbMessages;
   }
 }

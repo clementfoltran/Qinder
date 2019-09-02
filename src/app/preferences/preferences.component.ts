@@ -225,28 +225,14 @@ export class PreferencesComponent implements OnInit {
       userId: +localStorage.getItem('userId'),
       online
     };
-    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
-      .subscribe((result: GetUserOnlineReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+    this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline).subscribe();
   }
 saveUserLastConnection(date) {
   this.APIParameterSaveUserLastConnection = {
       userId: +localStorage.getItem('userId'),
       date
     };
-  this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection)
-      .subscribe((result: SaveUserLastConnectionReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+  this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection).subscribe();
   }
 
   logOut() {
@@ -293,7 +279,6 @@ saveUserLastConnection(date) {
   }
 
   uploadPhoto() {
-    console.log(this.selectedFile);
     this.APIParameterPhoto = {
       id: this.userId,
       photo: this.selectedFile,

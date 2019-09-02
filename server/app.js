@@ -45,7 +45,7 @@ const checkUserToken = (req, res, next) => {
 };
 
 // POST routes
-app.post('/', urlencodedParser, (req, res) => res.json({'res': 'Welcome !!!'};));
+app.post('/', urlencodedParser, (req, res) => res.json({'res': 'Welcome !!!'}));
 app.post('/login', urlencodedParser, user.login);
 app.post('/oauth', urlencodedParser, oauth.oauth);
 app.post('/updateGeolocation', urlencodedParser, checkUserToken, user.updateGeolocation);
