@@ -1,4 +1,5 @@
-import {Component, Input, OnInit, OnDestroy} from '@angular/core';
+import { HomeComponent } from './../home/home.component';
+import { Component, Input, OnInit, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
 import {EnterViewHomeReturn} from '../home/services/enter-view-home/enter-view-home-return';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UpdatePreferencesParameter} from '../home/services/update-preferences/update-preferences-parameter';
@@ -23,8 +24,6 @@ import { GetUserTagsReturn, UserTag } from './services/get-user-tags/get-user-ta
 import { RemoveUserTagService } from './services/remove-user-tag/remove-user-tag.service';
 import { RemoveUserTagReturn } from './services/remove-user-tag/remove-user-tag.return';
 import * as $ from 'jquery';
-import { GetUserOnlineReturn } from '../home/services/get-user-online/get-user-online-return';
-import { SaveUserLastConnectionReturn } from '../home/services/save-last-connection/save-last-connection-return';
 import { SaveUserLastConnectionParameter } from '../home/services/save-last-connection/save-last-connection-parameter';
 import { GetUserOnlineParameter } from '../home/services/get-user-online/get-user-online-parameter';
 import { GetUserOnlineService } from '../home/services/get-user-online/get-user-online.service';
@@ -35,16 +34,16 @@ import { AddPrefTagService } from './services/add-pref-tag/add-pref-tag.service'
 import { AddPrefTagReturn } from './services/add-pref-tag/add-pref-tag.return';
 import { RemovePrefTagService } from './services/remove-pref-tag/remove-pref-tag.service';
 import { RemovePrefTagReturn } from './services/remove-pref-tag/remove-pref-tag.return';
-import { HomeComponent } from '../home/home.component';
 
 declare var $: any;
 
 @Component({
   selector: 'app-preferences',
   templateUrl: './preferences.component.html',
-  styleUrls: ['./preferences.component.scss']
+  styleUrls: ['./preferences.component.scss'],
 })
 export class PreferencesComponent implements OnInit {
+  @Output() updateEvent = new EventEmitter<string>();
   /**
    *  Resolve data for the view
    *
@@ -169,6 +168,7 @@ export class PreferencesComponent implements OnInit {
             id_user: this.userId,
             tag: tag.tag
           });
+          this.updateEvent.next('');
         }
       });
   }
@@ -200,6 +200,7 @@ export class PreferencesComponent implements OnInit {
       .subscribe((result: RemovePrefTagReturn) => {
         if (result.success) {
           this.prefTags.splice(prefTagIndex, 1);
+          this.updateEvent.next('');
         }
       });
   }
@@ -266,6 +267,7 @@ saveUserLastConnection(date) {
               detail: 'Preference updated successfully',
               life: 6000,
             });
+            this.updateEvent.next('');
           } else {
             this.messageService.add({
               severity: 'error',

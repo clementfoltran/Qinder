@@ -10,7 +10,7 @@
       <div class="card mt-2" style="background-color: rgba(255, 255, 255, 0); border: none;">
         <div class="card-body">
           <div *ngIf="progressBarValue < 100; else showHeavens"  class="heavens">
-            <label><strong>✨ Keep swiping to preview the heavens.. ✨</strong></label>
+            <h2 style="font-size: 2vh">✨ Keep swiping to preview the heavens.. ✨</h2>
             <br>
             <div class="progress">
               <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="{ width: progressBarValue + '%' }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -27,7 +27,7 @@
 
     <!-- THE HEAVENS -->
     <div *ngIf="peopleInHeavens.length > 0 && heavensClicked === 1">
-      <div class="card mt-1 mb-1" style="background-color: rgba(255, 255, 255, 0); border: none;">
+      <div class="card mb-1" style="background-color: rgba(255, 255, 255, 0); border: none;">
           <div class="card-body">
               <label><strong>✨ Here are the people you can match with ✨</strong></label>
           </div>
@@ -92,7 +92,7 @@
       <ng-template #profileIncomplete>
           <div style="position: absolute; width: 100%; height: 100%; padding: 0">
               <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);">
-                <h2>You can't swipe without a picture, complete your profile now! 🙃</h2>
+                <h2 style="font-size: 3vh">You can't swipe without a picture, complete your profile now! 🙃</h2>
                 <button type="button" data-toggle="modal" data-target="#modSignIn" class="btn btn-primary m-2">Preferences</button>
               </div>
             </div>
@@ -102,7 +102,7 @@
       <div style="position: absolute; width: 100%; height: 100%; padding: 0">
         <div style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);">
           <img class="loader" src="assets/img/loader.svg" height="100" alt="">
-          <h2>You have eaten all the Qinders</h2>
+          <h2 style="font-size: 3vh">You have eaten all the Qinders</h2>
           <button type="button" data-toggle="modal" data-target="#modSignIn" class="btn btn-primary m-2">Preferences</button>
         </div>
       </div>
@@ -122,6 +122,7 @@
         <div class="modal-body text-center">
           <app-preferences [resolveData]="resolveData"
                           [userPhotos]="userPhotos"
+                          (updateEvent)="getUserToSwipe()"
           >
           </app-preferences>
         </div>

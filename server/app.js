@@ -25,7 +25,11 @@ let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(bodyParser.json({limit: '10mb', extended: true}));
 app.use((req, res, next) => {
+<<<<<<< HEAD
   res.header('Access-Control-Allow-Origin', 'https://qinder.cf');
+=======
+  res.header('Access-Control-Allow-Origin', '*');
+>>>>>>> clfoltra
   res.header('Access-Control-Allow-Headers', 'Content-Type, authorization');
   res.header('Access-Control-Allow-Credentials', true)
   next();
