@@ -489,7 +489,8 @@ async function nodeMailerRegisterCall(userName, email, key, callback) {
     from: '"Martin @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Validate your MATCHA account :)",
-    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:4200/activate/${email}/${key}`,
+    html: `<html><h1>Hello ${userName}! Please click the link below to activate your Matcha account: </h1><br> \
+            <a href="https://qinder.cf/activate/${email}/${key}">Validate your account</a></html>`,
   });
 
   console.log("Message sent: %s", info.messageId);
@@ -512,7 +513,8 @@ async function nodeMailerResetPasswordCall(email, key, callback) {
     from: '"Clément @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Reset your MATCHA password",
-    text: `Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: http://localhost:4200/resetPassword/${email}/${key}`,
+    html: `<html><h1>Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: </h1><br> \
+            <a href="https://qinder.cf/resetPassword/${email}/${key}">Reset your password</a></html>`,
   });
 
   console.log("Message sent: %s", info.messageId);

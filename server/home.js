@@ -79,7 +79,7 @@ exports.getUserToSwipe = (req, res) => {
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
-        AND EXISTS(SELECT null FROM PHOTO WHERE user.id_user = photo.id_user) \
+        AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
         LIMIT 1';
         query = db.format(sql, [
@@ -93,7 +93,7 @@ exports.getUserToSwipe = (req, res) => {
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
-        AND EXISTS(SELECT null FROM PHOTO WHERE user.id_user = photo.id_user) \
+        AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
         AND user.gender = ? AND popularity BETWEEN 0 AND ? LIMIT 1';
         query = db.format(sql, [
