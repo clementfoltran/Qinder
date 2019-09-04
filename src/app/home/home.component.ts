@@ -252,7 +252,7 @@ export class HomeComponent implements OnInit {
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
         this.userToSwipeAge = currentYear - +result.year;
-        if (this.userCurrentPosition)   {
+        if (this.userCurrentPosition) {
           const userToSwipePos = new google.maps.LatLng(result.position.latitude, result.position.longitude);
           this.userToSwipeDistance = Math.floor(Math.round(await +google.maps.geometry.spherical.computeDistanceBetween(
             this.userCurrentPosition,
@@ -267,13 +267,6 @@ export class HomeComponent implements OnInit {
           }, 3000);
         }
         this.getUserToSwipeTags(result.id);
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Well..',
-          detail: result.message,
-          life: 6000
-        });
       }
       // Notify userToSwipe
       this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
