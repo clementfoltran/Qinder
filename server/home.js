@@ -75,7 +75,7 @@ exports.getUserToSwipe = (req, res) => {
       }
       if (req.body.interest === 'Both') {
         // ADD DISTANCE CHECK
-        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
+        sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
@@ -89,7 +89,7 @@ exports.getUserToSwipe = (req, res) => {
           req.body.popularity,
         ]);
       } else {
-        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
+        sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
@@ -118,7 +118,9 @@ exports.getUserToSwipe = (req, res) => {
               bio: response[0].bio,
               position: JSON.parse(response[0].position),
               year: response[0].year,
-              popularity: response[0].popularity
+              popularity: response[0].popularity,
+              online: response[0].online,
+              lastConnected: response[0].last_connected
             });
           } else {
             res.json({ success: false, message: 'There are no more users to match with, try to change your parameters or come back later' });

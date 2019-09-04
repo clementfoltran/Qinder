@@ -9,5 +9,7 @@ export interface GetUserToSwipeReturn {
         longitude: number;
     };
     year: number;
-    popularity: number; 
+    popularity: number;
+    online: number;
+    lastConnected: Date;
 }
