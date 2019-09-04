@@ -33,7 +33,8 @@ export class SocketNotificationsService {
    * @param obj.notif
    * 1: View profile notification
    */
-  receive = (obj) => {
+   receive = (obj) => {
+   console.log(obj);
     if (obj && obj.to === +localStorage.getItem('userId')) {
       this.notifications.push(obj);
       if (obj.notif === 1) {
@@ -94,7 +95,7 @@ export class SocketNotificationsService {
 
   connect() {
     try {
-    this.socket = io.connect('https://apiqinder.cf/socket-notif');
+    this.socket = io.connect('https://apiqinder.cf/', {path: '/socket.io/socket-notification'});
       this.socket.on('receive notifications', this.receive);
     } catch (e) {
         console.log('Could not connect socket.io');

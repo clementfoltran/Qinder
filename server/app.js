@@ -26,27 +26,23 @@ let urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.use(bodyParser.json({limit: '10mb', extended: true}));
 app.use((req, res, next) => {
-<<<<<<< HEAD
   res.header('Access-Control-Allow-Origin', 'https://qinder.cf');
-=======
-  res.header('Access-Control-Allow-Origin', '*');
->>>>>>> clfoltra
   res.header('Access-Control-Allow-Headers', 'Content-Type, authorization');
   res.header('Access-Control-Allow-Credentials', true)
   next();
 });
 
-// var whitelist = ['https://qinder.cf', 'https://apiqinder.cf', 'https://gmail.com', 'http://ip-api.com/json']
-// var corsOptions = {
-//   origin: (origin, callback) => {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   }
-// }
-// app.use(cors(corsOptions));
+var whitelist = ['http://apiqinder.cf', 'https://qinder.cf', 'https://apiqinder.cf', 'https://gmail.com', 'http://ip-api.com/json', 'localhost', '127.0.0.1']
+var corsOptions = {
+   origin: (origin, callback) => {
+     if (whitelist.indexOf(origin) !== -1) {
+       callback(null, true)
+     } else {
+       callback(new Error('Not allowed by CORS'))
+     }
+   }
+ }
+ app.use(cors(corsOptions));
 
 // Check the request
 const checkUserToken = (req, res, next) => {
