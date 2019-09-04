@@ -89,8 +89,6 @@ export class ChatComponent implements OnInit {
       .subscribe((result: LoadMatchesReturn) => {
         if (result.success) {
           this.initMatchPic(result.matches_list);
-        } else {
-          console.log(result.message);
         }
       });
   }
@@ -110,8 +108,6 @@ export class ChatComponent implements OnInit {
                   me.picture = this.userPhotos[0].photo;
                   this.matchesObjects.push(me);
                 }
-              } else {
-                  console.log(result.message);
               }
             });
         }
@@ -132,8 +128,6 @@ export class ChatComponent implements OnInit {
           if (this.userPhotos.length > 0) {
             this.userMatchedPicture = this.userPhotos[0].photo;
           }
-        } else {
-            console.log(result.message);
         }
       });
 
@@ -144,8 +138,6 @@ export class ChatComponent implements OnInit {
       .subscribe((result: EnterViewHomeReturn) => {
         if (result.success) {
           this.userMatchedName = result.firstname;
-        } else {
-          console.log(result.message);
         }
       });
   }
@@ -161,16 +153,12 @@ export class ChatComponent implements OnInit {
         if (result.success) {
           this.userInfos = result.user;
           this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
-        } else {
-          console.log(result.message);
         }
       });
     this.getUserPhotosService.getUserPhotos(this.userMatchedId)
       .subscribe((result: GetUserPhotosReturn) => {
         if (result.success) {
           this.userMatchedPhotos = result.photos;
-        } else {
-          console.log(result.message);
         }
       });
   }
@@ -199,10 +187,7 @@ export class ChatComponent implements OnInit {
       this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
         .subscribe((result: LoadConversationReturn) => {
           if (result.success) {
-            console.log('result.messageArray = ', result.messageArray);
             this.fillMessagesArray(result.messageArray);
-          } else {
-            console.log(result.message);
           }
         });
     }
@@ -254,7 +239,6 @@ export class ChatComponent implements OnInit {
           this.saveMessage(this.id, msg, 1);
           // Send a notification to the recipient
           this.matchesObjects.forEach((v) => {
-            console.log(v);
             if (v.id.id_match === this.currentMatchId) {
               this.socketNotificationService.notify(this.id, v.id.id_user_matched, 6);
             }
@@ -274,8 +258,6 @@ export class ChatComponent implements OnInit {
     this.saveMessageService.saveMessage(this.APIParameterSaveMessage)
       .subscribe((result: SaveMessageReturn) => {
         if (result.success) {
-          console.log(result.message);
-        } else {
           console.log(result.message);
         }
       });
