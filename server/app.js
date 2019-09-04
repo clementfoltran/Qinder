@@ -61,7 +61,7 @@ const checkUserToken = (req, res, next) => {
 app.post('/', urlencodedParser, (req, res) => res.json({'res': 'Welcome !!!'}));
 app.post('/login', urlencodedParser, user.login);
 app.post('/oauth', urlencodedParser, oauth.oauth);
-app.post('/updateGeolocation', urlencodedParser, checkUserToken, user.updateGeolocation);
+app.post('/updateGeolocation', urlencodedParser, user.updateGeolocation);
 app.post('/register', urlencodedParser, user.register);
 app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/reportUser', urlencodedParser, checkUserToken, user.reportUser);

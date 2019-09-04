@@ -194,18 +194,23 @@ export class LandingPageComponent implements OnInit {
               life: 6000
             });
             $('#modRegister').modal('hide');
+            this.mailService.sendMail(this.MailAPIParameter)
+            .subscribe((result: MailReturn) => {
+              if (result.success) {
+                console.log('success: ', result);
+              } else {
+                console.log('fail: ', result);
+              }
+            });
           } else {
-            console.log(result.message);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Register',
+              detail: result.message,
+              life: 6000
+            });
           }
         });
-      this.mailService.sendMail(this.MailAPIParameter)
-      .subscribe((result: MailReturn) => {
-        if (result.success) {
-          console.log('success: ', result);
-        } else {
-          console.log('fail: ', result);
-        }
-      });
     } else {
       this.messageService.add({
         severity: 'warn',

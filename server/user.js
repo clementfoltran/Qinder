@@ -393,8 +393,7 @@ exports.register = (req, res) => {
       let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
-      let query = db.format(sql,
-      [
+      let query = db.format(sql, [
         req.body.firstname,
         req.body.lastname,
         req.body.email,
@@ -415,8 +414,12 @@ exports.register = (req, res) => {
         100
       ]);
       db.query(query, (err, response) => {
-        if (err) {
-          console.log(err);
+        if (err) { 
+          res.json({
+            message: 'This email already exist',
+            success: false,
+          });
+          throw err;
         } else {
           res.json({
             success: true,
@@ -490,7 +493,8 @@ async function nodeMailerRegisterCall(userName, email, key, callback) {
     to: email,
     subject: "Validate your MATCHA account :)",
     html: `<html><h1>Hello ${userName}! Please click the link below to activate your Matcha account: </h1><br> \
-            <a href="https://qinder.cf/activate/${email}/${key}">Validate your account</a></html>`,
+            <a href="https://qinder.cf/activate/${email}/${key}">Validate your account</a></html><br> \
+            Or copy, paste this link (à l'ancienne) : https://qinder.cf/activate/${email}/${key}`,
   });
 
   console.log("Message sent: %s", info.messageId);
@@ -514,7 +518,8 @@ async function nodeMailerResetPasswordCall(email, key, callback) {
     to: email,
     subject: "Reset your MATCHA password",
     html: `<html><h1>Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: </h1><br> \
-            <a href="https://qinder.cf/resetPassword/${email}/${key}">Reset your password</a></html>`,
+            <a href="https://qinder.cf/resetPassword/${email}/${key}">Reset your password</a></html> <br> \
+            Or copy, paste this link (à l'ancienne) : https://qinder.cf/activate/${email}/${key}',
   });
 
   console.log("Message sent: %s", info.messageId);
