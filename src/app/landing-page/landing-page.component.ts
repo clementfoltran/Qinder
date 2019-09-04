@@ -165,52 +165,75 @@ export class LandingPageComponent implements OnInit {
     return Array.from(arr, this.dec2hex).join('');
   }
 
+  checkPassword(password) {
+    if (/^[a-z][a-z0-9]+$/.test(this.registerForm.get('password').value) && (this.registerForm.get('password').value.length > 8)) {
+      return(1);
+    }
+  }
+  checkEmail(email) {
+    // tslint:disable-next-line: max-line-length
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
   register() {
     if (this.registerForm.valid) {
-      const key = this.generateId(80);
-      this.RegisterAPIParameter = {
-        firstname: this.registerForm.get('firstname').value,
-        lastname: this.registerForm.get('lastname').value,
-        email: this.registerForm.get('email').value,
-        birthdate: this.registerForm.get('birthdate').value.toISOString().slice(0, 10),
-        password: this.registerForm.get('password').value,
-        passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
-        gender: this.registerForm.get('gender').value,
-        key
-      };
-      this.MailAPIParameter = {
-        firstname: this.registerForm.get('firstname').value,
-        email: this.registerForm.get('email').value,
-        key
-      };
-      this.registerService.register(this.RegisterAPIParameter)
-        .subscribe((result: RegisterReturn) => {
-          if (result.success) {
-            this.sendGeolocation(result.user_id);
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Register',
-              detail: result.message,
-              life: 6000
-            });
-            $('#modRegister').modal('hide');
-            this.mailService.sendMail(this.MailAPIParameter)
-            .subscribe((result: MailReturn) => {
+      if (this.checkPassword(this.registerForm.get('password').value)) {
+        if (this.checkEmail(this.registerForm.get('email').value)) {
+          const key = this.generateId(80);
+          this.RegisterAPIParameter = {
+            firstname: this.registerForm.get('firstname').value,
+            lastname: this.registerForm.get('lastname').value,
+            email: this.registerForm.get('email').value,
+            birthdate: this.registerForm.get('birthdate').value.toISOString().slice(0, 10),
+            password: this.registerForm.get('password').value,
+            passwordConfirmation: this.registerForm.get('passwordConfirmation').value,
+            gender: this.registerForm.get('gender').value,
+            key
+          };
+          this.MailAPIParameter = {
+            firstname: this.registerForm.get('firstname').value,
+            email: this.registerForm.get('email').value,
+            key
+          };
+          this.registerService.register(this.RegisterAPIParameter)
+            .subscribe((result: RegisterReturn) => {
               if (result.success) {
-                console.log('success: ', result);
+                this.sendGeolocation(result.user_id);
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Register',
+                  detail: result.message,
+                  life: 6000
+                });
+                $('#modRegister').modal('hide');
               } else {
-                console.log('fail: ', result);
+                console.log(result.message);
               }
             });
-          } else {
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Register',
-              detail: result.message,
-              life: 6000
-            });
-          }
+          this.mailService.sendMail(this.MailAPIParameter)
+          .subscribe((result: MailReturn) => {
+            if (result.success) {
+              console.log('success: ', result);
+            } else {
+              console.log('fail: ', result);
+            }
+          });
+        } else {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Incorrect email format',
+            detail: 'Please enter a valid email address',
+            life: 6000
+          });
+        }
+      } else {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Incorrect password format',
+          detail: 'Please enter a password containing at least one number and 8 characters',
+          life: 6000
         });
+      }
     } else {
       this.messageService.add({
         severity: 'warn',
@@ -297,26 +320,35 @@ export class LandingPageComponent implements OnInit {
   saveNewPassword() {
     if (this.resetPasswordForm.valid &&
        (this.resetPasswordForm.get('newPassword').value === this.resetPasswordForm.get('newPasswordConfirmation').value)) {
-      this.SaveNewPasswordAPIParameter = {
-        email: this.activatedRoute.snapshot.paramMap.get('email'),
-        newPassword: this.resetPasswordForm.get('newPassword').value,
-      };
-      this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
-        .subscribe((result: SaveNewPasswordReturn) => {
-          if (result.success) {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Welcome',
-              detail: 'Password updated! You can now login :)',
-              life: 6000
+         if (this.checkPassword(this.resetPasswordForm.get('newPassword').value)) {
+          this.SaveNewPasswordAPIParameter = {
+            email: this.activatedRoute.snapshot.paramMap.get('email'),
+            newPassword: this.resetPasswordForm.get('newPassword').value,
+          };
+          this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
+            .subscribe((result: SaveNewPasswordReturn) => {
+              if (result.success) {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Welcome',
+                  detail: 'Password updated! You can now login :)',
+                  life: 6000
+                });
+                $('#modResetPwd').modal('hide');
+                this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
+                $('#modSignIn').modal('show');
+              } else {
+                console.log(result.message);
+              }
             });
-            $('#modResetPwd').modal('hide');
-            this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
-            $('#modSignIn').modal('show');
-          } else {
-            console.log(result.message);
-          }
-        });
+         } else {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Incorrect password format',
+            detail: 'Please enter a password containing at least one number and 8 characters',
+            life: 6000
+          });
+         }
     }
   }
 

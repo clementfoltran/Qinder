@@ -255,7 +255,12 @@ export class ChatComponent implements OnInit {
       ts,
       idMatch: this.currentOpenedConversationMatchId
     };
-    this.saveMessageService.saveMessage(this.APIParameterSaveMessage).subscribe();
+    this.saveMessageService.saveMessage(this.APIParameterSaveMessage)
+      .subscribe((result: SaveMessageReturn) => {
+        if (result.success) {
+          console.log(result.message);
+        }
+      });
   }
 
   receive = (obj) => {

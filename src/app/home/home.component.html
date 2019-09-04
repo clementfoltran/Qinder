@@ -66,6 +66,12 @@
                 </div>
                 <div class="col-md-4 p-0">
                   <div class="card-body text-left">
+                    <div *ngIf="userToSwipeOnline === 1; else elseBlock">
+                        <h6 style="color: green;">Online</h6>
+                    </div>
+                    <ng-template #elseBlock>
+                        <h6>{{ userToSwipeLastConnected | lastConnectedFormat }}</h6>
+                    </ng-template>
                     <h2>{{ userToSwipeName | titlecase }} {{ userToSwipeAge }}</h2>
                     <h5>{{ userToSwipeDistance }} kms</h5>
                     <h6>{{ userToSwipePopularity }}% trendy</h6>

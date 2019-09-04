@@ -1,23 +1,22 @@
-<div *ngIf="!matchesObjects;">
-  <div class="row">
-    <div *ngFor="let match of matchesObjects">
-      <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;">
-        <img class="rounded-circle m-1" src="{{ match.picture }}" height="80px" width="80px">
-      </a>
-    </div>
-  </div>
-  <!-- selected conversation pic & match name -->
-  <hr>  
-  <div class="p-2" *ngIf="!userMatchedName; else elseBlock">
-    <h6>Click on a match to open a conversation 😊</h6>
-  </div>
-  <ng-template class="p-2" #elseBlock>
-    <a (click)="loadMatchProfileData()" style="cursor: pointer;">
-      <img class="rounded-circle" height="80px" width="80px" src="{{ userMatchedPicture }}" alt="">
+<div class="row">
+  <div *ngFor="let match of matchesObjects">
+    <a (click)="loadMessages(match.id.id_match)" (click)="loadMatchInfos(match.id.id_user_matched)" style="cursor: pointer;">
+      <img class="rounded-circle m-1" src="{{ match.picture }}" height="80px" width="80px">
     </a>
-    <h2 class="m-auto p-2">{{ userMatchedName | titlecase }}</h2>
-  </ng-template>
+  </div>
 </div>
+<!-- selected conversation pic & match name -->
+<hr>  
+<div class="p-2" *ngIf="!userMatchedName; else elseBlock">
+  <h6>Click on a match to open a conversation 😊</h6>
+</div>
+<ng-template class="p-2" #elseBlock>
+  <a (click)="loadMatchProfileData()" style="cursor: pointer;">
+    <img class="rounded-circle" height="80px" width="80px" src="{{ userMatchedPicture }}" alt="">
+  </a>
+  <h2 class="m-auto p-2">{{ userMatchedName | titlecase }}</h2>
+</ng-template>
+
 <!-- if select is profile, display profile, if not display contentArea -->
 <div *ngIf="profileWasOpened === 1; else elseBlock3">
   <carousel class="p-2">
