@@ -10,7 +10,7 @@ import { IpLocationReturn } from './ip-location.return';
 })
 export class IpLocationService {
 
-  public serviceURL = 'http://ip-api.com/json/';
+  public serviceURL = 'https://ipapi.co/json/';
   constructor(public http: HttpClient) { }
 
   ipLocation(): Observable<IpLocationReturn> {
