@@ -76,7 +76,7 @@ exports.getUserToSwipe = (req, res) => {
       if (req.body.interest === 'Both') {
         // ADD DISTANCE CHECK
         sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
-        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched AND swipe.id_user = ?) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
         AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
@@ -84,19 +84,21 @@ exports.getUserToSwipe = (req, res) => {
         ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
           req.body.id,
+          req.body.id,
           maxAge,
           minAge,
           req.body.popularity,
         ]);
       } else {
         sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
-        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched AND swipe.id_user = ?) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
         AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
         AND user.gender = ? AND popularity BETWEEN 0 AND ? ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
+          req.body.id,
           req.body.id,
           maxAge,
           minAge,

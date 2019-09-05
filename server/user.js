@@ -404,7 +404,7 @@ exports.register = (req, res) => {
         null,
         10,
         18,
-        25,
+        100,
         req.body.key,
         false,
         100,
@@ -421,10 +421,22 @@ exports.register = (req, res) => {
           });
           throw err;
         } else {
-          res.json({
-            success: true,
-            message: 'Check your mailbox to confirm your account',
-            user_id: response.insertId
+          sql = 'INSERT INTO tagpref VALUES(id_tpref, 1, ?), (id_tpref, 2, ?),(id_tpref, 3, ?),(id_tpref, 4, ?),(id_tpref, 5, ?), (id_tpref, 6, ?)';
+          query = db.format([response.insertId]);
+          db.query(query, (err, response) => {
+            if (err) { 
+              res.json({
+                message: 'This email already exist',
+                success: false,
+              });
+              throw err;
+            } else {
+              res.json({
+                success: true,
+                message: 'Check your mailbox to confirm your account',
+                user_id: response.insertId 
+              });
+            }
           });
         }
       });
