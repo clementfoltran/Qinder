@@ -10,7 +10,6 @@
       <div class="card mt-2" style="background-color: rgba(255, 255, 255, 0); border: none;">
         <div class="card-body">
           <div *ngIf="progressBarValue < 100; else showHeavens"  class="heavens">
-            <h2 style="font-size: 2vh">✨ Keep swiping to preview the heavens.. ✨</h2>
             <br>
             <div class="progress">
               <div class="progress-bar bg-danger" role="progressbar" [ngStyle]="{ width: progressBarValue + '%' }" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -129,6 +128,7 @@
           <app-preferences [resolveData]="resolveData"
                           [userPhotos]="userPhotos"
                           (updateEvent)="getUserToSwipe()"
+                          (updateResolveDataHome)="resolveData"
           >
           </app-preferences>
         </div>

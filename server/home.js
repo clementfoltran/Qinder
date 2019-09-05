@@ -81,7 +81,7 @@ exports.getUserToSwipe = (req, res) => {
         AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
         AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
-        LIMIT 1';
+        ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           maxAge,
@@ -95,7 +95,7 @@ exports.getUserToSwipe = (req, res) => {
         AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
         AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        AND user.gender = ? AND popularity BETWEEN 0 AND ? LIMIT 1';
+        AND user.gender = ? AND popularity BETWEEN 0 AND ? ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           maxAge,
