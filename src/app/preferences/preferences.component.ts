@@ -43,6 +43,7 @@ declare var $: any;
   styleUrls: ['./preferences.component.scss'],
 })
 export class PreferencesComponent implements OnInit {
+  @Output() updateResolveDataHome = new EventEmitter<EnterViewHomeReturn>();
   @Output() updateEvent = new EventEmitter<string>();
   /**
    *  Resolve data for the view
@@ -245,7 +246,7 @@ saveUserLastConnection(date) {
     this.loginService.logOut();
   }
 
-  updatePref() {
+  async updatePref() {
     if (this.prefForm.valid) {
       this.APIParameterPref = {
         id: this.userId,
@@ -258,8 +259,8 @@ saveUserLastConnection(date) {
         pop: this.popularity,
         tagsInCommon: this.tagsInCommon
       };
-      this.updatePreferencesService.updatePreferences(this.APIParameterPref)
-        .subscribe((result: UpdatePreferencesReturn) => {
+      await this.updatePreferencesService.updatePreferences(this.APIParameterPref)
+        .subscribe(async (result: UpdatePreferencesReturn) => {
           if (result.success) {
             this.messageService.add({
               severity: 'success',
@@ -268,6 +269,12 @@ saveUserLastConnection(date) {
               life: 6000,
             });
             this.updateEvent.next('');
+            let updateResolveDataHome = this.resolveData;
+            updateResolveDataHome.distance = this.APIParameterPref.distance;
+            updateResolveDataHome.minage = this.APIParameterPref.minage;
+            updateResolveDataHome.maxage = this.APIParameterPref.maxage;
+            updateResolveDataHome.pop = this.APIParameterPref.pop;
+            await this.updateResolveDataHome.next(updateResolveDataHome);
           } else {
             this.messageService.add({
               severity: 'error',

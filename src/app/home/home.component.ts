@@ -261,7 +261,6 @@ export class HomeComponent implements OnInit {
         }
         if (this.userToSwipeDistance > this.distance) {
           this.userToSwipe = false;
-          this.swipe(false);
           setTimeout(() => {
             this.getUserToSwipe();
           }, 3000);
