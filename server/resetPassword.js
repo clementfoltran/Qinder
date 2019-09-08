@@ -15,7 +15,6 @@ exports.checkKey = (req, res) => {
                 message: 'User not found',
               });
             } else {
-              console.log(response)
               res.json({
                 success: true,
                 message: 'User exists',
@@ -36,7 +35,6 @@ exports.checkKey = (req, res) => {
       if (res) {
         const sql = "UPDATE user SET hash = ? WHERE email = ?";
         const hash = passwordHash.generate(req.body.newPassword);
-        console.log('hash = ', hash);
         const query = db.format(sql, [hash, req.body.email]);
         db.query(query, (err, response) => {
           if (err) {

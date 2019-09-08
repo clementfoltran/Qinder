@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {Router, ActivatedRoute, NavigationExtras, ParamMap} from '@angular/router';
+import { Router, ActivatedRoute, NavigationExtras, ParamMap } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { LoginParameter } from './services/login/login.parameter';
 import { LoginReturn } from './services/login/login.return';
@@ -38,6 +38,7 @@ import { OauthService } from './services/oauth/oauth.service';
 import { OauthParameter } from './services/oauth/oauth.parameter';
 
 declare var $: any;
+declare var FB: any;
 
 @Component({
   selector: 'app-landing-page',
@@ -166,8 +167,8 @@ export class LandingPageComponent implements OnInit {
   }
 
   checkPassword(password) {
-    if (/^[a-z][a-z0-9]+$/.test(this.registerForm.get('password').value) && (this.registerForm.get('password').value.length > 8)) {
-      return(1);
+    if (/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(this.registerForm.get('password').value) && (this.registerForm.get('password').value.length > 8)) {
+      return (1);
     }
   }
   checkEmail(email) {
@@ -207,17 +208,15 @@ export class LandingPageComponent implements OnInit {
                 });
                 $('#modRegister').modal('hide');
               } else {
-                console.log(result.message);
+                this.messageService.add({
+                  severity: 'warn',
+                  summary: 'Email',
+                  detail: result.message,
+                  life: 6000
+                });
               }
             });
-          this.mailService.sendMail(this.MailAPIParameter)
-          .subscribe((result: MailReturn) => {
-            if (result.success) {
-              console.log('success: ', result);
-            } else {
-              console.log('fail: ', result);
-            }
-          });
+          this.mailService.sendMail(this.MailAPIParameter).subscribe();
         } else {
           this.messageService.add({
             severity: 'warn',
@@ -238,7 +237,7 @@ export class LandingPageComponent implements OnInit {
       this.messageService.add({
         severity: 'warn',
         summary: 'Empty fields',
-        detail: 'Please fill all the inputs :)',
+        detail: 'Please fill all the inputs',
         life: 6000
       });
     }
@@ -298,67 +297,67 @@ export class LandingPageComponent implements OnInit {
 
   resetPassword(email, key) {
     this.checkKeyService.checkKey(email)
-        .subscribe((result: CheckKeyReturn) => {
-          if (result.success) {
-            if (result.key === key) {
-              this.readyToResetPassword = 1;
-              $('#modResetPwd').modal('show');
-            } else {
-              this.messageService.add({
-                severity: 'warn',
-                summary: 'Oops :/',
-                detail: 'The link you followed is obsolete, please ask for another password reset link',
-                life: 6000
-              });
-            }
+      .subscribe((result: CheckKeyReturn) => {
+        if (result.success) {
+          if (result.key === key) {
+            this.readyToResetPassword = 1;
+            $('#modResetPwd').modal('show');
           } else {
-            console.log(result.message);
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Oops :/',
+              detail: 'The link you followed is obsolete, please ask for another password reset link',
+              life: 6000
+            });
           }
-        });
+        } else {
+          console.log(result.message);
+        }
+      });
   }
 
   saveNewPassword() {
     if (this.resetPasswordForm.valid &&
-       (this.resetPasswordForm.get('newPassword').value === this.resetPasswordForm.get('newPasswordConfirmation').value)) {
-         if (this.checkPassword(this.resetPasswordForm.get('newPassword').value)) {
-          this.SaveNewPasswordAPIParameter = {
-            email: this.activatedRoute.snapshot.paramMap.get('email'),
-            newPassword: this.resetPasswordForm.get('newPassword').value,
-          };
-          this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
-            .subscribe((result: SaveNewPasswordReturn) => {
-              if (result.success) {
-                this.messageService.add({
-                  severity: 'success',
-                  summary: 'Welcome',
-                  detail: 'Password updated! You can now login :)',
-                  life: 6000
-                });
-                $('#modResetPwd').modal('hide');
-                this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
-                $('#modSignIn').modal('show');
-              } else {
-                console.log(result.message);
-              }
-            });
-         } else {
-          this.messageService.add({
-            severity: 'warn',
-            summary: 'Incorrect password format',
-            detail: 'Please enter a password containing at least one number and 8 characters',
-            life: 6000
+      (this.resetPasswordForm.get('newPassword').value === this.resetPasswordForm.get('newPasswordConfirmation').value)) {
+      if (this.checkPassword(this.resetPasswordForm.get('newPassword').value)) {
+        this.SaveNewPasswordAPIParameter = {
+          email: this.activatedRoute.snapshot.paramMap.get('email'),
+          newPassword: this.resetPasswordForm.get('newPassword').value,
+        };
+        this.saveNewPasswordService.saveNewPassword(this.SaveNewPasswordAPIParameter)
+          .subscribe((result: SaveNewPasswordReturn) => {
+            if (result.success) {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Welcome',
+                detail: 'Password updated! You can now login :)',
+                life: 6000
+              });
+              $('#modResetPwd').modal('hide');
+              this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
+              $('#modSignIn').modal('show');
+            } else {
+              console.log(result.message);
+            }
           });
-         }
+      } else {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Incorrect password format',
+          detail: 'Please enter a password containing at least one number and 8 characters',
+          life: 6000
+        });
+      }
     }
   }
 
   destroyKey(email) {
     const key = this.generateId(80);
     this.ResetPasswordAPIParameter = {
-        email,
-        key,
-        function: 'none',
-      };
+      email,
+      key,
+      function: 'none',
+    };
     this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
       .subscribe((result: ResetPasswordReturn) => {
         if (result.success) {
@@ -372,40 +371,39 @@ export class LandingPageComponent implements OnInit {
   verifyAccount(email) {
     console.log('VERIFY ACCOUNT CALLED');
     this.activateService.activateAccount(email)
-        .subscribe((result: ActivateReturn) => {
-          if (result.success) {
-            $('#modSignIn').modal('show');
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Welcome',
-              detail: 'Account successfully activated! You can now login :)',
-              life: 6000
-            });
-          } else {
-            console.log(result.message);
-          }
-        });
-    }
+      .subscribe((result: ActivateReturn) => {
+        if (result.success) {
+          $('#modSignIn').modal('show');
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Welcome',
+            detail: 'Account successfully activated! You can now login :)',
+            life: 6000
+          });
+        } else {
+          console.log(result.message);
+        }
+      });
+  }
 
-    
 
-    constructor(private route: ActivatedRoute,
-                public fb: FormBuilder,
-                public router: Router,
-                public registerService: RegisterService,
-                public loginService: LoginService,
-                private messageService: MessageService,
-                private mailService: MailService,
-                public activatedRoute: ActivatedRoute,
-                public geolocationService: GeolocationService,
-                public activateService: ActivateService,
-                public getUserOnlineService: GetUserOnlineService,
-                public resetPasswordService: ResetPasswordService,
-                public checkKeyService: CheckKeyService,
-                public ipLocationService: IpLocationService,
-                private authService: AuthService,
-                public oauthService: OauthService,
-                public saveNewPasswordService: SaveNewPasswordService) {
+
+  constructor(private route: ActivatedRoute,
+    public fb: FormBuilder,
+    public router: Router,
+    public registerService: RegisterService,
+    public loginService: LoginService,
+    private messageService: MessageService,
+    private mailService: MailService,
+    public activatedRoute: ActivatedRoute,
+    public geolocationService: GeolocationService,
+    public activateService: ActivateService,
+    public getUserOnlineService: GetUserOnlineService,
+    public resetPasswordService: ResetPasswordService,
+    public checkKeyService: CheckKeyService,
+    public ipLocationService: IpLocationService,
+    public oauthService: OauthService,
+    public saveNewPasswordService: SaveNewPasswordService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -417,18 +415,18 @@ export class LandingPageComponent implements OnInit {
     });
 
     this.loginForm = fb.group({
-    email: ['', Validators.required],
-    password: ['', Validators.required],
+      email: ['', Validators.required],
+      password: ['', Validators.required],
     });
 
     this.forgotPasswordForm = fb.group({
       email: ['', Validators.required],
-      });
+    });
 
     this.resetPasswordForm = fb.group({
       newPassword: ['', Validators.minLength(8)],
       newPasswordConfirmation: ['', Validators.minLength(8)],
-      });
+    });
 
     this.datePickerConfig = Object.assign({
       containerClass: 'theme-orange',
@@ -441,23 +439,16 @@ export class LandingPageComponent implements OnInit {
     });
   }
 
-  signInWithFB(): void {
-    const fbLoginOptions: LoginOpt = {
-      scope: 'user_birthday',
-      return_scopes: true,
-      enable_profile_selector: true
-    }; 
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID, fbLoginOptions)
-    .then((result: SocialUser) => {
-      try {
-        console.log(result);
-        if (result.id) {
+  facebookAuth() {
+    FB.login((response) => {
+      if (response.authResponse) {
+        FB.api('/me', { fields: 'id,name,birthday,first_name,last_name,email,gender' }, (response) => {
           const APIParameter: OauthParameter = {
-            id_facebook: +result.id,
-            firstname: result.firstName,
-            lastname: result.lastName,
-            email: result.email,
-            gender: 'Female',
+            id_facebook: +response.id,
+            firstname: response.first_name,
+            lastname: response.last_name,
+            email: response.email,
+            gender: response.gender,
             birthdate: new Date()
           }
           this.oauthService.oauth(APIParameter)
@@ -472,27 +463,45 @@ export class LandingPageComponent implements OnInit {
                 this.router.navigate(['/home']);
               }
             });
-        }
-      } catch (err) {
-        console.log(err);
+        });
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
       }
     });
-  } 
+  }
 
   ngOnInit() {
     if (this.router.url.split('/')[1] === 'activate' &&
-        this.activatedRoute.snapshot.paramMap.get('email') &&
-        this.activatedRoute.snapshot.paramMap.get('key')) {
-        this.activatedRoute.data.forEach((data: {viewData: EnterViewActivateReturn }) => {
-          this.resolvedData = data.viewData;
+      this.activatedRoute.snapshot.paramMap.get('email') &&
+      this.activatedRoute.snapshot.paramMap.get('key')) {
+      this.activatedRoute.data.forEach((data: { viewData: EnterViewActivateReturn }) => {
+        this.resolvedData = data.viewData;
       });
-        this.checkAccount(this.resolvedData);
+      this.checkAccount(this.resolvedData);
     }
+    (window as any).fbAsyncInit = function () {
+      FB.init({
+        appId: '412626469601871',
+        cookie: false,
+        xfbml: true,
+        version: 'v3.1'
+      });
+      FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/fr_FR/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
     if (this.router.url.split('/')[1] === 'resetPassword' &&
-        this.activatedRoute.snapshot.paramMap.get('email') &&
-        this.activatedRoute.snapshot.paramMap.get('key')) {
-          this.resetPassword(this.activatedRoute.snapshot.paramMap.get('email'), this.activatedRoute.snapshot.paramMap.get('key'));
-        }
+      this.activatedRoute.snapshot.paramMap.get('email') &&
+      this.activatedRoute.snapshot.paramMap.get('key')) {
+      this.resetPassword(this.activatedRoute.snapshot.paramMap.get('email'), this.activatedRoute.snapshot.paramMap.get('key'));
+    }
     this.registerForm.get('gender').setValue('Female');
     this.getLocation();
   }

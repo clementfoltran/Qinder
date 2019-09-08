@@ -101,9 +101,8 @@ exports.reportUser = (req, res) => {
                   query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
                   db.query(query, (err) => {
                     if (err) {
-                      console.log(req.body.id_user_, req.body.id_user);
-                      console.log(err);
                       res.json({ success: false, message: 'Network error' });
+                      throw err;
                     } else {
                       res.json({ success: true, message: '' });
                     }
@@ -255,9 +254,9 @@ exports.updateGeolocation = (req, res) => {
         req.body.id_user
       ]);
       db.query(query, (err, response) => {
-        console.log(response);
         if (err) {
           res.json({ success: false, message: 'Network error' });
+          throw err;
         } else {
           res.json({ success: true, message: '' });
         }
@@ -394,24 +393,8 @@ exports.register = (req, res) => {
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
       let query = db.format(sql, [
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        hash,
-        req.body.gender,
-        req.body.birthdate,
-        'Both',
-        null,
-        10,
-        18,
-        100,
-        req.body.key,
-        false,
-        100,
-        null,
-        0,
-        null,
-        100
+        req.body.firstname, req.body.lastname, req.body.email, hash, req.body.gender,
+        req.body.birthdate, 'Both', null, 10, 18, 100, req.body.key, false, 100, null, 0, null, 100
       ]);
       db.query(query, (err, response) => {
         if (err) { 
@@ -419,23 +402,16 @@ exports.register = (req, res) => {
             message: 'This email already exist',
             success: false,
           });
-          throw err;
         } else {
+          const userId = response.insertId;
           sql = 'INSERT INTO tagpref VALUES(id_tpref, 1, ?), (id_tpref, 2, ?),(id_tpref, 3, ?),(id_tpref, 4, ?),(id_tpref, 5, ?), (id_tpref, 6, ?)';
-          query = db.format([response.insertId]);
-          db.query(query, (err, response) => {
+          query = db.format(sql, [ userId, userId, userId, userId, userId, userId ]);
+          db.query(query, (err) => {
             if (err) { 
-              res.json({
-                message: 'This email already exist',
-                success: false,
-              });
+              res.json({ message: 'This email already exist', success: false });
               throw err;
             } else {
-              res.json({
-                success: true,
-                message: 'Check your mailbox to confirm your account',
-                user_id: response.insertId 
-              });
+              res.json({ success: true, message: 'Check your mailbox to confirm your account', user_id: userId });
             }
           });
         }
@@ -509,9 +485,6 @@ async function nodeMailerRegisterCall(userName, email, key, callback) {
             Or copy, paste this link : <u>https://qinder.cf/activate/${email}/${key}</u>`,
   });
 
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-
   callback(info);
 }
 
@@ -533,9 +506,6 @@ async function nodeMailerResetPasswordCall(email, key, callback) {
             <a href="https://qinder.cf/resetPassword/${email}/${key}">Reset your password</a></html> <br> \
             Or copy, paste this link : <u>https://qinder.cf/activate/${email}/${key}</u>`,
   });
-
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
   callback(info);
 }
