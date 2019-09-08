@@ -229,12 +229,12 @@ export class PreferencesComponent implements OnInit {
     };
     this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline).subscribe();
   }
-saveUserLastConnection(date) {
-  this.APIParameterSaveUserLastConnection = {
-      userId: +localStorage.getItem('userId'),
-      date
-    };
-  this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection).subscribe();
+  saveUserLastConnection(date) {
+    this.APIParameterSaveUserLastConnection = {
+        userId: +localStorage.getItem('userId'),
+        date
+      };
+    this.saveUserLastConnectionService.saveUserLastConnection(this.APIParameterSaveUserLastConnection).subscribe();
   }
 
   logOut() {
@@ -311,6 +311,7 @@ saveUserLastConnection(date) {
               life: 6000,
             });
             this.selectedFile = null;
+            this.updateEvent.next('');
           }
         });
     } else if (!this.selectedFile) {

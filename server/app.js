@@ -116,7 +116,3 @@ app.get('/randomUser', urlencodedParser, generator.randomUser);
 
 app.get('/getNotifications/:id', urlencodedParser, checkUserToken, notification.getNotifications);
 app.get('/deleteNotifications/:id', urlencodedParser, checkUserToken, notification.deleteNotification);
-
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
