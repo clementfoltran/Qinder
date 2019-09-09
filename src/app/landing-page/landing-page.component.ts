@@ -33,7 +33,6 @@ import { SaveNewPasswordReturn } from './services/save-new-password/save-new-pas
 import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
 import { IpLocationService } from './services/ip-location/ip-location.service';
 import { IpLocationReturn } from './services/ip-location/ip-location.return';
-import { AuthService, FacebookLoginProvider, SocialUser, LoginOpt } from 'angularx-social-login';
 import { OauthService } from './services/oauth/oauth.service';
 import { OauthParameter } from './services/oauth/oauth.parameter';
 
@@ -389,21 +388,21 @@ export class LandingPageComponent implements OnInit {
 
 
   constructor(private route: ActivatedRoute,
-    public fb: FormBuilder,
-    public router: Router,
-    public registerService: RegisterService,
-    public loginService: LoginService,
-    private messageService: MessageService,
-    private mailService: MailService,
-    public activatedRoute: ActivatedRoute,
-    public geolocationService: GeolocationService,
-    public activateService: ActivateService,
-    public getUserOnlineService: GetUserOnlineService,
-    public resetPasswordService: ResetPasswordService,
-    public checkKeyService: CheckKeyService,
-    public ipLocationService: IpLocationService,
-    public oauthService: OauthService,
-    public saveNewPasswordService: SaveNewPasswordService) {
+              public fb: FormBuilder,
+              public router: Router,
+              public registerService: RegisterService,
+              public loginService: LoginService,
+              private messageService: MessageService,
+              private mailService: MailService,
+              public activatedRoute: ActivatedRoute,
+              public geolocationService: GeolocationService,
+              public activateService: ActivateService,
+              public getUserOnlineService: GetUserOnlineService,
+              public resetPasswordService: ResetPasswordService,
+              public checkKeyService: CheckKeyService,
+              public ipLocationService: IpLocationService,
+              public oauthService: OauthService,
+              public saveNewPasswordService: SaveNewPasswordService) {
     this.registerForm = fb.group({
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
@@ -450,7 +449,7 @@ export class LandingPageComponent implements OnInit {
             email: response.email,
             gender: response.gender,
             birthdate: new Date()
-          }
+          };
           this.oauthService.oauth(APIParameter)
             .subscribe((result) => {
               if (result.success) {
@@ -479,7 +478,7 @@ export class LandingPageComponent implements OnInit {
       });
       this.checkAccount(this.resolvedData);
     }
-    (window as any).fbAsyncInit = function () {
+    (window as any).fbAsyncInit = function() {
       FB.init({
         appId: '412626469601871',
         cookie: false,
@@ -489,11 +488,11 @@ export class LandingPageComponent implements OnInit {
       FB.AppEvents.logPageView();
     };
 
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
+    (function(d, s, id) {
+      let js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
-      js.src = "https://connect.facebook.net/fr_FR/sdk.js";
+      js.src = 'https://connect.facebook.net/fr_FR/sdk.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
