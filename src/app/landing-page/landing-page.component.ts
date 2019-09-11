@@ -165,11 +165,15 @@ export class LandingPageComponent implements OnInit {
     return Array.from(arr, this.dec2hex).join('');
   }
 
-  checkPassword(password) {
+  checkPassword(password: string) {
     if (/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(this.registerForm.get('password').value) && (this.registerForm.get('password').value.length >= 8)) {
       return (1);
+    } else if (/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(password) && (password.length >= 8)) {
+      return (1);
+    } else {
+      return (0);
     }
-  }
+  } 
   checkEmail(email) {
     // tslint:disable-next-line: max-line-length
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

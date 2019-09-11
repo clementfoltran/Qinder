@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { LoadMatchesParameter } from './services/load-matches/load-matches-parameter';
 import { LoadMatchesReturn } from './services/load-matches/load-matches-return';
 import { LoadMatchesService } from './services/load-matches/load-matches.service';
@@ -29,6 +29,7 @@ import { ReportUserService } from './services/report-user/report-user.service';
 import { ReportUserReturn } from './services/report-user/report-user.return';
 import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 import * as moment from 'moment';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -39,6 +40,7 @@ import * as moment from 'moment';
 export class ChatComponent implements OnInit {
 
   @ViewChild('scrollMe', {static: false}) scrollMe: ElementRef;
+  @Input() resolveData: EnterViewHomeReturn = null;
 
   constructor(public loadMatchesService: LoadMatchesService,
               public getUserPhotosService: GetUserPhotosService,
@@ -250,7 +252,7 @@ export class ChatComponent implements OnInit {
           // Send a notification to the recipient
           this.matchesObjects.forEach((v) => {
             if (v.id.id_match === this.currentMatchId) {
-              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 6);
+              this.socketNotificationService.notify(this.id, this.resolveData.firstname, v.id.id_user_matched, 6);
             }
           });
         }
@@ -305,7 +307,7 @@ export class ChatComponent implements OnInit {
         this.reportUserService.reportUser(APIParameter)
           .subscribe((result: ReportUserReturn) => {
             if (result.success) {
-              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 3);
+              this.socketNotificationService.notify(this.id, this.resolveData.firstname, v.id.id_user_matched, 3);
             }
         });
       }
@@ -318,7 +320,7 @@ export class ChatComponent implements OnInit {
         this.removeMatchService.removeMatch(v.id.id_match)
           .subscribe((result: RemoveMatchReturn) => {
             if (result.success) {
-              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 2);
+              this.socketNotificationService.notify(this.id, this.resolveData.firstname, v.id.id_user_matched, 2);
             }
           });
       }

@@ -268,7 +268,7 @@ export class HomeComponent implements OnInit {
         this.getUserToSwipeTags(result.id);
       }
       // Notify userToSwipe
-      this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
+      this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, result.id, 1);
     });
   }
 
@@ -283,9 +283,9 @@ export class HomeComponent implements OnInit {
         if (result.success) {
           // if you like the person, we send a notification to this one
           if (like && !result.match) {
-            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 4);
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, this.userToSwipeId, 4);
           } else {
-            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 5);
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, this.userToSwipeId, 5);
           }
           this.getUserToSwipe();
           if (result.match) {
