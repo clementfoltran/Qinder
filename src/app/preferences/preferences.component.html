@@ -33,7 +33,10 @@
               </select>
             </div>
             <div class="form-group mb-4">
-                <label><strong>Add a picture</strong></label>
+              <div *ngIf="this.selectedFile">
+                <img class="mx-auto" height="40px" src="{{ this.selectedFile }}" alt="">
+              </div>
+              <label><strong>Add a picture</strong></label>
               <div class="input-group mb-3">
                 <div class="custom-file">
                   <input type="file" class="custom-file-input" id="inputGroupFile02" (change)="onFileChanged($event)">
@@ -133,7 +136,7 @@
                   </button>  
                 </div>
                 <ng-template #notSelectedPref>
-                  <button class="btn btn-primary m-1" type="button"
+                  <button class="btn btn-primary btn-block m-1" type="button"
                           (click)="addPrefTag(tags[i])">
                           {{ tag.tag }}
                   </button>
@@ -168,6 +171,5 @@
   </div>
 </div>
 <div class="form-group">
-  <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">DECONNEXION</button>
+  <button type="button" class="btn btn-primary btn-lg btn-block" (click)="logOut()">LOG OUT</button>
 </div>
-

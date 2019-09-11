@@ -37,7 +37,7 @@
       <div class="modal-body text-center">
         <div *ngIf="forgotModeVar === 0; else forgotForm" >
           <div class="form-group">
-            <button type="button" class="btn btn-primary btn-block" (click)="signInWithFB()">LOG IN WITH FACEBOOK</button>
+            <button type="button" class="btn btn-primary btn-block" (click)="facebookAuth();">LOG IN WITH FACEBOOK</button>
           </div>
           <hr>
           <form [formGroup]="loginForm" (ngSubmit)="login()">
@@ -119,7 +119,7 @@
         <h2 class="m-auto p-2">WELCOME ON BOARD</h2>
         <div class="modal-body text-center">
           <div class="form-group">
-            <button type="button" class="btn btn-primary btn-block" (click)="signInWithFB()">REGISTER WITH FACEBOOK</button>
+            <button type="button" class="btn btn-primary btn-block">REGISTER WITH FACEBOOK</button>
           </div>
           <hr>
           <form [formGroup]="registerForm" (ngSubmit)="register()">
@@ -186,7 +186,7 @@
               id="password"
               #password
               formControlName="password"
-              placeholder="Password, 8 characters minimum"
+              placeholder="Password, at least 8 letters + digits"
               >
             </div>
             <div class="form-group">

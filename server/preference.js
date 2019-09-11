@@ -104,7 +104,6 @@ exports.deletePhoto = (req, res) => {
         req.body.id_user,
       ]);
       db.query(query, (err, response) => {
-        console.log(response);
         if (err) {
           res.json({
             success: false,

@@ -101,9 +101,8 @@ exports.reportUser = (req, res) => {
                   query = db.format(sql, [ req.body.id_user_, req.body.id_user ]);
                   db.query(query, (err) => {
                     if (err) {
-                      console.log(req.body.id_user_, req.body.id_user);
-                      console.log(err);
                       res.json({ success: false, message: 'Network error' });
+                      throw err;
                     } else {
                       res.json({ success: true, message: '' });
                     }
@@ -255,9 +254,9 @@ exports.updateGeolocation = (req, res) => {
         req.body.id_user
       ]);
       db.query(query, (err, response) => {
-        console.log(response);
         if (err) {
           res.json({ success: false, message: 'Network error' });
+          throw err;
         } else {
           res.json({ success: true, message: '' });
         }
@@ -348,7 +347,6 @@ exports.login = (req, res) => {
     const sql = "SELECT hash, id_user, confirm FROM user WHERE email = ?";
     const query = db.format(sql, [req.body.email]);
     db.query(query, (err, response) => {
-      console.log(response);
       if (err) {
         res.json({
           message: 'Cannot find user with this email address',
@@ -394,35 +392,27 @@ exports.register = (req, res) => {
       let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
       // Hash the password
       const hash = passwordHash.generate(req.body.password);
-      let query = db.format(sql,
-      [
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        hash,
-        req.body.gender,
-        req.body.birthdate,
-        'Both',
-        null,
-        10,
-        18,
-        25,
-        req.body.key,
-        false,
-        100,
-        null,
-        0,
-        null,
-        100
+      let query = db.format(sql, [
+        req.body.firstname, req.body.lastname, req.body.email, hash, req.body.gender,
+        req.body.birthdate, 'Both', null, 10, 18, 100, req.body.key, false, 100, null, 0, null, 100
       ]);
       db.query(query, (err, response) => {
-        if (err) {
-          console.log(err);
-        } else {
+        if (err) { 
           res.json({
-            success: true,
-            message: 'Check your mailbox to confirm your account',
-            user_id: response.insertId
+            message: 'This email already exist',
+            success: false,
+          });
+        } else {
+          const userId = response.insertId;
+          sql = 'INSERT INTO tagpref VALUES(id_tpref, 1, ?), (id_tpref, 2, ?),(id_tpref, 3, ?),(id_tpref, 4, ?),(id_tpref, 5, ?), (id_tpref, 6, ?)';
+          query = db.format(sql, [ userId, userId, userId, userId, userId, userId ]);
+          db.query(query, (err) => {
+            if (err) { 
+              res.json({ message: 'This email already exist', success: false });
+              throw err;
+            } else {
+              res.json({ success: true, message: 'Check your mailbox to confirm your account', user_id: userId });
+            }
           });
         }
       });
@@ -490,11 +480,10 @@ async function nodeMailerRegisterCall(userName, email, key, callback) {
     from: '"Martin @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Validate your MATCHA account :)",
-    text: `Hello ${userName}! Please click the link below to activate your Matcha account: http://localhost:4200/activate/${email}/${key}`,
+    html: `<html><h1>Hello ${userName}! Please click the link below to activate your Matcha account: </h1><br> \
+            <a href="https://qinder.cf/activate/${email}/${key}">Validate your account</a></html><br> \
+            Or copy, paste this link : <u>https://qinder.cf/activate/${email}/${key}</u>`,
   });
-
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
   callback(info);
 }
@@ -513,11 +502,10 @@ async function nodeMailerResetPasswordCall(email, key, callback) {
     from: '"Clément @ MATCHA" <martin@matcha.io>',
     to: email,
     subject: "Reset your MATCHA password",
-    text: `Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: http://localhost:4200/resetPassword/${email}/${key}`,
+    html: `<html><h1>Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: </h1><br> \
+            <a href="https://qinder.cf/resetPassword/${email}/${key}">Reset your password</a></html> <br> \
+            Or copy, paste this link : <u>https://qinder.cf/activate/${email}/${key}</u>`,
   });
-
-  console.log("Message sent: %s", info.messageId);
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 
   callback(info);
 }

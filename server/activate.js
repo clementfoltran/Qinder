@@ -11,7 +11,7 @@ exports.enterViewActivate = (req, res) => {
       const query = db.format(sql, [req.params.email]);
       db.query(query, (err, response) => {
         if (err) {
-          console.error(err);
+          // console.error(err);
           res.json({
             success: false,
             message: 'User not found',

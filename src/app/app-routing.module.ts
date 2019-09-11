@@ -59,7 +59,6 @@ const routes: Routes = [
   {
     path: 'populate',
     component: PopulateComponent,
-    canActivate: [IsLoggedInGuard],
   }
 ];
 

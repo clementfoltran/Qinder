@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { LoadMatchesParameter } from './services/load-matches/load-matches-parameter';
 import { LoadMatchesReturn } from './services/load-matches/load-matches-return';
 import { LoadMatchesService } from './services/load-matches/load-matches.service';
@@ -37,6 +37,8 @@ import * as moment from 'moment';
   providers: [ LastConnectedTimeFormatPipe ]
 })
 export class ChatComponent implements OnInit {
+
+  @ViewChild('scrollMe', {static: false}) scrollMe: ElementRef;
 
   constructor(public loadMatchesService: LoadMatchesService,
               public getUserPhotosService: GetUserPhotosService,
@@ -78,6 +80,11 @@ export class ChatComponent implements OnInit {
   public previousId = 0;
   public userInfos = [];
   public userMatchedPhotos: Photo[];
+  // public clickedData: string;
+
+  clickedInfo() {
+    this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
+  }
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -89,8 +96,6 @@ export class ChatComponent implements OnInit {
       .subscribe((result: LoadMatchesReturn) => {
         if (result.success) {
           this.initMatchPic(result.matches_list);
-        } else {
-          console.log(result.message);
         }
       });
   }
@@ -110,8 +115,6 @@ export class ChatComponent implements OnInit {
                   me.picture = this.userPhotos[0].photo;
                   this.matchesObjects.push(me);
                 }
-              } else {
-                  console.log(result.message);
               }
             });
         }
@@ -132,8 +135,6 @@ export class ChatComponent implements OnInit {
           if (this.userPhotos.length > 0) {
             this.userMatchedPicture = this.userPhotos[0].photo;
           }
-        } else {
-            console.log(result.message);
         }
       });
 
@@ -144,33 +145,28 @@ export class ChatComponent implements OnInit {
       .subscribe((result: EnterViewHomeReturn) => {
         if (result.success) {
           this.userMatchedName = result.firstname;
-        } else {
-          console.log(result.message);
         }
       });
   }
 
-  loadMatchProfileData() {
+  async loadMatchProfileData() {
     if (this.profileWasOpened === 0) {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
     }
-    this.getUserInfosService.enterView(this.userMatchedId)
+    await this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
         if (result.success) {
           this.userInfos = result.user;
+          console.log('online = ', this.userInfos[0].online);
           this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
-        } else {
-          console.log(result.message);
         }
       });
-    this.getUserPhotosService.getUserPhotos(this.userMatchedId)
+    await this.getUserPhotosService.getUserPhotos(this.userMatchedId)
       .subscribe((result: GetUserPhotosReturn) => {
         if (result.success) {
           this.userMatchedPhotos = result.photos;
-        } else {
-          console.log(result.message);
         }
       });
   }
@@ -199,10 +195,7 @@ export class ChatComponent implements OnInit {
       this.getMessagesArrayService.loadConversation(this.APIParameterLoadConversation)
         .subscribe((result: LoadConversationReturn) => {
           if (result.success) {
-            console.log('result.messageArray = ', result.messageArray);
             this.fillMessagesArray(result.messageArray);
-          } else {
-            console.log(result.message);
           }
         });
     }
@@ -221,6 +214,9 @@ export class ChatComponent implements OnInit {
         this.messageList.push(me);
       }
     }
+    setTimeout(() => {
+      this.clickedInfo();
+    }, 100);
   }
 
   // JOIN CHAT ROOM
@@ -254,7 +250,6 @@ export class ChatComponent implements OnInit {
           this.saveMessage(this.id, msg, 1);
           // Send a notification to the recipient
           this.matchesObjects.forEach((v) => {
-            console.log(v);
             if (v.id.id_match === this.currentMatchId) {
               this.socketNotificationService.notify(this.id, v.id.id_user_matched, 6);
             }
@@ -274,9 +269,7 @@ export class ChatComponent implements OnInit {
     this.saveMessageService.saveMessage(this.APIParameterSaveMessage)
       .subscribe((result: SaveMessageReturn) => {
         if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
+          // console.log(result.message);
         }
       });
   }

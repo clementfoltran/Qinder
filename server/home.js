@@ -1,7 +1,7 @@
 const db = require('./database.js');
 const notification = require('./notification.js');
 
-exports.enterViewHome = (req, res) => {
+exports.enterViewHome = async (req, res) => {
   if (!req.body) {
     res.sendStatus(500);
   } else {
@@ -66,7 +66,6 @@ exports.getUserToSwipe = (req, res) => {
       let sql = '';
       let query;
       // Let configure user tags preference
-      console.log(req.body.prefTags);
       let prefTags = '';
       for (let i = 0; i < req.body.prefTags.length; i++) {
         prefTags += 'id_tag = ' + req.body.prefTags[i].id_tag;
@@ -76,28 +75,30 @@ exports.getUserToSwipe = (req, res) => {
       }
       if (req.body.interest === 'Both') {
         // ADD DISTANCE CHECK
-        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
-        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched AND swipe.id_user = ?) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
-        AND EXISTS(SELECT null FROM PHOTO WHERE user.id_user = photo.id_user) \
+        AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
-        LIMIT 1';
+        ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
+          req.body.id,
           req.body.id,
           maxAge,
           minAge,
           req.body.popularity,
         ]);
       } else {
-        sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year, popularity FROM user \
-        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
+        sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
+        WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched AND swipe.id_user = ?) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
-        AND EXISTS(SELECT null FROM PHOTO WHERE user.id_user = photo.id_user) \
+        AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        AND user.gender = ? AND popularity BETWEEN 0 AND ? LIMIT 1';
+        AND user.gender = ? AND popularity BETWEEN 0 AND ? ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
+          req.body.id,
           req.body.id,
           maxAge,
           minAge,
@@ -119,7 +120,9 @@ exports.getUserToSwipe = (req, res) => {
               bio: response[0].bio,
               position: JSON.parse(response[0].position),
               year: response[0].year,
-              popularity: response[0].popularity
+              popularity: response[0].popularity,
+              online: response[0].online,
+              lastConnected: response[0].last_connected
             });
           } else {
             res.json({ success: false, message: 'There are no more users to match with, try to change your parameters or come back later' });
@@ -211,7 +214,6 @@ function updateRatio(idUser) {
         if (err) throw err
         else {
           const nMatch = response[0].nmatch;
-          console.log(nMatch, nSwipePos);
           // Ratio calcul
           const ratio = (nMatch / nSwipePos) * 100;
           sql = 'UPDATE user SET popularity = ? WHERE id_user = ?';
@@ -236,7 +238,6 @@ exports.swipe = async (req, res) => {
       let sql = 'INSERT INTO swipe VALUES(id_swipe, ?, ?, ?, NULL)';
       let query = db.format(sql, [ req.body.id_user, req.body.id_user_, req.body.like ]);
       await db.query(query, (err) => {
-        console.log(req.body.like);
         if (err) {
           throw err
         } else if (req.body.like) {
@@ -248,7 +249,6 @@ exports.swipe = async (req, res) => {
           db.query(query, (err, response) => {
             if (err) throw err;
             else if (response[0]) {
-              console.log(response[0].id_user);
               const insertMatch = 'INSERT INTO `match` VALUES(id_match, NOW())';
               query = db.format(insertMatch);
               db.query(query, (err, response) => {

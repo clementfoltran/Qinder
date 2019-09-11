@@ -1,5 +1,6 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 // SOCKET.IO
 let http = require('http').Server(app);
@@ -27,8 +28,21 @@ app.use(bodyParser.json({limit: '10mb', extended: true}));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type, authorization');
+  res.header('Access-Control-Allow-Credentials', true);
   next();
 });
+
+// var whitelist = ['https://qinder.cf', 'https://apiqinder.cf', 'https://gmail.com', 'http://ip-api.com/json']
+// var corsOptions = {
+//   origin: (origin, callback) => {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
+// app.use(cors(corsOptions));
 
 // Check the request
 const checkUserToken = (req, res, next) => {
@@ -46,7 +60,7 @@ const checkUserToken = (req, res, next) => {
 // POST routes
 app.post('/login', urlencodedParser, user.login);
 app.post('/oauth', urlencodedParser, oauth.oauth);
-app.post('/updateGeolocation', urlencodedParser, checkUserToken, user.updateGeolocation);
+app.post('/updateGeolocation', urlencodedParser, user.updateGeolocation);
 app.post('/register', urlencodedParser, user.register);
 app.post('/sendmail', urlencodedParser, user.sendMail);
 app.post('/reportUser', urlencodedParser, checkUserToken, user.reportUser);
@@ -97,11 +111,7 @@ app.get('/removePrefTag/:id', urlencodedParser, checkUserToken, user.removePrefT
 
 app.get('/getProfilePhoto/:id', urlencodedParser, checkUserToken, user.getProfilePhoto);
 
-app.get('/randomUser', urlencodedParser, checkUserToken, generator.randomUser);
+app.get('/randomUser', urlencodedParser, generator.randomUser);
 
 app.get('/getNotifications/:id', urlencodedParser, checkUserToken, notification.getNotifications);
 app.get('/deleteNotifications/:id', urlencodedParser, checkUserToken, notification.deleteNotification);
-
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });

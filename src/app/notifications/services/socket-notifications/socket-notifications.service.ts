@@ -63,7 +63,6 @@ export class SocketNotificationsService {
       }
       if (obj.notif === 6) {
         this.nbMessages++;
-        console.log(this.nbMessages);
         this.messageService.add({
           severity: 'info', summary: 'New message', detail: 'You\'ve got a message' , life: 6000
         });
@@ -97,7 +96,6 @@ export class SocketNotificationsService {
     try {
       this.socket = io.connect('http://localhost:5000');
       this.socket.on('receive notifications', this.receive);
-      console.log('soket listening on port 5000');
     } catch (e) {
         console.log('Could not connect socket.io');
     }

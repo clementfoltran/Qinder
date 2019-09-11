@@ -28,12 +28,12 @@ exports.randomUser = async (req, res) => {
     res.sendStatus(500);
   } else {
     // for (let index; index < 1000; index++) {
-      await request('https://randomuser.me/api/', { json: true }, (err, response) => {
+      await request('https://randomuser.me/api/', { json: true }, async (err, response) => {
         if (err) {
           res.json({ success: false, message: 'Failed to retrieve randomuser' });
         } else {
           if (res) {
-            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)';
+            let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
             let index = response.body.results[0];
             const position = {
               latitude: Math.random() * (+50 - +48) + +48,
@@ -50,27 +50,27 @@ exports.randomUser = async (req, res) => {
               null, null, null, null, null, 1,
               Math.random() * (+100 - +1) + +1,
               JSON.stringify(position),
-              0, 100, 6
+              false, null, 100
             ]);
-            db.query(query, (err, response) => {
+            await db.query(query, async (err, response) => {
               if (err) {
                 res.json({ success: false, message: 'Failed to add randomuser' });
                 throw err;
               } else {
                 const idUser = response.insertId;
-                request(`https://source.unsplash.com/random/?$${ index.gender }`, { json: true }, (err, response) => {
+                await request(`https://source.unsplash.com/random/?$${ index.gender }`, { json: true }, (err, response) => {
                   sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())';
                   const photoUrl = response.request.uri.href;
                   query = db.format(sql, [
                     idUser,
                     photoUrl
                   ]);
-                  db.query(query, (err) => {
+                  db.query(query, async (err) => {
                     if (err) {
                       res.json({ success: false, message: 'Failed to add randomuser' });
                       throw err;
                     } else {
-                      randomTags(idUser);
+                      await randomTags(idUser);
                       res.json({ success: true, message: '', data: index, photoUrl: photoUrl });
                     }
                   });
