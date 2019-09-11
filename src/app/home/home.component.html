@@ -31,7 +31,8 @@
               <label><strong>✨ Here are the people you can match with ✨</strong></label>
           </div>
         </div>
-      <div class="row card-group">
+      <div class="scroll">
+        <div class="row card-group">
           <div class="mb-4 col-sm-2" *ngFor="let people of peopleInHeavens; let i = index;">
             <div class="card" style="opacity: 0">
               <img class="card-img-top" src="{{ people.photo }}" alt="Card image cap">
@@ -41,6 +42,7 @@
             </div>
           </div>
         </div>
+      </div>
     </div>
 
     <!-- SWIPE ZONE -->
@@ -80,7 +82,7 @@
                       </div>
                     </div>
                     <div *ngIf="userToSwipeBio">
-                      <p class="card-text">{{ userToSwipeBio }}</p>
+                      <p class="card-text"><i>'' {{ userToSwipeBio }} ''</i></p>
                     </div>
                 </div>
               </div>

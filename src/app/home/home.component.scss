@@ -27,6 +27,13 @@
   display: inline;
 }
 
+.scroll {
+  width: 100%;
+  height: 80vh;
+  overflow-y: scroll;
+  background-color: rgba(36, 36, 36, 0.027);
+}
+
 // .btn {
 //   background-color: rgba(240, 67, 33, 0.8);
 // }
