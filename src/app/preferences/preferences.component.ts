@@ -45,6 +45,7 @@ declare var $: any;
 export class PreferencesComponent implements OnInit {
   @Output() updateResolveDataHome = new EventEmitter<EnterViewHomeReturn>();
   @Output() updateEvent = new EventEmitter<string>();
+  @Output() updatePhotos = new EventEmitter<string>();
   /**
    *  Resolve data for the view
    *
@@ -311,7 +312,10 @@ export class PreferencesComponent implements OnInit {
               life: 6000,
             });
             this.selectedFile = null;
-            this.updateEvent.next('');
+            console.log(this.userPhotos.length);
+            if (this.userPhotos.length === 1) {
+              this.updatePhotos.next('');
+            }
           }
         });
     } else if (!this.selectedFile) {
@@ -350,6 +354,9 @@ export class PreferencesComponent implements OnInit {
       .subscribe((result: DeletePhotoReturn) => {
         if (result.success) {
           this.userPhotos.splice(index, 1);
+          if (this.userPhotos.length === 0) {
+            this.updatePhotos.next('');
+          }
         } else {
           this.messageService.add({
             severity: 'error',

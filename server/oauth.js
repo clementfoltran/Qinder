@@ -13,10 +13,10 @@ exports.oauth = (req, res) => {
       db.query(query, (err, response) => {
         if (err) throw err;
         if (response && response.length === 0) {
-          let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-          let query = db.format(sql, [ 
-            req.body.firstname, req.body.lastname, req.body.email, null, req.body.gender,
-            'Both', null, 20, 18, 60, null, 1, 100, null, 0, null, 0
+          let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+          let query = db.format(sql, [
+            req.body.firstname, req.body.lastname, req.body.email, null, req.body.gender, new Date(req.body.birthdate),
+            'Both', null, 10, 18, 100, req.body.key, false, 100, null, 0, null, 100
           ]);
           db.query(query, (err, response) => {
             if (err) throw err;

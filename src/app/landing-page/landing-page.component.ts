@@ -33,7 +33,6 @@ import { SaveNewPasswordReturn } from './services/save-new-password/save-new-pas
 import { SaveNewPasswordService } from './services/save-new-password/save-new-password.service';
 import { IpLocationService } from './services/ip-location/ip-location.service';
 import { IpLocationReturn } from './services/ip-location/ip-location.return';
-import { AuthService, FacebookLoginProvider, SocialUser, LoginOpt } from 'angularx-social-login';
 import { OauthService } from './services/oauth/oauth.service';
 import { OauthParameter } from './services/oauth/oauth.parameter';
 
