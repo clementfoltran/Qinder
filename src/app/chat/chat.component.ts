@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { LoadMatchesParameter } from './services/load-matches/load-matches-parameter';
 import { LoadMatchesReturn } from './services/load-matches/load-matches-return';
 import { LoadMatchesService } from './services/load-matches/load-matches.service';
@@ -37,6 +37,8 @@ import * as moment from 'moment';
   providers: [ LastConnectedTimeFormatPipe ]
 })
 export class ChatComponent implements OnInit {
+
+  @ViewChild('scrollMe', {static: false}) scrollMe: ElementRef;
 
   constructor(public loadMatchesService: LoadMatchesService,
               public getUserPhotosService: GetUserPhotosService,
@@ -78,6 +80,11 @@ export class ChatComponent implements OnInit {
   public previousId = 0;
   public userInfos = [];
   public userMatchedPhotos: Photo[];
+  // public clickedData: string;
+
+  clickedInfo() {
+    this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
+  }
 
   // LOAD MATCHES DATA
   // ----------------------------------------------------------------------------------------
@@ -207,6 +214,9 @@ export class ChatComponent implements OnInit {
         this.messageList.push(me);
       }
     }
+    setTimeout(() => {
+      this.clickedInfo();
+    }, 100);
   }
 
   // JOIN CHAT ROOM
@@ -259,7 +269,7 @@ export class ChatComponent implements OnInit {
     this.saveMessageService.saveMessage(this.APIParameterSaveMessage)
       .subscribe((result: SaveMessageReturn) => {
         if (result.success) {
-          console.log(result.message);
+          // console.log(result.message);
         }
       });
   }
