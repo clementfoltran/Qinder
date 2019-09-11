@@ -2,5 +2,5 @@ export interface NotificationParmeter {
     to: number;
     from: number;
     notif: number;
-    ts: number;
+    ts: Date;
 }
