@@ -74,8 +74,6 @@ export class SettingsComponent implements OnInit {
               detail: 'Your email address has been updated :)',
               life: 6000
             });
-          } else {
-            console.log(result.message);
           }
         });
       } else {

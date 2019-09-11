@@ -1,5 +1,6 @@
 const db = require('./database.js');
 const request = require('request');
+const passwordHash = require('password-hash'); 
 
 async function randomTags(idUser) {
   const sql = 'INSERT INTO usertag VALUES(id_utag, ?, ?)';
@@ -43,11 +44,11 @@ exports.randomUser = async (req, res) => {
               index.name.first,
               index.name.last,
               index.email,
-              index.login.sha1,
+              passwordHash.generate('clemclem'),
               index.gender.charAt(0).toUpperCase() + index.gender.slice(1),
               new Date(index.dob.date),
               (index.gender === 'male') ? 'Female' : 'Male',
-              null, null, null, null, null, 1,
+              null, 10, 18, 100, null, 1,
               Math.random() * (+100 - +1) + +1,
               JSON.stringify(position),
               false, null, 100
@@ -58,14 +59,14 @@ exports.randomUser = async (req, res) => {
                 throw err;
               } else {
                 const idUser = response.insertId;
-                await request(`https://source.unsplash.com/random/?$${ index.gender }`, { json: true }, (err, response) => {
+                await request(`https://source.unsplash.com/random/?$${ index.gender }`, { json: true }, async (err, response) => {
                   sql = 'INSERT INTO photo VALUES(id_photo, ?, ?, 0, NOW())';
                   const photoUrl = response.request.uri.href;
                   query = db.format(sql, [
                     idUser,
                     photoUrl
                   ]);
-                  db.query(query, async (err) => {
+                  await db.query(query, async (err) => {
                     if (err) {
                       res.json({ success: false, message: 'Failed to add randomuser' });
                       throw err;
