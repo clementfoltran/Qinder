@@ -88,7 +88,7 @@ export class SocketNotificationsService {
       from: id_user,
       firstname,
       notif,
-      ts: 1
+      ts: new Date()
     };
     this.socket.emit('notification', notification);
   }

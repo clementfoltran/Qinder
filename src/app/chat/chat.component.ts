@@ -84,7 +84,7 @@ export class ChatComponent implements OnInit {
   public userMatchedPhotos: Photo[];
   // public clickedData: string;
 
-  clickedInfo() {
+  scrollIt() {
     this.scrollMe.nativeElement.scrollTop = this.scrollMe.nativeElement.scrollHeight;
   }
 
@@ -156,6 +156,9 @@ export class ChatComponent implements OnInit {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
+      setTimeout(() => {
+        this.scrollIt();
+      }, 100);
     }
     await this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
@@ -216,7 +219,7 @@ export class ChatComponent implements OnInit {
       }
     }
     setTimeout(() => {
-      this.clickedInfo();
+      this.scrollIt();
     }, 100);
   }
 
@@ -245,7 +248,7 @@ export class ChatComponent implements OnInit {
           const me = Object.create(obj);
           me.id = this.id;
           me.msg = msg;
-          me.ts = 1; // dummy value replaced by NOW() in the backend
+          me.ts = new Date(); // dummy value replaced by NOW() in the backend
           this.socket.emit('send message', me);
           this.messageForm.reset();
           this.saveMessage(this.id, msg, 1);
@@ -256,6 +259,9 @@ export class ChatComponent implements OnInit {
             }
           });
         }
+        setTimeout(() => {
+          this.scrollIt();
+        }, 100);
       }
     }
   }

@@ -3,5 +3,5 @@ export interface NotificationParmeter {
     from: number;
     firstname: string;
     notif: number;
-    ts: number;
+    ts: Date;
 }
