@@ -159,7 +159,6 @@ export class ChatComponent implements OnInit {
       .subscribe((result: EnterViewSettingsReturn) => {
         if (result.success) {
           this.userInfos = result.user;
-          console.log('online = ', this.userInfos[0].online);
           this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
         }
       });
