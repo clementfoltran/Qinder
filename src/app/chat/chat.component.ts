@@ -142,20 +142,21 @@ export class ChatComponent implements OnInit {
       });
   }
 
-  loadMatchProfileData() {
+  async loadMatchProfileData() {
     if (this.profileWasOpened === 0) {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
     }
-    this.getUserInfosService.enterView(this.userMatchedId)
+    await this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
         if (result.success) {
           this.userInfos = result.user;
+          console.log('online = ', this.userInfos[0].online);
           this.userInfos[0].birthdate = this.getAge(this.userInfos[0].birthdate);
         }
       });
-    this.getUserPhotosService.getUserPhotos(this.userMatchedId)
+    await this.getUserPhotosService.getUserPhotos(this.userMatchedId)
       .subscribe((result: GetUserPhotosReturn) => {
         if (result.success) {
           this.userMatchedPhotos = result.photos;
