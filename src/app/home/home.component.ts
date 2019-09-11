@@ -263,7 +263,7 @@ export class HomeComponent implements OnInit {
           this.userToSwipe = false;
           setTimeout(() => {
             this.getUserToSwipe();
-          }, 3000);
+          }, 1);
         }
         this.getUserToSwipeTags(result.id);
       }
