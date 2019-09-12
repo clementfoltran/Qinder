@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { PreferencesComponent } from './../preferences/preferences.component';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {EnterViewHomeReturn} from './services/enter-view-home/enter-view-home-return';
@@ -155,14 +156,16 @@ export class HomeComponent implements OnInit {
 
   async getUserPosition() {
     if (navigator.geolocation) {
-      await navigator.geolocation.getCurrentPosition(position => {
+      await navigator.geolocation.getCurrentPosition(async position => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         if (latitude && longitude) {
+          await console.log({latitude, longitude});
           this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
         }
       }, async error => {
         if (error) {
+          console.log(error);
           await this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
             if (result.lat) {
               const latitude = result.lat;
@@ -259,10 +262,17 @@ export class HomeComponent implements OnInit {
             userToSwipePos
           )) / 1000);
         }
-        if (this.userToSwipeDistance > this.distance) {
+        if (this.userToSwipeDistance > this.distance || !this.userToSwipeDistance) {
           this.userToSwipe = false;
-          setTimeout(() => {
-            this.getUserToSwipe();
+          setTimeout(async() => {
+            try {
+              await this.getUserPosition();
+            } catch (err) {
+              throw err;
+            } finally {
+              await console.log('finaly');
+              await this.getUserToSwipe();
+            }
           }, 1);
         }
         this.getUserToSwipeTags(result.id);
@@ -475,6 +485,7 @@ async getTheHeavens() {
     } catch (err) {
       throw err;
     } finally {
+      await console.log('finaly');
       await this.getUserToSwipe();
     }
     // this.nbMessages = this.socketNotificationService.nbMessages;
