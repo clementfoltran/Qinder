@@ -158,9 +158,11 @@ export class ChatComponent implements OnInit {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
-      setTimeout(() => {
-        this.scrollIt();
-      }, 100);
+      if (this.messageList.length > 1) {
+        setTimeout(() => {
+          this.scrollIt();
+        }, 100);
+      }
     }
     await this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
@@ -263,9 +265,11 @@ export class ChatComponent implements OnInit {
             }
           });
         }
-        setTimeout(() => {
-          this.scrollIt();
-        }, 100);
+        if (this.messageList.length > 1) {
+          setTimeout(() => {
+            this.scrollIt();
+          }, 100);
+        }
       }
     }
   }
