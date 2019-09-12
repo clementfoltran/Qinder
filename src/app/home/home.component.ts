@@ -248,6 +248,7 @@ export class HomeComponent implements OnInit {
         this.userToSwipeName = result.firstname;
         this.userToSwipeBio = result.bio;
         this.userToSwipeId = result.id;
+        console.log(result.popularity);
         this.userToSwipePopularity = result.popularity;
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
@@ -259,19 +260,23 @@ export class HomeComponent implements OnInit {
             userToSwipePos
           )) / 1000);
         }
-        if (this.userToSwipeDistance >= this.resolveData.distance || !this.userCurrentPosition) {
-          this.userToSwipe = false;
-          setTimeout(async () => {
-            try {
-              await this.getUserPosition();
-            } catch (err) {
-              throw err;
-            } finally {
-              await this.getUserToSwipe();
-            }
-          }, 250);
-        }
         this.getUserToSwipeTags(result.id);
+      }
+      if (this.userToSwipeDistance >= this.resolveData.distance || !this.userCurrentPosition
+          || (this.userToSwipeAge < this.resolveData.minage && this.userToSwipeAge > this.resolveData.maxage)
+          || (this.userToSwipePopularity > this.resolveData.pop)) {
+        this.userToSwipe = false;
+        setTimeout(async () => {
+          try {
+            if (!this.userCurrentPosition) {
+              await this.getUserPosition();
+            }
+          } catch (err) {
+            throw err;
+          } finally {
+            await this.getUserToSwipe();
+          }
+        }, 250);
       }
       // Notify userToSwipe
       this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, result.id, 1);

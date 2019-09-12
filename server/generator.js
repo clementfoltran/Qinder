@@ -34,7 +34,7 @@ exports.randomUser = async (req, res) => {
       if (err) {
         res.json({ success: false, message: 'Failed to retrieve randomuser' });
       } else {
-        let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+        let sql = 'INSERT INTO user VALUES(id_user, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)';
         const randomUsers = response.body;
         for (let i = 0; i < randomUsers.length; i++) {
           const position = {
@@ -47,12 +47,12 @@ exports.randomUser = async (req, res) => {
             randomUsers[i].email,
             passwordHash.generate('clemclem'),
             randomUsers[i].gender.charAt(0).toUpperCase() + randomUsers[i].gender.slice(1),
-            new Date(randomUsers[i].birthday.dmy),
+            new Date(randomUsers[i].birthday.mdy),
             (randomUsers[i].gender === 'male') ? 'Female' : 'Male',
             null, 10, 18, 100, null, 1,
             Math.random() * (+100 - +1) + +1,
             JSON.stringify(position),
-            false, null, 100
+            false, 100
           ]);
           await db.query(query, async (err, response) => {
             if (err) {
