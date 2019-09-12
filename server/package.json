@@ -19,6 +19,7 @@
     "nodemon": "^1.19.1",
     "passport": "^0.4.0",
     "passport-facebook": "^3.0.0",
-    "password-hash": "^1.2.2"
+    "password-hash": "^1.2.2",
+    "socket.io": "^2.2.0"
   }
 }
