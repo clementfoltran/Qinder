@@ -259,7 +259,7 @@ export class HomeComponent implements OnInit {
             userToSwipePos
           )) / 1000);
         }
-        if (this.userToSwipeDistance > this.distance || !this.userToSwipeDistance) {
+        if (this.userToSwipeDistance > this.distance) {
           this.userToSwipe = false;
           setTimeout(async () => {
             try {
@@ -481,7 +481,6 @@ async getTheHeavens() {
     } catch (err) {
       throw err;
     } finally {
-      await console.log('finaly');
       await this.getUserToSwipe();
     }
     // this.nbMessages = this.socketNotificationService.nbMessages;

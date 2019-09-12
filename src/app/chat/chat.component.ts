@@ -220,9 +220,11 @@ export class ChatComponent implements OnInit {
         this.messageList.push(me);
       }
     }
-    setTimeout(() => {
-      this.scrollIt();
-    }, 100);
+    if (this.messageList.length > 1) {
+      setTimeout(() => {
+        this.scrollIt();
+      }, 100);
+    }
   }
 
   // JOIN CHAT ROOM

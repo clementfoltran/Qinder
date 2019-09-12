@@ -30,14 +30,15 @@ exports.removeMatch = (req, res) => {
                   res.json({ success: false, message: 'Network error' });
                   throw err;
                 } else {
-                  sql = 'DELETE FROM message WHERE id_match = ?';
-                  query = db.format(sql, [req.params.id]);
-                  if (err) {
-                    res.json({ success: false, message: 'Network error' });
-                    throw err;
-                  } else {
-                    res.json({ success: true, message: '' });
-                  }
+                  // sql = 'DELETE FROM message WHERE id_match = ?';
+                  // query = db.format(sql, [req.params.id]);
+                  // if (err) {
+                  //   res.json({ success: false, message: 'Network error' });
+                  //   throw err;
+                  // } else {
+                  //   res.json({ success: true, message: '' });
+                  // }
+                  res.json({ success: true, message: '' });
                 }
               });
             }
