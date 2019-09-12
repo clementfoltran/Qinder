@@ -230,7 +230,7 @@ export class HomeComponent implements OnInit {
 
   async getUserToSwipe() {
     this.userToSwipe = false;
-    const APIParameter: GetUserToSwipeParameter = {
+    let APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
       gender: this.resolveData.gender,
@@ -240,7 +240,6 @@ export class HomeComponent implements OnInit {
       popularity: this.resolveData.pop,
       prefTags: this.resolveData.prefTags,
     };
-    console.log(this.resolveData.distance);
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe(async (result: GetUserToSwipeReturn) => {
       if (result.success) {
@@ -260,7 +259,7 @@ export class HomeComponent implements OnInit {
             userToSwipePos
           )) / 1000);
         }
-        if (this.userToSwipeDistance > this.distance || !this.userCurrentPosition) {
+        if (this.userToSwipeDistance >= this.resolveData.distance || !this.userCurrentPosition) {
           this.userToSwipe = false;
           setTimeout(async () => {
             try {

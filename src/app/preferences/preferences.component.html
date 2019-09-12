@@ -116,15 +116,15 @@
             </div>
             <div class="form-group mb-4">
               <label>Distance {{ distance }} kms</label>
-              <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+              <p-slider [(ngModel)]="distance" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (click)="updatePref()" (mouseup)="updatePref()"></p-slider>
             </div>
             <div class="form-group mb-4">
               <label>Age range {{ ageRange[0] }} - {{ ageRange[1] }}</label>
-              <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" [min]="18" [max]="100" (mouseup)="updatePref()"></p-slider>
+              <p-slider [(ngModel)]="ageRange" [ngModelOptions]="{standalone: true}" [range]="true" [min]="18" [max]="100" (click)="updatePref()" (mouseup)="updatePref()"></p-slider>
             </div>
             <div class="form-group mb-4">
               <label>Popularity preference {{ popularity }}</label>
-              <p-slider [(ngModel)]="popularity" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (mouseup)="updatePref()"></p-slider>
+              <p-slider [(ngModel)]="popularity" [ngModelOptions]="{standalone: true}"  [min]="0" [max]="100" (click)="updatePref()" (mouseup)="updatePref()"></p-slider>
             </div>
             <div class="row mx-auto">
               <div *ngFor="let tag of tags; let i = index">

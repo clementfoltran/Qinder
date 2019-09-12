@@ -273,8 +273,13 @@ export class PreferencesComponent implements OnInit {
             updateResolveDataHome.minage = this.APIParameterPref.minage;
             updateResolveDataHome.maxage = this.APIParameterPref.maxage;
             updateResolveDataHome.pop = this.APIParameterPref.pop;
-            await this.updateResolveDataHome.next(updateResolveDataHome);
-            await this.updateEvent.next('');
+            try {
+              await this.updateResolveDataHome.next(updateResolveDataHome);
+            } catch (err) {
+              throw err;
+            } finally {
+              await this.updateEvent.next('');
+            }
           } else {
             this.messageService.add({
               severity: 'error',
