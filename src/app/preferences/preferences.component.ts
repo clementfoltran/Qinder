@@ -187,7 +187,6 @@ export class PreferencesComponent implements OnInit {
   removePrefTag(idTag: number, index: number) {
     let prefTagId: number;
     let prefTagIndex: number;
-    
     this.prefTags.forEach((v) => {
       if (v.id_tag === idTag) {
         prefTagId = v.id_tpref;
@@ -270,7 +269,7 @@ export class PreferencesComponent implements OnInit {
               life: 6000,
             });
             this.updateEvent.next('');
-            let updateResolveDataHome = this.resolveData;
+            const updateResolveDataHome = this.resolveData;
             updateResolveDataHome.distance = this.APIParameterPref.distance;
             updateResolveDataHome.minage = this.APIParameterPref.minage;
             updateResolveDataHome.maxage = this.APIParameterPref.maxage;
@@ -312,7 +311,6 @@ export class PreferencesComponent implements OnInit {
               life: 6000,
             });
             this.selectedFile = null;
-            console.log(this.userPhotos.length);
             if (this.userPhotos.length === 1) {
               this.updatePhotos.next('');
             }
