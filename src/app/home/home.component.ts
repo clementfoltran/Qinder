@@ -230,7 +230,7 @@ export class HomeComponent implements OnInit {
 
   async getUserToSwipe() {
     this.userToSwipe = false;
-    let APIParameter: GetUserToSwipeParameter = {
+    const APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
       gender: this.resolveData.gender,
@@ -269,7 +269,7 @@ export class HomeComponent implements OnInit {
             } finally {
               await this.getUserToSwipe();
             }
-          }, 500);
+          }, 250);
         }
         this.getUserToSwipeTags(result.id);
       }
