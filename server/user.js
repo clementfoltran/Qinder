@@ -30,14 +30,15 @@ exports.removeMatch = (req, res) => {
                   res.json({ success: false, message: 'Network error' });
                   throw err;
                 } else {
-                  sql = 'DELETE FROM message WHERE id_match = ?';
-                  query = db.format(sql, [req.params.id]);
-                  if (err) {
-                    res.json({ success: false, message: 'Network error' });
-                    throw err;
-                  } else {
-                    res.json({ success: true, message: '' });
-                  }
+                  // sql = 'DELETE FROM message WHERE id_match = ?';
+                  // query = db.format(sql, [req.params.id]);
+                  // if (err) {
+                  //   res.json({ success: false, message: 'Network error' });
+                  //   throw err;
+                  // } else {
+                  //   res.json({ success: true, message: '' });
+                  // }
+                  res.json({ success: true, message: '' });
                 }
               });
             }
@@ -504,7 +505,7 @@ async function nodeMailerResetPasswordCall(email, key, callback) {
     subject: "Reset your MATCHA password",
     html: `<html><h1>Hello, I am Clément from the Qinder team. Martin has let me know you forgot your credentials? Please click this link to reset your password: </h1><br> \
             <a href="https://qinder.cf/resetPassword/${email}/${key}">Reset your password</a></html> <br> \
-            Or copy, paste this link : <u>https://qinder.cf/activate/${email}/${key}</u>`,
+            Or copy, paste this link : <u>https://qinder.cf/resetPassword/${email}/${key}</u>`,
   });
 
   callback(info);

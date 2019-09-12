@@ -56,10 +56,10 @@ const routes: Routes = [
     component: LandingPageComponent,
     canActivate: [IsLoggedOutGuard],
   },
-  {
-    path: 'populate',
-    component: PopulateComponent,
-  }
+  // {
+  //   path: 'populate',
+  //   component: PopulateComponent,
+  // }
 ];
 
 @NgModule({

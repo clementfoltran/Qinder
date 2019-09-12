@@ -7,8 +7,6 @@ export class LastConnectedTimeFormatPipe implements PipeTransform {
         let elapsed = (Date.now() - +new Date(connectedTime)) / 60000;
         let time = '';
 
-        console.log('elapsed = ', elapsed);
-
         if (elapsed < 1) {
             return('just now');
         } else if (elapsed < 60) {

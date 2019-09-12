@@ -1,3 +1,4 @@
+import { async } from '@angular/core/testing';
 import { PreferencesComponent } from './../preferences/preferences.component';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {EnterViewHomeReturn} from './services/enter-view-home/enter-view-home-return';
@@ -155,7 +156,7 @@ export class HomeComponent implements OnInit {
 
   async getUserPosition() {
     if (navigator.geolocation) {
-      await navigator.geolocation.getCurrentPosition(position => {
+      await navigator.geolocation.getCurrentPosition(async position => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         if (latitude && longitude) {
@@ -164,9 +165,9 @@ export class HomeComponent implements OnInit {
       }, async error => {
         if (error) {
           await this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
-            if (result.lat) {
-              const latitude = result.lat;
-              const longitude = result.lon;
+            if (result.latitude) {
+              const latitude = result.latitude;
+              const longitude = result.longitude;
               this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
             }
           });
@@ -229,7 +230,7 @@ export class HomeComponent implements OnInit {
 
   async getUserToSwipe() {
     this.userToSwipe = false;
-    const APIParameter: GetUserToSwipeParameter = {
+    let APIParameter: GetUserToSwipeParameter = {
       id: this.resolveData.id,
       interest: this.resolveData.interest,
       gender: this.resolveData.gender,
@@ -238,7 +239,6 @@ export class HomeComponent implements OnInit {
       distance: this.resolveData.distance,
       popularity: this.resolveData.pop,
       prefTags: this.resolveData.prefTags,
-      
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe(async (result: GetUserToSwipeReturn) => {
@@ -259,16 +259,22 @@ export class HomeComponent implements OnInit {
             userToSwipePos
           )) / 1000);
         }
-        if (this.userToSwipeDistance > this.distance) {
+        if (this.userToSwipeDistance >= this.resolveData.distance || !this.userCurrentPosition) {
           this.userToSwipe = false;
-          setTimeout(() => {
-            this.getUserToSwipe();
-          }, 1);
+          setTimeout(async () => {
+            try {
+              await this.getUserPosition();
+            } catch (err) {
+              throw err;
+            } finally {
+              await this.getUserToSwipe();
+            }
+          }, 500);
         }
         this.getUserToSwipeTags(result.id);
       }
       // Notify userToSwipe
-      this.socketNotificationService.notify(+localStorage.getItem('userId'), result.id, 1);
+      this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, result.id, 1);
     });
   }
 
@@ -283,9 +289,9 @@ export class HomeComponent implements OnInit {
         if (result.success) {
           // if you like the person, we send a notification to this one
           if (like && !result.match) {
-            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 4);
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, this.userToSwipeId, 4);
           } else {
-            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.userToSwipeId, 5);
+            this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, this.userToSwipeId, 5);
           }
           this.getUserToSwipe();
           if (result.match) {
@@ -400,7 +406,6 @@ async getTheHeavens() {
     if (slider.classList.contains('opened')) {
       slider.classList.remove('opened');
       slider.classList.add('closed');
-  3;    // load data
       this.chatComponent.loadMatches();
     } else {
         slider.classList.remove('closed');

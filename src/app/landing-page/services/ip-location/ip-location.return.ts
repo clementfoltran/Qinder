@@ -1,24 +1,21 @@
 export interface IpLocationReturn {
-    query: string;
-    status: string;
-    continent: string;
-    continentCode: string;
-    country: string;
-    countryCode: string;
-    region: string;
-    regionName: string;
+    ip: string;
     city: string;
-    district: string;
-    zip: string;
-    lat: number;
-    lon: number;
+    region: string;
+    region_code: string;
+    country: string;
+    country_name: string;
+    continent_code: string;
+    in_eu: boolean;
+    postal: string;
+    latitude: number;
+    longitude: number;
     timezone: string;
+    utc_offset: string;
+    country_calling_code: string;
     currency: string;
-    isp: string;
+    languages: string;
+    asn: string;
     org: string;
-    as: string;
-    asname: string;
-    mobile: boolean;
-    proxy: boolean;
 }    
     

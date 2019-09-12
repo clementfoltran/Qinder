@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { LoadMatchesParameter } from './services/load-matches/load-matches-parameter';
 import { LoadMatchesReturn } from './services/load-matches/load-matches-return';
 import { LoadMatchesService } from './services/load-matches/load-matches.service';
@@ -29,6 +29,7 @@ import { ReportUserService } from './services/report-user/report-user.service';
 import { ReportUserReturn } from './services/report-user/report-user.return';
 import { SocketNotificationsService } from '../notifications/services/socket-notifications/socket-notifications.service';
 import * as moment from 'moment';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -39,6 +40,7 @@ import * as moment from 'moment';
 export class ChatComponent implements OnInit {
 
   @ViewChild('scrollMe', {static: false}) scrollMe: ElementRef;
+  @Input() resolveData: EnterViewHomeReturn = null;
 
   constructor(public loadMatchesService: LoadMatchesService,
               public getUserPhotosService: GetUserPhotosService,
@@ -117,6 +119,8 @@ export class ChatComponent implements OnInit {
                 }
               }
             });
+        } else {
+          // this.matchesObjects[0] =
         }
       }
     }
@@ -154,9 +158,11 @@ export class ChatComponent implements OnInit {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
-      setTimeout(() => {
-        this.scrollIt();
-      }, 100);
+      if (this.messageList.length > 1) {
+        setTimeout(() => {
+          this.scrollIt();
+        }, 100);
+      }
     }
     await this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
@@ -216,9 +222,11 @@ export class ChatComponent implements OnInit {
         this.messageList.push(me);
       }
     }
-    setTimeout(() => {
-      this.scrollIt();
-    }, 100);
+    if (this.messageList.length > 1) {
+      setTimeout(() => {
+        this.scrollIt();
+      }, 100);
+    }
   }
 
   // JOIN CHAT ROOM
@@ -231,7 +239,7 @@ export class ChatComponent implements OnInit {
       this.socket.emit('join room', matchId.toString());
       this.previousId = matchId;
     } catch (e) {
-        console.log('Could not connect socket.io');
+        // console.log('Could not connect socket.io');
     }
   }
 
@@ -253,13 +261,15 @@ export class ChatComponent implements OnInit {
           // Send a notification to the recipient
           this.matchesObjects.forEach((v) => {
             if (v.id.id_match === this.currentMatchId) {
-              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 6);
+              this.socketNotificationService.notify(this.id, this.resolveData.firstname, v.id.id_user_matched, 6);
             }
           });
         }
-        setTimeout(() => {
-          this.scrollIt();
-        }, 100);
+        if (this.messageList.length > 1) {
+          setTimeout(() => {
+            this.scrollIt();
+          }, 100);
+        }
       }
     }
   }
@@ -311,7 +321,7 @@ export class ChatComponent implements OnInit {
         this.reportUserService.reportUser(APIParameter)
           .subscribe((result: ReportUserReturn) => {
             if (result.success) {
-              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 3);
+              this.socketNotificationService.notify(this.id, this.resolveData.firstname, v.id.id_user_matched, 3);
             }
         });
       }
@@ -324,7 +334,7 @@ export class ChatComponent implements OnInit {
         this.removeMatchService.removeMatch(v.id.id_match)
           .subscribe((result: RemoveMatchReturn) => {
             if (result.success) {
-              this.socketNotificationService.notify(this.id, v.id.id_user_matched, 2);
+              this.socketNotificationService.notify(this.id, this.resolveData.firstname, v.id.id_user_matched, 2);
             }
           });
       }
@@ -340,7 +350,7 @@ export class ChatComponent implements OnInit {
     this.socket = io.connect('https://apiqinder.cf/', {path: '/socket.io/socket-chat'});
       this.socket.on('receive message', this.receive);
     } catch (e) {
-        console.log('Could not connect socket.io');
+      // console.log('Could not connect socket.io');
     }
   }
 
