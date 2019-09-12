@@ -259,7 +259,7 @@ export class HomeComponent implements OnInit {
             userToSwipePos
           )) / 1000);
         }
-        if (this.userToSwipeDistance > this.distance) {
+        if (this.userToSwipeDistance > this.distance || !this.userCurrentPosition) {
           this.userToSwipe = false;
           setTimeout(async () => {
             try {
