@@ -160,9 +160,9 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  addPrefTag(tag: Tag) {
+ async addPrefTag(tag: Tag) {
     this.addPrefTagService.addPrefTag({id_tag: tag.id_tag, id_user: this.userId})
-      .subscribe((result: AddPrefTagReturn) => {
+      .subscribe(async (result: AddPrefTagReturn) => {
         if (result.success) {
           this.prefTags.push({
             id_tpref: result.id_tpref,
@@ -170,7 +170,7 @@ export class PreferencesComponent implements OnInit {
             id_user: this.userId,
             tag: tag.tag
           });
-          this.updateEvent.next('');
+          await this.updateEvent.next('');
         }
       });
   }
@@ -184,7 +184,7 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  removePrefTag(idTag: number, index: number) {
+  async removePrefTag(idTag: number, index: number) {
     let prefTagId: number;
     let prefTagIndex: number;
     this.prefTags.forEach((v) => {
@@ -198,10 +198,10 @@ export class PreferencesComponent implements OnInit {
       }
     });
     this.removePrefTagService.removePrefTag(prefTagId)
-      .subscribe((result: RemovePrefTagReturn) => {
+      .subscribe(async (result: RemovePrefTagReturn) => {
         if (result.success) {
           this.prefTags.splice(prefTagIndex, 1);
-          this.updateEvent.next('');
+          await this.updateEvent.next('');
         }
       });
   }
