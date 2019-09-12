@@ -310,7 +310,7 @@ exports.saveUserLastConnection = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'UPDATE user SET last_connected = ? WHERE id_user = ?';
+      const sql = 'UPDATE user SET last_connected = NOW() WHERE id_user = ?';
       const query = db.format(sql, [req.body.date, req.body.userId]);
       db.query(query, (err) => {
         if (err) {
