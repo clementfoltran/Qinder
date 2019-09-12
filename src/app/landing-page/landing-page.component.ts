@@ -93,9 +93,9 @@ export class LandingPageComponent implements OnInit {
       }, error => {
         if (error) {
           this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
-            if (result.lat) {
-              this.latitude = result.lat;
-              this.longitude = result.lon;
+            if (result.latitude) {
+              this.latitude = result.latitude;
+              this.longitude = result.longitude;
             }
           });
         }

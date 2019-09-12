@@ -165,9 +165,9 @@ export class HomeComponent implements OnInit {
       }, async error => {
         if (error) {
           await this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
-            if (result.lat) {
-              const latitude = result.lat;
-              const longitude = result.lon;
+            if (result.latitude) {
+              const latitude = result.latitude;
+              const longitude = result.longitude;
               this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
             }
           });
@@ -240,6 +240,7 @@ export class HomeComponent implements OnInit {
       popularity: this.resolveData.pop,
       prefTags: this.resolveData.prefTags,
     };
+    console.log(this.resolveData.distance);
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe(async (result: GetUserToSwipeReturn) => {
       if (result.success) {
@@ -267,7 +268,6 @@ export class HomeComponent implements OnInit {
             } catch (err) {
               throw err;
             } finally {
-              await console.log('finaly');
               await this.getUserToSwipe();
             }
           }, 500);
