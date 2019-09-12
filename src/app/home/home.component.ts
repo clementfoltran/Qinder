@@ -270,7 +270,7 @@ export class HomeComponent implements OnInit {
               await console.log('finaly');
               await this.getUserToSwipe();
             }
-          }, 1);
+          }, 500);
         }
         this.getUserToSwipeTags(result.id);
       }
