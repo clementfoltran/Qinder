@@ -93,10 +93,10 @@ exports.getUserToSwipe = (req, res) => {
         sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched AND swipe.id_user = ?) \
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
-        AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
+        AND EXISTS(SELECT null FROM tagpref WHERE ' + prefTags + ' AND tagpref.id_user = user.id_user ) \
         AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        AND user.gender = ? AND popularity BETWEEN 0 AND ? ORDER BY RAND() LIMIT 1';
+        AND user.gender = ? AND pop BETWEEN 0 AND ? ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           req.body.id,
@@ -148,13 +148,6 @@ exports.getTheHeavens = (req, res) => {
       let sql = '';
       let query;
       if (req.body.interest === 'Both') {
-        // ADD DISTANCE CHECK
-    
-
-        // sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
-        // WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
-        // AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? ORDER BY RAND() LIMIT 20';
-
         sql = 'SELECT user.id_user, firstname, photo FROM user INNER JOIN photo ON user.id_user = photo.id_user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched)  \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? ORDER BY RAND() LIMIT 20';
@@ -164,11 +157,6 @@ exports.getTheHeavens = (req, res) => {
           minAge
         ]);
       } else {
-        // sql = 'SELECT user.id_user, firstname, bio, position, YEAR(birthdate) AS year FROM user \
-        // WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched) \
-        // AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        // AND user.gender = ? ORDER BY RAND() LIMIT 20';
-
         sql = 'SELECT user.id_user, firstname, photo FROM user INNER JOIN photo ON user.id_user = photo.id_user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched)  \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND user.gender = ? ORDER BY RAND() LIMIT 20';
@@ -310,7 +298,7 @@ exports.saveUserLastConnection = (req, res) => {
     res.sendStatus(500);
   } else {
     if (res) {
-      const sql = 'UPDATE user SET last_connected = ? WHERE id_user = ?';
+      const sql = 'UPDATE user SET last_connected = NOW() WHERE id_user = ?';
       const query = db.format(sql, [req.body.date, req.body.userId]);
       db.query(query, (err) => {
         if (err) {

@@ -119,6 +119,8 @@ export class ChatComponent implements OnInit {
                 }
               }
             });
+        } else {
+          // this.matchesObjects[0] =
         }
       }
     }
@@ -156,9 +158,11 @@ export class ChatComponent implements OnInit {
       this.profileWasOpened = 1;
     } else {
       this.profileWasOpened = 0;
-      setTimeout(() => {
-        this.scrollIt();
-      }, 100);
+      if (this.messageList.length > 1) {
+        setTimeout(() => {
+          this.scrollIt();
+        }, 100);
+      }
     }
     await this.getUserInfosService.enterView(this.userMatchedId)
       .subscribe((result: EnterViewSettingsReturn) => {
@@ -218,9 +222,11 @@ export class ChatComponent implements OnInit {
         this.messageList.push(me);
       }
     }
-    setTimeout(() => {
-      this.scrollIt();
-    }, 100);
+    if (this.messageList.length > 1) {
+      setTimeout(() => {
+        this.scrollIt();
+      }, 100);
+    }
   }
 
   // JOIN CHAT ROOM
@@ -233,7 +239,7 @@ export class ChatComponent implements OnInit {
       this.socket.emit('join room', matchId.toString());
       this.previousId = matchId;
     } catch (e) {
-        console.log('Could not connect socket.io');
+        // console.log('Could not connect socket.io');
     }
   }
 
@@ -259,9 +265,11 @@ export class ChatComponent implements OnInit {
             }
           });
         }
-        setTimeout(() => {
-          this.scrollIt();
-        }, 100);
+        if (this.messageList.length > 1) {
+          setTimeout(() => {
+            this.scrollIt();
+          }, 100);
+        }
       }
     }
   }
@@ -342,7 +350,7 @@ export class ChatComponent implements OnInit {
       this.socket = io.connect('http://localhost:3000');
       this.socket.on('receive message', this.receive);
     } catch (e) {
-        console.log('Could not connect socket.io');
+      // console.log('Could not connect socket.io');
     }
   }
 

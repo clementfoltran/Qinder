@@ -160,12 +160,10 @@ export class HomeComponent implements OnInit {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         if (latitude && longitude) {
-          await console.log({latitude, longitude});
           this.userCurrentPosition = new google.maps.LatLng(latitude, longitude);
         }
       }, async error => {
         if (error) {
-          console.log(error);
           await this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
             if (result.lat) {
               const latitude = result.lat;
@@ -241,7 +239,6 @@ export class HomeComponent implements OnInit {
       distance: this.resolveData.distance,
       popularity: this.resolveData.pop,
       prefTags: this.resolveData.prefTags,
-      
     };
     await this.getUserToSwipeService.getUserToSwipe(APIParameter)
     .subscribe(async (result: GetUserToSwipeReturn) => {
@@ -262,9 +259,9 @@ export class HomeComponent implements OnInit {
             userToSwipePos
           )) / 1000);
         }
-        if (this.userToSwipeDistance > this.distance || !this.userToSwipeDistance) {
+        if (this.userToSwipeDistance > this.distance) {
           this.userToSwipe = false;
-          setTimeout(async() => {
+          setTimeout(async () => {
             try {
               await this.getUserPosition();
             } catch (err) {
@@ -273,7 +270,7 @@ export class HomeComponent implements OnInit {
               await console.log('finaly');
               await this.getUserToSwipe();
             }
-          }, 1);
+          }, 500);
         }
         this.getUserToSwipeTags(result.id);
       }
@@ -410,7 +407,6 @@ async getTheHeavens() {
     if (slider.classList.contains('opened')) {
       slider.classList.remove('opened');
       slider.classList.add('closed');
-  3;    // load data
       this.chatComponent.loadMatches();
     } else {
         slider.classList.remove('closed');
@@ -485,7 +481,6 @@ async getTheHeavens() {
     } catch (err) {
       throw err;
     } finally {
-      await console.log('finaly');
       await this.getUserToSwipe();
     }
     // this.nbMessages = this.socketNotificationService.nbMessages;

@@ -106,7 +106,7 @@ export class SocketNotificationsService {
     this.getNotificationService.getNotifications(+localStorage.getItem('userId'))
       .subscribe((result: GetNotificationsReturn) => {
         if (result.success) {
-          this.notifications = result.notifications;
+          this.notifications = result.notifications.reverse();
           // Set nbMessages
           this.notifications.forEach((v) => {
             if (v.notif === 6) {

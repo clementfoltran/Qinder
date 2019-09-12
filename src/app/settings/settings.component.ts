@@ -103,8 +103,6 @@ export class SettingsComponent implements OnInit {
               detail: 'Your name has been changed :)',
               life: 6000
             });
-          } else {
-            console.log(result.message);
           }
         });
   }
