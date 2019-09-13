@@ -74,7 +74,7 @@
                         <h6>{{ userToSwipeLastConnected | lastConnectedFormat }}</h6>
                     </ng-template>
                     <h2>{{ userToSwipeName | titlecase }} {{ userToSwipeAge }}</h2>
-                    <h5>{{ userToSwipeDistance }} kms</h5>
+                    <h5>{{ userToSwipeDistance }} km</h5>
                     <h6>{{ userToSwipePopularity }}% trendy</h6>
                     <div class="row">
                       <div *ngFor="let tag of userToSwipeTags" class="mb-2">
@@ -149,7 +149,7 @@
         </div>
         <h2 class="m-auto p-2">Your matches</h2>
         <div class="modal-body text-center">
-          <app-chat></app-chat>
+          <app-chat [resolveData]="resolveData"></app-chat>
         </div>
       </div>
     </div>
@@ -182,7 +182,7 @@
         </div>
         <div class="modal-footer">
           <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-          <button type="button" class="btn btn-primary" (click)="reportUser()">BLOCK</button>    
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="reportUser()">BLOCK</button>    
         </div>
       </div>
     </div>

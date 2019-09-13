@@ -93,9 +93,9 @@ export class LandingPageComponent implements OnInit {
       }, error => {
         if (error) {
           this.ipLocationService.ipLocation().subscribe((result: IpLocationReturn) => {
-            if (result.lat) {
-              this.latitude = result.lat;
-              this.longitude = result.lon;
+            if (result.latitude) {
+              this.latitude = result.latitude;
+              this.longitude = result.longitude;
             }
           });
         }
@@ -147,13 +147,7 @@ export class LandingPageComponent implements OnInit {
       online
     };
     this.getUserOnlineService.getUserOnline(this.APIParameterGetUserOnline)
-      .subscribe((result: GetUserOnlineReturn) => {
-        if (result.success) {
-          console.log(result.message);
-        } else {
-          console.log(result.message);
-        }
-      });
+      .subscribe();
   }
 
   dec2hex(dec) {
@@ -165,9 +159,13 @@ export class LandingPageComponent implements OnInit {
     return Array.from(arr, this.dec2hex).join('');
   }
 
-  checkPassword(password) {
+  checkPassword(password: string) {
     if (/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(this.registerForm.get('password').value) && (this.registerForm.get('password').value.length >= 8)) {
       return (1);
+    } else if (/^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/.test(password) && (password.length >= 8)) {
+      return (1);
+    } else {
+      return (0);
     }
   }
   checkEmail(email) {
@@ -243,7 +241,6 @@ export class LandingPageComponent implements OnInit {
   }
 
   checkAccount(data) {
-    console.log('CHECK ACCOUNT');
     const email = this.activatedRoute.snapshot.paramMap.get('email');
     const key = this.activatedRoute.snapshot.paramMap.get('key');
 
@@ -278,7 +275,6 @@ export class LandingPageComponent implements OnInit {
       this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
         .subscribe((result: ResetPasswordReturn) => {
           if (result.success) {
-            console.log(result.message);
             this.messageService.add({
               severity: 'success',
               summary: 'See you again soon',
@@ -288,7 +284,6 @@ export class LandingPageComponent implements OnInit {
             $('#modSignIn').modal('hide');
             this.forgotModeVar = 0;
           } else {
-            console.log(result.message);
           }
         });
     }
@@ -309,8 +304,6 @@ export class LandingPageComponent implements OnInit {
               life: 6000
             });
           }
-        } else {
-          console.log(result.message);
         }
       });
   }
@@ -335,8 +328,6 @@ export class LandingPageComponent implements OnInit {
               $('#modResetPwd').modal('hide');
               this.destroyKey(this.activatedRoute.snapshot.paramMap.get('email'));
               $('#modSignIn').modal('show');
-            } else {
-              console.log(result.message);
             }
           });
       } else {
@@ -358,17 +349,10 @@ export class LandingPageComponent implements OnInit {
       function: 'none',
     };
     this.resetPasswordService.sendLink(this.ResetPasswordAPIParameter)
-      .subscribe((result: ResetPasswordReturn) => {
-        if (result.success) {
-          console.log('Succesfully replaced the auth key');
-        } else {
-          console.log(result.message);
-        }
-      });
+      .subscribe();
   }
 
   verifyAccount(email) {
-    console.log('VERIFY ACCOUNT CALLED');
     this.activateService.activateAccount(email)
       .subscribe((result: ActivateReturn) => {
         if (result.success) {
@@ -379,8 +363,6 @@ export class LandingPageComponent implements OnInit {
             detail: 'Account successfully activated! You can now login :)',
             life: 6000
           });
-        } else {
-          console.log(result.message);
         }
       });
   }
@@ -463,8 +445,6 @@ export class LandingPageComponent implements OnInit {
               }
             });
         });
-      } else {
-        console.log('User cancelled login or did not fully authorize.');
       }
     });
   }

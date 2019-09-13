@@ -160,9 +160,9 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  addPrefTag(tag: Tag) {
+ async addPrefTag(tag: Tag) {
     this.addPrefTagService.addPrefTag({id_tag: tag.id_tag, id_user: this.userId})
-      .subscribe((result: AddPrefTagReturn) => {
+      .subscribe(async (result: AddPrefTagReturn) => {
         if (result.success) {
           this.prefTags.push({
             id_tpref: result.id_tpref,
@@ -170,7 +170,7 @@ export class PreferencesComponent implements OnInit {
             id_user: this.userId,
             tag: tag.tag
           });
-          this.updateEvent.next('');
+          await this.updateEvent.next('');
         }
       });
   }
@@ -184,10 +184,9 @@ export class PreferencesComponent implements OnInit {
       });
   }
 
-  removePrefTag(idTag: number, index: number) {
+  async removePrefTag(idTag: number, index: number) {
     let prefTagId: number;
     let prefTagIndex: number;
-    
     this.prefTags.forEach((v) => {
       if (v.id_tag === idTag) {
         prefTagId = v.id_tpref;
@@ -199,10 +198,10 @@ export class PreferencesComponent implements OnInit {
       }
     });
     this.removePrefTagService.removePrefTag(prefTagId)
-      .subscribe((result: RemovePrefTagReturn) => {
+      .subscribe(async (result: RemovePrefTagReturn) => {
         if (result.success) {
           this.prefTags.splice(prefTagIndex, 1);
-          this.updateEvent.next('');
+          await this.updateEvent.next('');
         }
       });
   }
@@ -269,13 +268,18 @@ export class PreferencesComponent implements OnInit {
               detail: 'Preference updated successfully',
               life: 6000,
             });
-            this.updateEvent.next('');
-            let updateResolveDataHome = this.resolveData;
+            const updateResolveDataHome = this.resolveData;
             updateResolveDataHome.distance = this.APIParameterPref.distance;
             updateResolveDataHome.minage = this.APIParameterPref.minage;
             updateResolveDataHome.maxage = this.APIParameterPref.maxage;
             updateResolveDataHome.pop = this.APIParameterPref.pop;
-            await this.updateResolveDataHome.next(updateResolveDataHome);
+            try {
+              await this.updateResolveDataHome.next(updateResolveDataHome);
+            } catch (err) {
+              throw err;
+            } finally {
+              await this.updateEvent.next('');
+            }
           } else {
             this.messageService.add({
               severity: 'error',
@@ -312,7 +316,6 @@ export class PreferencesComponent implements OnInit {
               life: 6000,
             });
             this.selectedFile = null;
-            console.log(this.userPhotos.length);
             if (this.userPhotos.length === 1) {
               this.updatePhotos.next('');
             }

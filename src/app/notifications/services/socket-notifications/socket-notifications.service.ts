@@ -35,7 +35,7 @@ export class SocketNotificationsService {
    */
   receive = (obj) => {
     if (obj && obj.to === +localStorage.getItem('userId')) {
-      this.notifications.push(obj);
+      this.notifications.unshift(obj);
       if (obj.notif === 1) {
         this.messageService.add({
           severity: 'info', summary: 'New notification', detail: 'Somebody saw your profile', life: 6000,
@@ -82,12 +82,13 @@ export class SocketNotificationsService {
   }
 
   // TODO id to send the good notification
-  notify(id_user: number, id_user_: number, notif: number) {
+  notify(id_user: number, firstname: string, id_user_: number, notif: number) {
     const notification: NotificationParmeter = {
       to: id_user_,
       from: id_user,
+      firstname,
       notif,
-      ts: 1
+      ts: new Date()
     };
     this.socket.emit('notification', notification);
   }
@@ -105,7 +106,7 @@ export class SocketNotificationsService {
     this.getNotificationService.getNotifications(+localStorage.getItem('userId'))
       .subscribe((result: GetNotificationsReturn) => {
         if (result.success) {
-          this.notifications = result.notifications;
+          this.notifications = result.notifications.reverse();
           // Set nbMessages
           this.notifications.forEach((v) => {
             if (v.notif === 6) {

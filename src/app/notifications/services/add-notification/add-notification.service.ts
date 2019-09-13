@@ -18,7 +18,7 @@ export class AddNotificationService {
     const option = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        'Authorization': 'JWT ' + localStorage.getItem('token')
+        Authorization: 'JWT ' + localStorage.getItem('token')
       }),
     };
 
