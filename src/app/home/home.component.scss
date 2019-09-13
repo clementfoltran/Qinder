@@ -40,16 +40,26 @@
 
 .swipe-buttons {
   text-align: center;
-
   i {
     margin: 10px;
-    font-size: 40px;
+    font-size: 3vh;
     background-color: white;
     border-radius: 100%;
   }
 
   i:hover {
     transform: scale(1.1);
+  }
+}
+
+// style="max-height: 50vh; float: left;
+carousel img {
+  max-height: 50vh;
+}
+
+@media screen and (min-width: 200px) and (max-width: 800px) {
+  carousel img {
+    max-height: 30vh;
   }
 }
 
@@ -69,8 +79,14 @@
   height: 100%;
   background-color: rgba(245, 247, 250, 0.884);
   overflow: hidden;
+  h2 { font-size: 3vh; }
+  h5 { font-size: 2.5vh; }
+  h6 { font-size: 1.5vh; }
   .swipe { margin: auto; }
 
+  .swipe-zone {
+    height: 60vh;
+  }
   carousel button {
     width: 25px;
     height: 25px;
@@ -84,7 +100,11 @@
     z-index: 100;
   }
 
-  .tag { background-image: linear-gradient(rgba(240, 67, 33, 0.8), rgba(240, 92, 33, 0.8)); color: white; }  
+  .tag { 
+    background-image: linear-gradient(rgba(240, 67, 33, 0.8), rgba(240, 92, 33, 0.8));
+    color: white;
+    font-size: 1vh;
+  }  
 }
 
 body .ui-slider .ui-slider-range {

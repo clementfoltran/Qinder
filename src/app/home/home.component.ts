@@ -248,7 +248,6 @@ export class HomeComponent implements OnInit {
         this.userToSwipeName = result.firstname;
         this.userToSwipeBio = result.bio;
         this.userToSwipeId = result.id;
-        console.log(result.popularity);
         this.userToSwipePopularity = result.popularity;
         const currentDate = new Date();
         const currentYear = currentDate.getFullYear();
