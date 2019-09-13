@@ -81,7 +81,7 @@ exports.getUserToSwipe = (req, res) => {
         AND NOT EXISTS(SELECT null FROM report WHERE user.id_user = report.id_user_blocked) \
         AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND usertag.id_user = user.id_user ) \
         AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
-        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND pop BETWEEN 0 AND ? \
+        AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? AND popularity BETWEEN 0 AND ? \
         ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
           req.body.id,
@@ -98,7 +98,7 @@ exports.getUserToSwipe = (req, res) => {
         AND EXISTS(SELECT null FROM usertag WHERE ' + prefTags + ' AND usertag.id_user = user.id_user ) \
         AND EXISTS(SELECT null FROM photo WHERE user.id_user = photo.id_user) \
         AND user.id_user != ? AND YEAR(birthdate) BETWEEN ? AND ? \
-        AND user.gender = ? AND pop BETWEEN 0 AND ? ORDER BY RAND() LIMIT 1';
+        AND user.gender = ? AND popularity BETWEEN 0 AND ? ORDER BY RAND() LIMIT 1';
         query = db.format(sql, [
           req.body.id,
           req.body.id,
