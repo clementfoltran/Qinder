@@ -7,7 +7,7 @@
   <div class="match-zone col-md-12 text-center">
     <a href=""><img class="logo" src="../../assets/img/logo.svg" height="70" alt=""></a>
     <div *ngIf="profileComplete === 1;">
-      <div class="card mt-2" style="background-color: rgba(255, 255, 255, 0); border: none;">
+      <div class="card" style="background-color: rgba(255, 255, 255, 0); border: none;">
         <div class="card-body">
           <div *ngIf="progressBarValue < 100; else showHeavens"  class="heavens">
             <br>
@@ -26,7 +26,7 @@
 
     <!-- THE HEAVENS -->
     <div *ngIf="peopleInHeavens.length > 0 && heavensClicked === 1">
-      <div class="card mb-1" style="background-color: rgba(255, 255, 255, 0); border: none;">
+      <div class="card" style="background-color: rgba(255, 255, 255, 0); border: none;">
           <div class="card-body">
               <label><strong>✨ Here are the people you can match with ✨</strong></label>
           </div>
@@ -46,10 +46,10 @@
     </div>
 
     <!-- SWIPE ZONE -->
-    <div class="swipe-zone mt-4">
+    <div class="swipe-zone">
       <div *ngIf="profileComplete === 1; else profileIncomplete">
-          <div *ngIf="userToSwipe; else noUserToSwipe"  class="swipe col-sm-6 col-md-10 col-lg-6 col-xl-5 h-80">
-            <div class="card mb-3">
+          <div *ngIf="userToSwipe; else noUserToSwipe" class="swipe col-sm-6 col-md-10 col-lg-6 col-xl-5">
+            <div class="card mb-1">
               <div class="row no-gutters">
                 <div class="col-md-8">
                   <carousel>
@@ -78,7 +78,7 @@
                     <h6>{{ userToSwipePopularity }}% trendy</h6>
                     <div class="row">
                       <div *ngFor="let tag of userToSwipeTags" class="mb-2">
-                        <div class="tag p-1 m-2 rounded-pill">{{ tag.tag }}</div>
+                        <div class="tag p-1 m-1 rounded-pill">{{ tag.tag }}</div>
                       </div>
                     </div>
                     <div *ngIf="userToSwipeBio">
@@ -91,8 +91,12 @@
         </div>
         <div class="row">
           <div *ngIf="userToSwipe" class="swipe-buttons m-auto align-items-center">
-            <button (click)="swipe(false)" style="color: rgb(255, 61, 61)" class="btn"><i class="fas fa-heart-broken p-3"></i></button>
-            <button (click)="swipe(true)" style="color: rgb(96, 190, 96)" class="btn"><i class="fas fa-heart p-3"></i></button>
+            <button (click)="swipe(false)" style="color: rgb(255, 61, 61)" class="btn">
+              <i class="fas fa-heart-broken p-3"></i>
+            </button>
+            <button (click)="swipe(true)" style="color: rgb(96, 190, 96)" class="btn">
+              <i class="fas fa-heart p-3"></i>
+            </button>
           </div>
         </div>
       </div>

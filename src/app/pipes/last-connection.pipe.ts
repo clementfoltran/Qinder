@@ -15,7 +15,7 @@ export class LastConnectedTimeFormatPipe implements PipeTransform {
             time = ' hours ago';
         } else if ((elapsed /= 24) < 30) {
             time = ' days ago';
-        } else { return 'A long time ago..'; }
+        } else { return 'A long time ago'; }
 
         return Math.round(elapsed) + time;
     }
