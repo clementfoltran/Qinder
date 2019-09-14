@@ -34,7 +34,6 @@ export class SocketNotificationsService {
    * 1: View profile notification
    */
    receive = (obj) => {
-   console.log(obj);
     if (obj && obj.to === +localStorage.getItem('userId')) {
       this.notifications.unshift(obj);
       if (obj.notif === 1) {
