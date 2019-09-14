@@ -277,10 +277,10 @@ export class HomeComponent implements OnInit {
           }
         }, 10);
       } else {
+        // Notify userToSwipe
+        this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, result.id, 1);
         return ;
       }
-      // Notify userToSwipe
-      this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, result.id, 1);
     });
   }
 
