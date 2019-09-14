@@ -66,7 +66,6 @@ exports.getUserToSwipe = (req, res) => {
       let sql = '';
       let query;
       // Let configure user tags preference
-      console.log(req.body.prefTags);
       let prefTags = '';
       for (let i = 0; i < req.body.prefTags.length; i++) {
         prefTags += 'id_tag = ' + req.body.prefTags[i].id_tag;
@@ -90,7 +89,6 @@ exports.getUserToSwipe = (req, res) => {
           minAge,
           req.body.popularity,
         ]);
-        console.log(query);
       } else {
         sql = 'SELECT user.id_user, firstname, bio, online, last_connected, position, YEAR(birthdate) AS year, popularity FROM user \
         WHERE NOT EXISTS(SELECT null FROM swipe WHERE user.id_user = swipe.id_user_matched AND swipe.id_user = ?) \

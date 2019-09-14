@@ -170,7 +170,15 @@ export class PreferencesComponent implements OnInit {
             id_user: this.userId,
             tag: tag.tag
           });
-          await this.updateEvent.next('');
+          const updateResolveDataHome = this.resolveData;
+          updateResolveDataHome.prefTags = this.prefTags;
+          try {
+            await this.updateResolveDataHome.next(updateResolveDataHome);
+          } catch (err) {
+            throw err;
+          } finally {
+            await this.updateEvent.next('');
+          }
         }
       });
   }
@@ -201,7 +209,15 @@ export class PreferencesComponent implements OnInit {
       .subscribe(async (result: RemovePrefTagReturn) => {
         if (result.success) {
           this.prefTags.splice(prefTagIndex, 1);
-          await this.updateEvent.next('');
+          const updateResolveDataHome = this.resolveData;
+          updateResolveDataHome.prefTags = this.prefTags;
+          try {
+            await this.updateResolveDataHome.next(updateResolveDataHome);
+          } catch (err) {
+            throw err;
+          } finally {
+            await this.updateEvent.next('');
+          }
         }
       });
   }
