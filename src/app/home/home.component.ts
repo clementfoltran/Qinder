@@ -275,7 +275,9 @@ export class HomeComponent implements OnInit {
           } finally {
             await this.getUserToSwipe();
           }
-        }, 250);
+        }, 10);
+      } else {
+        return ;
       }
       // Notify userToSwipe
       this.socketNotificationService.notify(+localStorage.getItem('userId'), this.resolveData.firstname, result.id, 1);
